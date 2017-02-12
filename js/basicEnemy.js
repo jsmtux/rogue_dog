@@ -5,7 +5,6 @@ function BasicEnemy(_game, _index)
     this.health = 10;
     this.index = _index;
     this.padding = 220;
-    this.limit = 600;
     this.dying = false;
 }
 
@@ -78,7 +77,6 @@ BasicEnemy.prototype.takeHit = function(_combatManager)
     {
         _combatManager.killEnemy(this.index);
         this.infoManager.unregister(this.sprite);
-        this.infoManager
     }
 }
 
@@ -97,36 +95,49 @@ BasicEnemy.prototype.updateDeath = function()
 BasicEnemy.prototype.startAttack = function(_player, _difficultyManager)
 {
     console.log("Starting attack");
-    var attackOption = BasicEnemy.attackOptions[randomInt(0,3)];
+    this.attackOption = BasicEnemy.attackOptions[randomInt(0,3)];
     this.state = BasicEnemy.States.ATTACKING;
-    var arrow;
+    this.arrow;
     var initTimeout = 500 + Math.random() * 2000;
     var self = this;
-    var evaded = false;
     setTimeout(function(){
-        attackOption.key.onDown.add(function handler(){
-            evaded = true;
-            attackOption.key.onDown.remove(handler)
-        });
-        arrow = game.add.sprite(self.sprite.x, self.sprite.y - 50, attackOption.image);
+        self.attackOption.key.onDown.add(self.keyHandler, self);
+        self.arrow = self.game.add.sprite(self.sprite.x, self.sprite.y - 50, self.attackOption.image);
+        self.game.inputManager.directionGesture.add(self.directionGestureCb, self);
     }, initTimeout)
+    this.endTimeout = setTimeout(function(){
+        self.showResultSprite('bad');
+        _player.monsterHit();
+    }, initTimeout + _difficultyManager.getBasicEnemyTimeout());
+}
+
+BasicEnemy.prototype.keyHandler = function()
+{
+    clearTimeout(this.endTimeout);
+    this.showResultSprite('good');
+}
+
+BasicEnemy.prototype.directionGestureCb = function(_direction)
+{
+    console.log(_direction);
+    if (this.attackOption.image === _direction)
+    {
+        clearTimeout(this.endTimeout);
+        this.showResultSprite('good');        
+    }
+    this.game.inputManager.directionGesture.remove();
+}
+
+BasicEnemy.prototype.showResultSprite = function(_result)
+{
+    this.arrow.destroy();
+    this.attackOption.key.onDown.remove(this.keyHandler, this);
+    var resultSprite = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, _result);
+    var self = this;
     setTimeout(function(){
-        arrow.destroy();
-        var resultSprite;
-        if (evaded)
-        {
-            resultSprite = game.add.sprite(self.sprite.x, self.sprite.y - 50, 'good');
-        }
-        else
-        {
-            resultSprite = game.add.sprite(self.sprite.x, self.sprite.y - 50, 'bad');
-            _player.monsterHit();
-        }
-        setTimeout(function(){
-            resultSprite.destroy();
-            self.state = BasicEnemy.States.FINISHED;
-        }, _difficultyManager.getBasicEnemyTimeout());
-    }, initTimeout + this.limit);
+        resultSprite.destroy();
+        self.state = BasicEnemy.States.FINISHED;
+    }, 500);
 }
 
 function BeeEnemy(_game, _index)

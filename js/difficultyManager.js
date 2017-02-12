@@ -14,7 +14,7 @@ DifficultyManager.prototype.getSpikeVarSeparation = function()
 
 DifficultyManager.prototype.getBasicEnemyTimeout = function()
 {
-    return 500;
+    return 1200;
 }
 
 DifficultyManager.prototype.getBeeBulletSpeed = function()

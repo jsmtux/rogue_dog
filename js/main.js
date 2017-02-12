@@ -21,7 +21,7 @@ BasicGame.Main = function (game)
     this.combatManager = new CombatManager(this, this.player, this.difficultyManager, this.infoManager);
     this.walkManager = new WalkManager(this, this.player, WALKSPEED, this.difficultyManager);
     this.guiManager = new GUIManager();
-    this.inputManager = new InputManager();
+    this.inputManager = new InputManager(this);
     
     this.updateSignal = new Phaser.Signal();
 };
