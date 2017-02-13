@@ -112,7 +112,6 @@ BasicEnemy.prototype.startAttack = function(_player)
 
 BasicEnemy.prototype.keyHandler = function()
 {
-    clearTimeout(this.endTimeout);
     this.showResultSprite('good');
 }
 
@@ -124,11 +123,12 @@ BasicEnemy.prototype.directionGestureCb = function(_direction)
         clearTimeout(this.endTimeout);
         this.showResultSprite('good');        
     }
-    ServiceLocator.inputManager.directionGesture.remove();
 }
 
 BasicEnemy.prototype.showResultSprite = function(_result)
 {
+    clearTimeout(this.endTimeout);
+    ServiceLocator.inputManager.directionGesture.remove();
     this.arrow.destroy();
     this.attackOption.key.onDown.remove(this.keyHandler, this);
     var resultSprite = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, _result);

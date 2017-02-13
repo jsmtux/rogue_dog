@@ -102,6 +102,7 @@ function DrawGesture(_game, _inputManager)
     this.polyFillDecay = 0.05;
     this.functionCb;
     this.contextCb;
+    this.removeUpdateSignal = false;
 }
 
 DrawGesture.prototype.add = function(_function, _context)
@@ -115,13 +116,10 @@ DrawGesture.prototype.add = function(_function, _context)
 
 DrawGesture.prototype.remove = function(_function, _cont)
 {
-    this.bmd.destroy();
     this.game.input.deleteMoveCallback(this.updateMouse, this);
-    this.game.updateSignal.remove(this.update, this);
     this.functionCb = undefined;
     this.contextCb = undefined;
-    this.points = [];
-    this.polygonPoints = undefined;
+    this.removeUpdateSignal = true;
 };
 
 DrawGesture.prototype.update = function()
@@ -184,6 +182,16 @@ DrawGesture.prototype.update = function()
             }
         }
     }
+    
+    //remove update signal only when finished and graphics are not shown anymore
+    if (this.polyFillAlpha == 1.0 && this.removeUpdateSignal)
+    {
+        this.game.updateSignal.remove(this.update, this);
+        this.removeUpdateSignal = false;
+        this.bmd.destroy();
+        this.points = [];
+        this.polygonPoints = undefined;
+    }
 }
 
 DrawGesture.prototype.showPolyIntersection = function(startPoint, i, j)
@@ -194,7 +202,10 @@ DrawGesture.prototype.showPolyIntersection = function(startPoint, i, j)
         tmpPoints.push(this.points[x].point);
     }
     this.polygonPoints = new Phaser.Polygon(tmpPoints);
-    this.functionCb.call(this.contextCb, this.polygonPoints);
+    if (this.functionCb)
+    {
+        this.functionCb.call(this.contextCb, this.polygonPoints);
+    }
 }
 
 DrawGesture.prototype.updateMouse = function(pointer, x, y)
