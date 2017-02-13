@@ -1,7 +1,6 @@
-function Card(_combatManager)
+function Card()
 {
     this.sprite;
-    this.combatManager = _combatManager;
 }
 
 Card.prototype.apply = function()
@@ -13,12 +12,12 @@ Card.prototype.clicked = function()
 {
     this.apply();
     this.sprite.events.onInputDown.remove(this.clicked, this);
-    this.combatManager.finishLootChoose();
+    ServiceLocator.combatManager.finishLootChoose();
 }
 
-function SmMedkitCard(_player, _game, _combatManager)
+function SmMedkitCard(_player, _game)
 {
-    Card.prototype.constructor.call(this, _combatManager);
+    Card.prototype.constructor.call(this);
     this.player = _player;
     this.game = _game;
 }
@@ -48,9 +47,9 @@ SmMedkitCard.prototype.hide = function()
     this.sprite.destroy();
 }
 
-function WoodShieldCard(_player, _game, _combatManager)
+function WoodShieldCard(_player, _game)
 {
-    Card.prototype.constructor.call(this, _combatManager);
+    Card.prototype.constructor.call(this);
     this.player = _player;
     this.game = _game;
 }
@@ -80,9 +79,9 @@ WoodShieldCard.prototype.hide = function()
     this.sprite.destroy();
 }
 
-function IronShieldCard(_player, _game, _combatManager)
+function IronShieldCard(_player, _game)
 {
-    Card.prototype.constructor.call(this, _combatManager);
+    Card.prototype.constructor.call(this);
     this.player = _player;
     this.game = _game;
 }

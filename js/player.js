@@ -23,7 +23,7 @@ Player.preload = function(_game)
     SkillSelector.preload(_game);
 }
 
-Player.prototype.create = function(_game, _infoManager)
+Player.prototype.create = function(_game)
 {
     this.game = _game;
     this.character = this.game.add.sprite(100, this.playerInitialY, 'pc', 10);
@@ -32,7 +32,7 @@ Player.prototype.create = function(_game, _infoManager)
     this.character.animations.add('dizzy', [7,8]);
     this.character.animations.add('jump', [5]);
     this.character.animations.add('fall', [6]);
-    _infoManager.register("player", this.character);
+    ServiceLocator.infoManager.register("player", this.character);
     
     this.loadLogic(_game);
 }
@@ -159,20 +159,20 @@ Player.prototype.setShield = function(_category)
     this.updateShieldPercentage();
 }
 
-Player.prototype.startAttack = function(_combatManager)
+Player.prototype.startAttack = function()
 {
     this.skillSelector.create();
     this.skillSelector.sprite.x = 100;
     this.skillSelector.sprite.y = 270;
     var self = this;
-    this.game.inputManager.leftButton.onDown.add(function handler(){
+    ServiceLocator.inputManager.leftButton.onDown.add(function handler(){
         console.log();
         if (this.skillSelector.getSuccess())
         {
-            _combatManager.hitFirstEnemy();
+            ServiceLocator.combatManager.hitFirstEnemy();
         }
         this.skillSelector.reset();
-        this.game.inputManager.leftButton.onDown.remove(handler, self);
+        ServiceLocator.inputManager.leftButton.onDown.remove(handler, self);
         
     }, self);
 }
@@ -217,7 +217,7 @@ DogPlayer.preload = function(_game)
     _game.load.json("dogJSON", path + "dog.scon");
 }
 
-DogPlayer.prototype.create = function(_game, _infoManager)
+DogPlayer.prototype.create = function(_game)
 {
     this.game = _game;
     this.spriterGroup = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
@@ -240,7 +240,7 @@ DogPlayer.prototype.create = function(_game, _infoManager)
     this.spriterGroup.scale.set(0.3, 0.3);
     this.spriterGroup.pushCharMap("hat");
     
-    _infoManager.register("player", this.spriterGroup);
+    ServiceLocator.infoManager.register("player", this.spriterGroup);
     
     this.loadLogic(_game);
 }

@@ -27,22 +27,21 @@ BasicEnemy.preload = function(_game)
     this.sprite;
 }
 
-BasicEnemy.prototype.create = function(_infoManager)
+BasicEnemy.prototype.create = function()
 {
     this.sprite = this.game.add.sprite(resolution.x + 20 + this.padding * this.index, 320, 'monster', 10);
     this.sprite.animations.add('walk');
     this.sprite.animations.add('idle', [0]);
     
-    _infoManager.register("BasicEnemy", this.sprite);
-    this.infoManager = _infoManager;
+    ServiceLocator.infoManager.register("BasicEnemy", this.sprite);
     
     if (BasicEnemy.attackOptions == undefined)
     {
         BasicEnemy.attackOptions = [
-                {image: 'up', key: this.game.inputManager.up},
-                {image: 'left', key: this.game.inputManager.left},
-                {image: 'right', key: this.game.inputManager.right},
-                {image: 'down', key: this.game.inputManager.down}
+                {image: 'up', key: ServiceLocator.inputManager.up},
+                {image: 'left', key: ServiceLocator.inputManager.left},
+                {image: 'right', key: ServiceLocator.inputManager.right},
+                {image: 'down', key: ServiceLocator.inputManager.down}
             ];
     }
 }
@@ -65,7 +64,7 @@ BasicEnemy.prototype.inPlace = function()
     return this.sprite.x < (300 + this.padding * this.index);
 }
 
-BasicEnemy.prototype.takeHit = function(_combatManager)
+BasicEnemy.prototype.takeHit = function()
 {
     var posX = this.sprite.x;
     var posY = this.sprite.y;
@@ -75,8 +74,8 @@ BasicEnemy.prototype.takeHit = function(_combatManager)
     this.health -= 5;
     if (this.health <= 0)
     {
-        _combatManager.killEnemy(this.index);
-        this.infoManager.unregister(this.sprite);
+        ServiceLocator.combatManager.killEnemy(this.index);
+        ServiceLocator.infoManager.unregister(this.sprite);
     }
 }
 
@@ -92,7 +91,7 @@ BasicEnemy.prototype.updateDeath = function()
     return false;
 }
 
-BasicEnemy.prototype.startAttack = function(_player, _difficultyManager)
+BasicEnemy.prototype.startAttack = function(_player)
 {
     console.log("Starting attack");
     this.attackOption = BasicEnemy.attackOptions[randomInt(0,3)];
@@ -103,12 +102,12 @@ BasicEnemy.prototype.startAttack = function(_player, _difficultyManager)
     setTimeout(function(){
         self.attackOption.key.onDown.add(self.keyHandler, self);
         self.arrow = self.game.add.sprite(self.sprite.x, self.sprite.y - 50, self.attackOption.image);
-        self.game.inputManager.directionGesture.add(self.directionGestureCb, self);
+        ServiceLocator.inputManager.directionGesture.add(self.directionGestureCb, self);
     }, initTimeout)
     this.endTimeout = setTimeout(function(){
         self.showResultSprite('bad');
         _player.monsterHit();
-    }, initTimeout + _difficultyManager.getBasicEnemyTimeout());
+    }, initTimeout + ServiceLocator.difficultyManager.getBasicEnemyTimeout());
 }
 
 BasicEnemy.prototype.keyHandler = function()
@@ -125,7 +124,7 @@ BasicEnemy.prototype.directionGestureCb = function(_direction)
         clearTimeout(this.endTimeout);
         this.showResultSprite('good');        
     }
-    this.game.inputManager.directionGesture.remove();
+    ServiceLocator.inputManager.directionGesture.remove();
 }
 
 BasicEnemy.prototype.showResultSprite = function(_result)
@@ -152,7 +151,6 @@ function BeeEnemy(_game, _index)
     this.polygonPoints;
     this.polyFillAlpha = 1.0;
     this.polyFillDecay = 0.05;
-    this.infoManager;
 }
 
 BeeEnemy.prototype = new BasicEnemy();
@@ -165,16 +163,14 @@ BeeEnemy.preload = function(_game)
     this.sprite;
 }
 
-BeeEnemy.prototype.create = function(_infoManager)
+BeeEnemy.prototype.create = function()
 {
     this.sprite = this.game.add.sprite(resolution.x + 20 + this.padding * this.index, this.height, 'bee', 5);
     this.sprite.animations.add('walk');
     
-    _infoManager.register("BeeEnemy", this.sprite);
+    ServiceLocator.infoManager.register("BeeEnemy", this.sprite);
 
     this.bmd = this.game.add.graphics(0, 0);
-    
-    this.infoManager = _infoManager;
 }
 
 BeeEnemy.prototype.update = function()
@@ -277,19 +273,19 @@ BeeEnemy.prototype.showPolyIntersection = function(startPoint, i, j)
     this.polygonPoints = new Phaser.Polygon(tmpPoints);
 }
 
-BeeEnemy.prototype.startAttack = function(_player, _difficultyManager)
+BeeEnemy.prototype.startAttack = function(_player)
 {
     if (!this.bullet)
     {
         this.game.input.addMoveCallback(this.updateMouse, this);
-        this.bullet = new BeeBullet(this.game, _player, _difficultyManager.getBeeBulletSpeed());
+        this.bullet = new BeeBullet(this.game, _player, ServiceLocator.difficultyManager.getBeeBulletSpeed());
         this.bullet.create(this.sprite.x, this.sprite.y);
     }
 }
 
 BeeEnemy.prototype.updateMouse = function(pointer, x, y)
 {
-    if (pointer.isDown && !this.infoManager.shouldPause())
+    if (pointer.isDown && !ServiceLocator.infoManager.shouldPause())
     {
         this.points.push({'point':new Phaser.Point(x, y), 'time':performance.now()});
     }
@@ -344,7 +340,6 @@ function BasicTrainer(_game, _index)
     BasicEnemy.prototype.constructor.call(this, _game, _index);
     this.health = 10;
     this.game = _game;
-    this.infoManager;
     this.height = 420;
     this.padding = 270;
 }
@@ -359,7 +354,7 @@ BasicTrainer.preload = function(_game)
     _game.load.json("trainerJSON", path + "trainer.scon");
 }
 
-BasicTrainer.prototype.create = function(_infoManager)
+BasicTrainer.prototype.create = function()
 {
     this.sprite = loadSpriter(this.game, "trainerJSON", "trainerAnimAtlas", "entity_000");
     this.sprite.position.setTo(140, this.playerInitialY);
@@ -369,8 +364,7 @@ BasicTrainer.prototype.create = function(_infoManager)
     this.game.world.add(this.sprite);
     
     
-    _infoManager.register("MazeEnemy", this.sprite);
-    this.infoManager = _infoManager;
+    ServiceLocator.infoManager.register("MazeEnemy", this.sprite);
 }
 
 BasicTrainer.prototype.update = function()
@@ -382,7 +376,7 @@ BasicTrainer.prototype.update = function()
     }
 }
 
-BasicTrainer.prototype.startAttack = function(_player, _difficultyManager)
+BasicTrainer.prototype.startAttack = function(_player)
 {
     
 }

@@ -1,5 +1,5 @@
 
-function CombatManager(_game, _player, _difficultyManager, _infoManager)
+function CombatManager(_game, _player)
 {
     this.game = _game;
     this.state = CombatManager.State.FINISHED;
@@ -7,8 +7,6 @@ function CombatManager(_game, _player, _difficultyManager, _infoManager)
     this.cards = [];
     this.enemies = {};
     this.dyingEnemies = [];
-    this.difficultyManager = _difficultyManager;
-    this.infoManager = _infoManager;
 }
 
 CombatManager.State = {
@@ -63,7 +61,7 @@ CombatManager.prototype.update = function()
             }
             if (this.enemies[ind].state == BasicEnemy.States.WAITING)
             {
-                this.enemies[ind].startAttack(this.player, this.difficultyManager);
+                this.enemies[ind].startAttack(this.player);
                 return;
             }
         }
@@ -149,7 +147,7 @@ CombatManager.prototype.addEnemy = function(_definition)
 {
     var index = this.getNumberOfEnemies();
     var enemy = new _definition(this.game, index);
-    enemy.create(this.infoManager);
+    enemy.create();
     this.enemies[index] = enemy;
 }
 

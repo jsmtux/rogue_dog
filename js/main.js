@@ -3,25 +3,53 @@ var BasicGame = {};
 var WALKSPEED = 6;
 var GROUND_LEVEL = 525;
 
-BasicGame.Load = function(game)
+BasicGame.Load = function(_game)
 {
+    this.game = _game;
 }
 
-BasicGame.Load.preload = function()
+BasicGame.Load.prototype.preload = function()
 {
+    Background.preload(this.game);
+    BasicEnemy.preload(this.game);
+    BeeEnemy.preload(this.game);
+    BasicTrainer.preload(this.game);
+    Player.preload(this.game);
+    SmMedkitCard.preload(this.game);
+    WoodShieldCard.preload(this.game);
+    WalkManager.preload(this.game);
+    InfoManager.preload(this.game);
+    GUIManager.preload(this.game);
+    DogPlayer.preload(this.game);
+    this.game.load.onLoadComplete.add(this.loadComplete, this);
     
+    this.loaded = false;
+}
+
+BasicGame.Load.prototype.update = function()
+{
+    if (this.loaded)
+    {
+        this.state.start('Main');
+    }
+}
+
+BasicGame.Load.prototype.loadComplete = function()
+{
+    this.loaded = true;
 }
 
 BasicGame.Main = function (game)
 {
-    this.background = new Background();
-    this.difficultyManager = new DifficultyManager();
-    this.infoManager = new InfoManager(this);
     this.player = new DogPlayer();
-    this.combatManager = new CombatManager(this, this.player, this.difficultyManager, this.infoManager);
-    this.walkManager = new WalkManager(this, this.player, WALKSPEED, this.difficultyManager);
-    this.guiManager = new GUIManager();
-    this.inputManager = new InputManager(this);
+
+    ServiceLocator.initialize('difficultyManager', new DifficultyManager());
+    ServiceLocator.initialize('infoManager', new InfoManager(this));
+    ServiceLocator.initialize('combatManager', new CombatManager(this, this.player));
+    ServiceLocator.initialize('walkManager', new WalkManager(this, this.player, WALKSPEED));
+    ServiceLocator.initialize('guiManager', new GUIManager());
+    ServiceLocator.initialize('inputManager', new InputManager(this));
+    ServiceLocator.initialize('background', new Background(this));
     
     this.updateSignal = new Phaser.Signal();
 };
@@ -35,67 +63,50 @@ BasicGame.Main.prototype.preload = function ()
 {
     this.state;
     
-    game.load.image('bg1', './img/background/layer-1.png');
-    game.load.image('bg2', './img/background/layer-2.png');
-    game.load.image('bg3', './img/background/layer-3.png');
     game.load.image('attack', './img/attack.png');
     game.load.image('defend', './img/defend.png');
     
-    BasicEnemy.preload(game);
-    BeeEnemy.preload(game);
-    BasicTrainer.preload(game);
-    Player.preload(game);
-    SmMedkitCard.preload(game);
-    WoodShieldCard.preload(game);
-    WalkManager.preload(game);
-    InfoManager.preload(game);
-    GUIManager.preload(game);
-    DogPlayer.preload(game);
 }
 
 BasicGame.Main.prototype.create = function ()
 {
     this.state = undefined;
 
-    this.background.addLayer(game, 'bg1', WALKSPEED / 5);
-    this.background.addLayer(game, 'bg2', WALKSPEED / 2);
-    this.background.addLayer(game, 'bg3', WALKSPEED);
-    
-    this.inputManager.create(this);
-    this.infoManager.create();
-    this.player.create(this, this.infoManager);
+    ServiceLocator.background.create(this, WALKSPEED);
+    ServiceLocator.inputManager.create(this);
+    ServiceLocator.infoManager.create();
+    this.player.create(this);
 }
 
 BasicGame.Main.prototype.update = function ()
 {
     this.updateSignal.dispatch();
-    if (this.infoManager.shouldPause())
+    if (ServiceLocator.infoManager.shouldPause())
     {
         return;
     }
     if (this.state == undefined)
     {
         this.state = BasicGame.Main.State.WALKING;
-        this.walkManager.startWalk();
+        ServiceLocator.walkManager.startWalk();
     }
 
     if (this.state == BasicGame.Main.State.WALKING)
     {
-        this.walkManager.update();
-        this.background.update();
-        if (this.walkManager.isWalkingFinished())
+        ServiceLocator.walkManager.update();
+        if (ServiceLocator.walkManager.isWalkingFinished())
         {
             this.state = BasicGame.Main.State.FIGHTING;
-            this.combatManager.startCombat([BasicEnemy, BeeEnemy]);
+            ServiceLocator.combatManager.startCombat([BasicEnemy, BeeEnemy]);
         }
     }
     else if (this.state == BasicGame.Main.State.FIGHTING)
     {
-        this.combatManager.update();
-        if (this.combatManager.isCombatFinished())
+        ServiceLocator.combatManager.update();
+        if (ServiceLocator.combatManager.isCombatFinished())
         {
             this.state = BasicGame.Main.State.WALKING;
-            this.walkManager.startWalk();
+            ServiceLocator.walkManager.startWalk();
         }
     }
 }

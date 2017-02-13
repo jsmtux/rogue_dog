@@ -1,4 +1,4 @@
-function WalkManager(_game, _player, _walkSpeed, _difficultyManager)
+function WalkManager(_game, _player, _walkSpeed)
 {
     this.player = _player;
     this.walkedIterations = 0;
@@ -8,7 +8,6 @@ function WalkManager(_game, _player, _walkSpeed, _difficultyManager)
     this.nextObstacleIteration;
     this.obstaclesPlaced = 0;
     this.game = _game;
-    this.difficultyManager = _difficultyManager;
 }
 
 WalkManager.preload = function(_game)
@@ -22,11 +21,11 @@ WalkManager.prototype.update = function()
     this.player.updateWalk();
     
     if (this.nextObstacleIteration == undefined
-        && this.obstaclesPlaced < this.difficultyManager.getSpikeNumber())
+        && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber())
     {
         this.nextObstacleIteration = 
             this.walkedIterations + 60 + // minimumJumpable distance
-            this.difficultyManager.getSpikeVarSeparation();
+            ServiceLocator.difficultyManager.getSpikeVarSeparation();
     }
     
     if (this.nextObstacleIteration <= this.walkedIterations)
@@ -63,19 +62,22 @@ WalkManager.prototype.startWalk = function()
     this.handler = function(){
         self.player.jump();
     }
-    this.game.inputManager.leftButton.onDown.add(this.handler, this);
+    ServiceLocator.inputManager.leftButton.onDown.add(this.handler, this);
     this.obstaclesPlaced = 0;
     this.nextObstacleIteration = undefined;
     this.player.startWalk();
+    
+    ServiceLocator.background.setPaused(false);
 }
 
 WalkManager.prototype.isWalkingFinished = function()
 {
-    if (this.obstaclesPlaced >= this.difficultyManager.getSpikeNumber() && this.obstacles.length == 0 && this.player.onGround())
+    if (this.obstaclesPlaced >= ServiceLocator.difficultyManager.getSpikeNumber() && this.obstacles.length == 0 && this.player.onGround())
     {
-        this.game.inputManager.leftButton.onDown.remove(this.handler, this);
+        ServiceLocator.inputManager.leftButton.onDown.remove(this.handler, this);
         this.player.finishWalk();
         this.walkedIterations = 0;
+        ServiceLocator.background.setPaused(true);
         return true;
     }
     return false;

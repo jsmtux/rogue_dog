@@ -192,7 +192,7 @@ PlayerMenu.preload = function(_game)
 
 PlayerMenu.prototype.show = function()
 {
-    this.game.guiManager.showUI();
+    ServiceLocator.guiManager.showUI();
     
     this.spriterGroup = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
     this.spriterGroup.position.setTo(250, 250);
