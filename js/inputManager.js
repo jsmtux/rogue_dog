@@ -3,6 +3,7 @@ function InputManager(_game)
     this.bg;
     this.game = _game;
     this.directionGesture = new DirectionGesture(_game, this);
+    this.drawGesture = new DrawGesture(_game, this);
 }
 
 InputManager.prototype.create = function(game)
@@ -24,13 +25,6 @@ function DirectionGesture(_game, _inputManager)
 {
     this.game = _game;
     this.initialPos;
-}
-
-DirectionGesture.direction = {
-    UP: 0,
-    DOWN: 1,
-    LEFT: 2,
-    RIGHT: 3
 }
 
 DirectionGesture.prototype.getMousePos = function()
@@ -97,5 +91,116 @@ DirectionGesture.prototype.mouseUp = function()
 
 DirectionGesture.prototype.updateMouse = function()
 {
-    //console.log(this.getMousePos() - this.initialPos);
+}
+
+function DrawGesture(_game, _inputManager)
+{
+    this.game = _game;
+    this.points = [];
+    this.polygonPoints;
+    this.polyFillAlpha = 1.0;
+    this.polyFillDecay = 0.05;
+    this.functionCb;
+    this.contextCb;
+}
+
+DrawGesture.prototype.add = function(_function, _context)
+{
+    this.bmd = this.game.add.graphics(0, 0);
+    this.game.input.addMoveCallback(this.updateMouse, this);
+    this.game.updateSignal.add(this.update, this);
+    this.functionCb = _function;
+    this.contextCb = _context;
+}
+
+DrawGesture.prototype.remove = function(_function, _cont)
+{
+    this.bmd.destroy();
+    this.game.input.deleteMoveCallback(this.updateMouse, this);
+    this.game.updateSignal.remove(this.update, this);
+    this.functionCb = undefined;
+    this.contextCb = undefined;
+    this.points = [];
+    this.polygonPoints = undefined;
+};
+
+DrawGesture.prototype.update = function()
+{
+    var timeThreshold = performance.now() - 300;
+    for (var ind in this.points)
+    {
+        if(this.points[ind].time < timeThreshold)
+        {
+            this.points.shift();
+        }
+        else
+        {
+            break;
+        }
+    }
+    this.bmd.clear();
+    this.game.world.bringToTop(this.bmd);
+    
+    if (this.polygonPoints)
+    {
+        this.bmd.lineStyle(0, 0x000000, 0);
+        this.bmd.beginFill(0xFF700B, this.polyFillAlpha);
+        this.bmd.drawPolygon(this.polygonPoints);
+        this.bmd.endFill();
+
+        this.polyFillAlpha -= this.polyFillDecay;
+        if (this.polyFillAlpha < 0)
+        {
+            this.polygonPoints = undefined;
+            this.polyFillAlpha = 1.0;
+        }
+    }
+
+    this.bmd.lineStyle(10, 0xffd900, 1);
+    if (this.points.length > 0)
+    {
+        this.bmd.moveTo(this.points[0].point.x,this.points[0].point.y);
+        for(var i = 1; i < this.points.length; i++)
+        {
+            this.bmd.lineTo(this.points[i].point.x,this.points[i].point.y);
+        }
+    }
+    
+    for (var i = 0; i < this.points.length - 1; i++)
+    {
+        var lineA = new Phaser.Line(this.points[i].point.x, this.points[i].point.y, this.points[i+1].point.x, this.points[i+1].point.y);
+        for(var j = 0; j < this.points.length - 1; j++)
+        {
+            if (i + 5 > j)
+            {
+                continue;
+            }
+            var lineB = new Phaser.Line(this.points[j].point.x, this.points[j].point.y, this.points[j+1].point.x, this.points[j+1].point.y);
+            var p = lineA.intersects(lineB, true);
+            if (p)
+            {
+                this.showPolyIntersection(p, i + 1, j - 1);
+                break;
+            }
+        }
+    }
+}
+
+DrawGesture.prototype.showPolyIntersection = function(startPoint, i, j)
+{
+    var tmpPoints = [startPoint];
+    for(var x = i; x < j; x++)
+    {
+        tmpPoints.push(this.points[x].point);
+    }
+    this.polygonPoints = new Phaser.Polygon(tmpPoints);
+    this.functionCb.call(this.contextCb, this.polygonPoints);
+}
+
+DrawGesture.prototype.updateMouse = function(pointer, x, y)
+{
+    if (pointer.isDown && !ServiceLocator.infoManager.shouldPause())
+    {
+        this.points.push({'point':new Phaser.Point(x, y), 'time':performance.now()});
+    }
 }

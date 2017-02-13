@@ -147,10 +147,6 @@ function BeeEnemy(_game, _index)
     this.moveRadius = 10;
     this.rotationCounter = 0;
     this.game = _game;
-    this.points = [];
-    this.polygonPoints;
-    this.polyFillAlpha = 1.0;
-    this.polyFillDecay = 0.05;
 }
 
 BeeEnemy.prototype = new BasicEnemy();
@@ -169,8 +165,6 @@ BeeEnemy.prototype.create = function()
     this.sprite.animations.add('walk');
     
     ServiceLocator.infoManager.register("BeeEnemy", this.sprite);
-
-    this.bmd = this.game.add.graphics(0, 0);
 }
 
 BeeEnemy.prototype.update = function()
@@ -183,14 +177,17 @@ BeeEnemy.prototype.update = function()
         {
             var bulletWidth = this.bullet.sprite.width;
             var bulletHeight = this.bullet.sprite.height;
+            //Check different hit points
             inside = this.polygonPoints.contains(this.bullet.sprite.x, this.bullet.sprite.y);
             inside |= this.polygonPoints.contains(this.bullet.sprite.x + bulletWidth/2, this.bullet.sprite.y + bulletHeight/2);
             inside |= this.polygonPoints.contains(this.bullet.sprite.x + bulletWidth, this.bullet.sprite.y + bulletHeight);
+            //
+            this.polygonPoints = undefined;
         }
         if (inside || this.bullet.isFinished())
         {
             this.state = BasicEnemy.States.FINISHED;
-            this.game.input.deleteMoveCallback(this.updateMouse, this);
+            ServiceLocator.inputManager.drawGesture.remove(this.receivePolygonPoints, this);
             this.bullet.destroy();
             this.bullet = undefined;
         }
@@ -201,93 +198,22 @@ BeeEnemy.prototype.update = function()
         this.sprite.play('walk', 10, true);
         this.sprite.x -= 1.5;
     }
+
     this.sprite.y = this.height + Math.sin(this.rotationCounter++ / 10.0) * this.moveRadius;
-    
-    var timeThreshold = performance.now() - 300;
-    for (var ind in this.points)
-    {
-        if(this.points[ind].time < timeThreshold)
-        {
-            this.points.shift();
-        }
-        else
-        {
-            break;
-        }
-    }
-    this.bmd.clear();
-    this.game.world.bringToTop(this.bmd);
-    
-    if (this.polygonPoints)
-    {
-        this.bmd.lineStyle(0, 0x000000, 0);
-        this.bmd.beginFill(0xFF700B, this.polyFillAlpha);
-        this.bmd.drawPolygon(this.polygonPoints);
-        this.bmd.endFill();
-
-        this.polyFillAlpha -= this.polyFillDecay;
-        if (this.polyFillAlpha < 0)
-        {
-            this.polygonPoints = undefined;
-            this.polyFillAlpha = 1.0;
-        }
-    }
-
-    this.bmd.lineStyle(10, 0xffd900, 1);
-    if (this.points.length > 0)
-    {
-        this.bmd.moveTo(this.points[0].point.x,this.points[0].point.y);
-        for(var i = 1; i < this.points.length; i++)
-        {
-            this.bmd.lineTo(this.points[i].point.x,this.points[i].point.y);
-        }
-    }
-    
-    for (var i = 0; i < this.points.length - 1; i++)
-    {
-        var lineA = new Phaser.Line(this.points[i].point.x, this.points[i].point.y, this.points[i+1].point.x, this.points[i+1].point.y);
-        for(var j = 0; j < this.points.length - 1; j++)
-        {
-            if (i + 5 > j)
-            {
-                continue;
-            }
-            var lineB = new Phaser.Line(this.points[j].point.x, this.points[j].point.y, this.points[j+1].point.x, this.points[j+1].point.y);
-            var p = lineA.intersects(lineB, true);
-            if (p)
-            {
-                this.showPolyIntersection(p, i + 1, j - 1);
-                break;
-            }
-        }
-    }
 }
 
-BeeEnemy.prototype.showPolyIntersection = function(startPoint, i, j)
+BeeEnemy.prototype.receivePolygonPoints = function(_points)
 {
-    var tmpPoints = [startPoint];
-    for(var x = i; x < j; x++)
-    {
-        tmpPoints.push(this.points[x].point);
-    }
-    this.polygonPoints = new Phaser.Polygon(tmpPoints);
+    this.polygonPoints = _points;
 }
 
 BeeEnemy.prototype.startAttack = function(_player)
 {
     if (!this.bullet)
     {
-        this.game.input.addMoveCallback(this.updateMouse, this);
+        ServiceLocator.inputManager.drawGesture.add(this.receivePolygonPoints, this);
         this.bullet = new BeeBullet(this.game, _player, ServiceLocator.difficultyManager.getBeeBulletSpeed());
         this.bullet.create(this.sprite.x, this.sprite.y);
-    }
-}
-
-BeeEnemy.prototype.updateMouse = function(pointer, x, y)
-{
-    if (pointer.isDown && !ServiceLocator.infoManager.shouldPause())
-    {
-        this.points.push({'point':new Phaser.Point(x, y), 'time':performance.now()});
     }
 }
 
