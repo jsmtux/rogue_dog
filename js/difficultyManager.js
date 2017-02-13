@@ -4,7 +4,7 @@ function DifficultyManager()
 
 DifficultyManager.prototype.getSpikeNumber = function()
 {
-    return 15;
+    return 3;
 }
 
 DifficultyManager.prototype.getNextSpikeSeparation = function()

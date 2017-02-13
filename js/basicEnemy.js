@@ -209,7 +209,6 @@ BeeEnemy.prototype.receivePolygonPoints = function(_points)
 
 BeeEnemy.prototype.startAttack = function(_player)
 {
-    this.difficultyManager = _difficultyManager;
     if (!this.bullet)
     {
         ServiceLocator.inputManager.drawGesture.add(this.receivePolygonPoints, this);

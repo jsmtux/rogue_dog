@@ -25,7 +25,7 @@ WalkManager.prototype.update = function()
     {
         this.nextObstacleIteration = 
             this.walkedIterations +
-            this.difficultyManager.getNextSpikeSeparation();
+            ServiceLocator.difficultyManager.getNextSpikeSeparation();
     }
     
     if (this.nextObstacleIteration <= this.walkedIterations)
