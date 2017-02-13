@@ -196,12 +196,13 @@ PlayerMenu.prototype.show = function()
     
     this.spriterGroup = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
     this.spriterGroup.position.setTo(250, 250);
-    this.game.world.add(this.spriterGroup);
+    //this.game.world.add(this.spriterGroup);
     
     this.spriterGroup.scale.set(0.2, 0.2);
     this.spriterGroup.animations.play("idle");
     
     this.game.updateSignal.add(this.update, this);
+    EZGUI.Compatibility.GUIDisplayObjectContainer.globalPhaserGroup.addChild(this.spriterGroup);
 }
 
 PlayerMenu.prototype.update = function()
