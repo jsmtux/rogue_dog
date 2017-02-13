@@ -24,8 +24,8 @@ WalkManager.prototype.update = function()
         && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber())
     {
         this.nextObstacleIteration = 
-            this.walkedIterations + 60 + // minimumJumpable distance
-            ServiceLocator.difficultyManager.getSpikeVarSeparation();
+            this.walkedIterations +
+            this.difficultyManager.getNextSpikeSeparation();
     }
     
     if (this.nextObstacleIteration <= this.walkedIterations)

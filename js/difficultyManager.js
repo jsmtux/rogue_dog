@@ -4,12 +4,12 @@ function DifficultyManager()
 
 DifficultyManager.prototype.getSpikeNumber = function()
 {
-    return 1;
+    return 15;
 }
 
-DifficultyManager.prototype.getSpikeVarSeparation = function()
+DifficultyManager.prototype.getNextSpikeSeparation = function()
 {
-    return Math.random() * 180;
+    return randomInt(0, 2) * 30 + 60;
 }
 
 DifficultyManager.prototype.getBasicEnemyTimeout = function()
@@ -20,4 +20,9 @@ DifficultyManager.prototype.getBasicEnemyTimeout = function()
 DifficultyManager.prototype.getBeeBulletSpeed = function()
 {
     return 4;
+}
+
+DifficultyManager.prototype.getLineTimeAlive = function()
+{
+    return 600;
 }
