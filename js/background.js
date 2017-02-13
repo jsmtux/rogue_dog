@@ -22,7 +22,7 @@ Background.prototype.create = function(_game, WALKSPEED)
 
 Background.prototype.update = function()
 {
-    if (this.paused)
+    if (this.paused || ServiceLocator.infoManager.shouldPause())
     {
         return;
     }
