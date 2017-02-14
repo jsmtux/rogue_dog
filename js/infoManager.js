@@ -192,23 +192,31 @@ PlayerMenu.preload = function(_game)
 
 PlayerMenu.prototype.show = function()
 {
-    ServiceLocator.guiManager.showUI();
+    this.ui = ServiceLocator.guiManager.createUI(PlayerMenuUI, this.uiCallback, this);
+    this.ui.addCallback('btn1', 'click', 'hat');
+    this.ui.addCallback('btn2', 'click', 'back');
     
     this.spriterGroup = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
-    this.spriterGroup.position.setTo(250, 250);
-    //this.game.world.add(this.spriterGroup);
+    this.spriterGroup.position.setTo(150, 140);
     
     this.spriterGroup.scale.set(0.2, 0.2);
     this.spriterGroup.animations.play("idle");
     
-    this.game.updateSignal.add(this.update, this);
     EZGUI.Compatibility.GUIDisplayObjectContainer.globalPhaserGroup.addChild(this.spriterGroup);
+    this.shown = true;
 }
 
-PlayerMenu.prototype.update = function()
+PlayerMenu.prototype.uiCallback = function(_name, _event)
 {
-    console.log("updateing");
-    this.game.world.bringToTop(this.spriterGroup);
+    console.log("Received event with name " + _name);
+    if (_name == "hat")
+    {
+        this.spriterGroup.pushCharMap("hat");
+    }
+    if (_name == "back")
+    {
+        this.hide();
+    }
 }
 
 PlayerMenu.prototype.hide = function()
@@ -216,6 +224,7 @@ PlayerMenu.prototype.hide = function()
     if (this.shown)
     {
         this.spriterGroup.destroy(true);
+        this.ui.destroy();
     }
-    PopUpMenu.prototype.hide.call(this);
+    this.shown = false;
 }

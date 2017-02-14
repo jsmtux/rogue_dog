@@ -238,7 +238,6 @@ DogPlayer.prototype.create = function(_game)
     }
     
     this.spriterGroup.scale.set(0.3, 0.3);
-    this.spriterGroup.pushCharMap("hat");
     
     ServiceLocator.infoManager.register("player", this.spriterGroup);
     
@@ -309,4 +308,19 @@ DogPlayer.prototype.play = function(_animationName)
         this.currentAnimation = _animationName;
         this.spriterGroup.animations.play(_animationName);
     }
+}
+
+function DogHatAccesory()
+{
+    
+}
+
+DogHatAccesory.prototype.apply = function(_dogSprite)
+{
+    
+}
+
+DogHatAccesory.prototype.remove = function(_dogSprite)
+{
+    
 }
