@@ -317,10 +317,10 @@ function DogHatAccesory()
 
 DogHatAccesory.prototype.apply = function(_dogSprite)
 {
-    
+    _dogSprite.pushCharMap("hat");
 }
 
 DogHatAccesory.prototype.remove = function(_dogSprite)
 {
-    
+    _dogSprite.removeCharMap("hat");
 }

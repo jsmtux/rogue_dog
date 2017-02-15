@@ -17,7 +17,7 @@ var PlayerMenuUI = {
             position: { x: 0, y: 5 },
             width: 590,
             height: 160,
-            layout: [2, 1],
+            layout: [2, 2],
 
             children: [
                   {
@@ -29,57 +29,131 @@ var PlayerMenuUI = {
                       children: []
                   },
                   {
-                      id: 'btn1',
-                      text: 'Hat!',
-                      font: {
-                          size: '42px',
-                          family: 'Skranji',
-                          color: 'red'
+                      component: 'Layout',
+                      skin:'List',
+                      position: { x: 0, y: 0 },
+                      width: 250,
+                      height: 150,
+                      layout: [2, 4],
+                      children: [{
+                          id: 'btn1',
+                          text: 'Head',
+                          font: {
+                              size: '24px',
+                              family: 'Skranji',
+                              color: 'red'
+                          },
+                          component: 'Label',
+                          position: 'left',
+                          width: 100,
+                          height: 40
                       },
-                      component: 'Button',
-                      position: 'center',
-                      width: 190,
-                      height: 80
+                      {
+                          component: 'Layout',
+                          position: { x: 0, y: 0 },
+                          position: 'right',
+                          width: 100,
+                          height: 40,
+                          children: []
+                      },
+                      {
+                          id: 'neckBtn',
+                          text: 'Neck',
+                          font: {
+                              size: '24px',
+                              family: 'Skranji',
+                              color: 'red'
+                          },
+                          component: 'Label',
+                          position: 'left',
+                          width: 100,
+                          height: 40
+                      },
+                      {
+                          component: 'Layout',
+                          position: { x: 0, y: 0 },
+                          position: 'right',
+                          width: 100,
+                          height: 40,
+                          children: []
+                      },
+                      {
+                          id: 'bodyBtn',
+                          text: 'Body',
+                          font: {
+                              size: '24px',
+                              family: 'Skranji',
+                              color: 'red'
+                          },
+                          component: 'Label',
+                          position: 'left',
+                          width: 100,
+                          height: 40
+                      },
+                      {
+                          component: 'Layout',
+                          position: { x: 0, y: 0 },
+                          position: 'right',
+                          width: 100,
+                          height: 40,
+                          children: []
+                      },
+                      {
+                          id: 'feetBtn',
+                          text: 'Feet',
+                          font: {
+                              size: '24px',
+                              family: 'Skranji',
+                              color: 'red'
+                          },
+                          component: 'Label',
+                          position: 'left',
+                          width: 100,
+                          height: 40
+                      },
+                      {
+                          component: 'Layout',
+                          position: { x: 0, y: 0 },
+                          position: 'right',
+                          width: 100,
+                          height: 40,
+                          children: []
+                      }]
                   }
             ]
         },
-
-    {
-        id: 'hlist1',
-        component: 'List',
-
-        padding: 3,
-        position: 'center',
-        width: 400,
-        height: 150,
-        layout: [4, null],
-        children: [
-            { component: 'Button', position: 'center', width: 90, height: 120 },
-            null,
-            {  component: 'Button', position: 'center', width: 90, height: 120 },
-            {  component: 'Button', position: 'center', width: 90, height: 120 },
-            {  component: 'Button', position: 'center', width: 90, height: 120 },
-            { component: 'Button', position: 'center', width: 90, height: 120 },
-            { component: 'Button', position: 'center', width: 90, height: 120 },
-            { component: 'Button', position: 'center', width: 90, height: 120 },
-            { component: 'Button', position: 'center', width: 90, height: 120 },
-            { component: 'Button', position: 'center', width: 90, height: 120 },
-            { component: 'Button', position: 'center', width: 90, height: 120 },
-        ]
-    },
-    {
-        id: 'btn2',
-        text: 'Back',
-        font: {
-          size: '42px',
-          family: 'Skranji',
-          color: 'red'
+        {
+            id: 'hlist1',
+            component: 'List',
+            width: 570,
+            height: 240,
+            layout: [3, 3],
+            position: { x: 0, y: 5 },
+            children: [
+                { id:'btnn',component: 'Button', position: 'center', width: 180, height: 80 },
+                { component: 'Button', position: 'center', width: 180, height: 80 },
+                { component: 'Button', position: 'center', width: 180, height: 80 },
+                { component: 'Button', position: 'center', width: 180, height: 80 },
+                { component: 'Button', position: 'center', width: 180, height: 80 },
+                { component: 'Button', position: 'center', width: 180, height: 80 },
+                { component: 'Button', position: 'center', width: 180, height: 80 },
+                { component: 'Button', position: 'center', width: 180, height: 80 },
+                { component: 'Button', position: 'center', width: 180, height: 80 },
+            ]
         },
-        component: 'Button',
-        position: 'center',
-        width: 190,
-        height: 80
-    }
+        {
+            id: 'btn2',
+            text: 'Back',
+            font: {
+              size: '24px',
+              family: 'Skranji',
+              color: 'red'
+            },
+            component: 'Button',
+            position: { x: 205, y: 100 },
+            width: 190,
+            height: 40
+        }
     ]
 }
 

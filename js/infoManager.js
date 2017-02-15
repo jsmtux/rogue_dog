@@ -33,7 +33,7 @@ InfoManager.prototype.show = function()
     this.graphics.endFill();
     this.showing = true;
     
-    this.graphics.inputEnabled = true
+    //this.graphics.inputEnabled = true
     //this.graphics.input.priorityID = 1;
     //this.graphics.events.onInputDown.add(this.hide, this);
     
@@ -67,7 +67,7 @@ InfoManager.prototype.hide = function()
     }
     
     this.beeHelp.hide();
-    this.playerHelp.hide();
+    //this.playerHelp.hide();
 }
 
 InfoManager.prototype.shouldPause = function()
@@ -225,6 +225,7 @@ PlayerMenu.prototype.hide = function()
     {
         this.spriterGroup.destroy(true);
         this.ui.destroy();
+        ServiceLocator.infoManager.hide();
     }
     this.shown = false;
 }
