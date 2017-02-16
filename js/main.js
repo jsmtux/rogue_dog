@@ -74,6 +74,7 @@ BasicGame.Main.prototype.create = function ()
 
     ServiceLocator.background.create(this, WALKSPEED);
     ServiceLocator.inputManager.create(this);
+    ServiceLocator.guiManager.create();
     ServiceLocator.infoManager.create();
     this.player.create(this);
 }

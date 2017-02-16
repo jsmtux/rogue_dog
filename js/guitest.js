@@ -130,15 +130,15 @@ var PlayerMenuUI = {
             layout: [3, 3],
             position: { x: 0, y: 5 },
             children: [
-                { id:'btnn',component: 'Button', position: 'center', width: 180, height: 80 },
-                { component: 'Button', position: 'center', width: 180, height: 80 },
-                { component: 'Button', position: 'center', width: 180, height: 80 },
-                { component: 'Button', position: 'center', width: 180, height: 80 },
-                { component: 'Button', position: 'center', width: 180, height: 80 },
-                { component: 'Button', position: 'center', width: 180, height: 80 },
-                { component: 'Button', position: 'center', width: 180, height: 80 },
-                { component: 'Button', position: 'center', width: 180, height: 80 },
-                { component: 'Button', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid00', component: 'Button', text:'', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid01', component: 'Button', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid02', component: 'Button', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid10', component: 'Button', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid11', component: 'Button', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid12', component: 'Button', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid20', component: 'Button', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid21', component: 'Button', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid22', component: 'Button', position: 'center', width: 180, height: 80 },
             ]
         },
         {
@@ -167,18 +167,15 @@ GUIManager.preload = function(_game)
     _game.load.EZGUITheme('metalworks', 'js/lib/ezgui_assets/metalworks-theme/metalworks-theme.json');
 }
 
-GUIManager.prototype.createUI = function(_uiObj, _callback, _callbackEnv)
+GUIManager.prototype.create = function()
 {
-    var guiContainer = EZGUI.create(_uiObj, 'metalworks');
-
-    return new GUIElement(guiContainer, _callback, _callbackEnv);
+    this.playerMenuUI = new PlayerMenuGUIElement(PlayerMenuUI);
 }
 
-function GUIElement(_container, _cb, _cbEnv)
+function GUIElement(_container)
 {
-    this.guiContainer = _container;
-    this.cb = _cb;
-    this.cbEnv = _cbEnv;
+    this.guiContainer = EZGUI.create(_container, 'metalworks');
+    this.guiContainer.visible = false;
 }
 
 GUIElement.prototype.addCallback = function(_element, _event, _name)
@@ -187,7 +184,78 @@ GUIElement.prototype.addCallback = function(_element, _event, _name)
     EZGUI.components[_element].on(_event, function(event){self.cb.call(self.cbEnv, _name, event)});
 }
 
-GUIElement.prototype.destroy = function()
+GUIElement.prototype.registerCbReceiver = function(_cb, _cbEnv)
 {
-    this.guiContainer.destroy();
+    this.cb = _cb;
+    this.cbEnv = _cbEnv;
+}
+
+GUIElement.prototype.show = function()
+{
+    this.guiContainer.visible = true;
+}
+
+
+GUIElement.prototype.hide = function()
+{
+    this.guiContainer.visible = false;
+}
+
+function PlayerMenuGUIElement(_container)
+{
+    GUIElement.call(this, _container);
+    this.spriterGroup;
+}
+
+PlayerMenuGUIElement.prototype = Object.create(GUIElement.prototype);
+PlayerMenuGUIElement.prototype.constructor = PlayerMenuGUIElement;
+
+PlayerMenuGUIElement.prototype.setCharacterSpriteGroup = function(_spriterGroup)
+{
+    if (this.spriterGroup)
+    {
+        EZGUI.Compatibility.GUIDisplayObjectContainer.globalPhaserGroup.removeChild(this.spriterGroup);
+    }
+    this.spriterGroup = _spriterGroup;
+    EZGUI.Compatibility.GUIDisplayObjectContainer.globalPhaserGroup.addChild(_spriterGroup);
+    
+    this.spriterGroup.visible = this.guiContainer.visible;
+}
+
+PlayerMenuGUIElement.prototype.setItemsList = function(_list)
+{
+    var gridName = "accesoryGrid";
+    var size = 3;
+    for (var i = 0; i < size; i++)
+    {
+        for (var j = 0; j < size; j++)
+        {
+            var cellName = gridName + i + j;
+                EZGUI.components[cellName].text = cellName;
+            if (i + j * size > _list.length)
+            {
+                EZGUI.components[cellName].visible = false;
+            }
+        }
+    }
+    
+}
+
+PlayerMenuGUIElement.prototype.show = function()
+{
+    this.guiContainer.visible = true;
+    if (this.spriterGroup)
+    {
+        this.spriterGroup.visible = true;
+    }
+}
+
+
+PlayerMenuGUIElement.prototype.hide = function()
+{
+    this.guiContainer.visible = false;
+    if (this.spriterGroup)
+    {
+        this.spriterGroup.visible = false;
+    }
 }

@@ -21,6 +21,8 @@ InfoManager.prototype.create = function()
     this.infoIcon.inputEnabled = true;
     this.infoIcon.input.priorityID = 1;
     this.infoIcon.events.onInputDown.add(this.show, this);
+
+    this.playerHelp.create();
 }
 
 InfoManager.prototype.show = function()
@@ -190,19 +192,29 @@ PlayerMenu.preload = function(_game)
     // but is already loaded in player.js
 }
 
-PlayerMenu.prototype.show = function()
+PlayerMenu.prototype.create = function()
 {
-    this.ui = ServiceLocator.guiManager.createUI(PlayerMenuUI, this.uiCallback, this);
-    this.ui.addCallback('btn1', 'click', 'hat');
-    this.ui.addCallback('btn2', 'click', 'back');
-    
     this.spriterGroup = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
     this.spriterGroup.position.setTo(150, 140);
     
     this.spriterGroup.scale.set(0.2, 0.2);
     this.spriterGroup.animations.play("idle");
+
+    var ui = ServiceLocator.guiManager.playerMenuUI;
     
-    EZGUI.Compatibility.GUIDisplayObjectContainer.globalPhaserGroup.addChild(this.spriterGroup);
+    ui.addCallback('btn1', 'click', 'hat');
+    ui.addCallback('btn2', 'click', 'back');
+    
+    ui.setCharacterSpriteGroup(this.spriterGroup);
+    ui.registerCbReceiver(this.uiCallback, this);
+    ui.setItemsList([]);
+}
+
+PlayerMenu.prototype.show = function()
+{
+    
+    ServiceLocator.guiManager.playerMenuUI.show();
+    
     this.shown = true;
 }
 
@@ -223,8 +235,7 @@ PlayerMenu.prototype.hide = function()
 {
     if (this.shown)
     {
-        this.spriterGroup.destroy(true);
-        this.ui.destroy();
+        ServiceLocator.guiManager.playerMenuUI.hide();
         ServiceLocator.infoManager.hide();
     }
     this.shown = false;

@@ -312,7 +312,13 @@ DogPlayer.prototype.play = function(_animationName)
 
 function DogHatAccesory()
 {
-    
+    this.name = "Magician hat"
+    this.imageName = 'hat01';
+}
+
+DogHatAccesory.preload = function(_game)
+{
+    _game.load.video(this.imageName, './img/items/hat_icon.png');
 }
 
 DogHatAccesory.prototype.apply = function(_dogSprite)
