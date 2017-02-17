@@ -125,6 +125,15 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":299,"h":235},
 	"sourceSize": {"w":299,"h":235},
 	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "wool",
+	"frame": {"x":585,"y":369,"w":166,"h":217},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":166,"h":217},
+	"sourceSize": {"w":166,"h":217},
+	"pivot": {"x":0.5,"y":0.5}
 }],
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
@@ -133,6 +142,6 @@
 	"format": "RGBA8888",
 	"size": {"w":779,"h":779},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:5370a6614ddaecd0c1b8bd9945b087b0:db3fd450c2eaf79b840483bbdce54faa:ec6c3e0b9eb3cd3c555a7c426f3b0ee8$"
+	"smartupdate": "$TexturePacker:SmartUpdate:4ac839350371f146d021974a87355584:b44c8ddffb6385e87804465c1567334d:ec6c3e0b9eb3cd3c555a7c426f3b0ee8$"
 }
 }

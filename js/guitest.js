@@ -131,14 +131,14 @@ var PlayerMenuUI = {
             position: { x: 0, y: 5 },
             children: [
                 { id:'accesoryGrid00', component: 'Button', text:'', position: 'center', width: 180, height: 80 },
-                { id:'accesoryGrid01', component: 'Button', position: 'center', width: 180, height: 80 },
-                { id:'accesoryGrid02', component: 'Button', position: 'center', width: 180, height: 80 },
-                { id:'accesoryGrid10', component: 'Button', position: 'center', width: 180, height: 80 },
-                { id:'accesoryGrid11', component: 'Button', position: 'center', width: 180, height: 80 },
-                { id:'accesoryGrid12', component: 'Button', position: 'center', width: 180, height: 80 },
-                { id:'accesoryGrid20', component: 'Button', position: 'center', width: 180, height: 80 },
-                { id:'accesoryGrid21', component: 'Button', position: 'center', width: 180, height: 80 },
-                { id:'accesoryGrid22', component: 'Button', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid01', component: 'Button', text:'', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid02', component: 'Button', text:'', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid10', component: 'Button', text:'', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid11', component: 'Button', text:'', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid12', component: 'Button', text:'', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid20', component: 'Button', text:'', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid21', component: 'Button', text:'', position: 'center', width: 180, height: 80 },
+                { id:'accesoryGrid22', component: 'Button', text:'', position: 'center', width: 180, height: 80 },
             ]
         },
         {
@@ -181,13 +181,21 @@ function GUIElement(_container)
 GUIElement.prototype.addCallback = function(_element, _event, _name)
 {
     var self = this;
-    EZGUI.components[_element].on(_event, function(event){self.cb.call(self.cbEnv, _name, event)});
+    EZGUI.components[_element].on(_event, function(event){self.cbHandler(_name, event)});
 }
 
 GUIElement.prototype.registerCbReceiver = function(_cb, _cbEnv)
 {
     this.cb = _cb;
     this.cbEnv = _cbEnv;
+}
+
+GUIElement.prototype.cbHandler = function(_name, _event)
+{
+    if (this.cb)
+    {
+        this.cb.call(this.cbEnv, _name, _event);
+    }
 }
 
 GUIElement.prototype.show = function()
@@ -204,7 +212,20 @@ GUIElement.prototype.hide = function()
 function PlayerMenuGUIElement(_container)
 {
     GUIElement.call(this, _container);
+    this.gridName = "accesoryGrid";
     this.spriterGroup;
+    
+    for (var i = 0; i < 3; i++)
+    {
+        for (var j = 0; j < 3; j++)
+        {
+            var cellName = this.gridName + i + j;
+            this.addCallback(cellName, 'click', cellName);
+        }
+    }
+    
+    this.itemsList = [];
+    this.appliedItemsList = [];
 }
 
 PlayerMenuGUIElement.prototype = Object.create(GUIElement.prototype);
@@ -224,17 +245,22 @@ PlayerMenuGUIElement.prototype.setCharacterSpriteGroup = function(_spriterGroup)
 
 PlayerMenuGUIElement.prototype.setItemsList = function(_list)
 {
-    var gridName = "accesoryGrid";
+    this.itemsList = _list;
     var size = 3;
     for (var i = 0; i < size; i++)
     {
         for (var j = 0; j < size; j++)
         {
-            var cellName = gridName + i + j;
-                EZGUI.components[cellName].text = cellName;
-            if (i + j * size > _list.length)
+            var cellName = this.gridName + j + i;
+            var cell = EZGUI.components[cellName];
+            var index = i + j* size;
+            if (index >= _list.length)
             {
                 EZGUI.components[cellName].visible = false;
+            }
+            else
+            {
+                EZGUI.components[cellName].text = _list[index].getName();
             }
         }
     }
@@ -257,5 +283,38 @@ PlayerMenuGUIElement.prototype.hide = function()
     if (this.spriterGroup)
     {
         this.spriterGroup.visible = false;
+        GUIElement.prototype.cbHandler.call(this, 'appliedElements', this.appliedItemsList);
+    }
+}
+
+PlayerMenuGUIElement.prototype.cbHandler = function(_name, _event)
+{
+    if (_name.startsWith(this.gridName))
+    {
+        var i = parseInt(_name.charAt(this.gridName.length));
+        var j = parseInt(_name.charAt(this.gridName.length + 1));
+        console.log(i, j);
+        var chosenAccesory = this.itemsList[i * 3 + j];
+        
+        var chosenAccesoryRestrictions = chosenAccesory.getRestriction();
+        if (chosenAccesoryRestrictions !== undefined)
+        {
+            for (var appliedAccesory in this.appliedItemsList)
+            {
+                var curAccesory = this.appliedItemsList[appliedAccesory];
+                if (curAccesory.getRestriction() == chosenAccesoryRestrictions)
+                {
+                    curAccesory.remove(this.spriterGroup);
+                    this.appliedItemsList.splice(appliedAccesory);
+                }
+            }
+        }
+        
+        chosenAccesory.apply(this.spriterGroup);
+        this.appliedItemsList.push(chosenAccesory);
+    }
+    else
+    {
+        GUIElement.prototype.cbHandler.call(this, _name, _event);
     }
 }

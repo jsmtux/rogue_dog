@@ -735,6 +735,11 @@ if (!PIXI.TextureCache) {
 
         if (!texture)
         {
+            texture = game.add.image(0, 0, frameId).texture;
+        }
+
+        if (!texture)
+        {
             throw new Error('The frameId "' + frameId + '" does not exist in the texture cache');
         }
 

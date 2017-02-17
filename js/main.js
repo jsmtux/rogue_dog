@@ -19,8 +19,8 @@ BasicGame.Load.prototype.preload = function()
     WoodShieldCard.preload(this.game);
     WalkManager.preload(this.game);
     InfoManager.preload(this.game);
-    GUIManager.preload(this.game);
     DogPlayer.preload(this.game);
+    GUIManager.preload(this.game);
     this.game.load.onLoadComplete.add(this.loadComplete, this);
     
     this.loaded = false;

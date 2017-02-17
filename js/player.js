@@ -205,6 +205,9 @@ function DogPlayer()
     Player.prototype.constructor.call(this);
     this.currentAnimation = '';
     this.playerInitialY = GROUND_LEVEL - 90;
+    
+    this.itemsList = [new DogHatAccesory(), new DogWoolHatAccesory()];
+    this.appliedItems = [];
 }
 
 DogPlayer.prototype = Object.create(Player.prototype);
@@ -215,6 +218,9 @@ DogPlayer.preload = function(_game)
     var path = "anim/"
     _game.load.atlas("dogAnimAtlas", path + "dog.png", path + "dog.json");
     _game.load.json("dogJSON", path + "dog.scon");
+    
+    DogHatAccesory.preload(_game);
+    DogWoolHatAccesory.preload(_game);
 }
 
 DogPlayer.prototype.create = function(_game)
@@ -238,6 +244,7 @@ DogPlayer.prototype.create = function(_game)
     }
     
     this.spriterGroup.scale.set(0.3, 0.3);
+    this.spriterGroup.pushCharMap("NoWool");
     
     ServiceLocator.infoManager.register("player", this.spriterGroup);
     
@@ -286,6 +293,11 @@ DogPlayer.prototype.updateWalk = function()
     }*/
 }
 
+DogPlayer.prototype.getItemsList = function()
+{
+    return this.itemsList;
+}
+
 DogPlayer.prototype.getFeetArea = function()
 {
     return [this.spriterGroup.x - 40, this.spriterGroup.x + 109];
@@ -310,15 +322,59 @@ DogPlayer.prototype.play = function(_animationName)
     }
 }
 
+DogPlayer.prototype.setAppliedItems = function(_items)
+{
+    for (var itemInd in this.appliedItems)
+    {
+        this.appliedItems[itemInd].remove(this.spriterGroup);
+    }
+    this.appliedItems = [];
+    for(var itemInd in _items)
+    {
+        this.appliedItems.push(_items[itemInd]);
+       _items[itemInd].apply(this.game.player.spriterGroup)
+    }
+}
+
+function Accesory()
+{
+    
+}
+
+Accesory.Restrictions = {
+    HEAD: 0,
+    NECK: 1,
+    FEET: 2
+}
+
+Accesory.prototype.getName = function()
+{
+    return this.name;
+}
+
+Accesory.prototype.getImageName = function()
+{
+    return this.imageName;
+}
+
+Accesory.prototype.getRestriction = function()
+{
+    return this.restriction;
+}
+
 function DogHatAccesory()
 {
-    this.name = "Magician hat"
+    this.name = "Magician hat";
     this.imageName = 'hat01';
+    this.restriction = Accesory.Restrictions.HEAD;
 }
+
+DogHatAccesory.prototype = Object.create(Accesory.prototype);
+DogHatAccesory.prototype.constructor = DogHatAccesory;
 
 DogHatAccesory.preload = function(_game)
 {
-    _game.load.video(this.imageName, './img/items/hat_icon.png');
+    _game.load.image('hat01', './img/items/hat_icon.png');
 }
 
 DogHatAccesory.prototype.apply = function(_dogSprite)
@@ -329,4 +385,29 @@ DogHatAccesory.prototype.apply = function(_dogSprite)
 DogHatAccesory.prototype.remove = function(_dogSprite)
 {
     _dogSprite.removeCharMap("hat");
+}
+
+function DogWoolHatAccesory()
+{
+    this.name = "Wool hat";
+    this.imageName = 'hat02';
+    this.restriction = Accesory.Restrictions.HEAD;
+}
+
+DogWoolHatAccesory.prototype = Object.create(Accesory.prototype);
+DogWoolHatAccesory.prototype.constructor = DogWoolHatAccesory;
+
+DogWoolHatAccesory.preload = function(_game)
+{
+    //_game.load.image('hat01', './img/items/hat_icon.png');
+}
+
+DogWoolHatAccesory.prototype.apply = function(_dogSprite)
+{
+    _dogSprite.removeCharMap("NoWool");
+}
+
+DogWoolHatAccesory.prototype.remove = function(_dogSprite)
+{
+    _dogSprite.pushCharMap("NoWool");
 }

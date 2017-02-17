@@ -196,6 +196,7 @@ PlayerMenu.prototype.create = function()
 {
     this.spriterGroup = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
     this.spriterGroup.position.setTo(150, 140);
+    this.spriterGroup.pushCharMap("NoWool");
     
     this.spriterGroup.scale.set(0.2, 0.2);
     this.spriterGroup.animations.play("idle");
@@ -207,7 +208,7 @@ PlayerMenu.prototype.create = function()
     
     ui.setCharacterSpriteGroup(this.spriterGroup);
     ui.registerCbReceiver(this.uiCallback, this);
-    ui.setItemsList([]);
+    ui.setItemsList(this.game.player.getItemsList());
 }
 
 PlayerMenu.prototype.show = function()
@@ -221,13 +222,13 @@ PlayerMenu.prototype.show = function()
 PlayerMenu.prototype.uiCallback = function(_name, _event)
 {
     console.log("Received event with name " + _name);
-    if (_name == "hat")
-    {
-        this.spriterGroup.pushCharMap("hat");
-    }
     if (_name == "back")
     {
         this.hide();
+    }
+    if (_name == "appliedElements")
+    {
+        this.game.player.setAppliedItems(_event);
     }
 }
 
