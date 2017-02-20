@@ -3,9 +3,10 @@ function MainState(game)
     this.player = new DogPlayer();
 
     ServiceLocator.initialize('difficultyManager', new DifficultyManager());
+    ServiceLocator.initialize('camera', new Camera());
     ServiceLocator.initialize('infoManager', new InfoManager(this));
     ServiceLocator.initialize('combatManager', new CombatManager(this, this.player));
-    ServiceLocator.initialize('walkManager', new WalkManager(this, this.player, WALKSPEED));
+    ServiceLocator.initialize('walkManager', new WalkManager(this, this.player));
     ServiceLocator.initialize('guiManager', new GUIManager());
     ServiceLocator.initialize('inputManager', new InputManager(this));
     ServiceLocator.initialize('background', new Background(this));
@@ -31,10 +32,12 @@ MainState.prototype.create = function ()
 {
     this.state = undefined;
 
-    ServiceLocator.background.create(this, WALKSPEED);
+    ServiceLocator.background.create(this);
     ServiceLocator.inputManager.create(this);
     ServiceLocator.guiManager.create();
     ServiceLocator.infoManager.create();
+    ServiceLocator.camera.create(this);
+    this.game.camera.x = 50;
     this.player.create(this);
 }
 

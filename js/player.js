@@ -13,6 +13,8 @@ function Player()
     this.jumpAcceleration = 0;
     this.playerInitialY = GROUND_LEVEL - 225;
     this.dizzy = false;
+    
+    this.walkSpeed = 6;
 }
 
 Player.preload = function(_game)
@@ -305,11 +307,13 @@ DogPlayer.prototype.getFeetArea = function()
 
 DogPlayer.prototype.startWalk = function()
 {
+    ServiceLocator.camera.setSpeed(this.walkSpeed);
     this.play("walk");
 }
 
 DogPlayer.prototype.finishWalk = function()
 {
+    ServiceLocator.camera.setSpeed(0);
     this.play("idle");
 }
 

@@ -30,7 +30,7 @@ WalkManager.prototype.update = function()
     
     if (this.nextObstacleIteration <= this.walkedIterations)
     {
-        var obstacle = new Obstacle(this.walkSpeed);
+        var obstacle = new Obstacle(ServiceLocator.camera.getPosition());
         obstacle.create(this.game);
         this.obstacles.push(obstacle);
         this.obstaclesPlaced ++;
@@ -54,6 +54,8 @@ WalkManager.prototype.update = function()
             this.obstacles.splice(ind, 1);
         }
     }
+    
+    this.x += this.speed;
 }
 
 WalkManager.prototype.directionHandler = function(_context, _dir, _angle)
@@ -62,16 +64,12 @@ WalkManager.prototype.directionHandler = function(_context, _dir, _angle)
 }
 
 WalkManager.prototype.startWalk = function()
-{
-    var self = this;
-    
+{    
     ServiceLocator.inputManager.directionGesture.add(this.directionHandler, this);
     
     this.obstaclesPlaced = 0;
     this.nextObstacleIteration = undefined;
     this.player.startWalk();
-    
-    ServiceLocator.background.setPaused(false);
 }
 
 WalkManager.prototype.isWalkingFinished = function()
@@ -81,17 +79,26 @@ WalkManager.prototype.isWalkingFinished = function()
         ServiceLocator.inputManager.directionGesture.remove(this.directionHandler, this);
         this.player.finishWalk();
         this.walkedIterations = 0;
-        ServiceLocator.background.setPaused(true);
+        
         return true;
     }
     return false;
 }
 
-function Obstacle(_speed)
+WalkManager.prototype.getUpdatedDistance = function()
 {
-    this.speed = _speed;
+    if ( ServiceLocator.infoManager.shouldPause())
+    {
+        return 0;
+    }
+    return this.speed;
+}
+
+function Obstacle(_position)
+{
     this.sprite;
     this.broken = false;
+    this.position = _position;
 }
 
 Obstacle.preload = function(_game)
@@ -108,7 +115,7 @@ Obstacle.prototype.create = function(_game)
 
 Obstacle.prototype.update = function()
 {
-    this.sprite.x -= this.speed;
+    this.sprite.x = resolution.x + this.position.x - ServiceLocator.camera.x;
 }
 
 Obstacle.prototype.isOut = function()

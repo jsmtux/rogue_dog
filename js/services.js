@@ -7,6 +7,7 @@ function Services()
     this.guiManager = {};
     this.inputManager = {};
     this.background = {};
+    this.camera = {};
     Object.preventExtensions(this)
 }
 

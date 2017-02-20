@@ -11,21 +11,21 @@ Background.preload = function(_game)
     _game.load.image('bg3', './img/background/layer-3.png');
 }
 
-Background.prototype.create = function(_game, WALKSPEED)
+Background.prototype.create = function(_game)
 {
-    this.addLayer(_game, 'bg1', WALKSPEED / 5);
-    this.addLayer(_game, 'bg2', WALKSPEED / 2);
-    this.addLayer(_game, 'bg3', WALKSPEED);
+    this.addLayer(_game, 'bg1', 0.2);
+    this.addLayer(_game, 'bg2', 0.5);
+    this.addLayer(_game, 'bg3', 1.0);
     
     _game.updateSignal.add(this.update, this);
+    this.prevX = ServiceLocator.camera.getPosition().x;
 }
 
 Background.prototype.update = function()
 {
-    if (this.paused || ServiceLocator.infoManager.shouldPause())
-    {
-        return;
-    }
+    var curX = ServiceLocator.camera.getPosition().x;
+    var distance = curX - this.prevX;
+    this.prevX = curX;
 
     for(ind in this.layers)
     {
@@ -39,8 +39,8 @@ Background.prototype.update = function()
         {
             layer.imgB.x = layer.imgA.x + layer.imgB.width;
         }
-        layer.imgA.x -= layer.speed;
-        layer.imgB.x -= layer.speed;
+        layer.imgA.x -= distance * layer.speed;
+        layer.imgB.x -= distance * layer.speed;
     }
 }
 
@@ -61,9 +61,4 @@ Background.prototype.addLayer = function(_game, _image, _speed)
     layer.imgB.x = -layer.imgB.width;
     layer.speed = _speed;
     this.layers.push(layer);
-}
-
-Background.prototype.setPaused = function(value)
-{
-    this.paused = value;
 }
