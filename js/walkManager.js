@@ -56,13 +56,17 @@ WalkManager.prototype.update = function()
     }
 }
 
+WalkManager.prototype.directionHandler = function(_context, _dir, _angle)
+{
+    this.player.jump(_angle);
+}
+
 WalkManager.prototype.startWalk = function()
 {
     var self = this;
-    this.handler = function(){
-        self.player.jump();
-    }
-    ServiceLocator.inputManager.leftButton.onDown.add(this.handler, this);
+    
+    ServiceLocator.inputManager.directionGesture.add(this.directionHandler, this);
+    
     this.obstaclesPlaced = 0;
     this.nextObstacleIteration = undefined;
     this.player.startWalk();
@@ -74,7 +78,7 @@ WalkManager.prototype.isWalkingFinished = function()
 {
     if (this.obstaclesPlaced >= ServiceLocator.difficultyManager.getSpikeNumber() && this.obstacles.length == 0 && this.player.onGround())
     {
-        ServiceLocator.inputManager.leftButton.onDown.remove(this.handler, this);
+        ServiceLocator.inputManager.directionGesture.remove(this.directionHandler, this);
         this.player.finishWalk();
         this.walkedIterations = 0;
         ServiceLocator.background.setPaused(true);

@@ -85,7 +85,7 @@ DirectionGesture.prototype.mouseUp = function()
             direction = 'left'
         }
         
-        this.cbFunction.call(this.cbContext, direction);
+        this.cbFunction.call(this.cbContext, direction, angle);
     }
 }
 

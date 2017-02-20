@@ -182,7 +182,7 @@ Player.prototype.isAttackFinished = function()
     return !this.skillSelector.isActive();
 }
 
-Player.prototype.jump = function()
+Player.prototype.jump = function(_angle)
 {
     if (this.onGround())
     {
