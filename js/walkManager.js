@@ -114,7 +114,7 @@ class Obstacle
     
     create(_game)
     {
-        this.sprite = game.add.sprite(resolution.x, 0, 'spike');
+        this.sprite = _game.add.sprite(resolution.x, 0, 'spike');
         this.sprite.y = GROUND_LEVEL - this.sprite.height;
     }
     
@@ -125,7 +125,8 @@ class Obstacle
     
     isOut()
     {
-        return this.sprite.x < -this.sprite.width;
+        var camera = ServiceLocator.camera;
+        return this.sprite.x + this.sprite.width < camera.getPosition().x;
     }
     
     break()

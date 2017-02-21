@@ -17,6 +17,7 @@ class Player
         this.dizzy = false;
         
         this.walkSpeed = 6;
+        this.curSpeed = 0;
     }
     
     static preload(_game)
@@ -166,8 +167,7 @@ class Player
     startAttack()
     {
         this.skillSelector.create();
-        this.skillSelector.sprite.x = 100;
-        this.skillSelector.sprite.y = 270;
+        this.skillSelector.setPosition(100, 270);
         var self = this;
         ServiceLocator.inputManager.leftButton.onDown.add(function handler(){
             console.log();
@@ -231,7 +231,7 @@ class DogPlayer extends Player
     {
         this.game = _game;
         this.spriterGroup = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
-        this.spriterGroup.position.setTo(140, this.playerInitialY);
+        this.spriterGroup.position.setTo(0, this.playerInitialY);
         this.game.world.add(this.spriterGroup);
         
         var self = this;
@@ -263,6 +263,7 @@ class DogPlayer extends Player
     updateWalk()
     {
         var shouldPlay;
+        this.spriterGroup.x += this.curSpeed;
         if (this.onGround() && this.jumpAcceleration == 0)
         {
             shouldPlay = 'walk';
@@ -310,12 +311,14 @@ class DogPlayer extends Player
     startWalk()
     {
         ServiceLocator.camera.setSpeed(this.walkSpeed);
+        this.curSpeed = this.walkSpeed;
         this.play("walk");
     }
     
     finishWalk()
     {
         ServiceLocator.camera.setSpeed(0);
+        this.curSpeed = 0;
         this.play("idle");
     }
     

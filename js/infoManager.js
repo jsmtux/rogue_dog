@@ -20,6 +20,7 @@ class InfoManager
     create()
     {
         this.infoIcon = this.game.add.sprite(resolution.x - 50, 25, 'question_icon');
+        ServiceLocator.guiManager.addToUI(this.infoIcon);
         this.infoIcon.inputEnabled = true;
         this.infoIcon.input.priorityID = 1;
         this.infoIcon.events.onInputDown.add(this.show, this);
@@ -30,6 +31,7 @@ class InfoManager
     show()
     {
         this.graphics = this.game.add.graphics(0,0);
+        ServiceLocator.guiManager.addToUI(this.graphics);
         this.graphics.beginFill(0x000000, 0.5);
         this.graphics.lineTo(resolution.x, 0);
         this.graphics.lineTo(resolution.x, resolution.y)

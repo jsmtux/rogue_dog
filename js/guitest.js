@@ -165,9 +165,26 @@ class GUIManager
         _game.load.EZGUITheme('metalworks', 'lib/ezgui_assets/metalworks-theme/metalworks-theme.json');
     }
     
-    create()
+    create(_game)
     {
         this.playerMenuUI = new PlayerMenuGUIElement(PlayerMenuUI);
+        
+        this.UIGroup = _game.add.group();
+        this.UIGroup.fixedToCamera = true;
+        
+        this.game = _game;
+        
+        this.game.updateSignal.add(this.update, this);
+    }
+    
+    update()
+    {
+        this.game.world.bringToTop(this.UIGroup);
+    }
+    
+    addToUI(_sprite)
+    {
+        this.UIGroup.add(_sprite);
     }
 }
 

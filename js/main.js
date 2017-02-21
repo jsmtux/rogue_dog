@@ -1,6 +1,6 @@
 var GROUND_LEVEL = 525;
 
-var resolution = {x: 800, y: 600};
+var resolution = new Phaser.Point(800, 600);
 
 var game = new Phaser.Game(resolution.x, resolution.y, Phaser.AUTO, 'test', null, true, false);
 

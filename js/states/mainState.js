@@ -2,6 +2,8 @@ function MainState(game)
 {
     this.player = new DogPlayer();
 
+    this.game = game;
+
     ServiceLocator.initialize('difficultyManager', new DifficultyManager());
     ServiceLocator.initialize('camera', new Camera());
     ServiceLocator.initialize('infoManager', new InfoManager(this));
@@ -23,22 +25,23 @@ MainState.prototype.preload = function ()
 {
     this.state;
     
-    game.load.image('attack', './img/attack.png');
-    game.load.image('defend', './img/defend.png');
+    this.game.load.image('attack', './img/attack.png');
+    this.game.load.image('defend', './img/defend.png');
     
 }
 
 MainState.prototype.create = function ()
 {
     this.state = undefined;
+    this.game.world.setBounds(0, 0, 192000, 0);
+    //this.game.camera.bounds = undefined;
 
     ServiceLocator.background.create(this);
     ServiceLocator.inputManager.create(this);
-    ServiceLocator.guiManager.create();
+    ServiceLocator.guiManager.create(this);
     ServiceLocator.infoManager.create();
-    ServiceLocator.camera.create(this);
-    this.game.camera.x = 50;
     this.player.create(this);
+    ServiceLocator.camera.create(this, this.player);
 }
 
 MainState.prototype.update = function ()

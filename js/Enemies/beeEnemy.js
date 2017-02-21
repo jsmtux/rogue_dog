@@ -20,7 +20,9 @@ class BeeEnemy extends BasicEnemy
     
     create()
     {
-        this.sprite = this.game.add.sprite(resolution.x + 20 + this.padding * this.index, this.height, 'bee', 5);
+        var visibleArea = ServiceLocator.camera.getVisileArea();
+        this.sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, this.height, 'bee', 5);
+        this.endPos = visibleArea.bottomLeft.x +(300 + this.padding * this.index);
         this.sprite.animations.add('walk');
         
         ServiceLocator.infoManager.register("BeeEnemy", this.sprite);
@@ -34,12 +36,14 @@ class BeeEnemy extends BasicEnemy
             var inside = false;
             if (this.polygonPoints)
             {
+                var camPos = ServiceLocator.camera.getPosition();
+                var relativeBulletPosition = new Phaser.Point(this.bullet.sprite.x, this.bullet.sprite.y).subtract(camPos.x, camPos.y);
                 var bulletWidth = this.bullet.sprite.width;
                 var bulletHeight = this.bullet.sprite.height;
                 //Check different hit points
-                inside = this.polygonPoints.contains(this.bullet.sprite.x, this.bullet.sprite.y);
-                inside |= this.polygonPoints.contains(this.bullet.sprite.x + bulletWidth/2, this.bullet.sprite.y + bulletHeight/2);
-                inside |= this.polygonPoints.contains(this.bullet.sprite.x + bulletWidth, this.bullet.sprite.y + bulletHeight);
+                inside = this.polygonPoints.contains(relativeBulletPosition.x, relativeBulletPosition.y);
+                inside |= this.polygonPoints.contains(relativeBulletPosition.x + bulletWidth/2, relativeBulletPosition.y + bulletHeight/2);
+                inside |= this.polygonPoints.contains(relativeBulletPosition.x + bulletWidth, relativeBulletPosition.y + bulletHeight);
                 //
                 this.polygonPoints = undefined;
             }

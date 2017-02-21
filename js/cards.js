@@ -40,6 +40,7 @@ class SmMedkitCard extends Card
     show(index)
     {
         this.sprite = this.game.add.sprite(50 + 300 * index,50, 'SmMedkitCard_img');
+        ServiceLocator.guiManager.addToUI(this.sprite);
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(this.clicked, this);
     }
@@ -72,6 +73,7 @@ class WoodShieldCard extends Card
     show(index)
     {
         this.sprite = this.game.add.sprite(50 + 300 * index,50, 'WoodShieldCard_img');
+        ServiceLocator.guiManager.addToUI(this.sprite);
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(this.clicked, this);
     }
@@ -104,6 +106,7 @@ class IronShieldCard extends Card
     show(index)
     {
         this.sprite = this.game.add.sprite(50 + 300 * index,50, 'IronShieldCard_img');
+        ServiceLocator.guiManager.addToUI(this.sprite);
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(this.clicked, this);
     }

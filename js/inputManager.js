@@ -116,6 +116,7 @@ class DrawGesture
     add(_function, _context)
     {
         this.bmd = this.game.add.graphics(0, 0);
+        ServiceLocator.guiManager.addToUI(this.bmd);
         this.game.input.addMoveCallback(this.updateMouse, this);
         this.game.updateSignal.add(this.update, this);
         this.functionCb = _function;
@@ -145,7 +146,6 @@ class DrawGesture
             }
         }
         this.bmd.clear();
-        this.game.world.bringToTop(this.bmd);
         
         if (this.polygonPoints)
         {

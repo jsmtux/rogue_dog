@@ -17,9 +17,18 @@ class SkillSelector
     create()
     {
         this.spriteGroup = game.add.group();
+        ServiceLocator.guiManager.addToUI(this.spriteGroup);
         this.sprite = game.add.sprite(0, 0, 'skillbar');
+        this.spriteGroup.add(this.sprite);
         this.skillselector = game.add.sprite(10, 0, 'skillselector');
-        this.sprite.addChild(this.skillselector);
+        this.spriteGroup.add(this.skillselector);
+        
+    }
+    
+    setPosition(_x, _y)
+    {
+        this.spriteGroup.x = _x;
+        this.spriteGroup.y = _y;
     }
     
     update()

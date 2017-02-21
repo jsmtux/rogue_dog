@@ -25,7 +25,9 @@ class BasicEnemy
     
     create()
     {
-        this.sprite = this.game.add.sprite(resolution.x + 20 + this.padding * this.index, 320, 'monster', 10);
+        var visibleArea = ServiceLocator.camera.getVisileArea();
+        this.sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, 320, 'monster', 10);
+        this.endPos = visibleArea.bottomLeft.x +(300 + this.padding * this.index);
         this.sprite.animations.add('walk');
         this.sprite.animations.add('idle', [0]);
         
@@ -57,7 +59,7 @@ class BasicEnemy
     
     inPlace()
     {
-        return this.sprite.x < (300 + this.padding * this.index);
+        return this.sprite.x < this.endPos;
     }
     
     takeHit()
