@@ -1,28 +1,30 @@
-
-function SpriterAnimation(_game, _spriterGroup)
+class SpriterAnimation
 {
-    this.spriterGroup = _spriterGroup;
-    this.currentAnimation = -1;
-    this.playing = false;
-    _game.updateSignal.add(this.update, this);
-}
-
-SpriterAnimation.prototype.play = function(_name)
-{
-    this.spriterGroup.playAnimationByName(_name);
-    this.playing = true;
-}
-
-SpriterAnimation.prototype.stop = function()
-{
-    this.playing = false;
-}
-
-SpriterAnimation.prototype.update = function()
-{
-    if (this.playing)
+    constructor(_game, _spriterGroup)
     {
-        this.spriterGroup.updateAnimation();
+        this.spriterGroup = _spriterGroup;
+        this.currentAnimation = -1;
+        this.playing = false;
+        _game.updateSignal.add(this.update, this);
+    }
+    
+    play(_name)
+    {
+        this.spriterGroup.playAnimationByName(_name);
+        this.playing = true;
+    }
+    
+    stop()
+    {
+        this.playing = false;
+    }
+    
+    update()
+    {
+        if (this.playing)
+        {
+            this.spriterGroup.updateAnimation();
+        }
     }
 }
 

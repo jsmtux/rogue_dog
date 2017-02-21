@@ -157,164 +157,166 @@ var PlayerMenuUI = {
     ]
 }
 
-function GUIManager()
+class GUIManager
 {
-}
-
-GUIManager.preload = function(_game)
-{
-    EZGUI.renderer = _game.renderer;
-    _game.load.EZGUITheme('metalworks', 'js/lib/ezgui_assets/metalworks-theme/metalworks-theme.json');
-}
-
-GUIManager.prototype.create = function()
-{
-    this.playerMenuUI = new PlayerMenuGUIElement(PlayerMenuUI);
-}
-
-function GUIElement(_container)
-{
-    this.guiContainer = EZGUI.create(_container, 'metalworks');
-    this.guiContainer.visible = false;
-}
-
-GUIElement.prototype.addCallback = function(_element, _event, _name)
-{
-    var self = this;
-    EZGUI.components[_element].on(_event, function(event){self.cbHandler(_name, event)});
-}
-
-GUIElement.prototype.registerCbReceiver = function(_cb, _cbEnv)
-{
-    this.cb = _cb;
-    this.cbEnv = _cbEnv;
-}
-
-GUIElement.prototype.cbHandler = function(_name, _event)
-{
-    if (this.cb)
+    static preload(_game)
     {
-        this.cb.call(this.cbEnv, _name, _event);
+        EZGUI.renderer = _game.renderer;
+        _game.load.EZGUITheme('metalworks', 'lib/ezgui_assets/metalworks-theme/metalworks-theme.json');
+    }
+    
+    create()
+    {
+        this.playerMenuUI = new PlayerMenuGUIElement(PlayerMenuUI);
     }
 }
 
-GUIElement.prototype.show = function()
+class GUIElement
 {
-    this.guiContainer.visible = true;
-}
-
-
-GUIElement.prototype.hide = function()
-{
-    this.guiContainer.visible = false;
-}
-
-function PlayerMenuGUIElement(_container)
-{
-    GUIElement.call(this, _container);
-    this.gridName = "accesoryGrid";
-    this.spriterGroup;
-    
-    for (var i = 0; i < 3; i++)
+    constructor(_container)
     {
-        for (var j = 0; j < 3; j++)
+        this.guiContainer = EZGUI.create(_container, 'metalworks');
+        this.guiContainer.visible = false;
+    }
+    
+    addCallback(_element, _event, _name)
+    {
+        var self = this;
+        EZGUI.components[_element].on(_event, function(event){self.cbHandler(_name, event)});
+    }
+    
+    registerCbReceiver(_cb, _cbEnv)
+    {
+        this.cb = _cb;
+        this.cbEnv = _cbEnv;
+    }
+    
+    cbHandler(_name, _event)
+    {
+        if (this.cb)
         {
-            var cellName = this.gridName + i + j;
-            this.addCallback(cellName, 'click', cellName);
+            this.cb.call(this.cbEnv, _name, _event);
         }
     }
     
-    this.itemsList = [];
-    this.appliedItemsList = [];
-}
-
-PlayerMenuGUIElement.prototype = Object.create(GUIElement.prototype);
-PlayerMenuGUIElement.prototype.constructor = PlayerMenuGUIElement;
-
-PlayerMenuGUIElement.prototype.setCharacterSpriteGroup = function(_spriterGroup)
-{
-    if (this.spriterGroup)
+    show()
     {
-        EZGUI.Compatibility.GUIDisplayObjectContainer.globalPhaserGroup.removeChild(this.spriterGroup);
-    }
-    this.spriterGroup = _spriterGroup;
-    EZGUI.Compatibility.GUIDisplayObjectContainer.globalPhaserGroup.addChild(_spriterGroup);
-    
-    this.spriterGroup.visible = this.guiContainer.visible;
-}
-
-PlayerMenuGUIElement.prototype.setItemsList = function(_list)
-{
-    this.itemsList = _list;
-    var size = 3;
-    for (var i = 0; i < size; i++)
-    {
-        for (var j = 0; j < size; j++)
-        {
-            var cellName = this.gridName + j + i;
-            var cell = EZGUI.components[cellName];
-            var index = i + j* size;
-            if (index >= _list.length)
-            {
-                EZGUI.components[cellName].visible = false;
-            }
-            else
-            {
-                EZGUI.components[cellName].text = _list[index].getName();
-            }
-        }
+        this.guiContainer.visible = true;
     }
     
-}
-
-PlayerMenuGUIElement.prototype.show = function()
-{
-    this.guiContainer.visible = true;
-    if (this.spriterGroup)
+    
+    hide()
     {
-        this.spriterGroup.visible = true;
+        this.guiContainer.visible = false;
     }
 }
 
-
-PlayerMenuGUIElement.prototype.hide = function()
+class PlayerMenuGUIElement extends GUIElement
 {
-    this.guiContainer.visible = false;
-    if (this.spriterGroup)
+    constructor(_container)
     {
-        this.spriterGroup.visible = false;
-        GUIElement.prototype.cbHandler.call(this, 'appliedElements', this.appliedItemsList);
-    }
-}
-
-PlayerMenuGUIElement.prototype.cbHandler = function(_name, _event)
-{
-    if (_name.startsWith(this.gridName))
-    {
-        var i = parseInt(_name.charAt(this.gridName.length));
-        var j = parseInt(_name.charAt(this.gridName.length + 1));
-        console.log(i, j);
-        var chosenAccesory = this.itemsList[i * 3 + j];
+        super( _container);
+        this.gridName = "accesoryGrid";
+        this.spriterGroup;
         
-        var chosenAccesoryRestrictions = chosenAccesory.getRestriction();
-        if (chosenAccesoryRestrictions !== undefined)
+        for (var i = 0; i < 3; i++)
         {
-            for (var appliedAccesory in this.appliedItemsList)
+            for (var j = 0; j < 3; j++)
             {
-                var curAccesory = this.appliedItemsList[appliedAccesory];
-                if (curAccesory.getRestriction() == chosenAccesoryRestrictions)
+                var cellName = this.gridName + i + j;
+                this.addCallback(cellName, 'click', cellName);
+            }
+        }
+        
+        this.itemsList = [];
+        this.appliedItemsList = [];
+    }
+    
+    setCharacterSpriteGroup(_spriterGroup)
+    {
+        if (this.spriterGroup)
+        {
+            EZGUI.Compatibility.GUIDisplayObjectContainer.globalPhaserGroup.removeChild(this.spriterGroup);
+        }
+        this.spriterGroup = _spriterGroup;
+        EZGUI.Compatibility.GUIDisplayObjectContainer.globalPhaserGroup.addChild(_spriterGroup);
+        
+        this.spriterGroup.visible = this.guiContainer.visible;
+    }
+    
+    setItemsList(_list)
+    {
+        this.itemsList = _list;
+        var size = 3;
+        for (var i = 0; i < size; i++)
+        {
+            for (var j = 0; j < size; j++)
+            {
+                var cellName = this.gridName + j + i;
+                var cell = EZGUI.components[cellName];
+                var index = i + j* size;
+                if (index >= _list.length)
                 {
-                    curAccesory.remove(this.spriterGroup);
-                    this.appliedItemsList.splice(appliedAccesory);
+                    EZGUI.components[cellName].visible = false;
+                }
+                else
+                {
+                    EZGUI.components[cellName].text = _list[index].getName();
                 }
             }
         }
         
-        chosenAccesory.apply(this.spriterGroup);
-        this.appliedItemsList.push(chosenAccesory);
     }
-    else
+    
+    show()
     {
-        GUIElement.prototype.cbHandler.call(this, _name, _event);
+        this.guiContainer.visible = true;
+        if (this.spriterGroup)
+        {
+            this.spriterGroup.visible = true;
+        }
+    }
+    
+    
+    hide()
+    {
+        this.guiContainer.visible = false;
+        if (this.spriterGroup)
+        {
+            this.spriterGroup.visible = false;
+            GUIElement.prototype.cbHandler.call(this, 'appliedElements', this.appliedItemsList);
+        }
+    }
+    
+    cbHandler(_name, _event)
+    {
+        if (_name.startsWith(this.gridName))
+        {
+            var i = parseInt(_name.charAt(this.gridName.length));
+            var j = parseInt(_name.charAt(this.gridName.length + 1));
+            console.log(i, j);
+            var chosenAccesory = this.itemsList[i * 3 + j];
+            
+            var chosenAccesoryRestrictions = chosenAccesory.getRestriction();
+            if (chosenAccesoryRestrictions !== undefined)
+            {
+                for (var appliedAccesory in this.appliedItemsList)
+                {
+                    var curAccesory = this.appliedItemsList[appliedAccesory];
+                    if (curAccesory.getRestriction() == chosenAccesoryRestrictions)
+                    {
+                        curAccesory.remove(this.spriterGroup);
+                        this.appliedItemsList.splice(appliedAccesory);
+                    }
+                }
+            }
+            
+            chosenAccesory.apply(this.spriterGroup);
+            this.appliedItemsList.push(chosenAccesory);
+        }
+        else
+        {
+            GUIElement.prototype.cbHandler.call(this, _name, _event);
+        }
     }
 }

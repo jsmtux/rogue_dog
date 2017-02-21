@@ -1,148 +1,154 @@
-function WalkManager(_game, _player, _walkSpeed)
+class WalkManager
 {
-    this.player = _player;
-    this.walkedIterations = 0;
-    this.handler;
-    this.walkSpeed = _walkSpeed;
-    this.obstacles = [];
-    this.nextObstacleIteration;
-    this.obstaclesPlaced = 0;
-    this.game = _game;
-}
-
-WalkManager.preload = function(_game)
-{
-    Obstacle.preload(_game);
-}
-
-WalkManager.prototype.update = function()
-{
-    this.walkedIterations ++;
-    this.player.updateWalk();
-    
-    if (this.nextObstacleIteration == undefined
-        && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber())
+    constructor(_game, _player, _walkSpeed)
     {
-        this.nextObstacleIteration = 
-            this.walkedIterations +
-            ServiceLocator.difficultyManager.getNextSpikeSeparation();
-    }
-    
-    if (this.nextObstacleIteration <= this.walkedIterations)
-    {
-        var obstacle = new Obstacle(ServiceLocator.camera.getPosition());
-        obstacle.create(this.game);
-        this.obstacles.push(obstacle);
-        this.obstaclesPlaced ++;
-        this.nextObstacleIteration = undefined;
-    }
-
-    for (var ind in this.obstacles)
-    {
-        this.obstacles[ind].update();
-        if (this.obstacles[ind].collides(this.player))
-        {
-            this.player.obstacleHit();
-            this.obstacles[ind].break();
-        }
-    }
-    for (var ind in this.obstacles)
-    {
-        if (this.obstacles[ind].isOut())
-        {
-            this.obstacles[ind].destroy();
-            this.obstacles.splice(ind, 1);
-        }
-    }
-    
-    this.x += this.speed;
-}
-
-WalkManager.prototype.directionHandler = function(_context, _dir, _angle)
-{
-    this.player.jump(_angle);
-}
-
-WalkManager.prototype.startWalk = function()
-{    
-    ServiceLocator.inputManager.directionGesture.add(this.directionHandler, this);
-    
-    this.obstaclesPlaced = 0;
-    this.nextObstacleIteration = undefined;
-    this.player.startWalk();
-}
-
-WalkManager.prototype.isWalkingFinished = function()
-{
-    if (this.obstaclesPlaced >= ServiceLocator.difficultyManager.getSpikeNumber() && this.obstacles.length == 0 && this.player.onGround())
-    {
-        ServiceLocator.inputManager.directionGesture.remove(this.directionHandler, this);
-        this.player.finishWalk();
+        this.player = _player;
         this.walkedIterations = 0;
+        this.handler;
+        this.walkSpeed = _walkSpeed;
+        this.obstacles = [];
+        this.nextObstacleIteration;
+        this.obstaclesPlaced = 0;
+        this.game = _game;
+    }
+    
+    static preload(_game)
+    {
+        Obstacle.preload(_game);
+    }
+    
+    update()
+    {
+        this.walkedIterations ++;
+        this.player.updateWalk();
         
-        return true;
+        if (this.nextObstacleIteration == undefined
+            && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber())
+        {
+            this.nextObstacleIteration = 
+                this.walkedIterations +
+                ServiceLocator.difficultyManager.getNextSpikeSeparation();
+        }
+        
+        if (this.nextObstacleIteration <= this.walkedIterations)
+        {
+            var obstacle = new Obstacle(ServiceLocator.camera.getPosition());
+            obstacle.create(this.game);
+            this.obstacles.push(obstacle);
+            this.obstaclesPlaced ++;
+            this.nextObstacleIteration = undefined;
+        }
+    
+        for (var ind in this.obstacles)
+        {
+            this.obstacles[ind].update();
+            if (this.obstacles[ind].collides(this.player))
+            {
+                this.player.obstacleHit();
+                this.obstacles[ind].break();
+            }
+        }
+        for (var ind in this.obstacles)
+        {
+            if (this.obstacles[ind].isOut())
+            {
+                this.obstacles[ind].destroy();
+                this.obstacles.splice(ind, 1);
+            }
+        }
+        
+        this.x += this.speed;
     }
-    return false;
-}
-
-WalkManager.prototype.getUpdatedDistance = function()
-{
-    if ( ServiceLocator.infoManager.shouldPause())
+    
+    directionHandler(_context, _dir, _angle)
     {
-        return 0;
+        this.player.jump(_angle);
     }
-    return this.speed;
-}
-
-function Obstacle(_position)
-{
-    this.sprite;
-    this.broken = false;
-    this.position = _position;
-}
-
-Obstacle.preload = function(_game)
-{
-    _game.load.image('spike', './img/spike.png');
-    _game.load.image('brokenspike', './img/brokenspike.png');
-}
-
-Obstacle.prototype.create = function(_game)
-{
-    this.sprite = game.add.sprite(resolution.x, 0, 'spike');
-    this.sprite.y = GROUND_LEVEL - this.sprite.height;
-}
-
-Obstacle.prototype.update = function()
-{
-    this.sprite.x = resolution.x + this.position.x - ServiceLocator.camera.x;
-}
-
-Obstacle.prototype.isOut = function()
-{
-    return this.sprite.x < -this.sprite.width;
-}
-
-Obstacle.prototype.break = function()
-{
-    this.broken = true;
-    this.sprite.loadTexture('brokenspike');
-}
-
-Obstacle.prototype.destroy = function()
-{
-    this.sprite.destroy();
-}
-
-Obstacle.prototype.collides = function(_player)
-{
-    if (this.broken)
+    
+    startWalk()
+    {    
+        ServiceLocator.inputManager.directionGesture.add(this.directionHandler, this);
+        
+        this.obstaclesPlaced = 0;
+        this.nextObstacleIteration = undefined;
+        this.player.startWalk();
+    }
+    
+    isWalkingFinished()
     {
+        if (this.obstaclesPlaced >= ServiceLocator.difficultyManager.getSpikeNumber() && this.obstacles.length == 0 && this.player.onGround())
+        {
+            ServiceLocator.inputManager.directionGesture.remove(this.directionHandler, this);
+            this.player.finishWalk();
+            this.walkedIterations = 0;
+            
+            return true;
+        }
         return false;
     }
-    var characterArea = _player.getFeetArea();
-    var xCol = this.sprite.x < characterArea[1]
-        && (this.sprite.x + this.sprite.width) > characterArea[0];
     
-    return xCol && _player.jumpHeight < 55;
+    getUpdatedDistance()
+    {
+        if ( ServiceLocator.infoManager.shouldPause())
+        {
+            return 0;
+        }
+        return this.speed;
+    }
+}
+
+class Obstacle
+{
+    constructor(_position)
+    {
+        this.sprite;
+        this.broken = false;
+        this.position = _position;
+    }
+    
+    static preload(_game)
+    {
+        _game.load.image('spike', './img/spike.png');
+        _game.load.image('brokenspike', './img/brokenspike.png');
+    }
+    
+    create(_game)
+    {
+        this.sprite = game.add.sprite(resolution.x, 0, 'spike');
+        this.sprite.y = GROUND_LEVEL - this.sprite.height;
+    }
+    
+    update()
+    {
+        this.sprite.x = resolution.x + this.position.x - ServiceLocator.camera.x;
+    }
+    
+    isOut()
+    {
+        return this.sprite.x < -this.sprite.width;
+    }
+    
+    break()
+    {
+        this.broken = true;
+        this.sprite.loadTexture('brokenspike');
+    }
+    
+    destroy()
+    {
+        this.sprite.destroy();
+    }
+    
+    collides(_player)
+    {
+        if (this.broken)
+        {
+            return false;
+        }
+        var characterArea = _player.getFeetArea();
+        var xCol = this.sprite.x < characterArea[1]
+            && (this.sprite.x + this.sprite.width) > characterArea[0];
+        
+        return xCol && _player.jumpHeight < 55;
+    }
 }

@@ -1,28 +1,27 @@
-function DifficultyManager()
+class DifficultyManager
 {
-}
-
-DifficultyManager.prototype.getSpikeNumber = function()
-{
-    return 3;
-}
-
-DifficultyManager.prototype.getNextSpikeSeparation = function()
-{
-    return randomInt(0, 2) * 30 + 60;
-}
-
-DifficultyManager.prototype.getBasicEnemyTimeout = function()
-{
-    return 1200;
-}
-
-DifficultyManager.prototype.getBeeBulletSpeed = function()
-{
-    return 4;
-}
-
-DifficultyManager.prototype.getLineTimeAlive = function()
-{
-    return 600;
+    getSpikeNumber()
+    {
+        return 3;
+    }
+    
+    getNextSpikeSeparation()
+    {
+        return randomInt(0, 2) * 30 + 60;
+    }
+    
+    getBasicEnemyTimeout()
+    {
+        return 1200;
+    }
+    
+    getBeeBulletSpeed()
+    {
+        return 4;
+    }
+    
+    getLineTimeAlive()
+    {
+        return 600;
+    }
 }

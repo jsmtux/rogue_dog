@@ -8,7 +8,6 @@ LoadState.prototype.preload = function()
     Background.preload(this.game);
     BasicEnemy.preload(this.game);
     BeeEnemy.preload(this.game);
-    BasicTrainer.preload(this.game);
     Player.preload(this.game);
     SmMedkitCard.preload(this.game);
     WoodShieldCard.preload(this.game);

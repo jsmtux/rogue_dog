@@ -1,38 +1,41 @@
-function Services()
+class Services
 {
-    this.difficultyManager = {};
-    this.infoManager = {};
-    this.combatManager = {};
-    this.walkManager = {};
-    this.guiManager = {};
-    this.inputManager = {};
-    this.background = {};
-    this.camera = {};
-    Object.preventExtensions(this)
-}
-
-Services.prototype.initialize = function(_name, object)
-{
-    if (!this.checkVariableExists(_name))
+    constructor()
     {
-        console.error("Initializing undefined element " + _name);
+        this.difficultyManager = {};
+        this.infoManager = {};
+        this.combatManager = {};
+        this.walkManager = {};
+        this.guiManager = {};
+        this.inputManager = {};
+        this.background = {};
+        this.camera = {};
+        Object.preventExtensions(this)
     }
-    this[_name] = object;
-}
-
-Services.prototype.checkVariableExists = function(_name)
-{
-    var values = Object.keys(this);
-    return values.indexOf(_name) >= 0;
-}
-
-Services.prototype.getElement = function(_name)
-{
-    if (!this.checkVariableExists(_name))
+    
+    initialize(_name, object)
     {
-        console.error("Initializing undefined element " + _name);
+        if (!this.checkVariableExists(_name))
+        {
+            console.error("Initializing undefined element " + _name);
+        }
+        this[_name] = object;
     }
-    return this[_name];
+    
+    checkVariableExists(_name)
+    {
+        var values = Object.keys(this);
+        return values.indexOf(_name) >= 0;
+    }
+    
+    getElement(_name)
+    {
+        if (!this.checkVariableExists(_name))
+        {
+            console.error("Initializing undefined element " + _name);
+        }
+        return this[_name];
+    }
 }
 
 var ServiceLocator = new Services();

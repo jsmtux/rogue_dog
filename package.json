@@ -1,0 +1,7 @@
+{
+  "name": "endles-rpg",
+  "version": "0.0.0",
+  "devDependencies": {
+    "babel-cli": "^6.0.0"
+  }
+}
