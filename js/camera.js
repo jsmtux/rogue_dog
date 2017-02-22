@@ -34,4 +34,14 @@ class Camera
     {
         return this.game.camera.view;
     }
+    
+    shake(_str, _time)
+    {
+        this.game.camera.shake(_str, _time);
+    }
+
+    flash(_color, _time)
+    {
+        this.game.camera.flash(_color, _time);
+    }
 }

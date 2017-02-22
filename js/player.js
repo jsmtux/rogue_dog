@@ -11,8 +11,10 @@ class DogPlayer
         this.healthBar = new HealthBar();
         this.shieldBar = new ShieldBar();
         this.jumpHeight = 0;
-        this.jumpAcceleration = 0;
+        this.jumpAcceleration = new Phaser.Point(0, 0);
         this.dizzy = false;
+        
+        this.jumpStrenght = 9.0;
         
         this.walkSpeed = 6;
         this.curSpeed = 0;
@@ -72,16 +74,17 @@ class DogPlayer
     updateWalk()
     {
         var shouldPlay;
-        this.spriterGroup.x += this.curSpeed;
-        if (this.onGround() && this.jumpAcceleration == 0)
+        this.spriterGroup.x += this.curSpeed + this.jumpAcceleration.x;
+        if (this.onGround() && this.jumpAcceleration.y == 0)
         {
             shouldPlay = 'walk';
+            this.jumpAcceleration.x = 0;
         }
         else
         {
-            this.jumpHeight += this.jumpAcceleration;
-            this.jumpAcceleration -= 0.3;
-            if (this.jumpAcceleration > 0)
+            this.jumpHeight += this.jumpAcceleration.y;
+            this.jumpAcceleration.y -= 0.3;
+            if (this.jumpAcceleration.y > 0)
             {
                 shouldPlay = 'jump';
             }
@@ -91,7 +94,7 @@ class DogPlayer
             }
             if (this.jumpHeight < 0)
             {
-                this.jumpAcceleration = 0;
+                this.jumpAcceleration.y = 0;
                 this.jumpHeight = 0;
             }
             this.spriterGroup.y = this.playerInitialY - this.jumpHeight;
@@ -101,12 +104,14 @@ class DogPlayer
     
     startWalk()
     {
+        ServiceLocator.inputManager.directionGesture.add(this.jump, this);
         this.curSpeed = this.walkSpeed;
         this.play("walk");
     }
     
     finishWalk()
     {
+        ServiceLocator.inputManager.directionGesture.remove(this.jump, this);
         this.curSpeed = 0;
         this.play("idle");
     }
@@ -137,15 +142,16 @@ class DogPlayer
         setTimeout(function(){self.dizzy = false}, 500);
         this.health -= 5;
         this.updateHealthPercentage();
-        if (this.jumpAcceleration > 0)
+        if (this.jumpAcceleration.y > 0)
         {
-            this.jumpAcceleration = 0;
+            this.jumpAcceleration.y = 0;
         }
     }
     
     monsterHit()
     {
-        this.play('dizzy');
+        ServiceLocator.camera.shake(0.02, 200);
+        ServiceLocator.camera.flash(0xff0000, 200);
         var percentage = 1;
         if (this.shield > 0)
         {
@@ -203,11 +209,17 @@ class DogPlayer
         return this.attackFinished;
     }
     
-    jump(_angle)
+    jump(_direction, _angle)
     {
+        console.log(_angle);
+        if (_angle < 270)
+        {
+            return;
+        }
         if (this.onGround())
         {
-            this.jumpAcceleration = 8.5;
+            this.jumpAcceleration.y = this.jumpStrenght * -Math.sin(Math.radians(_angle));
+            this.jumpAcceleration.x = this.jumpStrenght * Math.cos(Math.radians(_angle));
         }
     }
     

@@ -64,6 +64,7 @@ class BasicEnemy
     
     takeHit()
     {
+        ServiceLocator.camera.shake(0.02, 200);
         var posX = this.sprite.x;
         var posY = this.sprite.y;
         this.hit = game.add.sprite(posX, posY, 'hit');

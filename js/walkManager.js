@@ -4,7 +4,6 @@ class WalkManager
     {
         this.player = _player;
         this.walkedIterations = 0;
-        this.handler;
         this.obstacles = [];
         this.nextObstacleIteration;
         this.obstaclesPlaced = 0;
@@ -56,15 +55,13 @@ class WalkManager
         }
     }
     
-    directionHandler(_context, _dir, _angle)
+    directionHandler(_dir, _angle)
     {
         this.player.jump(_angle);
     }
     
     startWalk()
-    {    
-        ServiceLocator.inputManager.directionGesture.add(this.directionHandler, this);
-        
+    {
         this.obstaclesPlaced = 0;
         this.nextObstacleIteration = undefined;
         this.player.startWalk();
@@ -74,7 +71,6 @@ class WalkManager
     {
         if (this.obstaclesPlaced >= ServiceLocator.difficultyManager.getSpikeNumber() && this.obstacles.length == 0 && this.player.onGround())
         {
-            ServiceLocator.inputManager.directionGesture.remove(this.directionHandler, this);
             this.player.finishWalk();
             this.walkedIterations = 0;
             
