@@ -1,4 +1,4 @@
-class Player
+class DogPlayer
 {
     constructor()
     {
@@ -12,39 +12,59 @@ class Player
         this.shieldBar = new ShieldBar();
         this.jumpHeight = 0;
         this.jumpAcceleration = 0;
-        this.playerInitialY = GROUND_LEVEL - 225;
         this.dizzy = false;
         
         this.walkSpeed = 6;
         this.curSpeed = 0;
         
         this.attackFinished = false;
+        
+        this.currentAnimation = '';
+        this.playerInitialY = GROUND_LEVEL - 90;
+        
+        this.itemsList = [new DogHatAccesory(), new DogWoolHatAccesory()];
+        this.appliedItems = [];
     }
     
     static preload(_game)
     {
-        _game.load.spritesheet('pc', './img/playerSpritesheet.png', 160, 225);
         HealthBar.preload(_game);
         ShieldBar.preload(_game);
         SkillSelector.preload(_game);
+
+        var path = "anim/"
+        _game.load.atlas("dogAnimAtlas", path + "dog.png", path + "dog.json");
+        _game.load.json("dogJSON", path + "dog.scon");
+        
+        DogHatAccesory.preload(_game);
+        DogWoolHatAccesory.preload(_game);
     }
     
     create(_game)
     {
         this.game = _game;
-        this.character = this.game.add.sprite(100, this.playerInitialY, 'pc', 10);
-        this.character.animations.add('idle',[0]);
-        this.character.animations.add('walk', [1,2,3,4]);
-        this.character.animations.add('dizzy', [7,8]);
-        this.character.animations.add('jump', [5]);
-        this.character.animations.add('fall', [6]);
-        ServiceLocator.infoManager.register("player", this.character);
+        this.spriterGroup = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
+        this.spriterGroup.position.setTo(0, this.playerInitialY);
+        this.game.world.add(this.spriterGroup);
         
-        this.loadLogic(_game);
-    }
-    
-    loadLogic(_game)
-    {
+        var self = this;
+        this.spriterGroup.events = {'onInputDown' : {
+            'add' : function(func, context){
+                self.spriterGroup.forEach(function(item) {
+                    item.events.onInputDown.add(func, context);
+                })},
+            'remove' : function(func, context){
+                self.spriterGroup.forEach(function(item) {
+                    item.events.onInputDown.remove(func, context);
+                })}
+            }
+        }
+        
+        this.spriterGroup.scale.set(0.3, 0.3);
+        this.spriterGroup.pushCharMap("NoWool");
+        
+        ServiceLocator.infoManager.register("player", this.spriterGroup);
+        
         this.healthBar.create();
         this.shieldBar.create();
     }
@@ -52,6 +72,7 @@ class Player
     updateWalk()
     {
         var shouldPlay;
+        this.spriterGroup.x += this.curSpeed;
         if (this.onGround() && this.jumpAcceleration == 0)
         {
             shouldPlay = 'walk';
@@ -73,30 +94,30 @@ class Player
                 this.jumpAcceleration = 0;
                 this.jumpHeight = 0;
             }
-            this.character.y = this.playerInitialY - this.jumpHeight;
+            this.spriterGroup.y = this.playerInitialY - this.jumpHeight;
         }
-        if (!this.dizzy)
-        {
-            this.play(shouldPlay);
-        }
-        else
-        {
-            this.play('dizzy');
-        }
+        this.play(shouldPlay);
     }
     
     startWalk()
     {
+        this.curSpeed = this.walkSpeed;
+        this.play("walk");
     }
     
     finishWalk()
     {
-        this.play('idle');
+        this.curSpeed = 0;
+        this.play("idle");
     }
-    
+
     play(_animationName)
     {
-        this.character.play(_animationName, 10, true);
+        if (this.currentAnimation != _animationName)
+        {
+            this.currentAnimation = _animationName;
+            this.spriterGroup.animations.play(_animationName);
+        }
     }
     
     updateHealthPercentage()
@@ -195,97 +216,6 @@ class Player
         return this.jumpHeight == 0;
     }
     
-    getFeetArea()
-    {
-        return [this.character.x + 45, this.character.x + 109];
-    }
-}
-
-class DogPlayer extends Player
-{
-    constructor()
-    {
-        super();
-        this.currentAnimation = '';
-        this.playerInitialY = GROUND_LEVEL - 90;
-        
-        this.itemsList = [new DogHatAccesory(), new DogWoolHatAccesory()];
-        this.appliedItems = [];
-    }
-    
-    static preload(_game)
-    {
-        var path = "anim/"
-        _game.load.atlas("dogAnimAtlas", path + "dog.png", path + "dog.json");
-        _game.load.json("dogJSON", path + "dog.scon");
-        
-        DogHatAccesory.preload(_game);
-        DogWoolHatAccesory.preload(_game);
-    }
-    
-    create(_game)
-    {
-        this.game = _game;
-        this.spriterGroup = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
-        this.spriterGroup.position.setTo(0, this.playerInitialY);
-        this.game.world.add(this.spriterGroup);
-        
-        var self = this;
-        this.spriterGroup.events = {'onInputDown' : {
-            'add' : function(func, context){
-                self.spriterGroup.forEach(function(item) {
-                    item.events.onInputDown.add(func, context);
-                })},
-            'remove' : function(func, context){
-                self.spriterGroup.forEach(function(item) {
-                    item.events.onInputDown.remove(func, context);
-                })}
-            }
-        }
-        
-        this.spriterGroup.scale.set(0.3, 0.3);
-        this.spriterGroup.pushCharMap("NoWool");
-        
-        ServiceLocator.infoManager.register("player", this.spriterGroup);
-        
-        this.loadLogic(_game);
-    }
-    
-    updateAttack()
-    {
-        this.skillSelector.update();
-    }
-    
-    updateWalk()
-    {
-        var shouldPlay;
-        this.spriterGroup.x += this.curSpeed;
-        if (this.onGround() && this.jumpAcceleration == 0)
-        {
-            shouldPlay = 'walk';
-        }
-        else
-        {
-            this.jumpHeight += this.jumpAcceleration;
-            this.jumpAcceleration -= 0.3;
-            if (this.jumpAcceleration > 0)
-            {
-                shouldPlay = 'jump';
-            }
-            else
-            {
-                shouldPlay = 'fall';
-            }
-            if (this.jumpHeight < 0)
-            {
-                this.jumpAcceleration = 0;
-                this.jumpHeight = 0;
-            }
-            this.spriterGroup.y = this.playerInitialY - this.jumpHeight;
-        }
-        this.play(shouldPlay);
-    }
-    
     getItemsList()
     {
         return this.itemsList;
@@ -294,27 +224,6 @@ class DogPlayer extends Player
     getFeetArea()
     {
         return [this.spriterGroup.x - 40, this.spriterGroup.x + 109];
-    }
-    
-    startWalk()
-    {
-        this.curSpeed = this.walkSpeed;
-        this.play("walk");
-    }
-    
-    finishWalk()
-    {
-        this.curSpeed = 0;
-        this.play("idle");
-    }
-    
-    play(_animationName)
-    {
-        if (this.currentAnimation != _animationName)
-        {
-            this.currentAnimation = _animationName;
-            this.spriterGroup.animations.play(_animationName);
-        }
     }
     
     setAppliedItems(_items)

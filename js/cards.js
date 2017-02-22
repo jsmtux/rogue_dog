@@ -16,6 +16,14 @@ class Card
         this.sprite.events.onInputDown.remove(this.clicked, this);
         ServiceLocator.combatManager.finishLootChoose();
     }
+    
+    show(_index)
+    {
+        this.sprite = this.game.add.sprite(50 + 300 * _index,50, this.imageName);
+        ServiceLocator.guiManager.addToUI(this.sprite);
+        this.sprite.inputEnabled = true;
+        this.sprite.events.onInputDown.add(this.clicked, this);
+    }
 }
 
 class SmMedkitCard extends Card
@@ -25,6 +33,7 @@ class SmMedkitCard extends Card
         super();
         this.player = _player;
         this.game = _game;
+        this.imageName = 'SmMedkitCard_img';
     }
     
     static preload(_game)
@@ -35,14 +44,6 @@ class SmMedkitCard extends Card
     apply()
     {
         this.player.addHealth(5);
-    }
-    
-    show(index)
-    {
-        this.sprite = this.game.add.sprite(50 + 300 * index,50, 'SmMedkitCard_img');
-        ServiceLocator.guiManager.addToUI(this.sprite);
-        this.sprite.inputEnabled = true;
-        this.sprite.events.onInputDown.add(this.clicked, this);
     }
     
     hide()
@@ -58,6 +59,7 @@ class WoodShieldCard extends Card
         super();
         this.player = _player;
         this.game = _game;
+        this.imageName = 'WoodShieldCard_img';
     }
     
     static preload(_game)
@@ -68,14 +70,6 @@ class WoodShieldCard extends Card
     apply()
     {
         this.player.setShield(2);
-    }
-    
-    show(index)
-    {
-        this.sprite = this.game.add.sprite(50 + 300 * index,50, 'WoodShieldCard_img');
-        ServiceLocator.guiManager.addToUI(this.sprite);
-        this.sprite.inputEnabled = true;
-        this.sprite.events.onInputDown.add(this.clicked, this);
     }
     
     hide()
@@ -91,6 +85,7 @@ class IronShieldCard extends Card
         super();
         this.player = _player;
         this.game = _game;
+        this.imageName = 'IronShieldCard_img';
     }
     
     static preload(_game)
@@ -101,14 +96,6 @@ class IronShieldCard extends Card
     apply()
     {
         this.player.setShield(2);
-    }
-    
-    show(index)
-    {
-        this.sprite = this.game.add.sprite(50 + 300 * index,50, 'IronShieldCard_img');
-        ServiceLocator.guiManager.addToUI(this.sprite);
-        this.sprite.inputEnabled = true;
-        this.sprite.events.onInputDown.add(this.clicked, this);
     }
     
     hide()
