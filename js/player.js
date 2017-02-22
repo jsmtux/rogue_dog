@@ -284,14 +284,6 @@ class DogPlayer extends Player
             this.spriterGroup.y = this.playerInitialY - this.jumpHeight;
         }
         this.play(shouldPlay);
-        /*if (!this.dizzy)
-        {
-            this.play(shouldPlay);
-        }
-        else
-        {
-            this.play('dizzy');
-        }*/
     }
     
     getItemsList()
@@ -306,14 +298,12 @@ class DogPlayer extends Player
     
     startWalk()
     {
-        ServiceLocator.camera.setSpeed(this.walkSpeed);
         this.curSpeed = this.walkSpeed;
         this.play("walk");
     }
     
     finishWalk()
     {
-        ServiceLocator.camera.setSpeed(0);
         this.curSpeed = 0;
         this.play("idle");
     }

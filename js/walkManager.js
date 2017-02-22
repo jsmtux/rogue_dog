@@ -1,11 +1,10 @@
 class WalkManager
 {
-    constructor(_game, _player, _walkSpeed)
+    constructor(_game, _player)
     {
         this.player = _player;
         this.walkedIterations = 0;
         this.handler;
-        this.walkSpeed = _walkSpeed;
         this.obstacles = [];
         this.nextObstacleIteration;
         this.obstaclesPlaced = 0;
@@ -32,7 +31,7 @@ class WalkManager
         
         if (this.nextObstacleIteration <= this.walkedIterations)
         {
-            var obstacle = new Obstacle(ServiceLocator.camera.getPosition());
+            var obstacle = new Obstacle();
             obstacle.create(this.game);
             this.obstacles.push(obstacle);
             this.obstaclesPlaced ++;
@@ -41,7 +40,6 @@ class WalkManager
     
         for (var ind in this.obstacles)
         {
-            this.obstacles[ind].update();
             if (this.obstacles[ind].collides(this.player))
             {
                 this.player.obstacleHit();
@@ -56,8 +54,6 @@ class WalkManager
                 this.obstacles.splice(ind, 1);
             }
         }
-        
-        this.x += this.speed;
     }
     
     directionHandler(_context, _dir, _angle)
@@ -86,15 +82,6 @@ class WalkManager
         }
         return false;
     }
-    
-    getUpdatedDistance()
-    {
-        if ( ServiceLocator.infoManager.shouldPause())
-        {
-            return 0;
-        }
-        return this.speed;
-    }
 }
 
 class Obstacle
@@ -103,7 +90,7 @@ class Obstacle
     {
         this.sprite;
         this.broken = false;
-        this.position = _position;
+        this.position = new Phaser.Point(ServiceLocator.camera.getVisibleArea().right, 0);
     }
     
     static preload(_game)
@@ -114,13 +101,8 @@ class Obstacle
     
     create(_game)
     {
-        this.sprite = _game.add.sprite(resolution.x, 0, 'spike');
+        this.sprite = _game.add.sprite(this.position.x, 0, 'spike');
         this.sprite.y = GROUND_LEVEL - this.sprite.height;
-    }
-    
-    update()
-    {
-        this.sprite.x = resolution.x + this.position.x - ServiceLocator.camera.x;
     }
     
     isOut()

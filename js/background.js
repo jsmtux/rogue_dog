@@ -81,7 +81,7 @@ class Layer
     
     cameraMoved(_distance)
     {
-        var visibleArea = ServiceLocator.camera.getVisileArea();
+        var visibleArea = ServiceLocator.camera.getVisibleArea();
         if (this.imgA.x + this.imgA.width < visibleArea.x)
         {
             this.imgA.x = this.imgB.x + this.imgB.width;

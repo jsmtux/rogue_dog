@@ -2,10 +2,6 @@ class Camera
 {
     constructor()
     {
-        this.x = 0;
-        this.y = 0;
-        this.lastX = this.x;
-        this.speed = 0;
     }
     
     create(_game, _player)
@@ -28,18 +24,13 @@ class Camera
         }
         return new Phaser.Point(this.game.camera.x, this.game.camera.y);
     }
-    
-    setSpeed(_speed)
-    {
-        this.speed = _speed;
-    }
 
     getResolution()
     {
         return resolution;
     }
 
-    getVisileArea()
+    getVisibleArea()
     {
         return this.game.camera.view;
     }
