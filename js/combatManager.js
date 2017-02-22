@@ -39,10 +39,6 @@ class CombatManager
                 var defendSprite = this.game.add.sprite(100,100,'defend');
                 setTimeout(function() {defendSprite.destroy();}, 1000);
             }
-            else
-            {
-                this.player.updateAttack();
-            }
         }
         else if (this.state == CombatManager.State.DEFEND)
         {

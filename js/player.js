@@ -10,7 +10,6 @@ class Player
         this.shield = 0;
         this.healthBar = new HealthBar();
         this.shieldBar = new ShieldBar();
-        this.skillSelector = new SkillSelector();
         this.jumpHeight = 0;
         this.jumpAcceleration = 0;
         this.playerInitialY = GROUND_LEVEL - 225;
@@ -18,6 +17,8 @@ class Player
         
         this.walkSpeed = 6;
         this.curSpeed = 0;
+        
+        this.attackFinished = false;
     }
     
     static preload(_game)
@@ -46,11 +47,6 @@ class Player
     {
         this.healthBar.create();
         this.shieldBar.create();
-    }
-    
-    updateAttack()
-    {
-        this.skillSelector.update();
     }
     
     updateWalk()
@@ -166,24 +162,24 @@ class Player
     
     startAttack()
     {
-        this.skillSelector.create();
-        this.skillSelector.setPosition(100, 270);
-        var self = this;
-        ServiceLocator.inputManager.leftButton.onDown.add(function handler(){
-            console.log();
-            if (this.skillSelector.getSuccess())
-            {
-                ServiceLocator.combatManager.hitFirstEnemy();
-            }
-            this.skillSelector.reset();
-            ServiceLocator.inputManager.leftButton.onDown.remove(handler, self);
-            
-        }, self);
+        ServiceLocator.inputManager.skillSelector.add(this.skillCallback, this);
+        ServiceLocator.inputManager.skillSelector.setPosition(100, 270);
+        this.attackFinished = false;
+    }
+    
+    skillCallback(_success)
+    {
+        if (_success)
+        {
+            ServiceLocator.combatManager.hitFirstEnemy();
+        }
+        ServiceLocator.inputManager.skillSelector.remove(this.skillCallback, this);
+        this.attackFinished = true;
     }
     
     isAttackFinished()
     {
-        return !this.skillSelector.isActive();
+        return this.attackFinished;
     }
     
     jump(_angle)
