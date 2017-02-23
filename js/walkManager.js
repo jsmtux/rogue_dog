@@ -4,15 +4,20 @@ class WalkManager
     {
         this.player = _player;
         this.walkedIterations = 0;
+
         this.obstacles = [];
         this.nextObstacleIteration;
         this.obstaclesPlaced = 0;
+
         this.game = _game;
+        
+        this.groundTiles = [];
     }
     
     static preload(_game)
     {
         Obstacle.preload(_game);
+        GroundTile.preload(_game);
     }
     
     update()
@@ -20,6 +25,13 @@ class WalkManager
         this.walkedIterations ++;
         this.player.updateWalk();
         
+        this.updateObstacles();
+        
+        this.updateGroundTiles();
+    }
+    
+    updateObstacles()
+    {
         if (this.nextObstacleIteration == undefined
             && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber())
         {
@@ -27,7 +39,7 @@ class WalkManager
                 this.walkedIterations +
                 ServiceLocator.difficultyManager.getNextSpikeSeparation();
         }
-        
+
         if (this.nextObstacleIteration <= this.walkedIterations)
         {
             var obstacle = new Obstacle();
@@ -52,6 +64,30 @@ class WalkManager
                 this.obstacles[ind].destroy();
                 this.obstacles.splice(ind, 1);
             }
+        }
+    }
+    
+    updateGroundTiles()
+    {
+        for (var ind in this.groundTiles)
+        {
+            if (this.groundTiles[ind].isOut())
+            {
+                this.groundTiles[ind].destroy();
+                this.groundTiles.splice(ind, 1);
+                ind--;
+            }
+        }
+        while(this.groundTiles.length < 50)
+        {
+            var x = 0;
+            if (this.groundTiles.length > 0)
+            {
+                x = this.groundTiles[this.groundTiles.length -1].position.x + 80;
+            }
+            var newTile = new GroundTile(new Phaser.Point(x, GROUND_LEVEL));
+            newTile.create(this.game);
+            this.groundTiles.push(newTile);
         }
     }
     
@@ -80,10 +116,51 @@ class WalkManager
     }
 }
 
-class Obstacle
+class VisibleObject
+{
+    isOut()
+    {
+        var camera = ServiceLocator.camera;
+        return this.sprite.x + this.sprite.width < camera.getPosition().x;
+    }
+    
+    getArea()
+    {
+        return this.sprite.getBounds();
+    }
+}
+
+class GroundTile extends VisibleObject
 {
     constructor(_position)
     {
+        super();
+        //this.imageName = _imageName;
+        this.position = _position;
+    }
+    
+    static preload(_game)
+    {
+        _game.load.image('grassTile', './img/tiles/grass_block.png');
+    }
+    
+    create(_game)
+    {
+        this.sprite = _game.add.sprite(this.position.x, this.position.y, 'grassTile');
+        this.sprite.scale.setTo(Layer.scale, Layer.scale);
+    }
+    
+    destroy()
+    {
+        this.sprite.destroy()
+    }
+}
+
+class Obstacle extends VisibleObject
+{
+    constructor(_position)
+    {
+        super();
         this.sprite;
         this.broken = false;
         this.position = new Phaser.Point(ServiceLocator.camera.getVisibleArea().right, 0);
@@ -99,12 +176,6 @@ class Obstacle
     {
         this.sprite = _game.add.sprite(this.position.x, 0, 'spike');
         this.sprite.y = GROUND_LEVEL - this.sprite.height;
-    }
-    
-    isOut()
-    {
-        var camera = ServiceLocator.camera;
-        return this.sprite.x + this.sprite.width < camera.getPosition().x;
     }
     
     break()

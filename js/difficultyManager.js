@@ -2,7 +2,7 @@ class DifficultyManager
 {
     getSpikeNumber()
     {
-        return 3;
+        return 9;
     }
     
     getNextSpikeSeparation()

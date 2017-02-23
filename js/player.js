@@ -212,9 +212,17 @@ class DogPlayer
     jump(_direction, _angle)
     {
         console.log(_angle);
-        if (_angle < 270)
+        if (_angle < 45)
         {
-            return;
+            _angle = 340;
+        }
+        else if (_angle < 270)
+        {
+            _angle = 270;
+        }
+        else if (_angle > 340)
+        {
+            _angle = 340;
         }
         if (this.onGround())
         {

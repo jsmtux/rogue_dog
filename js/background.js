@@ -6,7 +6,6 @@ class Background
         this.scale = 1.0;
         this.addLayer('./img/background/layer-1.png', 0.2);
         this.addLayer('./img/background/layer-2.png', 0.5);
-        this.addLayer('./img/background/layer-3.png', 1.0);
     }
     
     static preload(_game)
