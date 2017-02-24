@@ -211,7 +211,6 @@ class DogPlayer
     
     jump(_direction, _angle)
     {
-        console.log(_angle);
         if (_angle < 45)
         {
             _angle = 340;

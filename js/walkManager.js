@@ -2,16 +2,15 @@ class WalkManager
 {
     constructor(_game, _player)
     {
-        this.player = _player;
-        this.walkedIterations = 0;
-
-        this.obstacles = [];
-        this.nextObstacleIteration;
-        this.obstaclesPlaced = 0;
-
         this.game = _game;
-        
+        this.lastX = 0;
         this.groundTiles = [];
+        this.player = _player;
+        this.obstaclesPlaced = 0;
+        
+        //modify this!!
+        this.lastPlaced = 0;
+        this.placeNext = 0;
     }
     
     static preload(_game)
@@ -22,53 +21,8 @@ class WalkManager
     
     update()
     {
-        this.walkedIterations ++;
         this.player.updateWalk();
-        
-        this.updateObstacles();
-        
-        this.updateGroundTiles();
-    }
-    
-    updateObstacles()
-    {
-        if (this.nextObstacleIteration == undefined
-            && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber())
-        {
-            this.nextObstacleIteration = 
-                this.walkedIterations +
-                ServiceLocator.difficultyManager.getNextSpikeSeparation();
-        }
 
-        if (this.nextObstacleIteration <= this.walkedIterations)
-        {
-            var obstacle = new Obstacle();
-            obstacle.create(this.game);
-            this.obstacles.push(obstacle);
-            this.obstaclesPlaced ++;
-            this.nextObstacleIteration = undefined;
-        }
-    
-        for (var ind in this.obstacles)
-        {
-            if (this.obstacles[ind].collides(this.player))
-            {
-                this.player.obstacleHit();
-                this.obstacles[ind].break();
-            }
-        }
-        for (var ind in this.obstacles)
-        {
-            if (this.obstacles[ind].isOut())
-            {
-                this.obstacles[ind].destroy();
-                this.obstacles.splice(ind, 1);
-            }
-        }
-    }
-    
-    updateGroundTiles()
-    {
         for (var ind in this.groundTiles)
         {
             if (this.groundTiles[ind].isOut())
@@ -77,18 +31,55 @@ class WalkManager
                 this.groundTiles.splice(ind, 1);
                 ind--;
             }
-        }
-        while(this.groundTiles.length < 50)
-        {
-            var x = 0;
-            if (this.groundTiles.length > 0)
+            else
             {
-                x = this.groundTiles[this.groundTiles.length -1].position.x + 80;
+                this.groundTiles[ind].update(this.player);
             }
-            var newTile = new GroundTile(new Phaser.Point(x, GROUND_LEVEL));
+        }
+        while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
+        {
+            var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), this.obstacleToPlace());
             newTile.create(this.game);
+            this.lastX += newTile.sprite.width;
             this.groundTiles.push(newTile);
         }
+        
+        for (var ind in this.obstacles)
+        {
+            this.obstacles[ind].update(this.player);
+        }
+    }
+    
+    obstacleToPlace()
+    {
+        var ret = undefined;
+        
+        this.lastPlaced++;
+        
+        if (this.placeNext > 0 || (this.lastPlaced > 4 && Math.random() > 0.6 && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber()))
+        {
+            this.lastPlaced = 0;
+            ret = Obstacle;
+            this.obstaclesPlaced++;
+            if (this.placeNext > 0)
+            {
+                this.placeNext --;
+            }
+            else
+            {
+                var rand = Math.random();
+                if (rand > 0.8)
+                {
+                    this.placeNext = 2;
+                }
+                else if (rand > 0.5)
+                {
+                    this.placeNext = 1;
+                }
+            }
+        }
+        
+        return ret;
     }
     
     directionHandler(_dir, _angle)
@@ -105,14 +96,26 @@ class WalkManager
     
     isWalkingFinished()
     {
-        if (this.obstaclesPlaced >= ServiceLocator.difficultyManager.getSpikeNumber() && this.obstacles.length == 0 && this.player.onGround())
+        var ret = this.obstaclesPlaced >= ServiceLocator.difficultyManager.getSpikeNumber() && this.player.onGround() && this.getVisibleObstacles().length == 0;
+        if (ret)
         {
             this.player.finishWalk();
-            this.walkedIterations = 0;
-            
-            return true;
+            this.obstaclesPlaced = 0;
         }
-        return false;
+        return ret;
+    }
+
+    getVisibleObstacles()
+    {
+        var ret = []
+        for (var ind in this.groundTiles)
+        {
+            if (this.groundTiles[ind].obstacle != undefined)
+            {
+                ret.push(this.groundTiles[ind].obstacle);
+            }
+        }
+        return ret;
     }
 }
 
@@ -132,11 +135,15 @@ class VisibleObject
 
 class GroundTile extends VisibleObject
 {
-    constructor(_position)
+    constructor(_position, _obstacle)
     {
         super();
         //this.imageName = _imageName;
         this.position = _position;
+        if (_obstacle)
+        {
+            this.obstacle = new _obstacle(_position);
+        }
     }
     
     static preload(_game)
@@ -147,12 +154,27 @@ class GroundTile extends VisibleObject
     create(_game)
     {
         this.sprite = _game.add.sprite(this.position.x, this.position.y, 'grassTile');
-        this.sprite.scale.setTo(Layer.scale, Layer.scale);
+        if (this.obstacle)
+        {
+            this.obstacle.create(_game);
+        }
     }
     
     destroy()
     {
         this.sprite.destroy()
+        if (this.obstacle)
+        {
+            this.obstacle.destroy();
+        }
+    }
+    
+    update(_player)
+    {
+        if (this.obstacle)
+        {
+            this.obstacle.update(_player);
+        }
     }
 }
 
@@ -163,7 +185,7 @@ class Obstacle extends VisibleObject
         super();
         this.sprite;
         this.broken = false;
-        this.position = new Phaser.Point(ServiceLocator.camera.getVisibleArea().right, 0);
+        this.position = _position;
     }
     
     static preload(_game)
@@ -187,6 +209,15 @@ class Obstacle extends VisibleObject
     destroy()
     {
         this.sprite.destroy();
+    }
+    
+    update(_player)
+    {
+        if (this.collides(_player))
+        {
+            _player.obstacleHit();
+            this.break();
+        }
     }
     
     collides(_player)
