@@ -157,6 +157,43 @@ var PlayerMenuUI = {
     ]
 }
 
+var lostGameUI = {
+	id: 'lostGame',
+	component: 'Window',
+	
+	padding: 4,
+	position: { x: 0, y: 0 },
+	width: 500,
+	height: 300,
+	layout:[1,3],
+	children: [
+		{
+			component: 'Label',
+			text : 'You Lost!',
+		  font: {
+		      size: '35px',
+		      color: 'white'
+		  },	
+		  position: 'center',		  
+		  width: 100,
+		  height: 60			
+		},
+		null,
+		{
+		  id: 'playMoreButton',
+		  text: 'Retry',
+		  component: 'Button',
+		  position: 'center',
+		  font: {
+		      size: '25px',
+		      color: 'orange'
+		  },		  
+		  width: 180,
+		  height: 60
+		}	
+	]	
+}
+
 class GUIManager
 {
     static preload(_game)
@@ -168,6 +205,7 @@ class GUIManager
     create(_game)
     {
         this.playerMenuUI = new PlayerMenuGUIElement(PlayerMenuUI);
+        this.lostUI = new GUIElement(lostGameUI);
         
         this.UIGroup = _game.add.group();
         this.UIGroup.fixedToCamera = true;

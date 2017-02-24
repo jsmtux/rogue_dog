@@ -59,6 +59,8 @@ class DogPlayer
                 self.spriterGroup.forEach(function(item) {
                     item.events.onInputDown.remove(func, context);
                 })}
+            },
+            'onRemovedFromGroup$dispatch' : function(){
             }
         }
         
@@ -140,8 +142,7 @@ class DogPlayer
         this.dizzy = true;
         var self = this;
         setTimeout(function(){self.dizzy = false}, 500);
-        this.health -= 5;
-        this.updateHealthPercentage();
+        this.subtractHealth(5)
         if (this.jumpAcceleration.y > 0)
         {
             this.jumpAcceleration.y = 0;
@@ -159,12 +160,21 @@ class DogPlayer
             this.shield -= 1;
             this.updateShieldPercentage();
         }
-        this.health -= 5 * percentage;
-        this.updateHealthPercentage();
+        subtractHealth(5 * percentage);
         var self = this;
         setTimeout(function(){
             self.play('idle');
         }, 500);
+    }
+    
+    subtractHealth(_amount)
+    {
+        this.health -= _amount;
+        this.updateHealthPercentage();
+        if (this.health <= 0)
+        {
+            this.game.die();
+        }
     }
     
     addHealth(_points)

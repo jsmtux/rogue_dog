@@ -2,24 +2,21 @@ class Background
 {
     constructor()
     {
-        this.layers = [];
-        this.scale = 1.0;
-        this.addLayer('./img/background/layer-1.png', 0.2);
-        this.addLayer('./img/background/layer-2.png', 0.5);
     }
     
     static preload(_game)
     {
-        for (var ind in Background.LayersToPreload)
-        {
-            //TODO: use real tally and not ind
-            _game.load.image('bg' + ind, Background.LayersToPreload[ind]);
-        }
-        Background.LayersToPreload = [];
+        _game.load.image('bg0', './img/background/layer-1.png');
+        _game.load.image('bg1', './img/background/layer-2.png');
     }
     
     create(_game)
     {
+        this.layers = [];
+        this.scale = 1.0;
+        this.addLayer('./img/background/layer-1.png', 0.2);
+        this.addLayer('./img/background/layer-2.png', 0.5);
+
         for (var ind in this.layers)
         {
             this.layers[ind].create(_game);
@@ -43,11 +40,8 @@ class Background
     addLayer(_path, _speed)
     {
         this.layers.push(new Layer(_path, _speed, this.layers.length));
-        Background.LayersToPreload.push(_path);
     }
 }
-
-Background.LayersToPreload = [];
 
 class Layer
 {

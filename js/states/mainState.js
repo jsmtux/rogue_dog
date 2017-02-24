@@ -1,8 +1,25 @@
 function MainState(game)
 {
-    this.player = new DogPlayer();
-
     this.game = game;
+};
+
+MainState.State = {
+    WALKING : 0,
+    FIGHTING : 1
+}
+
+MainState.prototype.preload = function ()
+{
+    this.gameplayState;
+    
+    this.game.load.image('attack', './img/attack.png');
+    this.game.load.image('defend', './img/defend.png');
+    
+}
+
+MainState.prototype.create = function ()
+{
+    this.player = new DogPlayer();
 
     ServiceLocator.initialize('difficultyManager', new DifficultyManager());
     ServiceLocator.initialize('camera', new Camera());
@@ -14,25 +31,8 @@ function MainState(game)
     ServiceLocator.initialize('background', new Background(this));
     
     this.updateSignal = new Phaser.Signal();
-};
 
-MainState.State = {
-    WALKING : 0,
-    FIGHTING : 1
-}
-
-MainState.prototype.preload = function ()
-{
-    this.state;
-    
-    this.game.load.image('attack', './img/attack.png');
-    this.game.load.image('defend', './img/defend.png');
-    
-}
-
-MainState.prototype.create = function ()
-{
-    this.state = undefined;
+    this.gameplayState = undefined;
     this.game.world.setBounds(0, 0, 192000, 0);
     //this.game.camera.bounds = undefined;
 
@@ -42,6 +42,9 @@ MainState.prototype.create = function ()
     ServiceLocator.infoManager.create();
     this.player.create(this);
     ServiceLocator.camera.create(this, this.player);
+
+    var self = this;
+    ServiceLocator.inputManager.down.onDown.add(function(){self.die();});
 }
 
 MainState.prototype.update = function ()
@@ -51,27 +54,27 @@ MainState.prototype.update = function ()
     {
         return;
     }
-    if (this.state == undefined)
+    if (this.gameplayState == undefined)
     {
-        this.state = MainState.State.WALKING;
+        this.gameplayState = MainState.State.WALKING;
         ServiceLocator.walkManager.startWalk();
     }
 
-    if (this.state == MainState.State.WALKING)
+    if (this.gameplayState == MainState.State.WALKING)
     {
         ServiceLocator.walkManager.update();
         if (ServiceLocator.walkManager.isWalkingFinished())
         {
-            this.state = MainState.State.FIGHTING;
+            this.gameplayState = MainState.State.FIGHTING;
             ServiceLocator.combatManager.startCombat(ServiceLocator.difficultyManager.getEnemies());
         }
     }
-    else if (this.state == MainState.State.FIGHTING)
+    else if (this.gameplayState == MainState.State.FIGHTING)
     {
         ServiceLocator.combatManager.update();
         if (ServiceLocator.combatManager.isCombatFinished())
         {
-            this.state = MainState.State.WALKING;
+            this.gameplayState = MainState.State.WALKING;
             ServiceLocator.walkManager.startWalk();
         }
     }
@@ -79,4 +82,9 @@ MainState.prototype.update = function ()
 
 MainState.prototype.render = function ()
 {
+}
+
+MainState.prototype.die = function()
+{
+    this.state.start('Main');
 }
