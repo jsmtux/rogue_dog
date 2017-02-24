@@ -10,16 +10,18 @@ class DrawGesture
         this.functionCb;
         this.contextCb;
         this.removeUpdateSignal = false;
+        this.inputManager = _inputManager;
     }
     
     add(_function, _context)
     {
-        this.bmd = this.game.add.graphics(0, 0);
+        this.bmd = this.inputManager.getBmd();
         ServiceLocator.guiManager.addToUI(this.bmd);
         this.game.input.addMoveCallback(this.updateMouse, this);
         this.game.updateSignal.add(this.update, this);
         this.functionCb = _function;
         this.contextCb = _context;
+        this.removeUpdateSignal = false;
     }
     
     remove(_function, _cont)
@@ -95,7 +97,7 @@ class DrawGesture
         {
             this.game.updateSignal.remove(this.update, this);
             this.removeUpdateSignal = false;
-            this.bmd.destroy();
+            this.bmd.clear();
             this.points = [];
             this.polygonPoints = undefined;
         }

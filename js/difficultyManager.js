@@ -2,7 +2,7 @@ class DifficultyManager
 {
     getSpikeNumber()
     {
-        return 9;
+        return 15;
     }
     
     getNextSpikeSeparation()
@@ -23,5 +23,28 @@ class DifficultyManager
     getLineTimeAlive()
     {
         return 600;
+    }
+    
+    getEnemies()
+    {
+        var ret = [];
+        
+        for (var i = 0; i < 2; i++)
+        {
+            var enemy;
+            
+            if (Math.random() < 0.5)
+            {
+                enemy = BasicEnemy;
+            }
+            else
+            {
+                enemy = BeeEnemy;
+            }
+            
+            ret.push(enemy);
+        }
+        
+        return ret;
     }
 }

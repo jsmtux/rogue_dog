@@ -63,7 +63,7 @@ MainState.prototype.update = function ()
         if (ServiceLocator.walkManager.isWalkingFinished())
         {
             this.state = MainState.State.FIGHTING;
-            ServiceLocator.combatManager.startCombat([BasicEnemy, BeeEnemy]);
+            ServiceLocator.combatManager.startCombat(ServiceLocator.difficultyManager.getEnemies());
         }
     }
     else if (this.state == MainState.State.FIGHTING)

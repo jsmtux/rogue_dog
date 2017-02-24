@@ -11,6 +11,7 @@ class WalkManager
         //modify this!!
         this.lastPlaced = 0;
         this.placeNext = 0;
+        this.initial = true;
     }
     
     static preload(_game)
@@ -22,6 +23,20 @@ class WalkManager
     update()
     {
         this.player.updateWalk();
+
+        while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
+        {
+            var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), this.obstacleToPlace());
+            newTile.create(this.game);
+            this.lastX += newTile.sprite.width;
+            this.groundTiles.push(newTile);
+        }
+
+        if (this.initial)
+        {
+            this.initial = false;
+            return;
+        }
 
         for (var ind in this.groundTiles)
         {
@@ -36,13 +51,6 @@ class WalkManager
                 this.groundTiles[ind].update(this.player);
             }
         }
-        while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
-        {
-            var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), this.obstacleToPlace());
-            newTile.create(this.game);
-            this.lastX += newTile.sprite.width;
-            this.groundTiles.push(newTile);
-        }
         
         for (var ind in this.obstacles)
         {
@@ -52,6 +60,10 @@ class WalkManager
     
     obstacleToPlace()
     {
+        if (this.initial)
+        {
+            return;
+        }
         var ret = undefined;
         
         this.lastPlaced++;

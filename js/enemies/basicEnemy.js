@@ -27,7 +27,7 @@ class BasicEnemy
     {
         var visibleArea = ServiceLocator.camera.getVisibleArea();
         this.sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, 320, 'monster', 10);
-        this.endPos = visibleArea.bottomLeft.x +(300 + this.padding * this.index);
+        this.endPos = visibleArea.bottomLeft.x +(350 + this.padding * this.index);
         this.sprite.animations.add('walk');
         this.sprite.animations.add('idle', [0]);
         
