@@ -61,7 +61,7 @@ class DirectionGesture
             }
             else
             {
-                direction = 'left'
+                direction = 'right'
             }
             
             this.cbFunction.call(this.cbContext, direction, angle);
