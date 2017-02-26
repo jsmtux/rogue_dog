@@ -3,7 +3,6 @@ class InfoManager
     constructor(_game)
     {
         this.game = _game;
-        this.showing = false;
         this.infoElements = {};
         this.beeHelp = new BeeHelp(_game);
         this.playerHelp = new PlayerMenu(_game);
@@ -37,7 +36,9 @@ class InfoManager
         this.graphics.lineTo(resolution.x, resolution.y)
         this.graphics.lineTo(0, resolution.y);
         this.graphics.endFill();
-        this.showing = true;
+        
+        
+        this.game.setPaused(true);
         
         //this.graphics.inputEnabled = true
         //this.graphics.input.priorityID = 1;
@@ -50,7 +51,6 @@ class InfoManager
             console.log("element name is " + elementName);
             var curSprite = this.infoElements[elementName];
             this.game.world.bringToTop(curSprite);
-            curSprite.animations.stop();
             curSprite.inputEnabled = true;
             curSprite.input.priorityID = 2;
             curSprite.eventManager = function(_name){return function(){self.showHelp(_name)}}(elementName);
@@ -62,7 +62,7 @@ class InfoManager
     {
         this.graphics.events.onInputDown.remove(this.hide, this);
         this.graphics.destroy();
-        this.showing = false;
+        this.game.setPaused(false);
         
         for(var elementName in this.infoElements)
         {
@@ -74,11 +74,7 @@ class InfoManager
         
         this.beeHelp.hide();
         //this.playerHelp.hide();
-    }
-    
-    shouldPause()
-    {
-        return this.showing;
+        this.game.setPaused(false);
     }
     
     register(_infoName, _sprite)

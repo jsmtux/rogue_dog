@@ -119,7 +119,7 @@ class DrawGesture
     
     updateMouse(pointer, x, y)
     {
-        if (pointer.isDown && !ServiceLocator.infoManager.shouldPause())
+        if (pointer.isDown && !this.game.isPaused())
         {
             this.points.push({'point':new Phaser.Point(x, y), 'time':performance.now()});
         }

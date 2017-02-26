@@ -4,24 +4,24 @@ class SpriterAnimation
     {
         this.spriterGroup = _spriterGroup;
         this.currentAnimation = -1;
-        this.playing = false;
+        this.paused = true;
         _game.updateSignal.add(this.update, this);
     }
     
     play(_name)
     {
         this.spriterGroup.playAnimationByName(_name);
-        this.playing = true;
+        this.paused = false;
     }
     
     stop()
     {
-        this.playing = false;
+        this.paused = true;
     }
     
     update()
     {
-        if (this.playing)
+        if (!this.paused)
         {
             this.spriterGroup.updateAnimation();
         }

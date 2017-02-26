@@ -13,7 +13,7 @@ class Camera
     
     update()
     {
-        this.game.camera.x = this.player.spriterGroup.x - 140;
+        this.game.camera.x = this.player.sprite.x - 140;
     }
     
     getPosition()

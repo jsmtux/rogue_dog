@@ -21,7 +21,9 @@ class BeeEnemy extends BasicEnemy
     create()
     {
         var visibleArea = ServiceLocator.camera.getVisibleArea();
-        this.sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, this.height, 'bee', 5);
+        var sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, this.height, 'bee', 5);
+        GameObject.prototype.create.call(this, sprite, true);
+
         this.endPos = visibleArea.bottomLeft.x +(350 + this.padding * this.index);
         this.sprite.animations.add('walk');
         

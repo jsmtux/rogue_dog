@@ -131,7 +131,7 @@ class WalkManager
     }
 }
 
-class VisibleObject
+class VisibleObject extends GameObject
 {
     isOut()
     {
@@ -165,7 +165,8 @@ class GroundTile extends VisibleObject
     
     create(_game)
     {
-        this.sprite = _game.add.sprite(this.position.x, this.position.y, 'grassTile');
+        var sprite = _game.add.sprite(this.position.x, this.position.y, 'grassTile');
+        super.create(sprite)
         if (this.obstacle)
         {
             this.obstacle.create(_game);

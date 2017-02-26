@@ -10,7 +10,8 @@ class Services
         this.inputManager = {};
         this.background = {};
         this.camera = {};
-        Object.preventExtensions(this)
+        this.animationManager = {};
+        Object.preventExtensions(this);
     }
     
     initialize(_name, object)

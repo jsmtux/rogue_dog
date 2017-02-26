@@ -1,6 +1,7 @@
 function MainState(game)
 {
     this.game = game;
+    this.paused = false;
 };
 
 MainState.State = {
@@ -29,6 +30,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('guiManager', new GUIManager());
     ServiceLocator.initialize('inputManager', new InputManager(this));
     ServiceLocator.initialize('background', new Background(this));
+    ServiceLocator.initialize('animationManager', new AnimationManager());
     
     this.updateSignal = new Phaser.Signal();
 
@@ -42,15 +44,15 @@ MainState.prototype.create = function ()
     ServiceLocator.infoManager.create();
     this.player.create(this);
     ServiceLocator.camera.create(this, this.player);
-
-    var self = this;
-    ServiceLocator.inputManager.down.onDown.add(function(){self.die();});
+    
+    ServiceLocator.guiManager.lostUI.addCallback('reloadButton', 'click', 'reload');
+    ServiceLocator.guiManager.lostUI.registerCbReceiver(this.handleUI, this)
 }
 
 MainState.prototype.update = function ()
 {
     this.updateSignal.dispatch();
-    if (ServiceLocator.infoManager.shouldPause())
+    if (this.paused)
     {
         return;
     }
@@ -84,7 +86,39 @@ MainState.prototype.render = function ()
 {
 }
 
+MainState.prototype.handleUI = function()
+{
+    //this is only on 'reload' event
+    ServiceLocator.guiManager.lostUI.hide();
+    this.setPaused(false);
+    this.restart();
+}
+
 MainState.prototype.die = function()
 {
+    ServiceLocator.guiManager.lostUI.show();
+    this.setPaused(true);
+}
+
+MainState.prototype.restart = function()
+{
     this.state.start('Main');
+}
+
+MainState.prototype.setPaused = function(_value)
+{
+    this.paused = _value;
+    if (!_value)
+    {
+        ServiceLocator.animationManager.resumeAll();
+    }
+    else
+    {
+        ServiceLocator.animationManager.pauseAll();
+    }
+}
+
+MainState.prototype.isPaused = function()
+{
+    return this.paused;
 }

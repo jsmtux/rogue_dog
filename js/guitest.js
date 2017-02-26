@@ -162,7 +162,7 @@ var lostGameUI = {
 	component: 'Window',
 	
 	padding: 4,
-	position: { x: 0, y: 0 },
+	position: { x: 40, y: 20 },
 	width: 500,
 	height: 300,
 	layout:[1,3],
@@ -180,7 +180,7 @@ var lostGameUI = {
 		},
 		null,
 		{
-		  id: 'playMoreButton',
+		  id: 'reloadButton',
 		  text: 'Retry',
 		  component: 'Button',
 		  position: 'center',
@@ -196,6 +196,11 @@ var lostGameUI = {
 
 class GUIManager
 {
+    constructor()
+    {//EZgui does not like this to be done more than once
+        this.playerMenuUI = new PlayerMenuGUIElement(PlayerMenuUI);
+        this.lostUI = new GUIElement(lostGameUI);
+    }
     static preload(_game)
     {
         EZGUI.renderer = _game.renderer;
@@ -203,10 +208,7 @@ class GUIManager
     }
     
     create(_game)
-    {
-        this.playerMenuUI = new PlayerMenuGUIElement(PlayerMenuUI);
-        this.lostUI = new GUIElement(lostGameUI);
-        
+    {        
         this.UIGroup = _game.add.group();
         this.UIGroup.fixedToCamera = true;
         

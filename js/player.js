@@ -1,7 +1,8 @@
-class DogPlayer
+class DogPlayer extends GameObject
 {
     constructor()
     {
+        super();
         this.game;
         this.character;
         this.maxHealth = 40;
@@ -45,18 +46,19 @@ class DogPlayer
     create(_game)
     {
         this.game = _game;
-        this.spriterGroup = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
-        this.spriterGroup.position.setTo(0, this.playerInitialY);
-        this.game.world.add(this.spriterGroup);
+        var sprite = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
+        super.create(sprite, true);
+        this.sprite.position.setTo(0, this.playerInitialY);
+        this.game.world.add(this.sprite);
         
         var self = this;
-        this.spriterGroup.events = {'onInputDown' : {
+        this.sprite.events = {'onInputDown' : {
             'add' : function(func, context){
-                self.spriterGroup.forEach(function(item) {
+                self.sprite.forEach(function(item) {
                     item.events.onInputDown.add(func, context);
                 })},
             'remove' : function(func, context){
-                self.spriterGroup.forEach(function(item) {
+                self.sprite.forEach(function(item) {
                     item.events.onInputDown.remove(func, context);
                 })}
             },
@@ -64,10 +66,10 @@ class DogPlayer
             }
         }
         
-        this.spriterGroup.scale.set(0.3, 0.3);
-        this.spriterGroup.pushCharMap("NoWool");
+        this.sprite.scale.set(0.3, 0.3);
+        this.sprite.pushCharMap("NoWool");
         
-        ServiceLocator.infoManager.register("player", this.spriterGroup);
+        ServiceLocator.infoManager.register("player", this.sprite);
         
         this.healthBar.create();
         this.shieldBar.create();
@@ -76,7 +78,7 @@ class DogPlayer
     updateWalk()
     {
         var shouldPlay;
-        this.spriterGroup.x += this.curSpeed + this.jumpAcceleration.x;
+        this.sprite.x += this.curSpeed + this.jumpAcceleration.x;
         if (this.onGround() && this.jumpAcceleration.y == 0)
         {
             shouldPlay = 'walk';
@@ -99,7 +101,7 @@ class DogPlayer
                 this.jumpAcceleration.y = 0;
                 this.jumpHeight = 0;
             }
-            this.spriterGroup.y = this.playerInitialY - this.jumpHeight;
+            this.sprite.y = this.playerInitialY - this.jumpHeight;
         }
         this.play(shouldPlay);
     }
@@ -123,7 +125,7 @@ class DogPlayer
         if (this.currentAnimation != _animationName)
         {
             this.currentAnimation = _animationName;
-            this.spriterGroup.animations.play(_animationName);
+            this.sprite.animations.play(_animationName);
         }
     }
     
@@ -160,7 +162,7 @@ class DogPlayer
             this.shield -= 1;
             this.updateShieldPercentage();
         }
-        subtractHealth(5 * percentage);
+        this.subtractHealth(5 * percentage);
         var self = this;
         setTimeout(function(){
             self.play('idle');
@@ -252,20 +254,20 @@ class DogPlayer
     
     getFeetArea()
     {
-        return [this.spriterGroup.x - 40, this.spriterGroup.x + 109];
+        return [this.sprite.x - 40, this.sprite.x + 109];
     }
     
     setAppliedItems(_items)
     {
         for (var itemInd in this.appliedItems)
         {
-            this.appliedItems[itemInd].remove(this.spriterGroup);
+            this.appliedItems[itemInd].remove(this.sprite);
         }
         this.appliedItems = [];
         for(var itemInd in _items)
         {
             this.appliedItems.push(_items[itemInd]);
-           _items[itemInd].apply(this.game.player.spriterGroup)
+           _items[itemInd].apply(this.game.player.sprite)
         }
     }
 }

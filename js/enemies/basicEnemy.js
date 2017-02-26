@@ -1,7 +1,8 @@
-class BasicEnemy
+class BasicEnemy extends GameObject
 {
     constructor(_game, _index)
     {
+        super();
         this.game = _game;
         this.state = BasicEnemy.States.WAITING;
         this.health = 10;
@@ -26,7 +27,9 @@ class BasicEnemy
     create()
     {
         var visibleArea = ServiceLocator.camera.getVisibleArea();
-        this.sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, 320, 'monster', 10);
+        var sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, 320, 'monster', 10);
+        super.create(sprite, true);
+
         this.endPos = visibleArea.bottomLeft.x +(350 + this.padding * this.index);
         this.sprite.animations.add('walk');
         this.sprite.animations.add('idle', [0]);
@@ -83,7 +86,7 @@ class BasicEnemy
         this.sprite.alpha -= 0.02;
         if (this.sprite.alpha <= 0)
         {
-            this.sprite.destroy();
+            this.destroy();
             return true;
         }
         
