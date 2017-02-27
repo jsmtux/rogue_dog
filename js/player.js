@@ -250,7 +250,8 @@ class DogPlayer extends GameObject
         
         for (var ind in groundLevels)
         {
-            if (this.sprite.y >= groundLevels[ind] - 5 && this.sprite.y <= groundLevels[ind] + 5)
+            var offset = Math.abs(this.jumpAcceleration.y);
+            if (this.sprite.y >= groundLevels[ind] - offset && this.sprite.y <= groundLevels[ind] + offset)
             {
                 ret = groundLevels[ind];
                 break;

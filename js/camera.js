@@ -2,6 +2,7 @@ class Camera
 {
     constructor()
     {
+        this.offset = new Phaser.Point(140, 435)
         this.yOffset = 435;
     }
     
@@ -14,9 +15,9 @@ class Camera
     
     update()
     {
-        this.game.camera.x = this.player.sprite.x - 140;
-        var diffY = this.game.camera.y - this.player.sprite.y + this.yOffset;
-        this.game.camera.y += diffY * 0.5;
+        this.game.camera.x = this.player.sprite.x - this.offset.x;
+        //var diffY = this.game.camera.y - this.player.sprite.y + this.yOffset;
+        this.game.camera.y = this.player.sprite.y - this.offset.y;
     }
     
     getPosition()

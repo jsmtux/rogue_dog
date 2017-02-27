@@ -4,6 +4,7 @@ class WalkManager
     {
         this.game = _game;
         this.lastX = 0;
+        this.lastUndergroundX = 0;
         this.groundTiles = [];
         this.player = _player;
         this.obstaclesPlaced = 0;
@@ -27,7 +28,7 @@ class WalkManager
         this.background.create(_game, [
             {'name':'bg0', 'speed':0.2},
             {'name':'bg1', 'speed':0.5},
-            {'name':'bg2', 'speed':0.7, 'yOffset':200}]);
+            {'name':'bg2', 'speed':0.7, 'yOffset':360}]);
     }
     
     update()
@@ -39,7 +40,7 @@ class WalkManager
             this.lastPlaced ++;
             if (Math.random() > 0.2 || this.lastPlaced <= 4)
             {
-                var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), this.obstacleToPlace());
+                var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), 'grassTile', this.obstacleToPlace());
                 newTile.create(this.game);
                 this.lastX += newTile.sprite.width;
                 this.groundTiles.push(newTile);
@@ -49,6 +50,14 @@ class WalkManager
                 this.lastPlaced = 0;
                 this.lastX += 400;
             }
+        }
+        
+        while(this.lastUndergroundX < ServiceLocator.camera.getVisibleArea().right)
+        {
+            var newTile = new GroundTile(new Phaser.Point(this.lastUndergroundX, 880), 'undergroundTile');
+            newTile.create(this.game);
+            this.lastUndergroundX += newTile.sprite.width;
+            this.groundTiles.push(newTile);
         }
 
         if (this.initial)
@@ -155,7 +164,7 @@ class WalkManager
             var area = this.groundTiles[ind].getArea();
             if (_x >= area.x && _x <= area.x + area.width)
             {
-                list.push(GROUND_LEVEL - 90);
+                list.push(area.y - 90);
             }
         }
         return list;
@@ -178,10 +187,10 @@ class VisibleObject extends GameObject
 
 class GroundTile extends VisibleObject
 {
-    constructor(_position, _obstacle)
+    constructor(_position, _imageName, _obstacle)
     {
         super();
-        //this.imageName = _imageName;
+        this.imageName = _imageName;
         this.position = _position;
         if (_obstacle)
         {
@@ -192,11 +201,12 @@ class GroundTile extends VisibleObject
     static preload(_game)
     {
         _game.load.image('grassTile', './img/tiles/grass_block.png');
+        _game.load.image('undergroundTile', './img/tiles/underground_block.png');
     }
     
     create(_game)
     {
-        var sprite = _game.add.sprite(this.position.x, this.position.y, 'grassTile');
+        var sprite = _game.add.sprite(this.position.x, this.position.y, this.imageName);
         super.create(sprite)
         if (this.obstacle)
         {

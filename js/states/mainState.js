@@ -34,7 +34,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('animationManager', new AnimationManager());
 
     this.gameplayState = undefined;
-    this.game.world.setBounds(0, 0, 192000, 0);
+    this.game.world.setBounds(0, 0, 192000, 192000);
     //this.game.camera.bounds = undefined;
 
     ServiceLocator.inputManager.create(this);
