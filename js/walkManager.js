@@ -137,19 +137,18 @@ class WalkManager
         return ret;
     }
     
-    isPointOnGround(_x)
+    getGroundLevels(_x)
     {
         var list = [];
         for (var ind in this.groundTiles)
         {
             var area = this.groundTiles[ind].getArea();
-            list.push(area)
             if (_x >= area.x && _x <= area.x + area.width)
             {
-                return true;
+                list.push(0);
             }
         }
-        return false;
+        return list;
     }
 }
 
