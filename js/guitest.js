@@ -314,11 +314,11 @@ class PlayerMenuGUIElement extends GUIElement
                 var index = i + j* size;
                 if (index >= _list.length)
                 {
-                    EZGUI.components[cellName].visible = false;
+                    cell.visible = false;
                 }
                 else
                 {
-                    EZGUI.components[cellName].text = _list[index].getName();
+                    cell.text = _list[index].getName();
                 }
             }
         }

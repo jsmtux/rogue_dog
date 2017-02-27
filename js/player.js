@@ -11,7 +11,6 @@ class DogPlayer extends GameObject
         this.shield = 0;
         this.healthBar = new HealthBar();
         this.shieldBar = new ShieldBar();
-        this.jumpHeight = 0;
         this.jumpAcceleration = new Phaser.Point(0, 0);
         this.dizzy = false;
         
@@ -87,7 +86,7 @@ class DogPlayer extends GameObject
         }
         else
         {
-            this.jumpHeight += this.jumpAcceleration.y;
+            this.sprite.y -= this.jumpAcceleration.y;
             this.jumpAcceleration.y -= 0.3;
             if (this.jumpAcceleration.y > 0)
             {
@@ -97,12 +96,12 @@ class DogPlayer extends GameObject
             {
                 shouldPlay = 'fall';
             }
-            if (this.onGround())
+            var groundLevel = this.getGroundLevel();
+            if (groundLevel)
             {
                 this.jumpAcceleration.y = 0;
-                this.jumpHeight = 0;
+                this.sprite.y = groundLevel;
             }
-            this.sprite.y = this.playerInitialY - this.jumpHeight;
         }
         this.play(shouldPlay);
     }
@@ -243,22 +242,27 @@ class DogPlayer extends GameObject
         }
     }
     
-    onGround()
+    getGroundLevel()
     {
-        var ret = false;
+        var ret = undefined;
         
         var groundLevels = ServiceLocator.walkManager.getGroundLevels(this.sprite.x);
         
         for (var ind in groundLevels)
         {
-            if (this.jumpHeight >= groundLevels[ind] - 5 && this.jumpHeight <= groundLevels[ind] + 5)
+            if (this.sprite.y >= groundLevels[ind] - 5 && this.sprite.y <= groundLevels[ind] + 5)
             {
-                ret = true;
+                ret = groundLevels[ind];
                 break;
             }
         }
         
-        return ret;
+        return ret;        
+    }
+    
+    onGround()
+    {
+        return this.getGroundLevel() !== undefined;
     }
     
     getItemsList()

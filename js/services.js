@@ -8,9 +8,9 @@ class Services
         this.walkManager = {};
         this.guiManager = {};
         this.inputManager = {};
-        this.background = {};
         this.camera = {};
         this.animationManager = {};
+
         Object.preventExtensions(this);
     }
     

@@ -20,8 +20,10 @@ MainState.prototype.preload = function ()
 
 MainState.prototype.create = function ()
 {
-    this.player = new DogPlayer();
+    this.updateSignal = new Phaser.Signal();
 
+    this.player = new DogPlayer();
+    
     ServiceLocator.initialize('difficultyManager', new DifficultyManager());
     ServiceLocator.initialize('camera', new Camera());
     ServiceLocator.initialize('infoManager', new InfoManager(this));
@@ -29,21 +31,19 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('walkManager', new WalkManager(this, this.player));
     ServiceLocator.initialize('guiManager', new GUIManager());
     ServiceLocator.initialize('inputManager', new InputManager(this));
-    ServiceLocator.initialize('background', new Background(this));
     ServiceLocator.initialize('animationManager', new AnimationManager());
-    
-    this.updateSignal = new Phaser.Signal();
 
     this.gameplayState = undefined;
     this.game.world.setBounds(0, 0, 192000, 0);
     //this.game.camera.bounds = undefined;
 
-    ServiceLocator.background.create(this);
     ServiceLocator.inputManager.create(this);
     ServiceLocator.guiManager.create(this);
     ServiceLocator.infoManager.create();
-    this.player.create(this);
     ServiceLocator.camera.create(this, this.player);
+    ServiceLocator.walkManager.create(this);
+
+    this.player.create(this);
     
     ServiceLocator.guiManager.lostUI.addCallback('reloadButton', 'click', 'reload');
     ServiceLocator.guiManager.lostUI.registerCbReceiver(this.handleUI, this)

@@ -2,6 +2,7 @@ class Camera
 {
     constructor()
     {
+        this.yOffset = 435;
     }
     
     create(_game, _player)
@@ -14,6 +15,8 @@ class Camera
     update()
     {
         this.game.camera.x = this.player.sprite.x - 140;
+        var diffY = this.game.camera.y - this.player.sprite.y + this.yOffset;
+        this.game.camera.y += diffY * 0.5;
     }
     
     getPosition()

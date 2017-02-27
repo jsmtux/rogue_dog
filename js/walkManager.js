@@ -12,12 +12,22 @@ class WalkManager
         this.lastPlaced = 0;
         this.placeNext = 0;
         this.initial = true;
+
+        this.background = new Background(this.game);
     }
     
     static preload(_game)
     {
         Obstacle.preload(_game);
         GroundTile.preload(_game);
+    }
+    
+    create(_game)
+    {
+        this.background.create(_game, [
+            {'name':'bg0', 'speed':0.2},
+            {'name':'bg1', 'speed':0.5},
+            {'name':'bg2', 'speed':0.7, 'yOffset':200}]);
     }
     
     update()
@@ -145,7 +155,7 @@ class WalkManager
             var area = this.groundTiles[ind].getArea();
             if (_x >= area.x && _x <= area.x + area.width)
             {
-                list.push(0);
+                list.push(GROUND_LEVEL - 90);
             }
         }
         return list;
@@ -231,7 +241,7 @@ class Obstacle extends VisibleObject
     create(_game)
     {
         this.sprite = _game.add.sprite(this.position.x, 0, 'spike');
-        this.sprite.y = GROUND_LEVEL - this.sprite.height;
+        this.sprite.y = this.position.y - this.sprite.height;
     }
     
     break()
@@ -264,6 +274,14 @@ class Obstacle extends VisibleObject
         var xCol = this.sprite.x < characterArea[1]
             && (this.sprite.x + this.sprite.width) > characterArea[0];
         
-        return xCol && _player.jumpHeight < 55;
+        var yCol = false;
+        
+        if (xCol)
+        {
+            var yDiff = _player.sprite.y - this.sprite.y;
+            yCol = yDiff <= 0 && yDiff > -55;
+        }
+        
+        return xCol && yCol;
     }
 }
