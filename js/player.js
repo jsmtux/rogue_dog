@@ -79,6 +79,7 @@ class DogPlayer extends GameObject
     {
         var shouldPlay;
         this.sprite.x += this.curSpeed + this.jumpAcceleration.x;
+
         if (this.onGround() && this.jumpAcceleration.y == 0)
         {
             shouldPlay = 'walk';
@@ -96,7 +97,7 @@ class DogPlayer extends GameObject
             {
                 shouldPlay = 'fall';
             }
-            if (this.jumpHeight < 0)
+            if (this.jumpHeight < 0 && ServiceLocator.walkManager.isPointOnGround(this.sprite.x))
             {
                 this.jumpAcceleration.y = 0;
                 this.jumpHeight = 0;
@@ -244,7 +245,7 @@ class DogPlayer extends GameObject
     
     onGround()
     {
-        return this.jumpHeight == 0;
+        return this.jumpHeight == 0 && ServiceLocator.walkManager.isPointOnGround(this.sprite.x);
     }
     
     getItemsList()

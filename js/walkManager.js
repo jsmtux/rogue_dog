@@ -26,10 +26,19 @@ class WalkManager
 
         while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
         {
-            var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), this.obstacleToPlace());
-            newTile.create(this.game);
-            this.lastX += newTile.sprite.width;
-            this.groundTiles.push(newTile);
+            this.lastPlaced ++;
+            if (Math.random() > 0.2 || this.lastPlaced <= 4)
+            {
+                var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), this.obstacleToPlace());
+                newTile.create(this.game);
+                this.lastX += newTile.sprite.width;
+                this.groundTiles.push(newTile);
+            }
+            else
+            {
+                this.lastPlaced = 0;
+                this.lastX += 400;
+            }
         }
 
         if (this.initial)
@@ -65,8 +74,6 @@ class WalkManager
             return;
         }
         var ret = undefined;
-        
-        this.lastPlaced++;
         
         if (this.placeNext > 0 || (this.lastPlaced > 4 && Math.random() > 0.6 && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber()))
         {
@@ -129,6 +136,21 @@ class WalkManager
         }
         return ret;
     }
+    
+    isPointOnGround(_x)
+    {
+        var list = [];
+        for (var ind in this.groundTiles)
+        {
+            var area = this.groundTiles[ind].getArea();
+            list.push(area)
+            if (_x >= area.x && _x <= area.x + area.width)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 class VisibleObject extends GameObject
@@ -141,7 +163,7 @@ class VisibleObject extends GameObject
     
     getArea()
     {
-        return this.sprite.getBounds();
+        return new Phaser.Rectangle(this.sprite.x, this.sprite.y, 80, 80);
     }
 }
 
