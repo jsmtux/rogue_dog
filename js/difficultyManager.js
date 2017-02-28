@@ -12,7 +12,12 @@ class DifficultyManager
     
     getBasicEnemyTimeout()
     {
-        return 1200;
+        return 700;
+    }
+    
+    getBasicEnemyRetries()
+    {
+        return 3;
     }
     
     getBeeBulletSpeed()
@@ -27,6 +32,7 @@ class DifficultyManager
     
     getEnemies()
     {
+        return [BasicEnemy, BasicEnemy];
         var ret = [];
         
         for (var i = 0; i < 2; i++)

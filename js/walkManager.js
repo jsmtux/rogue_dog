@@ -38,18 +38,18 @@ class WalkManager
         while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
         {
             this.lastPlaced ++;
-            if (Math.random() > 0.2 || this.lastPlaced <= 4)
+            //if (Math.random() > 0.2 || this.lastPlaced <= 4)
             {
                 var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), 'grassTile', this.obstacleToPlace());
                 newTile.create(this.game);
                 this.lastX += newTile.sprite.width;
                 this.groundTiles.push(newTile);
             }
-            else
+            /*else
             {
                 this.lastPlaced = 0;
                 this.lastX += 400;
-            }
+            }*/
         }
         
         while(this.lastUndergroundX < ServiceLocator.camera.getVisibleArea().right)

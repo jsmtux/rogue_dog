@@ -1,14 +1,16 @@
-class BasicEnemy extends GameObject
+class BasicEnemy
 {
     constructor(_game, _index)
     {
-        super();
         this.game = _game;
         this.state = BasicEnemy.States.WAITING;
         this.health = 10;
         this.index = _index;
         this.padding = 220;
         this.dying = false;
+        
+        this.iterationNumber = 0;
+        this.player = _game.player;
     }
     
     static preload(_game)
@@ -27,9 +29,7 @@ class BasicEnemy extends GameObject
     create()
     {
         var visibleArea = ServiceLocator.camera.getVisibleArea();
-        var sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, 320, 'monster', 10);
-        super.create(sprite, true);
-
+        this.sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, 320, 'monster', 10);
         this.endPos = visibleArea.bottomLeft.x +(350 + this.padding * this.index);
         this.sprite.animations.add('walk');
         this.sprite.animations.add('idle', [0]);
@@ -86,7 +86,7 @@ class BasicEnemy extends GameObject
         this.sprite.alpha -= 0.02;
         if (this.sprite.alpha <= 0)
         {
-            this.destroy();
+            this.sprite.destroy();
             return true;
         }
         
@@ -95,26 +95,21 @@ class BasicEnemy extends GameObject
     
     startAttack(_player)
     {
-        console.log("Starting attack");
-        this.attackOption = BasicEnemy.attackOptions[randomInt(0,3)];
         this.state = BasicEnemy.States.ATTACKING;
-        this.arrow;
-        var initTimeout = 500 + Math.random() * 2000;
-        var self = this;
-        setTimeout(function(){
-            self.attackOption.key.onDown.add(self.keyHandler, self);
-            self.arrow = self.game.add.sprite(self.sprite.x, self.sprite.y - 50, self.attackOption.image);
-            ServiceLocator.inputManager.directionGesture.add(self.directionGestureCb, self);
-        }, initTimeout)
-        this.endTimeout = setTimeout(function(){
-            self.showResultSprite('bad');
-            _player.monsterHit();
-        }, initTimeout + ServiceLocator.difficultyManager.getBasicEnemyTimeout());
+        setTimeout(() => {this.startNewCommand()}, 500);
     }
     
-    keyHandler()
+    startNewCommand()
     {
-        this.showResultSprite('good');
+        this.attackOption = BasicEnemy.attackOptions[randomInt(0,3)];
+        this.arrow = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, this.attackOption.image);
+        ServiceLocator.inputManager.directionGesture.add(this.directionGestureCb, this);
+        
+        var self = this;
+        this.endTimeout = setTimeout(function(){
+            self.showResultSprite('bad');
+            self.player.monsterHit();
+        }, ServiceLocator.difficultyManager.getBasicEnemyTimeout());
     }
     
     directionGestureCb(_direction)
@@ -129,16 +124,24 @@ class BasicEnemy extends GameObject
     
     showResultSprite(_result)
     {
+        this.iterationNumber++;
         clearTimeout(this.endTimeout);
         ServiceLocator.inputManager.directionGesture.remove();
         this.arrow.destroy();
-        this.attackOption.key.onDown.remove(this.keyHandler, this);
-        var resultSprite = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, _result);
-        var self = this;
-        setTimeout(function(){
-            resultSprite.destroy();
-            self.state = BasicEnemy.States.FINISHED;
-        }, 500);
+        if (_result == 'good' && this.iterationNumber < ServiceLocator.difficultyManager.getBasicEnemyRetries())
+        {
+            setTimeout(() => {this.startNewCommand();}, 100);
+        }
+        else
+        {
+            this.iterationNumber = 0;
+            var resultSprite = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, _result);
+            var self = this;
+            setTimeout(function(){
+                resultSprite.destroy();
+                self.state = BasicEnemy.States.FINISHED;
+            }, 500);
+        }
     }
 };
 
