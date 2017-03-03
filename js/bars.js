@@ -61,3 +61,21 @@ class ShieldBar extends StatsBar
         this.setPercentage(0);
     }
 }
+
+class EnergyBar extends StatsBar
+{
+    static preload(_game)
+    {
+        _game.load.image('energy_bar', './img/statBars/energy_bar.png');
+        _game.load.image('energy_bar_fill', './img/statBars/energy_bar_fill.png');
+    }
+    
+    create()
+    {
+        this.sprite = game.add.sprite(20, 75, 'energy_bar');
+        ServiceLocator.guiManager.addToUI(this.sprite);
+        this.spriteFill = game.add.sprite(20, 80, 'energy_bar_fill');
+        ServiceLocator.guiManager.addToUI(this.spriteFill);
+        this.setPercentage(0);
+    }
+}

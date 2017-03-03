@@ -1,8 +1,23 @@
 class DifficultyManager
 {
+    getHoleProbability()
+    {
+        return 0.4;
+    }
+    
     getSpikeNumber()
     {
         return 15;
+    }
+    
+    getTallSpikeProbability()
+    {
+        return 0.0;
+    }
+    
+    getSpikeProbability()
+    {
+        return 0.6
     }
     
     getNextSpikeSeparation()

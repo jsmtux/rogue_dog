@@ -87,6 +87,7 @@ class BasicEnemy
         if (this.sprite.alpha <= 0)
         {
             this.sprite.destroy();
+            this.player.enemyKilledNotification(this);
             return true;
         }
         
@@ -142,6 +143,11 @@ class BasicEnemy
                 self.state = BasicEnemy.States.FINISHED;
             }, 500);
         }
+    }
+    
+    getLootEnergy()
+    {
+        return 2;
     }
 };
 

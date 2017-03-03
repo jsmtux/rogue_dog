@@ -10,7 +10,7 @@ class WalkManager
         this.obstaclesPlaced = 0;
         
         //modify this!!
-        this.lastPlaced = 0;
+        this.numberIterationsToPlace = 0;
         this.placeNext = 0;
         this.initial = true;
 
@@ -20,6 +20,7 @@ class WalkManager
     static preload(_game)
     {
         Obstacle.preload(_game);
+        TallObstacle.preload(_game);
         GroundTile.preload(_game);
     }
     
@@ -37,19 +38,19 @@ class WalkManager
 
         while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
         {
-            this.lastPlaced ++;
-            //if (Math.random() > 0.2 || this.lastPlaced <= 4)
+            this.numberIterationsToPlace --;
+            if (Math.random() > ServiceLocator.difficultyManager.getHoleProbability() || this.numberIterationsToPlace <= 0)
             {
                 var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), 'grassTile', this.obstacleToPlace());
                 newTile.create(this.game);
                 this.lastX += newTile.sprite.width;
                 this.groundTiles.push(newTile);
             }
-            /*else
+            else
             {
-                this.lastPlaced = 0;
+                this.numberIterationsToPlace = 4;
                 this.lastX += 400;
-            }*/
+            }
         }
         
         while(this.lastUndergroundX < ServiceLocator.camera.getVisibleArea().right)
@@ -94,25 +95,35 @@ class WalkManager
         }
         var ret = undefined;
         
-        if (this.placeNext > 0 || (this.lastPlaced > 4 && Math.random() > 0.6 && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber()))
+        if (this.placeNext > 0 || (this.numberIterationsToPlace <= 0 && Math.random() > ServiceLocator.difficultyManager.getSpikeProbability() && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber()))
         {
-            this.lastPlaced = 0;
-            ret = Obstacle;
             this.obstaclesPlaced++;
             if (this.placeNext > 0)
             {
+                ret = Obstacle;
                 this.placeNext --;
             }
             else
             {
-                var rand = Math.random();
-                if (rand > 0.8)
+                if (Math.random() > ServiceLocator.difficultyManager.getTallSpikeProbability())
                 {
-                    this.placeNext = 2;
+                    ret = Obstacle;
+                    this.numberIterationsToPlace = 6;
+                    var rand = Math.random();
+                    if (rand > 0.8)
+                    {
+                        this.placeNext = 2;
+                        this.numberIterationsToPlace = 7;
+                    }
+                    else if (rand > 0.5)
+                    {
+                        this.placeNext = 1;
+                        this.numberIterationsToPlace = 7;
+                    }
                 }
-                else if (rand > 0.5)
+                else
                 {
-                    this.placeNext = 1;
+                    ret = TallObstacle;
                 }
             }
         }
@@ -289,9 +300,58 @@ class Obstacle extends VisibleObject
         if (xCol)
         {
             var yDiff = _player.sprite.y - this.sprite.y;
-            yCol = yDiff <= 0 && yDiff > -55;
+            yCol = yDiff  <= 0 && yDiff > - this.sprite.height;
         }
         
         return xCol && yCol;
     }
+}
+
+class TallObstacle extends Obstacle
+{
+    constructor(_position)
+    {
+        super(_position);
+    }
+    
+    static preload(_game)
+    {
+        _game.load.image('tall_spike', './img/tall_spike.png');
+        _game.load.image('brokentall_spike', './img/tall_spike_broken.png');
+    }
+    
+    create(_game)
+    {
+        this.sprite = _game.add.sprite(this.position.x, 0, 'tall_spike');
+        this.sprite.y = this.position.y - this.sprite.height;
+    }
+    
+    break()
+    {
+        this.broken = true;
+        this.sprite.loadTexture('brokentall_spike');
+    }
+    
+    collides(_player)
+    {
+        if (this.broken)
+        {
+            return false;
+        }
+        var characterArea = _player.getFeetArea();
+        var xCol = this.sprite.x < characterArea[1]
+            && (this.sprite.x + this.sprite.width) > characterArea[0];
+        
+        var yCol = false;
+        
+        if (xCol)
+        {
+            var playerBottom = _player.getHitAreaBottom();
+            var height = this.sprite.y - playerBottom;
+            yCol = height < 0;
+        }
+        
+        return xCol && yCol;
+    }
+    
 }

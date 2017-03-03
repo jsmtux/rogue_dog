@@ -9,12 +9,14 @@ class DogPlayer extends GameObject
         this.maxShield = 15;//constant
         this.health = this.maxHealth;
         this.shield = 0;
+        this.maxEnergy = 15;
+        this.energy = 0;
         this.healthBar = new HealthBar();
-        this.shieldBar = new ShieldBar();
+        this.energyBar = new EnergyBar();
         this.jumpAcceleration = new Phaser.Point(0, 0);
         this.dizzy = false;
         
-        this.jumpStrenght = 9.0;
+        this.jumpStrenght = 10;
         
         this.walkSpeed = 6;
         this.curSpeed = 0;
@@ -31,7 +33,7 @@ class DogPlayer extends GameObject
     static preload(_game)
     {
         HealthBar.preload(_game);
-        ShieldBar.preload(_game);
+        EnergyBar.preload(_game);
         SkillSelector.preload(_game);
 
         var path = "anim/"
@@ -71,7 +73,7 @@ class DogPlayer extends GameObject
         ServiceLocator.infoManager.register("player", this.sprite);
         
         this.healthBar.create();
-        this.shieldBar.create();
+        this.energyBar.create();
     }
     
     updateWalk()
@@ -134,9 +136,9 @@ class DogPlayer extends GameObject
         this.healthBar.setPercentage(this.health / this.maxHealth);
     }
     
-    updateShieldPercentage()
+    updateEnergyPercentage()
     {
-        this.shieldBar.setPercentage(this.shield / this.maxShield);
+        this.energyBar.setPercentage(this.energy / this.maxEnergy);
     }
     
     obstacleHit()
@@ -221,6 +223,13 @@ class DogPlayer extends GameObject
         return this.attackFinished;
     }
     
+    enemyKilledNotification(_enemy)
+    {
+        this.energy += _enemy.getLootEnergy();
+        this.updateEnergyPercentage();
+        
+    }
+    
     jump(_direction, _angle)
     {
         if (_angle < 45)
@@ -288,6 +297,12 @@ class DogPlayer extends GameObject
             this.appliedItems.push(_items[itemInd]);
            _items[itemInd].apply(this.game.player.sprite)
         }
+    }
+    
+    getHitAreaBottom()
+    {
+        var bottomHeight = 75;
+        return this.sprite.y - bottomHeight;
     }
 }
 
