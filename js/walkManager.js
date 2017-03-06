@@ -8,13 +8,10 @@ class WalkManager
         this.groundTiles = [];
         this.player = _player;
         this.obstaclesPlaced = 0;
-        
-        //modify this!!
-        this.numberIterationsToPlace = 0;
-        this.placeNext = 0;
-        this.initial = true;
 
         this.background = new Background(this.game);
+        
+        this.stagePrototype = undefined;
     }
     
     static preload(_game)
@@ -32,25 +29,54 @@ class WalkManager
             {'name':'bg2', 'speed':0.7, 'yOffset':360}]);
     }
     
+    fillEmpty()
+    {
+        while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
+        {
+            this.addTile();
+            this.lastX += 80;
+        }
+    }
+    
+    addTile(_obstacle)
+    {
+        var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), 'grassTile', _obstacle);
+
+        newTile.create(this.game);
+        this.groundTiles.push(newTile);        
+    }
+    
     update()
     {
         this.player.updateWalk();
 
         while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
         {
-            this.numberIterationsToPlace --;
-            if (Math.random() > ServiceLocator.difficultyManager.getHoleProbability() || this.numberIterationsToPlace <= 0)
+            var newCell = StagePrototype.cellType.GRASS;
+            if (this.stagePrototype)
             {
-                var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), 'grassTile', this.obstacleToPlace());
-                newTile.create(this.game);
-                this.lastX += newTile.sprite.width;
-                this.groundTiles.push(newTile);
+                newCell = this.stagePrototype.getNextCellType();
+                if (this.stagePrototype.isStageFinished())
+                {
+                    this.stagePrototype = undefined;
+                }
             }
-            else
+            
+            if (newCell !== StagePrototype.cellType.HOLE)
             {
-                this.numberIterationsToPlace = 4;
-                this.lastX += 400;
+                var obstacle;
+                if (newCell === StagePrototype.cellType.OBSTACLE)
+                {
+                    obstacle = Obstacle;
+                }
+                else if (newCell === StagePrototype.cellType.TALL_OBSTACLE)
+                {
+                    obstacle = TallObstacle;
+                }
+                this.addTile(obstacle);
             }
+            
+            this.lastX += 80;
         }
         
         while(this.lastUndergroundX < ServiceLocator.camera.getVisibleArea().right)
@@ -59,12 +85,6 @@ class WalkManager
             newTile.create(this.game);
             this.lastUndergroundX += newTile.sprite.width;
             this.groundTiles.push(newTile);
-        }
-
-        if (this.initial)
-        {
-            this.initial = false;
-            return;
         }
 
         for (var ind in this.groundTiles)
@@ -87,48 +107,10 @@ class WalkManager
         }
     }
     
-    obstacleToPlace()
+    startWalk(_stagePrototype)
     {
-        if (this.initial)
-        {
-            return;
-        }
-        var ret = undefined;
-        
-        if (this.placeNext > 0 || (this.numberIterationsToPlace <= 0 && Math.random() > ServiceLocator.difficultyManager.getSpikeProbability() && this.obstaclesPlaced < ServiceLocator.difficultyManager.getSpikeNumber()))
-        {
-            this.obstaclesPlaced++;
-            if (this.placeNext > 0)
-            {
-                ret = Obstacle;
-                this.placeNext --;
-            }
-            else
-            {
-                if (Math.random() > ServiceLocator.difficultyManager.getTallSpikeProbability())
-                {
-                    ret = Obstacle;
-                    this.numberIterationsToPlace = 6;
-                    var rand = Math.random();
-                    if (rand > 0.8)
-                    {
-                        this.placeNext = 2;
-                        this.numberIterationsToPlace = 7;
-                    }
-                    else if (rand > 0.5)
-                    {
-                        this.placeNext = 1;
-                        this.numberIterationsToPlace = 7;
-                    }
-                }
-                else
-                {
-                    ret = TallObstacle;
-                }
-            }
-        }
-        
-        return ret;
+        this.player.startWalk();
+        this.stagePrototype = _stagePrototype;
     }
     
     directionHandler(_dir, _angle)
@@ -136,20 +118,12 @@ class WalkManager
         this.player.jump(_angle);
     }
     
-    startWalk()
-    {
-        this.obstaclesPlaced = 0;
-        this.nextObstacleIteration = undefined;
-        this.player.startWalk();
-    }
-    
     isWalkingFinished()
     {
-        var ret = this.obstaclesPlaced >= ServiceLocator.difficultyManager.getSpikeNumber() && this.player.onGround() && this.getVisibleObstacles().length == 0;
+        var ret = !this.stagePrototype && this.player.onGround() && this.getVisibleObstacles().length == 0;
         if (ret)
         {
             this.player.finishWalk();
-            this.obstaclesPlaced = 0;
         }
         return ret;
     }
