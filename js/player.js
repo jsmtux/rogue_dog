@@ -49,8 +49,8 @@ class DogPlayer extends GameObject
         this.game = _game;
         var sprite = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
         super.create(sprite, true);
+        ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.position.setTo(0, this.playerInitialY);
-        this.game.world.add(this.sprite);
         
         var self = this;
         this.sprite.events = {'onInputDown' : {

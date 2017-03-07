@@ -228,6 +228,7 @@ class GroundTile extends VisibleObject
     create(_game)
     {
         var sprite = _game.add.sprite(this.position.x, this.position.y, this.imageName);
+        ServiceLocator.renderer.addToScene(sprite);
         super.create(sprite)
         if (this.obstacle)
         {
@@ -272,6 +273,7 @@ class Obstacle extends VisibleObject
     create(_game)
     {
         this.sprite = _game.add.sprite(this.position.x, 0, 'spike');
+        ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.y = this.position.y - this.sprite.height;
     }
     
@@ -333,6 +335,7 @@ class TallObstacle extends Obstacle
     create(_game)
     {
         this.sprite = _game.add.sprite(this.position.x, 0, 'tall_spike');
+        ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.y = this.position.y - this.sprite.height;
     }
     

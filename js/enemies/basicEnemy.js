@@ -33,6 +33,7 @@ class BasicEnemy
         this.endPos = visibleArea.bottomLeft.x +(350 + this.padding * this.index);
         this.sprite.animations.add('walk');
         this.sprite.animations.add('idle', [0]);
+        ServiceLocator.renderer.addToScene(this.sprite);
         
         ServiceLocator.infoManager.register("BasicEnemy", this.sprite);
         
@@ -71,6 +72,7 @@ class BasicEnemy
         var posX = this.sprite.x;
         var posY = this.sprite.y;
         this.hit = game.add.sprite(posX, posY, 'hit');
+        ServiceLocator.renderer.addToOverlay(this.hit);
         var self = this;
         setTimeout(function() {self.hit.destroy();}, 500);
         this.health -= 5;
@@ -104,6 +106,7 @@ class BasicEnemy
     {
         this.attackOption = BasicEnemy.attackOptions[randomInt(0,3)];
         this.arrow = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, this.attackOption.image);
+        ServiceLocator.renderer.addToOverlay(this.arrow);
         ServiceLocator.inputManager.directionGesture.add(this.directionGestureCb, this);
         
         var self = this;
@@ -137,6 +140,7 @@ class BasicEnemy
         {
             this.iterationNumber = 0;
             var resultSprite = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, _result);
+            ServiceLocator.renderer.addToOverlay(resultSprite);
             var self = this;
             setTimeout(function(){
                 resultSprite.destroy();

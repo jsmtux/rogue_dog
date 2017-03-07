@@ -36,9 +36,10 @@ class HealthBar extends StatsBar
     
     create()
     {
-        this.sprite = game.add.sprite(20, 20, 'health_bar');
+        var renderer = ServiceLocator.renderer;
+        this.sprite = game.add.sprite(20, 20, 'health_bar', 0, renderer.uiGroup);
         ServiceLocator.guiManager.addToUI(this.sprite);
-        this.spriteFill = game.add.sprite(20, 20, 'health_bar_fill');
+        this.spriteFill = game.add.sprite(20, 20, 'health_bar_fill', 0, renderer.uiGroup);
         ServiceLocator.guiManager.addToUI(this.spriteFill);
         this.setPercentage(100);
     }

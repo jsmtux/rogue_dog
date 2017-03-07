@@ -22,6 +22,7 @@ class BeeEnemy extends BasicEnemy
     {
         var visibleArea = ServiceLocator.camera.getVisibleArea();
         var sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, this.height, 'bee', 5);
+        ServiceLocator.renderer.addToScene(sprite);
         GameObject.prototype.create.call(this, sprite, true);
 
         this.endPos = visibleArea.bottomLeft.x +(350 + this.padding * this.index);
@@ -103,6 +104,7 @@ class BeeBullet
     create(_x, _y)
     {
         this.sprite = this.game.add.sprite(_x, _y + 90, 'beeBullet', 5);
+        ServiceLocator.renderer.addToScene(this.sprite);
     }
     
     update()
@@ -123,6 +125,7 @@ class BeeBullet
     destroy()
     {
         var explosion = this.game.add.sprite(this.sprite.x, this.sprite.y, 'beeBulletExplosion');
+        ServiceLocator.renderer.addToScene(explosion);
         var explodingAnimation = explosion.animations.add('explode');
         explosion.play('explode', 10);
         explodingAnimation.onComplete.add(function () {explosion.destroy();});

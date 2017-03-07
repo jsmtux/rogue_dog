@@ -32,7 +32,6 @@ class DifficultyManager
     
     getEnemies()
     {
-        return [BasicEnemy, BasicEnemy];
         var ret = [];
         
         for (var i = 0; i < 2; i++)

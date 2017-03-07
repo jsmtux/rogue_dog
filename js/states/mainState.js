@@ -32,11 +32,13 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('guiManager', new GUIManager());
     ServiceLocator.initialize('inputManager', new InputManager(this));
     ServiceLocator.initialize('animationManager', new AnimationManager());
+    ServiceLocator.initialize('renderer', new Renderer(this));
 
     this.gameplayState = undefined;
     this.game.world.setBounds(0, 0, 192000, 192000);
     //this.game.camera.bounds = undefined;
 
+    ServiceLocator.renderer.create(this);
     ServiceLocator.inputManager.create(this);
     ServiceLocator.guiManager.create(this);
     ServiceLocator.infoManager.create();
@@ -85,6 +87,7 @@ MainState.prototype.update = function ()
 
 MainState.prototype.render = function ()
 {
+    ServiceLocator.renderer.render();
 }
 
 MainState.prototype.handleUI = function()

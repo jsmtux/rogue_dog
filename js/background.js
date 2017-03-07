@@ -55,9 +55,12 @@ class Layer
     create(_game)
     {
         var resolution = ServiceLocator.camera.getResolution();
+        var renderer = ServiceLocator.renderer;
         
         this.imgA = _game.add.sprite(0, 0, this.imageName);
         this.imgB = _game.add.sprite(0, 0, this.imageName);
+        renderer.addToScene(this.imgA);
+        renderer.addToScene(this.imgB);
 
         this.imgA.y = resolution.y - this.imgA.height + this.yOffset;
         this.imgB.y = resolution.y - this.imgB.height + this.yOffset;

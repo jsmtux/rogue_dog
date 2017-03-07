@@ -10,6 +10,7 @@ class Services
         this.inputManager = {};
         this.camera = {};
         this.animationManager = {};
+        this.renderer = {};
 
         Object.preventExtensions(this);
     }
