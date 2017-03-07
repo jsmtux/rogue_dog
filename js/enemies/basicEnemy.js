@@ -106,7 +106,7 @@ class BasicEnemy
     {
         this.attackOption = BasicEnemy.attackOptions[randomInt(0,3)];
         this.arrow = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, this.attackOption.image);
-        ServiceLocator.renderer.addToOverlay(this.arrow);
+        ServiceLocator.renderer.addToScene(this.arrow);
         ServiceLocator.inputManager.directionGesture.add(this.directionGestureCb, this);
         
         var self = this;

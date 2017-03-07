@@ -14,6 +14,7 @@ LoadState.prototype.preload = function()
     InfoManager.preload(this.game);
     DogPlayer.preload(this.game);
     GUIManager.preload(this.game);
+    Renderer.preload(this.game);
     this.game.load.onLoadComplete.add(this.loadComplete, this);
     
     this.loaded = false;

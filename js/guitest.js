@@ -219,7 +219,7 @@ class GUIManager
     
     update()
     {
-        this.game.world.bringToTop(this.UIGroup);
+        //this.game.world.bringToTop(this.UIGroup);
     }
     
     addToUI(_sprite)
