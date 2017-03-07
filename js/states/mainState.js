@@ -60,7 +60,7 @@ MainState.prototype.update = function ()
     {
         this.gameplayState = MainState.State.WALKING;
         ServiceLocator.walkManager.fillEmpty();
-        ServiceLocator.walkManager.startWalk(ServiceLocator.difficultyManager.getStagePrototype());
+        ServiceLocator.walkManager.startWalk();
     }
 
     if (this.gameplayState == MainState.State.WALKING)

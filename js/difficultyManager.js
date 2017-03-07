@@ -62,14 +62,14 @@ class DifficultyManager
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.1);
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.DOUBLE_OBSTACLE, 0.2);
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TRIPLE_OBSTACLE, 0.1);
-        return new StagePrototype(prototypeRules);
+        return new StagePrototype(prototypeRules, 7);
     }
     
     getUndergroundStagePrototype()
     {
         var prototypeRules = new PrototypeRules();
-        prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.UNDERGROUND_GRASS, 1.0);
-        return new StagePrototype(prototypeRules);
+        prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 1.0);
+        return new StagePrototype();
     }
 }
 
@@ -111,20 +111,24 @@ PrototypeRules.ruleTypes = {
 
 class StagePrototype
 {
-    constructor (_prototypeRules)
+    constructor (_prototypeRules, _numberObstacles)
     {
         this.obstaclesPlaced = 0;
 
         this.itemsToPlaceQeue = [];
         
-        //PROTOTYPE RULES
-        this.spikeNumber = 7;
+        this.spikeNumber = _numberObstacles;
         this.rules = _prototypeRules;
     }
     
     getNextCellType()
     {
         var ret;
+        
+        if (!this.rules)
+        {
+            return StagePrototype.cellType.GRASS;
+        }
         
         if (this.itemsToPlaceQeue.length > 0)
         {

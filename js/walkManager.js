@@ -1,55 +1,25 @@
-class WalkManager
+class WalkLevel
 {
-    constructor(_game, _player)
+    constructor(_groundTileName, _height, _walkManager)
     {
-        this.game = _game;
+        this.height = _height;
+        this.groundTileName = _groundTileName;
+        this.walkManager = _walkManager;
         this.lastX = 0;
-        this.lastUndergroundX = 0;
-        this.groundTiles = [];
-        this.player = _player;
-        this.obstaclesPlaced = 0;
-
-        this.background = new Background(this.game);
-        
-        this.stagePrototype = undefined;
-    }
-    
-    static preload(_game)
-    {
-        Obstacle.preload(_game);
-        TallObstacle.preload(_game);
-        GroundTile.preload(_game);
-    }
-    
-    create(_game)
-    {
-        this.background.create(_game, [
-            {'name':'bg0', 'speed':0.2},
-            {'name':'bg1', 'speed':0.5},
-            {'name':'bg2', 'speed':0.7, 'yOffset':360}]);
+        this.stagePrototype;
     }
     
     fillEmpty()
     {
         while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
         {
-            this.addTile();
+            this.walkManager.addTile(this.groundTileName, new Phaser.Point(this.lastX, this.height));
             this.lastX += 80;
         }
     }
     
-    addTile(_obstacle)
-    {
-        var newTile = new GroundTile(new Phaser.Point(this.lastX, GROUND_LEVEL), 'grassTile', _obstacle);
-
-        newTile.create(this.game);
-        this.groundTiles.push(newTile);        
-    }
-    
     update()
     {
-        this.player.updateWalk();
-
         while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
         {
             var newCell = StagePrototype.cellType.GRASS;
@@ -73,20 +43,78 @@ class WalkManager
                 {
                     obstacle = TallObstacle;
                 }
-                this.addTile(obstacle);
+                this.walkManager.addTile(this.groundTileName, new Phaser.Point(this.lastX, this.height), obstacle);
             }
             
             this.lastX += 80;
         }
-        
-        while(this.lastUndergroundX < ServiceLocator.camera.getVisibleArea().right)
-        {
-            var newTile = new GroundTile(new Phaser.Point(this.lastUndergroundX, 880), 'undergroundTile');
-            newTile.create(this.game);
-            this.lastUndergroundX += newTile.sprite.width;
-            this.groundTiles.push(newTile);
-        }
+    }
+    
+    setStagePrototype(_stagePrototype)
+    {
+        this.stagePrototype = _stagePrototype;
+    }
+    
+    isFinished()
+    {
+        return this.stagePrototype == undefined;
+    }
+}
 
+class WalkManager
+{
+    constructor(_game, _player)
+    {
+        this.game = _game;
+        this.lastX = 0;
+        this.lastUndergroundX = 0;
+        this.groundTiles = [];
+        this.player = _player;
+        this.obstaclesPlaced = 0;
+
+        this.background = new Background(this.game);
+        
+        this.stagePrototype = undefined;
+        
+        this.walkLevels = [];
+        this.walkLevels.push(new WalkLevel('grassTile', GROUND_LEVEL, this));
+        this.walkLevels.push(new WalkLevel('undergroundTile', 880, this));
+        
+        this.currentWalkLevel = this.walkLevels[0];
+    }
+    
+    static preload(_game)
+    {
+        Obstacle.preload(_game);
+        TallObstacle.preload(_game);
+        GroundTile.preload(_game);
+    }
+    
+    create(_game)
+    {
+        this.background.create(_game, [
+            {'name':'bg0', 'speed':0.2},
+            {'name':'bg1', 'speed':0.5},
+            {'name':'bg2', 'speed':0.7, 'yOffset':360}]);
+    }
+    
+    addTile(_grassName, _position, _obstacle)
+    {
+        var newTile = new GroundTile(new Phaser.Point(_position.x, _position.y), _grassName, _obstacle);
+
+        newTile.create(this.game);
+        this.groundTiles.push(newTile);        
+    }
+
+    update()
+    {
+        this.player.updateWalk();
+        
+        for(var levelInd in this.walkLevels)
+        {
+            this.walkLevels[levelInd].update();
+        }
+        
         for (var ind in this.groundTiles)
         {
             if (this.groundTiles[ind].isOut())
@@ -110,7 +138,7 @@ class WalkManager
     startWalk(_stagePrototype)
     {
         this.player.startWalk();
-        this.stagePrototype = _stagePrototype;
+        this.currentWalkLevel.setStagePrototype(ServiceLocator.difficultyManager.getStagePrototype());
     }
     
     directionHandler(_dir, _angle)
@@ -120,7 +148,7 @@ class WalkManager
     
     isWalkingFinished()
     {
-        var ret = !this.stagePrototype && this.player.onGround() && this.getVisibleObstacles().length == 0;
+        var ret = this.currentWalkLevel.isFinished() && this.player.onGround() && this.getVisibleObstacles().length == 0;
         if (ret)
         {
             this.player.finishWalk();
@@ -153,6 +181,14 @@ class WalkManager
             }
         }
         return list;
+    }
+    
+    fillEmpty()
+    {
+        for(var levelInd in this.walkLevels)
+        {
+            this.walkLevels[levelInd].fillEmpty();
+        }
     }
 }
 
