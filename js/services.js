@@ -11,6 +11,7 @@ class Services
         this.camera = {};
         this.animationManager = {};
         this.renderer = {};
+        this.lighting = {};
 
         Object.preventExtensions(this);
     }

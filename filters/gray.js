@@ -26,9 +26,10 @@ Phaser.Filter.Gray = function (game) {
 
         "void main(void) {",
             "gl_FragColor = texture2D(uSampler, vTextureCoord);",
-            "vec4 maskColor = texture2D(mask, vTextureCoord);",
+            "vec2 correctedUV = vec2(vTextureCoord.x, 1.0 - vTextureCoord.y);",
+            "vec4 maskColor = texture2D(mask, correctedUV);",
             "gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.2126 * gl_FragColor.r + 0.7152 * gl_FragColor.g + 0.0722 * gl_FragColor.b), gray);",
-            "//gl_FragColor.rgb = vec3(gl_FragColor.r * maskColor.x, gl_FragColor.g * maskColor.x, gl_FragColor.b * maskColor.x);",
+            "gl_FragColor.rgb = vec3(gl_FragColor.r * maskColor.x, gl_FragColor.g * maskColor.y, gl_FragColor.b * maskColor.z);",
         "}"
     ];
 

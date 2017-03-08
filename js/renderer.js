@@ -31,22 +31,16 @@ class Renderer
         this.grayFilter.mask = this.maskRenderTexture;
         this.outputSprite.filters = [this.grayFilter];
         
-        this.drawCircle(_game);
+        this.graphics = _game.add.graphics(0, 0);
+        this.addToMask(this.graphics);
     }
-    
-    drawCircle(_game)
-    {
-        var graphics = game.add.graphics(0, 0);
-        this.addToMask(graphics);
-    
-        graphics.beginFill(0xFF0000, 1);
-        graphics.drawCircle(300, 300, 100);
-    }
-    
+
     render()
     {
         var cameraPos = ServiceLocator.camera.getPosition();
         
+        ServiceLocator.lighting.draw(this.graphics);
+
         this.maskGroup.visible = true;
         this.maskRenderTexture.renderXY(this.maskGroup, -cameraPos.x, -cameraPos.y, true);
         this.maskGroup.visible = false;

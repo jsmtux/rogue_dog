@@ -28,6 +28,8 @@ class DogPlayer extends GameObject
         
         this.itemsList = [new DogHatAccesory(), new DogWoolHatAccesory()];
         this.appliedItems = [];
+        
+        this.ownLight;
     }
     
     static preload(_game)
@@ -74,12 +76,16 @@ class DogPlayer extends GameObject
         
         this.healthBar.create();
         this.energyBar.create();
+        
+        this.ownLight = new spotLight(new Phaser.Point(this.sprite.x + 25, this.sprite.y), 250, 0xFFFF00, 0.5);
+        ServiceLocator.lighting.addLight(this.ownLight);
     }
     
     updateWalk()
     {
         var shouldPlay;
         this.sprite.x += this.curSpeed + this.jumpAcceleration.x;
+        this.ownLight.position = new Phaser.Point(this.sprite.x + 100, this.sprite.y - 25);
 
         if (this.onGround() && this.jumpAcceleration.y == 0)
         {

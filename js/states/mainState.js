@@ -32,6 +32,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('guiManager', new GUIManager());
     ServiceLocator.initialize('inputManager', new InputManager(this));
     ServiceLocator.initialize('animationManager', new AnimationManager());
+    ServiceLocator.initialize('lighting', new Lighting());
     ServiceLocator.initialize('renderer', new Renderer(this));
 
     this.gameplayState = undefined;
@@ -49,6 +50,8 @@ MainState.prototype.create = function ()
     
     ServiceLocator.guiManager.lostUI.addCallback('reloadButton', 'click', 'reload');
     ServiceLocator.guiManager.lostUI.registerCbReceiver(this.handleUI, this)
+    
+    ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
 }
 
 MainState.prototype.update = function ()

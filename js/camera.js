@@ -36,7 +36,16 @@ class Camera
 
     getVisibleArea()
     {
-        return this.game.camera.view;
+        var ret;
+        if (this.game)
+        {
+            ret = this.game.camera.view;
+        }
+        else
+        {
+            return new Phaser.Rectangle();
+        }
+        return ret;
     }
     
     shake(_str, _time)
