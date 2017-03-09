@@ -194,6 +194,53 @@ var lostGameUI = {
 	]	
 }
 
+var cardUI = {
+	id: 'cardUI',
+	component: 'Window',
+	
+	padding: 0,
+	position: { x: 0, y: 0 },
+	width: 280,
+	height: 400,
+	image: 'cardbg',
+	layout:[1,3],
+	children: [
+		{
+		  component: 'Label',
+		  text : 'Card title',
+	      position: { x: 45, y: 40 },
+		  font: {
+		      size: '35px',
+		      color: 'black'
+		  },
+		  width: 190,
+		  height: 30,
+		},
+		{
+		  component: 'Layout',
+	      position: { x: 50, y: -45 },
+		  width: 180,
+		  height: 180,
+	      image: 'heart_icon',
+		},
+		{
+		  id: 'description',
+		  wordWrapWidth: 200,
+		  text: 'LONG TEXT LONG TEXT LONG TEX\nLONG TEXT LONG TEXT LONG TEX\nLONG TEXT LONG TEXT LONG TEX\nLONG TEXT LONG TEXT LONG TEX',
+		  component: 'Label',
+	      position: { x: 40, y: 20 },
+		  font: {
+		      size: '13px',
+		      color: 'black',
+              wordWrap: true,
+              wordWrapWidth: 200
+		  },		  
+		  width: 210,
+		  height: 80
+		}	
+	]	
+}
+
 class GUIManager
 {
     constructor()
@@ -205,6 +252,9 @@ class GUIManager
     {
         EZGUI.renderer = _game.renderer;
         _game.load.EZGUITheme('metalworks', 'lib/ezgui_assets/metalworks-theme/metalworks-theme.json');
+        _game.load.image('cardbg', 'img/card/card_bg.png');
+        _game.load.image('heart_icon', 'img/card/heart_icon.png');
+        _game.load.image('wooden_shield_icon', 'img/card/wooden_shield_icon.png');
     }
     
     create(_game)
@@ -226,6 +276,19 @@ class GUIManager
     {
         this.UIGroup.add(_sprite);
     }
+
+    getCardImage(_title, _text, _logoName)
+    {
+        var currentCardUI = cardUI;
+        currentCardUI.children[0].text = _title;
+        currentCardUI.children[1].image = _logoName;
+        currentCardUI.children[2].text = _text;
+        
+        var cardGuiContainer = new CardElement(cardUI);
+        cardGuiContainer.visible = false;
+        
+        return cardGuiContainer;
+    }
 }
 
 class GUIElement
@@ -234,6 +297,17 @@ class GUIElement
     {
         this.guiContainer = EZGUI.create(_container, 'metalworks');
         this.guiContainer.visible = false;
+    }
+    
+    destroy()
+    {
+        this.guiContainer.destroy();
+    }
+    
+    setPosition(_position)
+    {
+        this.guiContainer.phaserGroup.x = _position.x;
+        this.guiContainer.phaserGroup.y = _position.y;
     }
     
     addCallback(_element, _event, _name)
@@ -265,6 +339,14 @@ class GUIElement
     hide()
     {
         this.guiContainer.visible = false;
+    }
+}
+
+class CardElement extends GUIElement
+{
+    constructor(_container)
+    {
+        super(_container)
     }
 }
 

@@ -52,6 +52,13 @@ MainState.prototype.create = function ()
     ServiceLocator.guiManager.lostUI.registerCbReceiver(this.handleUI, this)
     
     ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
+    
+    var cardUI = ServiceLocator.guiManager.getCardImage("Small health", "Receive 25 health ptsReceive 25 health ptsReceive 25 health pts", "heart_icon");
+    cardUI.show();
+    cardUI.setPosition(new Phaser.Point(50, 50));
+    var cardUI2 = ServiceLocator.guiManager.getCardImage("Small shield", "Attacks don't hurt as much", "wooden_shield_icon");
+    cardUI2.show();
+    cardUI2.setPosition(new Phaser.Point(150, 50));
 }
 
 MainState.prototype.update = function ()
