@@ -1,44 +1,68 @@
 class Card
 {
-    constructor()
+    constructor(_title, _text, _logoName)
     {
-        this.sprite;
-    }
-    
-    apply()
-    {
+        this.cardGUIContainer = undefined;
+        this.title = _title;
+        this.text = _text;
+        this.logoName = _logoName;
         
+        this.handlerFunction;
+        this.handlerContext;
     }
     
-    clicked()
+    preload(_game)
     {
-        this.apply();
-        this.sprite.events.onInputDown.remove(this.clicked, this);
-        ServiceLocator.combatManager.finishLootChoose();
+        _game.load.image(this.logoName, './img/card/' + this.logoName + '.png');
     }
     
-    show(_index)
+    show()
     {
-        this.sprite = this.game.add.sprite(50 + 300 * _index,50, this.imageName);
-        ServiceLocator.guiManager.addToUI(this.sprite);
-        this.sprite.inputEnabled = true;
-        this.sprite.events.onInputDown.add(this.clicked, this);
+        if (!this.cardGUIContainer)
+        {
+            this.cardGUIContainer = ServiceLocator.guiManager.getCardImage(this.title, this.text, this.logoName);
+        }
+        this.cardGUIContainer.show();
+        
+        var spriteGroup = this.cardGUIContainer.guiContainer.phaserGroup;
+        spriteGroup.inputEnabled = true;
+        spriteGroup.events.onInputDown.add(this.clickHandler, this);
+    }
+    
+    hide()
+    {
+        this.cardGUIContainer.hide();
+        spriteGroup.inputEnabled = false;
+        spriteGroup.events.onInputDown.remove(this.clickHandler, this);
+    }
+    
+    setPosition(_position)
+    {
+        this.cardGUIContainer.setPosition(_position);
+    }
+    
+    clickHandler()
+    {
+        this.handlerFunction.call(this.handlerContext);
+    }
+    
+    setHandler(_fun, _ctxt)
+    {
+        this.handlerFunction = _fun;
+        this.handlerContext = _ctxt;
+    }
+    
+    getID()
+    {
+        return this.constructor.ID;
     }
 }
 
 class SmMedkitCard extends Card
 {
-    constructor(_player, _game)
+    constructor()
     {
-        super();
-        this.player = _player;
-        this.game = _game;
-        this.imageName = 'SmMedkitCard_img';
-    }
-    
-    static preload(_game)
-    {
-        _game.load.image('SmMedkitCard_img', './img/card/sm_medkit_card.png');
+        super("Small health", "Receive 25 health ptsReceive 25 health ptsReceive 25 health pts", "heart_icon");
     }
     
     apply()
@@ -51,20 +75,13 @@ class SmMedkitCard extends Card
         this.sprite.destroy();
     }
 }
+SmMedkitCard.ID = "SmMedkitCard";
 
 class WoodShieldCard extends Card
 {
-    constructor(_player, _game)
+    constructor()
     {
-        super();
-        this.player = _player;
-        this.game = _game;
-        this.imageName = 'WoodShieldCard_img';
-    }
-    
-    static preload(_game)
-    {
-        _game.load.image('WoodShieldCard_img', './img/card/wood_shield_card.png');
+        super("Small shield", "Attacks don't hurt as much", "wooden_shield_icon");
     }
     
     apply()
@@ -77,29 +94,4 @@ class WoodShieldCard extends Card
         this.sprite.destroy();
     }
 }
-
-class IronShieldCard extends Card
-{
-    constructor(_player, _game)
-    {
-        super();
-        this.player = _player;
-        this.game = _game;
-        this.imageName = 'IronShieldCard_img';
-    }
-    
-    static preload(_game)
-    {
-        _game.load.image('IronShieldCard_img', './img/card/iron_shield_card.png');
-    }
-    
-    apply()
-    {
-        this.player.setShield(2);
-    }
-    
-    hide()
-    {
-        this.sprite.destroy();
-    }
-}
+WoodShieldCard.ID = "WoodShieldCard";

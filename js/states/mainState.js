@@ -34,6 +34,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('animationManager', new AnimationManager());
     ServiceLocator.initialize('lighting', new Lighting());
     ServiceLocator.initialize('renderer', new Renderer(this));
+    ServiceLocator.initialize('cardManager', new CardManager());
 
     this.gameplayState = undefined;
     this.game.world.setBounds(0, 0, 192000, 192000);
@@ -53,12 +54,7 @@ MainState.prototype.create = function ()
     
     ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
     
-    var cardUI = ServiceLocator.guiManager.getCardImage("Small health", "Receive 25 health ptsReceive 25 health ptsReceive 25 health pts", "heart_icon");
-    cardUI.show();
-    cardUI.setPosition(new Phaser.Point(50, 50));
-    var cardUI2 = ServiceLocator.guiManager.getCardImage("Small shield", "Attacks don't hurt as much", "wooden_shield_icon");
-    cardUI2.show();
-    cardUI2.setPosition(new Phaser.Point(150, 50));
+    //ServiceLocator.cardManager.getCard(SmMedkitCard).show();
 }
 
 MainState.prototype.update = function ()

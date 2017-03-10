@@ -12,31 +12,18 @@ class Services
         this.animationManager = {};
         this.renderer = {};
         this.lighting = {};
+        this.cardManager = {};
 
         Object.preventExtensions(this);
     }
     
     initialize(_name, object)
     {
-        if (!this.checkVariableExists(_name))
-        {
-            console.error("Initializing undefined element " + _name);
-        }
         this[_name] = object;
-    }
-    
-    checkVariableExists(_name)
-    {
-        var values = Object.keys(this);
-        return values.indexOf(_name) >= 0;
     }
     
     getElement(_name)
     {
-        if (!this.checkVariableExists(_name))
-        {
-            console.error("Initializing undefined element " + _name);
-        }
         return this[_name];
     }
 }

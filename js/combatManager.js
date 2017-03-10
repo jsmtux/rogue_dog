@@ -5,7 +5,6 @@ class CombatManager
         this.game = _game;
         this.state = CombatManager.State.FINISHED;
         this.player = _player;
-        this.cards = [];
         this.enemies = {};
         this.dyingEnemies = [];
     }
@@ -65,12 +64,10 @@ class CombatManager
             }
             else if (this.getNumberOfDyingEnemies() == 0)
             {
-                this.startLootChoose();
+                this.state = CombatManager.State.LOOT;
+                var self = this;
+                ServiceLocator.cardManager.startLootChoose([SmMedkitCard, WoodShieldCard], function(){self.state = CombatManager.State.FINISHED;});
             }
-        }
-        else if (this.state == CombatManager.State.LOOT)
-        {
-            
         }
     }
     
@@ -145,27 +142,6 @@ class CombatManager
     killEnemy(_index){
         this.dyingEnemies.push(this.enemies[_index]);
         delete this.enemies[_index];
-    }
-    
-    startLootChoose()
-    {
-        this.state = CombatManager.State.LOOT;
-        this.cards.push(new SmMedkitCard(this.player, this.game, this));
-        this.cards.push(new WoodShieldCard(this.player, this.game, this));
-        for (var ind in this.cards)
-        {
-            this.cards[ind].show(ind);
-        }
-    }
-    
-    finishLootChoose()
-    {
-        this.state = CombatManager.State.FINISHED;
-        for (var ind in this.cards)
-        {
-            this.cards[ind].hide();
-        }
-        this.cards = [];
     }
     
     isCombatFinished()

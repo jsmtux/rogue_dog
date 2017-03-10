@@ -284,7 +284,7 @@ class GUIManager
         currentCardUI.children[1].image = _logoName;
         currentCardUI.children[2].text = _text;
         
-        var cardGuiContainer = new CardElement(cardUI);
+        var cardGuiContainer = new GUIElement(cardUI);
         cardGuiContainer.visible = false;
         
         return cardGuiContainer;
@@ -339,14 +339,6 @@ class GUIElement
     hide()
     {
         this.guiContainer.visible = false;
-    }
-}
-
-class CardElement extends GUIElement
-{
-    constructor(_container)
-    {
-        super(_container)
     }
 }
 
