@@ -66,7 +66,7 @@ class CombatManager
             {
                 this.state = CombatManager.State.LOOT;
                 var self = this;
-                ServiceLocator.cardManager.startLootChoose([SmMedkitCard, WoodShieldCard], function(){self.state = CombatManager.State.FINISHED;});
+                this.startLootChoose([SmMedkitCard, SmEnergyCard], function(){self.state = CombatManager.State.FINISHED;});
             }
         }
     }
@@ -147,6 +147,19 @@ class CombatManager
     isCombatFinished()
     {
         return this.state == CombatManager.State.FINISHED;
+    }
+    
+    startLootChoose(_cardList, _cb, _cbCtxt)
+    {
+        var self = this;
+        for (var ind in _cardList)
+        {
+            var curCard = new _cardList[ind]();
+            curCard.create(this.game);
+            curCard.show();
+            curCard.setPosition(new Phaser.Point(50 + 300 * ind,50));
+            curCard.setHandler(function(_curCard){return function(){self.finishLootChoose(_cardList, _curCard, _cb, _cbCtxt);}}(curCard));
+        }
     }
 }
 

@@ -34,7 +34,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('animationManager', new AnimationManager());
     ServiceLocator.initialize('lighting', new Lighting());
     ServiceLocator.initialize('renderer', new Renderer(this));
-    ServiceLocator.initialize('cardManager', new CardManager());
+    ServiceLocator.initialize('cardManager', new CardManager(this));
 
     this.gameplayState = undefined;
     this.game.world.setBounds(0, 0, 192000, 192000);
@@ -53,8 +53,6 @@ MainState.prototype.create = function ()
     ServiceLocator.guiManager.lostUI.registerCbReceiver(this.handleUI, this)
     
     ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
-    
-    //ServiceLocator.cardManager.getCard(SmMedkitCard).show();
 }
 
 MainState.prototype.update = function ()

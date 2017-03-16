@@ -253,8 +253,6 @@ class GUIManager
         EZGUI.renderer = _game.renderer;
         _game.load.EZGUITheme('metalworks', 'lib/ezgui_assets/metalworks-theme/metalworks-theme.json');
         _game.load.image('cardbg', 'img/card/card_bg.png');
-        _game.load.image('heart_icon', 'img/card/heart_icon.png');
-        _game.load.image('wooden_shield_icon', 'img/card/wooden_shield_icon.png');
     }
     
     create(_game)
@@ -277,7 +275,7 @@ class GUIManager
         this.UIGroup.add(_sprite);
     }
 
-    getCardImage(_title, _text, _logoName)
+    getCardUI(_title, _text, _logoName)
     {
         var currentCardUI = cardUI;
         currentCardUI.children[0].text = _title;
