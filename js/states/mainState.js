@@ -2,17 +2,13 @@ function MainState(game)
 {
     this.game = game;
     this.paused = false;
+    
+    this.gameModes = {};
+    this.currentGameMode;
 };
-
-MainState.State = {
-    WALKING : 0,
-    FIGHTING : 1
-}
 
 MainState.prototype.preload = function ()
 {
-    this.gameplayState;
-    
     this.game.load.image('attack', './img/attack.png');
     this.game.load.image('defend', './img/defend.png');
     
@@ -36,7 +32,6 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('renderer', new Renderer(this));
     ServiceLocator.initialize('cardManager', new CardManager(this));
 
-    this.gameplayState = undefined;
     this.game.world.setBounds(0, 0, 192000, 192000);
     //this.game.camera.bounds = undefined;
 
@@ -53,6 +48,22 @@ MainState.prototype.create = function ()
     ServiceLocator.guiManager.lostUI.registerCbReceiver(this.handleUI, this)
     
     ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
+    
+    ServiceLocator.walkManager.fillEmpty();
+    
+    this.addGameMode(ServiceLocator.walkManager);
+    this.addGameMode(ServiceLocator.combatManager);
+    this.addGameMode(new CombatLootMode(this.game, this.player));
+}
+
+MainState.prototype.addGameMode = function(_mode)
+{
+    if (!this.currentGameMode)
+    {
+        this.currentGameMode = _mode;
+        this.currentGameMode.startMode();
+    }
+    this.gameModes[_mode.getModeName()] = _mode;
 }
 
 MainState.prototype.update = function ()
@@ -62,30 +73,15 @@ MainState.prototype.update = function ()
     {
         return;
     }
-    if (this.gameplayState == undefined)
+    
+    this.currentGameMode.update();
+    var nextMode = this.currentGameMode.getNextMode();
+    if (nextMode)
     {
-        this.gameplayState = MainState.State.WALKING;
-        ServiceLocator.walkManager.fillEmpty();
-        ServiceLocator.walkManager.startWalk();
-    }
-
-    if (this.gameplayState == MainState.State.WALKING)
-    {
-        ServiceLocator.walkManager.update();
-        if (ServiceLocator.walkManager.isWalkingFinished())
-        {
-            this.gameplayState = MainState.State.FIGHTING;
-            ServiceLocator.combatManager.startCombat(ServiceLocator.difficultyManager.getEnemies());
-        }
-    }
-    else if (this.gameplayState == MainState.State.FIGHTING)
-    {
-        ServiceLocator.combatManager.update();
-        if (ServiceLocator.combatManager.isCombatFinished())
-        {
-            this.gameplayState = MainState.State.WALKING;
-            ServiceLocator.walkManager.startWalk();
-        }
+        this.currentGameMode.finishMode();
+        var gameModeArguments = this.currentGameMode.getNextModeArguments();
+        this.currentGameMode = this.gameModes[nextMode];
+        this.currentGameMode.startMode(gameModeArguments);
     }
 }
 

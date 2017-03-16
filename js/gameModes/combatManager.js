@@ -1,7 +1,8 @@
-class CombatManager
+class CombatManager extends GameMode
 {
     constructor(_game, _player)
     {
+        super();
         this.game = _game;
         this.state = CombatManager.State.FINISHED;
         this.player = _player;
@@ -64,9 +65,8 @@ class CombatManager
             }
             else if (this.getNumberOfDyingEnemies() == 0)
             {
-                this.state = CombatManager.State.LOOT;
-                var self = this;
-                this.startLootChoose([SmMedkitCard, SmEnergyCard], function(){self.state = CombatManager.State.FINISHED;});
+                this.state = CombatManager.State.FINISHED;
+                this.nextModeArguments = [SmMedkitCard, SmEnergyCard];
             }
         }
     }
@@ -144,22 +144,24 @@ class CombatManager
         delete this.enemies[_index];
     }
     
-    isCombatFinished()
+    getNextMode()
     {
-        return this.state == CombatManager.State.FINISHED;
+        var ret;
+        if (this.state == CombatManager.State.FINISHED)
+        {
+            ret = "CombatLootMode";
+        }
+        return ret;
     }
     
-    startLootChoose(_cardList, _cb, _cbCtxt)
+    getNextModeArguments()
     {
-        var self = this;
-        for (var ind in _cardList)
-        {
-            var curCard = new _cardList[ind]();
-            curCard.create(this.game);
-            curCard.show();
-            curCard.setPosition(new Phaser.Point(50 + 300 * ind,50));
-            curCard.setHandler(function(_curCard){return function(){self.finishLootChoose(_cardList, _curCard, _cb, _cbCtxt);}}(curCard));
-        }
+        return this.nextModeArguments;
+    }
+    
+    startMode()
+    {
+        ServiceLocator.combatManager.startCombat(ServiceLocator.difficultyManager.getEnemies());
     }
 }
 
@@ -167,6 +169,7 @@ CombatManager.State = {
     WAITING_MONSTERS : 1,
     ATTACK : 2,
     DEFEND : 3,
-    LOOT: 4,
-    FINISHED: 5
+    FINISHED: 4
 }
+
+CombatManager.NAME = "CombatManager";

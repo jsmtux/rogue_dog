@@ -61,10 +61,11 @@ class WalkLevel
     }
 }
 
-class WalkManager
+class WalkManager extends GameMode
 {
     constructor(_game, _player)
     {
+        super();
         this.game = _game;
         this.lastX = 0;
         this.lastUndergroundX = 0;
@@ -135,25 +136,31 @@ class WalkManager
         }
     }
     
-    startWalk(_stagePrototype)
-    {
-        this.player.startWalk();
-        this.currentWalkLevel.setStagePrototype(ServiceLocator.difficultyManager.getStagePrototype());
-    }
-    
     directionHandler(_dir, _angle)
     {
         this.player.jump(_angle);
     }
     
-    isWalkingFinished()
+    getNextMode()
     {
-        var ret = this.currentWalkLevel.isFinished() && this.player.onGround() && this.getVisibleObstacles().length == 0;
-        if (ret)
+        var finished = this.currentWalkLevel.isFinished() && this.player.onGround() && this.getVisibleObstacles().length == 0;
+        var ret;
+        if (finished)
         {
-            this.player.finishWalk();
+            ret = "CombatManager";
         }
         return ret;
+    }
+    
+    startMode()
+    {
+        this.player.startWalk();
+        this.currentWalkLevel.setStagePrototype(ServiceLocator.difficultyManager.getStagePrototype());
+    }
+    
+    finishMode()
+    {
+        this.player.finishWalk();
     }
 
     getVisibleObstacles()
@@ -191,6 +198,8 @@ class WalkManager
         }
     }
 }
+
+WalkManager.NAME = "WalkManager";
 
 class VisibleObject extends GameObject
 {

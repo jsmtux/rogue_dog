@@ -148,11 +148,6 @@ class BasicEnemy
             }, 500);
         }
     }
-    
-    getLootEnergy()
-    {
-        return 2;
-    }
 };
 
 BasicEnemy.States = {

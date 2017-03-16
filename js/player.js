@@ -197,6 +197,11 @@ class DogPlayer extends GameObject
         this.updateHealthPercentage();
     }
     
+    addEnergy(_points)
+    {
+        this.energy += _points;
+        this.updateEnergyPercentage();
+    }
     
     //Shield categories: 2(wood) 3(iron) 4(gold)
     //  on every use the shield diminishes by 1
@@ -231,9 +236,6 @@ class DogPlayer extends GameObject
     
     enemyKilledNotification(_enemy)
     {
-        this.energy += _enemy.getLootEnergy();
-        this.updateEnergyPercentage();
-        
     }
     
     jump(_direction, _angle)

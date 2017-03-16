@@ -43,6 +43,7 @@ class Card
     {
         this.sprite.visible = true;
         this.sprite.inputEnabled = true;
+        this.sprite.input.enableDrag(true);
         this.sprite.events.onInputDown.add(this.clickHandler, this);
     }
     
@@ -88,9 +89,9 @@ class SmMedkitCard extends Card
         super("Small health", "Receive 25 health ptsReceive 25 health ptsReceive 25 health pts", "heart_icon", _game);
     }
     
-    apply()
+    apply(_arguments)
     {
-        this.player.addHealth(5);
+        _arguments.player.addHealth(5);
     }
     
     hide()
@@ -107,9 +108,9 @@ class WoodShieldCard extends Card
         super("Small shield", "Attacks don't hurt as much", "wooden_shield_icon", _game);
     }
     
-    apply()
+    apply(_arguments)
     {
-        this.player.setShield(2);
+        _arguments.player.setShield(2);
     }
     
     hide()
@@ -126,9 +127,9 @@ class SmEnergyCard extends Card
         super("Small Crystal", "Small energy increase", "small_energy_icon", _game);
     }
     
-    apply()
+    apply(_arguments)
     {
-        this.player.setShield(2);
+        _arguments.player.addEnergy(2);
     }
     
     hide()
@@ -145,9 +146,9 @@ class MedEnergyCard extends Card
         super("Med. Crystal", "Medium energy increase", "medium_energy_icon", _game);
     }
     
-    apply()
+    apply(_arguments)
     {
-        this.player.setShield(2);
+        _arguments.player.addEnergy(5);
     }
     
     hide()
@@ -164,9 +165,9 @@ class BigEnergyCard extends Card
         super("Big Crystal", "Big energy increase", "big_energy_icon", _game);
     }
     
-    apply()
+    apply(_arguments)
     {
-        this.player.setShield(2);
+        _arguments.player.addEnergy(10);
     }
     
     hide()
