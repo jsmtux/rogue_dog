@@ -13,6 +13,12 @@ class CardManager
         CardManager.addNewCard(SmEnergyCard);
         CardManager.addNewCard(MedEnergyCard);
         CardManager.addNewCard(BigEnergyCard);
+        CardManager.addNewCard(NewEnemyCard);
+        CardManager.addNewCard(StrongerEnemyCard);
+        CardManager.addNewCard(NewObstacleCard);
+        CardManager.addNewCard(MoreObstaclesCard);
+        CardManager.addNewCard(TwoEnemiesCard);
+        CardManager.addNewCard(ThreeEnemiesCard);
         
         for(var ind in CardManager.existingCards)
         {

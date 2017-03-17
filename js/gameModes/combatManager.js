@@ -8,6 +8,7 @@ class CombatManager extends GameMode
         this.player = _player;
         this.enemies = {};
         this.dyingEnemies = [];
+        this.cardsToLoot = [];
     }
     
     update()
@@ -66,7 +67,6 @@ class CombatManager extends GameMode
             else if (this.getNumberOfDyingEnemies() == 0)
             {
                 this.state = CombatManager.State.FINISHED;
-                this.nextModeArguments = [SmMedkitCard, SmEnergyCard];
             }
         }
     }
@@ -141,6 +141,8 @@ class CombatManager extends GameMode
     
     killEnemy(_index){
         this.dyingEnemies.push(this.enemies[_index]);
+        var droppedCards = this.enemies[_index].getDroppedCards();
+        this.cardsToLoot = this.cardsToLoot.concat(droppedCards);
         delete this.enemies[_index];
     }
     
@@ -156,12 +158,13 @@ class CombatManager extends GameMode
     
     getNextModeArguments()
     {
-        return this.nextModeArguments;
+        return this.cardsToLoot;
     }
     
     startMode()
     {
         ServiceLocator.combatManager.startCombat(ServiceLocator.difficultyManager.getEnemies());
+        this.cardsToLoot = [];
     }
 }
 

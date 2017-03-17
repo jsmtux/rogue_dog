@@ -152,6 +152,11 @@ class Card
     {
         this.sprite.destroy();
     }
+    
+    hide()
+    {
+        this.destroy();
+    }
 }
 
 class SmMedkitCard extends Card
@@ -164,11 +169,6 @@ class SmMedkitCard extends Card
     apply(_arguments)
     {
         _arguments.player.addHealth(5);
-    }
-    
-    hide()
-    {
-        this.sprite.destroy();
     }
 }
 SmMedkitCard.ID = "SmMedkitCard";
@@ -184,11 +184,6 @@ class WoodShieldCard extends Card
     {
         _arguments.player.setShield(2);
     }
-    
-    hide()
-    {
-        this.sprite.destroy();
-    }
 }
 WoodShieldCard.ID = "WoodShieldCard";
 
@@ -202,11 +197,6 @@ class SmEnergyCard extends Card
     apply(_arguments)
     {
         _arguments.player.addEnergy(2);
-    }
-    
-    hide()
-    {
-        this.sprite.destroy();
     }
 }
 SmEnergyCard.ID = "SmEnergyCard";
@@ -222,11 +212,6 @@ class MedEnergyCard extends Card
     {
         _arguments.player.addEnergy(5);
     }
-    
-    hide()
-    {
-        this.sprite.destroy();
-    }
 }
 MedEnergyCard.ID = "MedEnergyCard";
 
@@ -241,10 +226,89 @@ class BigEnergyCard extends Card
     {
         _arguments.player.addEnergy(10);
     }
-    
-    hide()
-    {
-        this.sprite.destroy();
-    }
 }
 BigEnergyCard.ID = "BigEnergyCard";
+
+class NewEnemyCard extends Card
+{
+    constructor(_game)
+    {
+        super("Shiny Pig", "A new type of enemy will appear!", "new_enemy_icon", _game);
+    }
+    
+    apply(_arguments)
+    {
+        ServiceLocator.difficultyManager.unlockEnemy();
+    }
+}
+NewEnemyCard.ID = "NewEnemyCard";
+
+class MoreObstaclesCard extends Card
+{
+    constructor(_game)
+    {
+        super("Wood Wood Wood", "You'll probably find more obstacles along your way!", "wood_logs_icon", _game);
+    }
+    
+    apply(_arguments)
+    {
+        ServiceLocator.difficultyManager.increaseObstacleNumber();
+    }
+}
+MoreObstaclesCard.ID = "MoreObstaclesCard";
+
+class StrongerEnemyCard extends Card
+{
+    constructor(_game)
+    {
+        super("Ancient Mask", "Enemies will be stronger!", "stronger_enemy_icon", _game);
+    }
+    
+    apply(_arguments)
+    {
+        //Should be making enemies stronger
+    }
+}
+StrongerEnemyCard.ID = "StrongerEnemyCard"
+
+class NewObstacleCard extends Card
+{
+    constructor(_game)
+    {
+        super("Stupid Map", "New obstacles may appear!", "new_obstacle_icon", _game);
+    }
+    
+    apply(_arguments)
+    {
+        //Should be making enemies stronger
+    }
+}
+StrongerEnemyCard.ID = "StrongerEnemyCard"
+
+class TwoEnemiesCard extends Card
+{
+    constructor(_game)
+    {
+        super("Let's Hang Out", "You will find multiple enemies in combat!", "enemy_friend_icon", _game);
+    }
+    
+    apply(_arguments)
+    {
+        ServiceLocator.difficultyManager.setNumberOfEnemies(2);
+    }
+}
+TwoEnemiesCard.ID = "TwoEnemiesCard"
+
+class ThreeEnemiesCard extends Card
+{
+    constructor(_game)
+    {
+        super("Three's a crowd", "You will find up to three enemies in combat!", "enemy_friends_icon", _game);
+    }
+    
+    apply(_arguments)
+    {
+        ServiceLocator.difficultyManager.setNumberOfEnemies(3);
+    }
+}
+ThreeEnemiesCard.ID = "ThreeEnemiesCard"

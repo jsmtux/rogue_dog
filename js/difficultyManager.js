@@ -2,7 +2,15 @@ class DifficultyManager
 {
     constructor()
     {
+    }
+    
+    create()
+    {
         this.difficultyLevel = 0;
+        this.unlockedEnemies = [];
+        this.unlockEnemy();
+        this.combatEnemyNumber = 1;
+        this.obstacleNumber = 3;
     }
         
     getNextSpikeSeparation()
@@ -30,28 +38,33 @@ class DifficultyManager
         return 600;
     }
     
+    unlockEnemy()
+    {
+        this.unlockedEnemies.push(DifficultyManager.UnlockableEnemies[this.unlockedEnemies.length]);
+    }
+    
+    setNumberOfEnemies(_amount)
+    {
+        this.combatEnemyNumber = _amount;
+    }
+    
     getEnemies()
     {
-        return [BeeEnemy];
         var ret = [];
         
-        for (var i = 0; i < 2; i++)
+        for (var i = 0; i < this.combatEnemyNumber; i++)
         {
-            var enemy;
-            
-            if (Math.random() < 0.5)
-            {
-                enemy = BasicEnemy;
-            }
-            else
-            {
-                enemy = BeeEnemy;
-            }
+            var enemy = this.unlockedEnemies[randomInt(1, this.unlockedEnemies.length) - 1];
             
             ret.push(enemy);
         }
         
         return ret;
+    }
+    
+    increaseObstacleNumber()
+    {
+        this.obstacleNumber++;
     }
     
     getStagePrototype()
@@ -62,7 +75,7 @@ class DifficultyManager
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.1);
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.DOUBLE_OBSTACLE, 0.2);
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TRIPLE_OBSTACLE, 0.1);
-        return new StagePrototype(prototypeRules, 0);
+        return new StagePrototype(prototypeRules, this.obstacleNumber);
     }
     
     getUndergroundStagePrototype()
@@ -72,6 +85,8 @@ class DifficultyManager
         return new StagePrototype();
     }
 }
+
+DifficultyManager.UnlockableEnemies = [BasicEnemy, BeeEnemy];
 
 class PrototypeRules
 {

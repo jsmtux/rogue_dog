@@ -96,6 +96,11 @@ class BasicEnemy
         return false;
     }
     
+    getDroppedCards()
+    {
+        return [MoreObstaclesCard];
+    }
+    
     startAttack(_player)
     {
         this.state = BasicEnemy.States.ATTACKING;

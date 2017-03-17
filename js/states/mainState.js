@@ -41,6 +41,7 @@ MainState.prototype.create = function ()
     ServiceLocator.infoManager.create();
     ServiceLocator.camera.create(this, this.player);
     ServiceLocator.walkManager.create(this);
+    ServiceLocator.difficultyManager.create();
 
     this.player.create(this);
     
