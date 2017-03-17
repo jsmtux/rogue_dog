@@ -7,6 +7,7 @@ class CardManager
     
     static preload(_game)
     {
+        _game.load.image('cardBack', './img/card/back.png');
         CardManager.addNewCard(SmMedkitCard);
         CardManager.addNewCard(WoodShieldCard);
         CardManager.addNewCard(SmEnergyCard);

@@ -32,6 +32,7 @@ class DifficultyManager
     
     getEnemies()
     {
+        return [BeeEnemy];
         var ret = [];
         
         for (var i = 0; i < 2; i++)
@@ -61,7 +62,7 @@ class DifficultyManager
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.1);
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.DOUBLE_OBSTACLE, 0.2);
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TRIPLE_OBSTACLE, 0.1);
-        return new StagePrototype(prototypeRules, 7);
+        return new StagePrototype(prototypeRules, 0);
     }
     
     getUndergroundStagePrototype()

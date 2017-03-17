@@ -53,7 +53,7 @@ MainState.prototype.create = function ()
     
     this.addGameMode(ServiceLocator.walkManager);
     this.addGameMode(ServiceLocator.combatManager);
-    this.addGameMode(new CombatLootMode(this.game, this.player));
+    this.addGameMode(new CombatLootMode(this, this.player));
 }
 
 MainState.prototype.addGameMode = function(_mode)

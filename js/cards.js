@@ -9,6 +9,14 @@ class Card
         
         this.handlerFunction;
         this.handlerContext;
+        
+        
+        this.position = new Phaser.Point(0,0);
+        
+        this.yRotAngle = 0.0;
+        this.yDesiredAngle = undefined;
+        this.flipCb;
+        this.flipCbCtxt;
     }
     
     preload(_game)
@@ -34,21 +42,84 @@ class Card
     
     create(_game)
     {
-        var image = ServiceLocator.cardManager.getCardImage(this);
-        this.sprite = _game.add.sprite(0, 0, image);
+        this.frontImage = ServiceLocator.cardManager.getCardImage(this);
+        this.sprite = _game.add.sprite(0, 0, this.frontImage);
         ServiceLocator.guiManager.addToUI(this.sprite);
+        this.game = _game;
     }
     
     show()
     {
         this.sprite.visible = true;
         this.sprite.inputEnabled = true;
-        this.sprite.input.enableDrag(true);
         this.sprite.events.onInputDown.add(this.clickHandler, this);
+        
+        this.game.updateSignal.add(this.update, this);
+    }
+    
+    update()
+    {
+        if (this.yDesiredAngle === undefined)
+        {
+            return;
+        }
+
+        if (this.yRotAngle > this.yDesiredAngle)
+        {
+            this.callFlipCb();
+            this.yRotAngle = this.yDesiredAngle;
+            this.yDesiredAngle = undefined;
+        }
+        else
+        {
+            this.setYAngle(this.yRotAngle + 0.05);
+        }
+    }
+    
+    setYAngle(_angle)
+    {
+        this.yRotAngle = _angle;
+        this.sprite.scale.x = Math.cos(this.yRotAngle);
+        if (this.sprite.scale.x < 0)
+        {
+            this.sprite.loadTexture('cardBack');
+        }
+        else
+        {
+            this.sprite.loadTexture(this.frontImage);
+        }
+        this.setPosition(this.position);
+    }
+    
+    flip(_cb, _cbCtxt)
+    {
+        this.flipCb = _cb;
+        this.flipCbCtxt = _cbCtxt;
+        if (this.yRotAngle == 0)
+        {
+            this.yDesiredAngle = Math.PI;
+        }
+        if (this.yRotAngle == Math.PI)
+        {
+            this.yRotAngle = -Math.PI;
+            this.yDesiredAngle = 0;
+        }
+    }
+    
+    callFlipCb()
+    {
+        if (this.flipCb === undefined)
+        {
+            return;
+        }
+        this.flipCb.call(this.flipCbCtxt, this);
+        this.flipCb = undefined;
+        this.flipCbCtxt = undefined;
     }
     
     hide()
     {
+        this.game.updateSignal.remove(this.update, this);
         this.sprite.visible = false;
         this.sprite.inputEnabled = false;
         this.sprite.events.onInputDown.remove(this.clickHandler, this);
@@ -56,13 +127,14 @@ class Card
     
     setPosition(_position)
     {
-        this.sprite.x = _position.x;
+        this.position = _position;
+        this.sprite.x = _position.x - 0.5 * 280 * Math.cos(this.yRotAngle);
         this.sprite.y = _position.y;
     }
     
     clickHandler()
     {
-        this.handlerFunction.call(this.handlerContext);
+        this.handlerFunction.call(this.handlerContext, this);
     }
     
     setHandler(_fun, _ctxt)
