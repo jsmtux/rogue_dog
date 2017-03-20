@@ -2,7 +2,12 @@ class BasicEnemy extends Enemy
 {
     constructor(_game, _index)
     {
-        super(_game, _index, 10);        
+        var cardProbabilities = {}
+        cardProbabilities["NewEnemyCard"] = Enemy.cardProbability.LOW;
+        cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
+        cardProbabilities["TwoEnemiesCard"] = Enemy.cardProbability.LOW;
+        cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.MED;
+        super(_game, _index, 10, cardProbabilities);        
         this.iterationNumber = 0;
     }
     
@@ -49,11 +54,6 @@ class BasicEnemy extends Enemy
         {
             this.sprite.play('idle');
         }
-    }
-    
-    getDroppedCards()
-    {
-        return [MoreObstaclesCard];
     }
     
     startAttack(_player)

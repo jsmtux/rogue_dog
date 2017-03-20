@@ -1,11 +1,13 @@
 class Enemy
 {
-    constructor(_game, _index, _health)
+    constructor(_game, _index, _health, _cardProbabilities)
     {
         this.game = _game;
         this.dying = false;
         this.player = _game.player;
         this.health = _health;
+        
+        this.cardProbabilities = _cardProbabilities;
         
         this.index = _index;
         this.padding = 220;   
@@ -59,8 +61,31 @@ class Enemy
     
     getDroppedCards()
     {
-        console.error("Returning no cards from enemy");
-        return [];
+        var totalProbability = 0;
+        var cardPosition = {};
+        for (var cardName in this.cardProbabilities)
+        {
+            var card = ServiceLocator.cardManager.getCardClassFromID(cardName);
+            if (ServiceLocator.cardManager.stillInDeck(card))
+            {
+                var probabilities = this.cardProbabilities[cardName];
+                totalProbability += probabilities;
+                cardPosition[totalProbability] = cardName;
+            }
+        }
+        
+        var roll = randomInt(0, totalProbability + 1);
+        
+        for (var ind in cardPosition)
+        {
+            if (ind > roll)
+            {
+                var cardName = cardPosition[ind];
+                break
+            }
+        }
+        
+        return [ServiceLocator.cardManager.getCardClassFromID(cardName)];
     }
     
     startAttack(_player)
@@ -75,3 +100,8 @@ Enemy.States = {
     FINISHED: 2
 }
 
+Enemy.cardProbability = {
+    LOW: 1,
+    MED: 3,
+    HIGH: 9
+}

@@ -3,7 +3,10 @@ class BeeEnemy extends Enemy
 {
     constructor(_game, _index)
     {
-        super(_game, _index, 5);
+        var cardProbabilities = {}
+        cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
+        cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.MED;
+        super(_game, _index, 5, cardProbabilities);
 
         this.height = 320;
         this.moveRadius = 10;

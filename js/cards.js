@@ -173,20 +173,6 @@ class SmMedkitCard extends Card
 }
 SmMedkitCard.ID = "SmMedkitCard";
 
-class WoodShieldCard extends Card
-{
-    constructor(_game)
-    {
-        super("Small shield", "Attacks don't hurt as much", "wooden_shield_icon", _game);
-    }
-    
-    apply(_arguments)
-    {
-        _arguments.player.setShield(2);
-    }
-}
-WoodShieldCard.ID = "WoodShieldCard";
-
 class SmEnergyCard extends Card
 {
     constructor(_game)
