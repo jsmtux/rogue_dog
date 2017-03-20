@@ -2,7 +2,7 @@ class BasicEnemy extends Enemy
 {
     constructor(_game, _spec, _index)
     {
-        super(_game, _index, _spec);
+        super(_game, _spec, _index);
         
         this.spec = _spec;
         
@@ -70,17 +70,19 @@ class BasicEnemy extends Enemy
         var self = this;
         this.endTimeout = setTimeout(function(){
             self.showResultSprite('bad');
-            self.player.monsterHit();
         }, this.spec.timeout);
     }
     
     directionGestureCb(_direction)
     {
-        console.log(_direction);
+        clearTimeout(this.endTimeout);
         if (this.attackOption.image === _direction)
         {
-            clearTimeout(this.endTimeout);
-            this.showResultSprite('good');        
+            this.showResultSprite('good');
+        }
+        else
+        {
+            this.showResultSprite('bad');
         }
     }
     
@@ -96,6 +98,10 @@ class BasicEnemy extends Enemy
         }
         else
         {
+            if (_result == 'bad')
+            {
+                this.player.monsterHit();
+            }
             this.iterationNumber = 0;
             var resultSprite = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, _result);
             ServiceLocator.renderer.addToOverlay(resultSprite);

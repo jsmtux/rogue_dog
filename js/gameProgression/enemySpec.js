@@ -21,6 +21,7 @@ class BasicEnemySpec
         this.cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["TwoEnemiesCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.LOW;
+        this.cardProbabilities["SmMedkitCard"] = Enemy.cardProbability.LOW;
     }
     
     setValues(_timeout, _retries, _health)
@@ -55,5 +56,6 @@ class BeeEnemySpec
         this.cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.MED;
         this.cardProbabilities["StrongerBeeEnemyCard"] = Enemy.cardProbability.LOW;
+        this.cardProbabilities["SmMedkitCard"] = Enemy.cardProbability.LOW;
     }
 }

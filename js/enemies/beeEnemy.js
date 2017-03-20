@@ -3,7 +3,7 @@ class BeeEnemy extends Enemy
 {
     constructor(_game, _spec, _index)
     {
-        super(_game, _index, _spec);
+        super(_game, _spec, _index);
 
         this.height = 320;
         this.moveRadius = 10;

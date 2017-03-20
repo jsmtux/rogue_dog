@@ -33,7 +33,6 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('cardManager', new CardManager(this));
 
     this.game.world.setBounds(0, 0, 192000, 192000);
-    //this.game.camera.bounds = undefined;
 
     ServiceLocator.renderer.create(this);
     ServiceLocator.inputManager.create(this);
@@ -52,6 +51,7 @@ MainState.prototype.create = function ()
     
     ServiceLocator.walkManager.fillEmpty();
     
+    this.currentGameMode = undefined;
     this.addGameMode(ServiceLocator.walkManager);
     this.addGameMode(ServiceLocator.combatManager);
     this.addGameMode(new CombatLootMode(this, this.player));

@@ -1,6 +1,6 @@
 class Enemy extends GameObject
 {
-    constructor(_game, _index, _spec)
+    constructor(_game, _spec, _index)
     {
         super();
         this.game = _game;
@@ -66,7 +66,6 @@ class Enemy extends GameObject
         var cardPosition = {};
         for (var cardName in this.cardProbabilities)
         {
-            var card = ServiceLocator.cardManager.getCardClassFromID(cardName);
             if (ServiceLocator.cardManager.stillInDeck(cardName))
             {
                 var probabilities = this.cardProbabilities[cardName];
@@ -75,7 +74,7 @@ class Enemy extends GameObject
             }
         }
         
-        var roll = randomInt(0, totalProbability + 1);
+        var roll = randomInt(1, totalProbability + 1);
         
         for (var ind in cardPosition)
         {

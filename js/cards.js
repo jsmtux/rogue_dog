@@ -163,7 +163,7 @@ class SmMedkitCard extends Card
 {
     constructor(_game)
     {
-        super("Small health", "Receive 25 health ptsReceive 25 health ptsReceive 25 health pts", "heart_icon", _game);
+        super("Small cake", "A bit of health", "small_cake_icon", _game);
     }
     
     apply(_arguments)
