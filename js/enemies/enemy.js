@@ -1,13 +1,14 @@
-class Enemy
+class Enemy extends GameObject
 {
-    constructor(_game, _index, _health, _cardProbabilities)
+    constructor(_game, _index, _spec)
     {
+        super();
         this.game = _game;
         this.dying = false;
         this.player = _game.player;
-        this.health = _health;
+        this.health = _spec.health;
         
-        this.cardProbabilities = _cardProbabilities;
+        this.cardProbabilities = _spec.cardProbabilities;
         
         this.index = _index;
         this.padding = 220;   
@@ -51,7 +52,7 @@ class Enemy
         this.sprite.alpha -= 0.02;
         if (this.sprite.alpha <= 0)
         {
-            this.sprite.destroy();
+            this.destroy();
             this.player.enemyKilledNotification(this);
             return true;
         }
@@ -66,7 +67,7 @@ class Enemy
         for (var cardName in this.cardProbabilities)
         {
             var card = ServiceLocator.cardManager.getCardClassFromID(cardName);
-            if (ServiceLocator.cardManager.stillInDeck(card))
+            if (ServiceLocator.cardManager.stillInDeck(cardName))
             {
                 var probabilities = this.cardProbabilities[cardName];
                 totalProbability += probabilities;
@@ -81,6 +82,7 @@ class Enemy
             if (ind > roll)
             {
                 var cardName = cardPosition[ind];
+                ServiceLocator.cardManager.drawCard(cardName);
                 break
             }
         }
@@ -91,6 +93,11 @@ class Enemy
     startAttack(_player)
     {
         console.error("Trying to start undefined attack");
+    }
+    
+    getName()
+    {
+        return this.constructor.NAME;
     }
 }
 

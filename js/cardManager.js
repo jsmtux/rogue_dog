@@ -7,7 +7,6 @@ class CardManager
         
         for(var ind in CardManager.cardDefinitions)
         {
-            CardManager.cardDefinitions[ind].class.preload(_game);
             this.remainingCards[ind] = CardManager.cardDefinitions[ind].numberInDeck;
         }
     }
@@ -19,7 +18,7 @@ class CardManager
         CardManager.addNewCard(SmEnergyCard);
         CardManager.addNewCard(MedEnergyCard);
         CardManager.addNewCard(BigEnergyCard);
-        CardManager.addNewCard(NewEnemyCard, 2);
+        CardManager.addNewCard(NewEnemyCard, 1);
         CardManager.addNewCard(StrongerEnemyCard, 2);
         CardManager.addNewCard(NewObstacleCard, 0);
         CardManager.addNewCard(MoreObstaclesCard);
@@ -28,14 +27,15 @@ class CardManager
         
         for(var ind in CardManager.cardDefinitions)
         {
-            CardManager.cardDefinitions[ind].class.preload(_game);
+            CardManager.cardDefinitions[ind].instance.preload(_game);
         }
     };
     
     static addNewCard(_cardClass, _numberInDeck)
     {
         var newCardDefinition = {
-            "class": new _cardClass(),
+            "class": _cardClass,
+            "instance": new _cardClass(),
             "renderedImage":undefined,
             "numberInDeck":_numberInDeck
         };
@@ -63,21 +63,21 @@ class CardManager
         return Object.keys(CardManager.cardDefinitions);
     }
     
-    stillInDeck(_card)
+    stillInDeck(_cardName)
     {
-        var numberRemaining = this.remainingCards[_card.getID()];
+        var numberRemaining = this.remainingCards[_cardName];
         return numberRemaining === undefined || numberRemaining > 0;
     }
     
-    drawCard(_card)
+    drawCard(_cardName)
     {
-        if (this.remainingCards[_card.getID()] !== undefined)
+        if (this.remainingCards[_cardName] !== undefined)
         {
-            this.remainingCards[_card.getID()] --;
-            if (this.remainingCards[_card.getID()] < 0)
+            this.remainingCards[_cardName] --;
+            if (this.remainingCards[_cardName] < 0)
             {
-                this.remainingCards[_card.getID()] = 0;
-                console.error("Drawn too many cards of type " + _card.getID());
+                this.remainingCards[_cardName] = 0;
+                console.error("Drawn too many cards of type " + _cardName);
             }
         }
     }

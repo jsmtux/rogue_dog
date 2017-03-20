@@ -76,7 +76,11 @@ class CombatManager extends GameMode
         this.state = CombatManager.State.WAITING_MONSTERS;
         for (var ind in enemyTypes)
         {
-            this.addEnemy(enemyTypes[ind]);
+            var type = enemyTypes[ind];
+            var spec = ServiceLocator.difficultyManager.getEnemySpec(type.NAME);
+            var enemy = new type(this.game, spec, ind);
+            enemy.create();
+            this.enemies[ind] = enemy;
         }
     }
     
@@ -129,14 +133,6 @@ class CombatManager extends GameMode
     getNumberOfDyingEnemies()
     {
         return this.dyingEnemies.length;
-    }
-    
-    addEnemy(_definition)
-    {
-        var index = this.getNumberOfEnemies();
-        var enemy = new _definition(this.game, index);
-        enemy.create();
-        this.enemies[index] = enemy;
     }
     
     killEnemy(_index){

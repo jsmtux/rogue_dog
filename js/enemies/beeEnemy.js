@@ -1,16 +1,15 @@
 
 class BeeEnemy extends Enemy
 {
-    constructor(_game, _index)
+    constructor(_game, _spec, _index)
     {
-        var cardProbabilities = {}
-        cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
-        cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.MED;
-        super(_game, _index, 5, cardProbabilities);
+        super(_game, _index, _spec);
 
         this.height = 320;
         this.moveRadius = 10;
         this.rotationCounter = 0;
+        
+        this.spec = _spec;
     }
 
     static preload(_game)
@@ -75,12 +74,13 @@ class BeeEnemy extends Enemy
         if (!this.bullet)
         {
             ServiceLocator.inputManager.drawGesture.add(this.receivePolygonPoints, this);
-            this.bullet = new BeeBullet(this.game, _player, ServiceLocator.difficultyManager.getBeeBulletSpeed());
+            this.bullet = new BeeBullet(this.game, _player, this.spec.bulletSpeed);
             this.bullet.create(this.sprite.x, this.sprite.y);
         }
     }
-
 }
+
+BeeEnemy.NAME = "BeeEnemy";
 
 class BeeBullet
 {

@@ -18,13 +18,13 @@ class InfoManager
     
     create()
     {
-        this.infoIcon = this.game.add.sprite(resolution.x - 50, 25, 'question_icon');
+        /*this.infoIcon = this.game.add.sprite(resolution.x - 50, 25, 'question_icon');
         ServiceLocator.guiManager.addToUI(this.infoIcon);
         this.infoIcon.inputEnabled = true;
         this.infoIcon.input.priorityID = 1;
         this.infoIcon.events.onInputDown.add(this.show, this);
     
-        this.playerHelp.create();
+        this.playerHelp.create();*/
     }
     
     show()

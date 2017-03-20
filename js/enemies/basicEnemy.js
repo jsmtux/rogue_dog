@@ -1,13 +1,11 @@
 class BasicEnemy extends Enemy
 {
-    constructor(_game, _index)
+    constructor(_game, _spec, _index)
     {
-        var cardProbabilities = {}
-        cardProbabilities["NewEnemyCard"] = Enemy.cardProbability.LOW;
-        cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
-        cardProbabilities["TwoEnemiesCard"] = Enemy.cardProbability.LOW;
-        cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.MED;
-        super(_game, _index, 10, cardProbabilities);        
+        super(_game, _index, _spec);
+        
+        this.spec = _spec;
+        
         this.iterationNumber = 0;
     }
     
@@ -73,7 +71,7 @@ class BasicEnemy extends Enemy
         this.endTimeout = setTimeout(function(){
             self.showResultSprite('bad');
             self.player.monsterHit();
-        }, ServiceLocator.difficultyManager.getBasicEnemyTimeout());
+        }, this.spec.timeout);
     }
     
     directionGestureCb(_direction)
@@ -92,7 +90,7 @@ class BasicEnemy extends Enemy
         clearTimeout(this.endTimeout);
         ServiceLocator.inputManager.directionGesture.remove();
         this.arrow.destroy();
-        if (_result == 'good' && this.iterationNumber < ServiceLocator.difficultyManager.getBasicEnemyRetries())
+        if (_result == 'good' && this.iterationNumber < this.spec.retries)
         {
             setTimeout(() => {this.startNewCommand();}, 100);
         }
@@ -109,3 +107,5 @@ class BasicEnemy extends Enemy
         }
     }
 };
+
+BasicEnemy.NAME = "BasicEnemy"
