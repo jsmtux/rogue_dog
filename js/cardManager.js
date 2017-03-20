@@ -19,7 +19,8 @@ class CardManager
         CardManager.addNewCard(MedEnergyCard);
         CardManager.addNewCard(BigEnergyCard);
         CardManager.addNewCard(NewEnemyCard, 1);
-        CardManager.addNewCard(StrongerEnemyCard, 2);
+        CardManager.addNewCard(StrongerBasicEnemyCard, 2);
+        CardManager.addNewCard(StrongerBeeEnemyCard, 2);
         CardManager.addNewCard(NewObstacleCard, 0);
         CardManager.addNewCard(MoreObstaclesCard);
         CardManager.addNewCard(TwoEnemiesCard, 1);

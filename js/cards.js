@@ -243,19 +243,33 @@ class MoreObstaclesCard extends Card
 }
 MoreObstaclesCard.ID = "MoreObstaclesCard";
 
-class StrongerEnemyCard extends Card
+class StrongerBasicEnemyCard extends Card
 {
     constructor(_game)
     {
-        super("Ancient Mask", "Enemies will be stronger!", "stronger_enemy_icon", _game);
+        super("Ancient Mask", "BasicEnemy will be stronger!", "stronger_enemy_icon", _game);
     }
     
     apply(_arguments)
     {
-        //Should be making enemies stronger
+        ServiceLocator.difficultyManager.increaseEnemyDifficulty("BasicEnemy");
     }
 }
-StrongerEnemyCard.ID = "StrongerEnemyCard"
+StrongerBasicEnemyCard.ID = "StrongerBasicEnemyCard"
+
+class StrongerBeeEnemyCard extends Card
+{
+    constructor(_game)
+    {
+        super("Ancient Mask", "BeeEnemy will be stronger!", "stronger_enemy_icon", _game);
+    }
+    
+    apply(_arguments)
+    {
+        ServiceLocator.difficultyManager.increaseEnemyDifficulty("BeeEnemy");
+    }
+}
+StrongerBeeEnemyCard.ID = "StrongerBeeEnemyCard"
 
 class NewObstacleCard extends Card
 {
@@ -269,7 +283,7 @@ class NewObstacleCard extends Card
         //Should be making enemies stronger
     }
 }
-StrongerEnemyCard.ID = "StrongerEnemyCard"
+NewObstacleCard.ID = "NewObstacleCard"
 
 class TwoEnemiesCard extends Card
 {

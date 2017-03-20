@@ -17,6 +17,7 @@ class BasicEnemySpec
         
         this.cardProbabilities = {}
         this.cardProbabilities["NewEnemyCard"] = Enemy.cardProbability.LOW;
+        this.cardProbabilities["StrongerBasicEnemyCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["TwoEnemiesCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.LOW;
@@ -34,11 +35,25 @@ class BeeEnemySpec
 {
     constructor(_level)
     {
-        this.health = 5;
-        this.bulletSpeed = 4;
+        switch(_level)
+        {
+            case 0:
+                this.health = 5;
+                this.bulletSpeed = 7;
+                break;
+            case 1:
+                this.health = 5;
+                this.bulletSpeed = 6;
+                break;
+            case 2:
+                this.health = 5;
+                this.bulletSpeed = 4;
+                break;
+        }
         
         this.cardProbabilities = {}
         this.cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.MED;
+        this.cardProbabilities["StrongerBeeEnemyCard"] = Enemy.cardProbability.LOW;
     }
 }

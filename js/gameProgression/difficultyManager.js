@@ -29,6 +29,11 @@ class DifficultyManager
         }
     }
     
+    increaseEnemyDifficulty(_enemyName)
+    {
+        this.enemiesDifficulty[_enemyName]++;
+    }
+    
     getLineTimeAlive()
     {
         return 600;
