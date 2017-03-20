@@ -46,11 +46,11 @@ class CombatManager extends GameMode
         {
             for (ind in this.enemies)
             {
-                if (this.enemies[ind].state == BasicEnemy.States.ATTACKING)
+                if (this.enemies[ind].state == Enemy.States.ATTACKING)
                 {
                     return;
                 }
-                if (this.enemies[ind].state == BasicEnemy.States.WAITING)
+                if (this.enemies[ind].state == Enemy.States.WAITING)
                 {
                     this.enemies[ind].startAttack(this.player);
                     return;
@@ -58,7 +58,7 @@ class CombatManager extends GameMode
             }
             for (ind in this.enemies)
             {
-                this.enemies[ind].state = BasicEnemy.States.WAITING;
+                this.enemies[ind].state = Enemy.States.WAITING;
             }
             if (this.getNumberOfEnemies() > 0)
             {

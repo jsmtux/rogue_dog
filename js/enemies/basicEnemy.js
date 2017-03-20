@@ -1,16 +1,9 @@
-class BasicEnemy
+class BasicEnemy extends Enemy
 {
     constructor(_game, _index)
     {
-        this.game = _game;
-        this.state = BasicEnemy.States.WAITING;
-        this.health = 10;
-        this.index = _index;
-        this.padding = 220;
-        this.dying = false;
-        
+        super(_game, _index, 10);        
         this.iterationNumber = 0;
-        this.player = _game.player;
     }
     
     static preload(_game)
@@ -28,12 +21,9 @@ class BasicEnemy
     
     create()
     {
-        var visibleArea = ServiceLocator.camera.getVisibleArea();
-        this.sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, 320, 'monster', 10);
-        this.endPos = visibleArea.bottomLeft.x +(350 + this.padding * this.index);
+        this.setSprite(this.game.add.sprite(0, 320, 'monster', 10));
         this.sprite.animations.add('walk');
         this.sprite.animations.add('idle', [0]);
-        ServiceLocator.renderer.addToScene(this.sprite);
         
         ServiceLocator.infoManager.register("BasicEnemy", this.sprite);
         
@@ -61,41 +51,6 @@ class BasicEnemy
         }
     }
     
-    inPlace()
-    {
-        return this.sprite.x < this.endPos;
-    }
-    
-    takeHit()
-    {
-        ServiceLocator.camera.shake(0.02, 200);
-        var posX = this.sprite.x;
-        var posY = this.sprite.y;
-        this.hit = game.add.sprite(posX, posY, 'hit');
-        ServiceLocator.renderer.addToOverlay(this.hit);
-        var self = this;
-        setTimeout(function() {self.hit.destroy();}, 500);
-        this.health -= 5;
-        if (this.health <= 0)
-        {
-            ServiceLocator.combatManager.killEnemy(this.index);
-            ServiceLocator.infoManager.unregister(this.sprite);
-        }
-    }
-    
-    updateDeath()
-    {
-        this.sprite.alpha -= 0.02;
-        if (this.sprite.alpha <= 0)
-        {
-            this.sprite.destroy();
-            this.player.enemyKilledNotification(this);
-            return true;
-        }
-        
-        return false;
-    }
-    
     getDroppedCards()
     {
         return [MoreObstaclesCard];
@@ -103,7 +58,7 @@ class BasicEnemy
     
     startAttack(_player)
     {
-        this.state = BasicEnemy.States.ATTACKING;
+        this.state = Enemy.States.ATTACKING;
         setTimeout(() => {this.startNewCommand()}, 500);
     }
     
@@ -149,14 +104,8 @@ class BasicEnemy
             var self = this;
             setTimeout(function(){
                 resultSprite.destroy();
-                self.state = BasicEnemy.States.FINISHED;
+                self.state = Enemy.States.FINISHED;
             }, 500);
         }
     }
 };
-
-BasicEnemy.States = {
-    WAITING : 0,
-    ATTACKING : 1,
-    FINISHED: 2
-}

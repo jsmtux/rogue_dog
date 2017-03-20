@@ -1,14 +1,13 @@
 
-class BeeEnemy extends BasicEnemy
+class BeeEnemy extends Enemy
 {
     constructor(_game, _index)
     {
-        super(_game, _index);
-        this.health = 5;
+        super(_game, _index, 5);
+
         this.height = 320;
         this.moveRadius = 10;
         this.rotationCounter = 0;
-        this.game = _game;
     }
 
     static preload(_game)
@@ -20,12 +19,7 @@ class BeeEnemy extends BasicEnemy
     
     create()
     {
-        var visibleArea = ServiceLocator.camera.getVisibleArea();
-        var sprite = this.game.add.sprite(visibleArea.bottomRight.x + 20 + this.padding * this.index, this.height, 'bee', 5);
-        ServiceLocator.renderer.addToScene(sprite);
-        GameObject.prototype.create.call(this, sprite, true);
-
-        this.endPos = visibleArea.bottomLeft.x +(350 + this.padding * this.index);
+        this.setSprite(this.game.add.sprite(0, this.height, 'bee', 5));
         this.sprite.animations.add('walk');
         
         ServiceLocator.infoManager.register("BeeEnemy", this.sprite);
@@ -52,7 +46,7 @@ class BeeEnemy extends BasicEnemy
             }
             if (inside || this.bullet.isFinished())
             {
-                this.state = BasicEnemy.States.FINISHED;
+                this.state = Enemy.States.FINISHED;
                 ServiceLocator.inputManager.drawGesture.remove(this.receivePolygonPoints, this);
                 this.bullet.destroy();
                 this.bullet = undefined;
