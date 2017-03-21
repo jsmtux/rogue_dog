@@ -2,6 +2,17 @@ class BasicEnemySpec
 {
     constructor(_level)
     {
+        this.cardProbabilities = {}
+        this.cardProbabilities["NewEnemyCard"] = Enemy.cardProbability.LOW;
+        this.cardProbabilities["StrongerBasicEnemyCard"] = Enemy.cardProbability.LOW;
+        this.cardProbabilities["TwoEnemiesCard"] = Enemy.cardProbability.LOW;
+        this.cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.LOW;
+        this.cardProbabilities["SmMedkitCard"] = Enemy.cardProbability.LOW;
+        if (_level > 0)
+        {
+            this.cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
+            this.cardProbabilities["NewObstacleCard"] = Enemy.cardProbability.LOW;
+        }
         switch(_level)
         {
             case 0:
@@ -15,13 +26,6 @@ class BasicEnemySpec
                 break;
         }
         
-        this.cardProbabilities = {}
-        this.cardProbabilities["NewEnemyCard"] = Enemy.cardProbability.LOW;
-        this.cardProbabilities["StrongerBasicEnemyCard"] = Enemy.cardProbability.LOW;
-        this.cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
-        this.cardProbabilities["TwoEnemiesCard"] = Enemy.cardProbability.LOW;
-        this.cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.LOW;
-        this.cardProbabilities["SmMedkitCard"] = Enemy.cardProbability.LOW;
     }
     
     setValues(_timeout, _retries, _health)
@@ -57,5 +61,6 @@ class BeeEnemySpec
         this.cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.MED;
         this.cardProbabilities["StrongerBeeEnemyCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["SmMedkitCard"] = Enemy.cardProbability.LOW;
+        this.cardProbabilities["NewObstacleCard"] = Enemy.cardProbability.LOW;
     }
 }

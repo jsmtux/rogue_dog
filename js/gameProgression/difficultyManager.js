@@ -14,6 +14,7 @@ class DifficultyManager
         this.combatEnemyNumber = 1;
 
         this.obstacleNumber = 3;
+        this.obstacleLevel = 0;
     }
     
     getEnemySpec(_name)
@@ -75,10 +76,30 @@ class DifficultyManager
         var prototypeRules = new PrototypeRules();
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.4);
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.HOLE, 0.2);
-        prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.1);
-        prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.DOUBLE_OBSTACLE, 0.2);
-        prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TRIPLE_OBSTACLE, 0.1);
+        switch(this.obstacleLevel)
+        {
+            case 0:
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.4);
+                break;
+            case 1:
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.2);
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.DOUBLE_OBSTACLE, 0.2);
+                break;
+            case 2:
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.DOUBLE_OBSTACLE, 0.3);
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TRIPLE_OBSTACLE, 0.1);
+                break;
+            case 3:
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.DOUBLE_OBSTACLE, 0.2);
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TRIPLE_OBSTACLE, 0.2);
+                break;
+        }
         return new StagePrototype(prototypeRules, this.obstacleNumber);
+    }
+    
+    increaseObstacleLevel()
+    {
+        this.obstacleLevel++;
     }
     
     getUndergroundStagePrototype()

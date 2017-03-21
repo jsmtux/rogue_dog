@@ -11,7 +11,7 @@ class WalkLevel
     
     fillEmpty()
     {
-        while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
+        while(this.lastX - 80 < ServiceLocator.camera.getVisibleArea().right)
         {
             this.walkManager.addTile(this.groundTileName, new Phaser.Point(this.lastX, this.height));
             this.lastX += 80;

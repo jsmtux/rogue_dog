@@ -16,12 +16,15 @@ class PrototypeRules
     {
         var accum = 0;
         var curRule = PrototypeRules.ruleTypes.GRASS;
-        while (accum < _value)
+        for (curRule in this.rules)
         {
             accum += this.rules[curRule];
-            curRule++;
+            if (accum >= _value)
+            {
+                break;
+            }
         }
-        return curRule - 1;
+        return parseInt(curRule);
     }
 }
 
@@ -109,7 +112,7 @@ class StagePrototype
     
     isStageFinished()
     {
-        return this.obstaclesPlaced >= this.spikeNumber;
+        return this.obstaclesPlaced >= this.spikeNumber && this.itemsToPlaceQeue.length == 0;
     }
 }
 

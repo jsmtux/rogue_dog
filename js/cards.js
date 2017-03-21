@@ -275,12 +275,12 @@ class NewObstacleCard extends Card
 {
     constructor(_game)
     {
-        super("Stupid Map", "New obstacles may appear!", "new_obstacle_icon", _game);
+        super("Stupid Map", "Harder obstacles may appear!", "new_obstacle_icon", _game);
     }
     
     apply(_arguments)
     {
-        //Should be making enemies stronger
+        ServiceLocator.difficultyManager.increaseObstacleLevel();
     }
 }
 NewObstacleCard.ID = "NewObstacleCard"

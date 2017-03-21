@@ -82,11 +82,12 @@ class Enemy extends GameObject
             }
         }
         
-        var roll = randomInt(1, totalProbability + 1);
+        var roll = randomInt(1, totalProbability);
         
         for (var ind in cardPosition)
         {
-            if (ind > roll)
+            ind = parseInt(ind);
+            if (ind >= roll)
             {
                 var cardName = cardPosition[ind];
                 ServiceLocator.cardManager.drawCard(cardName);
