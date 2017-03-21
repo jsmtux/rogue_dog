@@ -71,15 +71,25 @@ class CombatManager extends GameMode
         }
     }
     
-    startCombat(enemyTypes)
+    startCombat(_enemyTypes)
     {
+        var visibleArea = ServiceLocator.camera.getVisibleArea();
+        var padding = 220;
+        var numberOfEnemies = _enemyTypes.length;
         this.state = CombatManager.State.WAITING_MONSTERS;
-        for (var ind in enemyTypes)
+        for (var ind in _enemyTypes)
         {
-            var type = enemyTypes[ind];
+            var type = _enemyTypes[ind];
             var spec = ServiceLocator.difficultyManager.getEnemySpec(type.NAME);
             var enemy = new type(this.game, spec, ind);
             enemy.create();
+
+            var initPos = visibleArea.bottomRight.x + 20 + padding * ind;
+            var endPos = visibleArea.bottomRight.x + padding * (ind - numberOfEnemies);
+            
+            
+            enemy.setWalkPath(initPos, endPos);
+
             this.enemies[ind] = enemy;
         }
     }

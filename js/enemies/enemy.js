@@ -11,23 +11,31 @@ class Enemy extends GameObject
         this.cardProbabilities = _spec.cardProbabilities;
         
         this.index = _index;
-        this.padding = 220;   
         this.state = Enemy.States.WAITING;
+        
+        this.endPos = undefined;
     }
     
     setSprite(_sprite)
     {
-        var visibleArea = ServiceLocator.camera.getVisibleArea();
-        _sprite.x = visibleArea.bottomRight.x + 20 + this.padding * this.index;
         ServiceLocator.renderer.addToScene(_sprite);
         GameObject.prototype.create.call(this, _sprite, true);
-
-        this.endPos = visibleArea.bottomLeft.x +(350 + this.padding * this.index);
+    }
+    
+    setWalkPath(_initX, _endX)
+    {
+        this.sprite.x = _initX;
+        this.endPos = _endX;
     }
     
     inPlace()
     {
-        return this.sprite.x < this.endPos;
+        var ret = false;
+        if (this.endPos !== undefined)
+        {
+            ret = this.sprite.x < this.endPos;
+        }
+        return ret;
     }
 
     takeHit()
