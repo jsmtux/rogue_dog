@@ -6,10 +6,8 @@ class DogPlayer extends GameObject
         this.game;
         this.character;
         this.maxHealth = 40;
-        this.maxShield = 15;//constant
         this.health = this.maxHealth;
-        this.shield = 0;
-        this.maxEnergy = 15;
+        this.maxEnergy = 40;
         this.energy = 0;
         this.healthBar = new HealthBar();
         this.energyBar = new EnergyBar();
@@ -112,6 +110,11 @@ class DogPlayer extends GameObject
             }
         }
         this.play(shouldPlay);
+        
+        if (this.isUnderground())
+        {
+            this.subtractEnergy(0.01);
+        }
     }
     
     startWalk()
@@ -164,12 +167,6 @@ class DogPlayer extends GameObject
         ServiceLocator.camera.shake(0.02, 200);
         ServiceLocator.camera.flash(0xff0000, 200);
         var percentage = 1;
-        if (this.shield > 0)
-        {
-            percentage = (this.shield / this.maxShield) / 2 + 0.5;
-            this.shield -= 1;
-            this.updateShieldPercentage();
-        }
         this.subtractHealth(5 * percentage);
         var self = this;
         setTimeout(function(){
@@ -197,10 +194,34 @@ class DogPlayer extends GameObject
         this.updateHealthPercentage();
     }
     
+    subtractHealth(_amount)
+    {
+        this.health -= _amount;
+        this.updateHealthPercentage();
+        if (this.health <= 0)
+        {
+            this.game.die();
+        }
+    }
+    
     addEnergy(_points)
     {
         this.energy += _points;
+        if (this.energy > this.maxEnergy)
+        {
+            this.energy = this.maxEnergy;
+        }
         this.updateEnergyPercentage();
+    }
+    
+    subtractEnergy(_amount)
+    {
+        this.energy -= _amount;
+        this.updateEnergyPercentage();
+        if (this.energy <= 0)
+        {
+            this.game.die();
+        }
     }
     
     startAttack()
@@ -304,6 +325,11 @@ class DogPlayer extends GameObject
     {
         var bottomHeight = 75;
         return this.sprite.y - bottomHeight;
+    }
+    
+    isUnderground()
+    {
+        return this.sprite.y > (GROUND_LEVEL);
     }
 }
 
