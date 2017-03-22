@@ -35,7 +35,8 @@ PrototypeRules.ruleTypes = {
     DOUBLE_OBSTACLE: 3,
     TRIPLE_OBSTACLE: 4,
     TALL_OBSTACLE: 5,
-    RULES_SIZE: 6
+    PLATFORM: 6,
+    RULES_SIZE: 7
 }
 
 class StagePrototype
@@ -46,7 +47,7 @@ class StagePrototype
 
         this.itemsToPlaceQeue = [];
         
-        this.spikeNumber = _numberObstacles;
+        this.obstacleNumber = _numberObstacles;
         this.rules = _prototypeRules;
     }
     
@@ -99,6 +100,12 @@ class StagePrototype
                     numberEmptyFollowing = 8;
                     this.obstaclesPlaced += 3;
                     break;
+                case PrototypeRules.ruleTypes.PLATFORM:
+                    ret = StagePrototype.cellType.PLATFORM;
+                    this.itemsToPlaceQeue.push(StagePrototype.cellType.PLATFORM);
+                    this.itemsToPlaceQeue.push(StagePrototype.cellType.PLATFORM);
+                    numberEmptyFollowing = 4;
+                    break;
             }
 
             for (var i = 0; i < numberEmptyFollowing; i++)
@@ -112,7 +119,7 @@ class StagePrototype
     
     isStageFinished()
     {
-        return this.obstaclesPlaced >= this.spikeNumber && this.itemsToPlaceQeue.length == 0;
+        return this.obstacleNumber !== undefined && this.obstaclesPlaced >= this.obstacleNumber && this.itemsToPlaceQeue.length == 0;
     }
 }
 
@@ -120,5 +127,6 @@ StagePrototype.cellType = {
     GRASS: 0,
     HOLE: 1,
     OBSTACLE: 2,
-    TALL_OBSTACLE: 3
+    TALL_OBSTACLE: 3,
+    PLATFORM: 4
 }

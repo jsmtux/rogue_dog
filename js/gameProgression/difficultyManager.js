@@ -105,8 +105,9 @@ class DifficultyManager
     getUndergroundStagePrototype()
     {
         var prototypeRules = new PrototypeRules();
-        prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 1.0);
-        return new StagePrototype();
+        prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.8);
+        prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.PLATFORM, 0.2);
+        return new StagePrototype(prototypeRules);
     }
 }
 

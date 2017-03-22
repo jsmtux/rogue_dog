@@ -16,7 +16,7 @@ class DogPlayer extends GameObject
         this.jumpAcceleration = new Phaser.Point(0, 0);
         this.dizzy = false;
         
-        this.jumpStrenght = 10;
+        this.jumpStrenght = 10.5;
         
         this.walkSpeed = 6;
         this.curSpeed = 0;
@@ -203,15 +203,6 @@ class DogPlayer extends GameObject
         this.updateEnergyPercentage();
     }
     
-    //Shield categories: 2(wood) 3(iron) 4(gold)
-    //  on every use the shield diminishes by 1
-    //  percentage protected is sqrt(shield + 1)
-    setShield(_category)
-    {
-        this.shield = Math.pow(_category, 2) - 1;
-        this.updateShieldPercentage();
-    }
-    
     startAttack()
     {
         ServiceLocator.inputManager.skillSelector.add(this.skillCallback, this);
@@ -263,14 +254,16 @@ class DogPlayer extends GameObject
     {
         var ret = undefined;
         
-        var groundLevels = ServiceLocator.walkManager.getGroundLevels(this.sprite.x);
+        var groundTiles = ServiceLocator.walkManager.getGroundTiles(this.sprite.x);
         
-        for (var ind in groundLevels)
+        for (var ind in groundTiles)
         {
             var offset = Math.abs(this.jumpAcceleration.y);
-            if (this.sprite.y >= groundLevels[ind] - offset && this.sprite.y <= groundLevels[ind] + offset)
+            var height = groundTiles[ind].getTopPosition();
+            if (this.sprite.y >= height - offset && this.sprite.y <= height + offset)
             {
-                ret = groundLevels[ind];
+                ret = height;
+                ServiceLocator.walkManager.setCurrentWalkLevel(groundTiles[ind].getWalkLevel());
                 break;
             }
         }

@@ -49,8 +49,6 @@ MainState.prototype.create = function ()
     
     ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
     
-    ServiceLocator.walkManager.fillEmpty();
-    
     this.currentGameMode = undefined;
     this.addGameMode(ServiceLocator.walkManager);
     this.addGameMode(ServiceLocator.combatManager);
