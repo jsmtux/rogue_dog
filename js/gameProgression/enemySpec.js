@@ -44,21 +44,21 @@ class BeeEnemySpec
         {
             case 0:
                 this.health = 5;
-                this.bulletSpeed = 7;
+                this.bulletSpeed = 3;
                 break;
             case 1:
                 this.health = 5;
-                this.bulletSpeed = 6;
+                this.bulletSpeed = 5;
                 break;
             case 2:
                 this.health = 5;
-                this.bulletSpeed = 4;
+                this.bulletSpeed = 7;
                 break;
         }
         
         this.cardProbabilities = {}
         this.cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
-        this.cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.MED;
+        this.cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["StrongerBeeEnemyCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["SmMedkitCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["NewObstacleCard"] = Enemy.cardProbability.LOW;

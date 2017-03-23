@@ -25,7 +25,6 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('infoManager', new InfoManager(this));
     ServiceLocator.initialize('combatManager', new CombatManager(this, this.player));
     ServiceLocator.initialize('walkManager', new WalkManager(this, this.player));
-    ServiceLocator.initialize('guiManager', new GUIManager());
     ServiceLocator.initialize('inputManager', new InputManager(this));
     ServiceLocator.initialize('animationManager', new AnimationManager());
     ServiceLocator.initialize('lighting', new Lighting());
@@ -45,6 +44,7 @@ MainState.prototype.create = function ()
     this.player.create(this);
     
     ServiceLocator.guiManager.lostUI.addCallback('reloadButton', 'click', 'reload');
+    ServiceLocator.guiManager.lostUI.addCallback('backMenuButton', 'click', 'back');
     ServiceLocator.guiManager.lostUI.registerCbReceiver(this.handleUI, this)
     
     ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
@@ -89,12 +89,19 @@ MainState.prototype.render = function ()
     ServiceLocator.renderer.render();
 }
 
-MainState.prototype.handleUI = function()
+MainState.prototype.handleUI = function(_name, _event)
 {
     //this is only on 'reload' event
-    ServiceLocator.guiManager.lostUI.hide();
-    this.setPaused(false);
-    this.restart();
+    if (_name == "reload")
+    {
+        ServiceLocator.guiManager.lostUI.hide();
+        this.setPaused(false);
+        this.restart();
+    }
+    else if (_name == "back")
+    {
+        this.state.start('Menu');
+    }
 }
 
 MainState.prototype.die = function()
