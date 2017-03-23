@@ -1,7 +1,6 @@
 function MainState(game)
 {
     this.game = game;
-    this.paused = false;
     
     this.gameModes = {};
     this.currentGameMode;
@@ -16,6 +15,8 @@ MainState.prototype.preload = function ()
 
 MainState.prototype.create = function ()
 {
+    this.statePaused = false;
+
     this.updateSignal = new Phaser.Signal();
 
     this.player = new DogPlayer();
@@ -68,7 +69,7 @@ MainState.prototype.addGameMode = function(_mode)
 MainState.prototype.update = function ()
 {
     this.updateSignal.dispatch();
-    if (this.paused)
+    if (this.statePaused)
     {
         return;
     }
@@ -92,14 +93,15 @@ MainState.prototype.render = function ()
 MainState.prototype.handleUI = function(_name, _event)
 {
     //this is only on 'reload' event
-    if (_name == "reload")
+    if (_name === "reload")
     {
         ServiceLocator.guiManager.lostUI.hide();
         this.setPaused(false);
         this.restart();
     }
-    else if (_name == "back")
+    else if (_name === "back")
     {
+        ServiceLocator.guiManager.lostUI.hide();
         this.state.start('Menu');
     }
 }
@@ -117,7 +119,7 @@ MainState.prototype.restart = function()
 
 MainState.prototype.setPaused = function(_value)
 {
-    this.paused = _value;
+    this.statePaused = _value;
     if (!_value)
     {
         ServiceLocator.animationManager.resumeAll();
@@ -130,5 +132,5 @@ MainState.prototype.setPaused = function(_value)
 
 MainState.prototype.isPaused = function()
 {
-    return this.paused;
+    return this.statePaused;
 }

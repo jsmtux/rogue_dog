@@ -3,7 +3,6 @@ function InitState(_game)
     this.game = _game;
 }
 
-
 InitState.prototype.preload = function()
 {
     this.game.load.image('menu_bg', './img/ui/menu_dog.png');

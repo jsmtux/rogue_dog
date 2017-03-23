@@ -13,7 +13,7 @@ MenuState.prototype.preload = function()
 
 MenuState.prototype.update = function()
 {
-    if (!this.bgSprite)
+    if (!this.bgSprite || !this.bgSprite.alive)
     {
         this.bgSprite = this.game.add.sprite(-400, 200, 'menu_bg');
         ServiceLocator.guiManager.mainMenuUI.addCallback('playButton', 'click', 'playButtonClicked');

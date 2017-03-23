@@ -307,11 +307,12 @@ var cardUI = {
 class GUIManager
 {
     constructor()
-    {//EZgui does not like this to be done more than once
-        this.playerMenuUI = new PlayerMenuGUIElement(PlayerMenuUI);
-        this.lostUI = new GUIElement(lostGameUI);
-        this.mainMenuUI = new GUIElement(mainMenuUI);
+    {
+        this.playerMenuUI = GUIManager.getUI(PlayerMenuUI, PlayerMenuGUIElement);
+        this.lostUI = GUIManager.getUI(lostGameUI, GUIElement);
+        this.mainMenuUI = GUIManager.getUI(mainMenuUI, GUIElement);
     }
+
     static preload(_game)
     {
         EZGUI.renderer = _game.renderer;
@@ -319,8 +320,20 @@ class GUIManager
         _game.load.image('cardbg', 'img/card/card_bg.png');
     }
     
+    static getUI(_ui, _constructor)
+    {
+        var ret = GUIManager.loadedUIs[_ui.id];
+        if (!ret)
+        {
+            ret = new _constructor(_ui);
+            GUIManager.loadedUIs[_ui.id] = ret;
+        }
+        
+        return ret;
+    }
+    
     create(_game)
-    {        
+    {
         this.UIGroup = _game.add.group();
         this.UIGroup.fixedToCamera = true;
         
@@ -352,6 +365,8 @@ class GUIManager
         return cardGuiContainer;
     }
 }
+
+GUIManager.loadedUIs = {};
 
 class GUIElement
 {
