@@ -58,10 +58,12 @@ class BeeEnemy extends Enemy
         if (!this.inPlace())
         {
             this.sprite.play('walk', 10, true);
-            this.sprite.x -= 1.5;
+            this.position.x -= 1.5;
         }
     
-        this.sprite.y = this.height + Math.sin(this.rotationCounter++ / 10.0) * this.moveRadius;
+        this.position.y = this.height + Math.sin(this.rotationCounter++ / 10.0) * this.moveRadius;
+        
+        super.update();
     }
     
     receivePolygonPoints(_points)
@@ -75,7 +77,7 @@ class BeeEnemy extends Enemy
         {
             ServiceLocator.inputManager.drawGesture.add(this.receivePolygonPoints, this);
             this.bullet = new BeeBullet(this.game, _player, this.spec.bulletSpeed);
-            this.bullet.create(this.sprite.x, this.sprite.y);
+            this.bullet.create(this.position.x, this.position.y);
         }
     }
 }

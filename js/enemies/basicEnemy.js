@@ -8,6 +8,8 @@ class BasicEnemy extends Enemy
         
         this.iterationNumber = 0;
         this.isIdle = false;
+        
+        this.spriteOffset = new Phaser.Point(100, 120);
     }
     
     static preload(_game)
@@ -29,8 +31,8 @@ class BasicEnemy extends Enemy
     {
         var sprite = loadSpriter(this.game, "basicEnemyJSON", "basicEnemyAtlas", "entity_000");
         this.setSprite(sprite);
-        this.sprite.scale.set(0.3, 0.3);
-        this.sprite.y = 460;
+        this.sprite.scale.set(0.4, 0.4);
+        this.position.y = 320;
         this.sprite.animations.play('walk');
         
         ServiceLocator.infoManager.register("BasicEnemy", this.sprite);
@@ -50,7 +52,7 @@ class BasicEnemy extends Enemy
     {
         if (!this.inPlace())
         {
-            this.sprite.x -= 1.3;
+            this.position.x -= 1.0;
         }
         else
         {
@@ -60,6 +62,7 @@ class BasicEnemy extends Enemy
                 this.isIdle = true;
             }
         }
+        super.update();
     }
     
     startAttack(_player)
@@ -71,7 +74,7 @@ class BasicEnemy extends Enemy
     startNewCommand()
     {
         this.attackOption = BasicEnemy.attackOptions[randomInt(0,3)];
-        this.arrow = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, this.attackOption.image);
+        this.arrow = this.game.add.sprite(this.position.x, this.position.y - 50, this.attackOption.image);
         ServiceLocator.renderer.addToScene(this.arrow);
         ServiceLocator.inputManager.directionGesture.add(this.directionGestureCb, this);
         
@@ -108,10 +111,18 @@ class BasicEnemy extends Enemy
         {
             if (_result == 'bad')
             {
-                this.player.monsterHit();
+                this.sprite.animations.play('attack');
+                
+                var changeAnimationOnEnd = () => {
+                    this.sprite.animations.play('idle');
+                }
+                this.sprite.onLoop.add(changeAnimationOnEnd);
+                setTimeout(() =>{
+                    this.player.monsterHit();
+                }, 200);
             }
             this.iterationNumber = 0;
-            var resultSprite = this.game.add.sprite(this.sprite.x, this.sprite.y - 50, _result);
+            var resultSprite = this.game.add.sprite(this.position.x, this.position.y - 50, _result);
             ServiceLocator.renderer.addToOverlay(resultSprite);
             var self = this;
             setTimeout(function(){

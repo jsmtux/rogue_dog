@@ -14,6 +14,9 @@ class Enemy extends GameObject
         this.state = Enemy.States.WAITING;
         
         this.endPos = undefined;
+        
+        this.position = new Phaser.Point(0, 0);
+        this.spriteOffset = new Phaser.Point(0, 0);
     }
     
     setSprite(_sprite)
@@ -24,7 +27,7 @@ class Enemy extends GameObject
     
     setWalkPath(_initX, _endX)
     {
-        this.sprite.x = _initX;
+        this.position.x = _initX;
         this.endPos = _endX;
     }
     
@@ -33,7 +36,7 @@ class Enemy extends GameObject
         var ret = false;
         if (this.endPos !== undefined)
         {
-            ret = this.sprite.x < this.endPos;
+            ret = this.position.x < this.endPos;
         }
         return ret;
     }
@@ -41,8 +44,8 @@ class Enemy extends GameObject
     takeHit()
     {
         ServiceLocator.camera.shake(0.02, 200);
-        var posX = this.sprite.x;
-        var posY = this.sprite.y;
+        var posX = this.position.x;
+        var posY = this.position.y;
         this.hit = game.add.sprite(posX, posY, 'hit');
         ServiceLocator.renderer.addToOverlay(this.hit);
         var self = this;
@@ -106,6 +109,12 @@ class Enemy extends GameObject
     getName()
     {
         return this.constructor.NAME;
+    }
+    
+    update()
+    {
+        this.sprite.x = this.position.x + this.spriteOffset.x;
+        this.sprite.y = this.position.y + this.spriteOffset.y;
     }
 }
 
