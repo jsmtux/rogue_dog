@@ -1,0 +1,39 @@
+{"frames": [
+
+{
+	"filename": "back_foot",
+	"frame": {"x":1,"y":481,"w":189,"h":107},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":189,"h":107},
+	"sourceSize": {"w":189,"h":107},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "front_foot",
+	"frame": {"x":192,"y":481,"w":189,"h":107},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":189,"h":107},
+	"sourceSize": {"w":189,"h":107},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "head",
+	"frame": {"x":1,"y":1,"w":485,"h":478},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":485,"h":478},
+	"sourceSize": {"w":485,"h":478},
+	"pivot": {"x":0.5,"y":0.5}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "basicEnemy.png",
+	"format": "RGBA8888",
+	"size": {"w":487,"h":589},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:2276f45971a1546a568a53a82012fc21:775a87f5bdbbe5884bcebcdc0cc54829:c78676ae950a7897299e8becf45a2ee4$"
+}
+}

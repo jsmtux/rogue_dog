@@ -22,13 +22,11 @@ Phaser.Filter.Gray = function (game) {
         "varying vec4       vColor;",
         "uniform sampler2D  uSampler;",
         "uniform sampler2D  mask;",
-        "uniform float      gray;",
 
         "void main(void) {",
             "gl_FragColor = texture2D(uSampler, vTextureCoord);",
             "vec2 correctedUV = vec2(vTextureCoord.x, 1.0 - vTextureCoord.y);",
             "vec4 maskColor = texture2D(mask, correctedUV);",
-            "gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.2126 * gl_FragColor.r + 0.7152 * gl_FragColor.g + 0.0722 * gl_FragColor.b), gray);",
             "gl_FragColor.rgb = vec3(gl_FragColor.r * maskColor.x, gl_FragColor.g * maskColor.y, gl_FragColor.b * maskColor.z);",
         "}"
     ];
@@ -37,22 +35,6 @@ Phaser.Filter.Gray = function (game) {
 
 Phaser.Filter.Gray.prototype = Object.create(Phaser.Filter.prototype);
 Phaser.Filter.Gray.prototype.constructor = Phaser.Filter.Gray;
-
-/**
-* The strength of the gray. 1 will make the object black and white, 0 will make the object its normal color
-* @property gray
-*/
-Object.defineProperty(Phaser.Filter.Gray.prototype, 'gray', {
-
-    get: function() {
-        return this.uniforms.gray.value;
-    },
-
-    set: function(value) {
-        this.uniforms.gray.value = value;
-    }
-
-});
 
 Object.defineProperty(Phaser.Filter.Gray.prototype, 'mask', {
 

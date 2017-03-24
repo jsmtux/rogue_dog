@@ -7,11 +7,14 @@ class BasicEnemy extends Enemy
         this.spec = _spec;
         
         this.iterationNumber = 0;
+        this.isIdle = false;
     }
     
     static preload(_game)
     {
-        _game.load.spritesheet('monster', './img/monster.png', 205, 200);
+        var path = "anim/"
+        _game.load.atlas("basicEnemyAtlas", path + "basicEnemy.png", path + "basicEnemy.json");
+        _game.load.json("basicEnemyJSON", path + "basicEnemy.scon");
         _game.load.spritesheet('hit', './img/hit.png');
         _game.load.image('up', './img/arrowUp.png');
         _game.load.image('down', './img/arrowDown.png');
@@ -24,9 +27,11 @@ class BasicEnemy extends Enemy
     
     create()
     {
-        this.setSprite(this.game.add.sprite(0, 320, 'monster', 10));
-        this.sprite.animations.add('walk');
-        this.sprite.animations.add('idle', [0]);
+        var sprite = loadSpriter(this.game, "basicEnemyJSON", "basicEnemyAtlas", "entity_000");
+        this.setSprite(sprite);
+        this.sprite.scale.set(0.3, 0.3);
+        this.sprite.y = 460;
+        this.sprite.animations.play('walk');
         
         ServiceLocator.infoManager.register("BasicEnemy", this.sprite);
         
@@ -45,12 +50,15 @@ class BasicEnemy extends Enemy
     {
         if (!this.inPlace())
         {
-            this.sprite.play('walk', 10, true);
-            this.sprite.x -= 1.5;
+            this.sprite.x -= 1.3;
         }
         else
         {
-            this.sprite.play('idle');
+            if (!this.isIdle)
+            {
+                this.sprite.animations.play('idle');
+                this.isIdle = true;
+            }
         }
     }
     
