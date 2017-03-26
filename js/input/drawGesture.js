@@ -16,7 +16,6 @@ class DrawGesture
     add(_function, _context)
     {
         this.bmd = this.inputManager.getBmd();
-        ServiceLocator.guiManager.addToUI(this.bmd);
         this.game.input.addMoveCallback(this.updateMouse, this);
         this.game.updateSignal.add(this.update, this);
         this.functionCb = _function;

@@ -4,6 +4,7 @@ class DirectionGesture
     {
         this.game = _game;
         this.initialPos;
+        this.curAngle;
     }
     
     getMousePos()
@@ -18,6 +19,7 @@ class DirectionGesture
         this.game.input.addMoveCallback(this.updateMouse, this);
         this.cbFunction = _function;
         this.cbContext = _context;
+        this.game.updateSignal.add(this.update, this);
     }
     
     remove(_function, _cont)
@@ -25,8 +27,9 @@ class DirectionGesture
         this.game.input.onDown.remove(this.mouseDown, this);
         this.game.input.onUp.remove(this.mouseUp, this);
         this.game.input.deleteMoveCallback(this.updateMouse, this);
+        this.game.updateSignal.remove(this.update, this);
     };
-    
+
     mouseDown()
     {
         this.initialPos = this.getMousePos();
@@ -36,39 +39,85 @@ class DirectionGesture
     {
         if (this.initialPos)
         {
-            var curPos = this.getMousePos();
-            var angle = Math.degrees(this.initialPos.angle(curPos));
-            angle = angle < 0 ? angle + 360: angle;
             this.initialPos = undefined;
             
             var direction;
             
-            if (angle < 45)
+            if (this.curAngle < 45)
             {
                 direction = 'right';
             }
-            else if (angle < 135)
+            else if (this.curAngle < 135)
             {
                 direction = 'down';
             }
-            else if (angle < 225)
+            else if (this.curAngle < 225)
             {
                 direction = 'left';
             }
-            else if (angle < 315)
+            else if (this.curAngle < 315)
             {
                 direction = 'up';
             }
             else
             {
-                direction = 'right'
+                direction = 'right';
             }
             
-            this.cbFunction.call(this.cbContext, direction, angle);
+            this.cbFunction.call(this.cbContext, direction, this.curAngle);
+            
+            this.curAngle = undefined;
         }
     }
     
     updateMouse()
     {
+    }
+    
+    update()
+    {
+        if (this.initialPos)
+        {
+            var curPos = this.getMousePos();
+            var angle = Math.degrees(this.initialPos.angle(curPos));
+            this.curAngle = angle < 0 ? angle + 360: angle;
+        }
+    }
+}
+
+class PlayerDirectionGesture extends DirectionGesture
+{
+    mouseUp()
+    {
+        if (this.initialPos)
+        {
+            this.initialPos = undefined;
+            this.cbFunction.call(this.cbContext, this.curAngle);
+            
+            this.curAngle = undefined;
+        }
+    }
+    
+    update()
+    {
+        if (this.initialPos)
+        {
+            var curPos = this.getMousePos();
+            var angle = Math.degrees(this.initialPos.angle(curPos));
+            this.curAngle = angle < 0 ? angle + 360: angle;
+            
+            if (this.curAngle < 45)
+            {
+                this.curAngle = 340;
+            }
+            else if (this.curAngle < 270)
+            {
+                this.curAngle = 270;
+            }
+            else if (this.curAngle > 340)
+            {
+                this.curAngle = 340;
+            }
+        }
     }
 }

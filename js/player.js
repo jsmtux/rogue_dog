@@ -119,14 +119,14 @@ class DogPlayer extends GameObject
     
     startWalk()
     {
-        ServiceLocator.inputManager.directionGesture.add(this.jump, this);
+        ServiceLocator.inputManager.playerDirectionGesture.add(this.jump, this);
         this.curSpeed = this.walkSpeed;
         this.play("walk");
     }
     
     finishWalk()
     {
-        ServiceLocator.inputManager.directionGesture.remove(this.jump, this);
+        ServiceLocator.inputManager.playerDirectionGesture.remove(this.jump, this);
         this.curSpeed = 0;
         this.play("idle");
     }
@@ -250,20 +250,8 @@ class DogPlayer extends GameObject
     {
     }
     
-    jump(_direction, _angle)
+    jump(_angle)
     {
-        if (_angle < 45)
-        {
-            _angle = 340;
-        }
-        else if (_angle < 270)
-        {
-            _angle = 270;
-        }
-        else if (_angle > 340)
-        {
-            _angle = 340;
-        }
         if (this.onGround())
         {
             this.jumpAcceleration.y = this.jumpStrenght * -Math.sin(Math.radians(_angle));
@@ -330,6 +318,11 @@ class DogPlayer extends GameObject
     isUnderground()
     {
         return this.sprite.y > (GROUND_LEVEL);
+    }
+    
+    getPosition()
+    {
+        return new Phaser.Point(this.sprite.x, this.sprite.y);
     }
 }
 

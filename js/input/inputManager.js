@@ -5,6 +5,7 @@ class InputManager
         this.bg;
         this.game = _game;
         this.directionGesture = new DirectionGesture(_game, this);
+        this.playerDirectionGesture = new PlayerDirectionGesture(_game, this);
         this.drawGesture = new DrawGesture(_game, this);
         this.skillSelector = new SkillSelector(_game);
     }
@@ -43,6 +44,7 @@ class InputManager
     
     getBmd()
     {
+        ServiceLocator.guiManager.addToUI(this.bmd);
         return this.bmd;
     }
 }

@@ -136,6 +136,8 @@ class WalkManager extends GameMode
             ServiceLocator.inGameHelper.hideJumpHelp();
         }
         
+        this.updateTrajectoryImage();
+        
         this.player.updateWalk();
         
         for(var levelInd in this.walkLevels)
@@ -160,6 +162,35 @@ class WalkManager extends GameMode
         for (var ind in this.obstacles)
         {
             this.obstacles[ind].update(this.player);
+        }
+    }
+    
+    updateTrajectoryImage()
+    {
+        var bmd = ServiceLocator.inputManager.getBmd();
+        bmd.clear();
+        var curAngle = ServiceLocator.inputManager.playerDirectionGesture.curAngle;
+        if (curAngle !== undefined && this.player.onGround())
+        {
+            var playerPos = this.player.getPosition();
+            var cameraPos = ServiceLocator.camera.getPosition();
+            var relativePlayerPos = playerPos.subtract(cameraPos.x, cameraPos.y);
+            bmd.lineStyle(2, 0xffd900, 1);
+            
+            bmd.moveTo(relativePlayerPos.x,relativePlayerPos.y);
+            var curPos = relativePlayerPos.clone();
+            var iterationAdvance = 1;
+            var jumpAcceleration = new Phaser.Point();
+            var jumpStrength = this.player.jumpStrenght;
+            jumpAcceleration.y = jumpStrength * -Math.sin(Math.radians(curAngle));
+            jumpAcceleration.x = jumpStrength * Math.cos(Math.radians(curAngle)) + this.player.curSpeed;
+            while(relativePlayerPos.y >= curPos.y)
+            {
+                curPos.x += iterationAdvance * jumpAcceleration.x;
+                curPos.y -= iterationAdvance * jumpAcceleration.y;
+                jumpAcceleration.y -= 0.3;
+                bmd.lineTo(curPos.x, curPos.y);
+            }
         }
     }
     
@@ -188,6 +219,7 @@ class WalkManager extends GameMode
     
     finishMode()
     {
+        ServiceLocator.inputManager.getBmd().clear();
         ServiceLocator.inGameHelper.hideJumpHelp();
         this.player.finishWalk();
     }
