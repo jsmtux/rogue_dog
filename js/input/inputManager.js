@@ -10,9 +10,10 @@ class InputManager
         this.skillSelector = new SkillSelector(_game);
     }
     
-    preload(_game)
+    static preload(_game)
     {
         SkillSelector.preload(game);
+        PlayerDirectionGesture.preload(game);
     }
     
     create(game)

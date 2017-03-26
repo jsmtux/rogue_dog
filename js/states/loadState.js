@@ -14,6 +14,7 @@ LoadState.prototype.preload = function()
     Renderer.preload(this.game);
     CardManager.preload(this.game);
     InGameHelper.preload(this.game);
+    InputManager.preload(this.game);
     this.game.load.onLoadComplete.add(this.loadComplete, this);
     
     this.loaded = false;

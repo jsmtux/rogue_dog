@@ -175,7 +175,7 @@ class WalkManager extends GameMode
             var playerPos = this.player.getPosition();
             var cameraPos = ServiceLocator.camera.getPosition();
             var relativePlayerPos = playerPos.subtract(cameraPos.x, cameraPos.y);
-            bmd.lineStyle(2, 0xffd900, 1);
+            var alpha = 1.0;
             
             bmd.moveTo(relativePlayerPos.x,relativePlayerPos.y);
             var curPos = relativePlayerPos.clone();
@@ -186,6 +186,8 @@ class WalkManager extends GameMode
             jumpAcceleration.x = jumpStrength * Math.cos(Math.radians(curAngle)) + this.player.curSpeed;
             while(relativePlayerPos.y >= curPos.y)
             {
+                bmd.lineStyle(2, 0xffd900, alpha);
+                alpha -= 0.03;
                 curPos.x += iterationAdvance * jumpAcceleration.x;
                 curPos.y -= iterationAdvance * jumpAcceleration.y;
                 jumpAcceleration.y -= 0.3;
