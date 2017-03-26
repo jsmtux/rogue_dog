@@ -98,6 +98,8 @@ class WalkManager extends GameMode
         this.walkLevels.push(new WalkLevel('undergroundTile', 880, this));
         
         this.currentWalkLevel;
+        
+        this.lastShownJumpHelp = performance.now();
     }
     
     static preload(_game)
@@ -125,6 +127,15 @@ class WalkManager extends GameMode
 
     update()
     {
+        if (ServiceLocator.inputManager.leftButton.getLastTouched() > 2000)
+        {
+            ServiceLocator.inGameHelper.showJumpHelp();
+        }
+        else
+        {
+            ServiceLocator.inGameHelper.hideJumpHelp();
+        }
+        
         this.player.updateWalk();
         
         for(var levelInd in this.walkLevels)
@@ -177,6 +188,7 @@ class WalkManager extends GameMode
     
     finishMode()
     {
+        ServiceLocator.inGameHelper.hideJumpHelp();
         this.player.finishWalk();
     }
 

@@ -13,6 +13,7 @@ LoadState.prototype.preload = function()
     DogPlayer.preload(this.game);
     Renderer.preload(this.game);
     CardManager.preload(this.game);
+    InGameHelper.preload(this.game);
     this.game.load.onLoadComplete.add(this.loadComplete, this);
     
     this.loaded = false;

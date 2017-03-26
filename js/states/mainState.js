@@ -31,6 +31,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('lighting', new Lighting());
     ServiceLocator.initialize('renderer', new Renderer(this));
     ServiceLocator.initialize('cardManager', new CardManager(this));
+    ServiceLocator.initialize('inGameHelper', new InGameHelper(this));
 
     this.game.world.setBounds(0, 0, 192000, 192000);
 
@@ -41,6 +42,7 @@ MainState.prototype.create = function ()
     ServiceLocator.camera.create(this, this.player);
     ServiceLocator.walkManager.create(this);
     ServiceLocator.difficultyManager.create();
+    ServiceLocator.inGameHelper.create();
 
     this.player.create(this);
     

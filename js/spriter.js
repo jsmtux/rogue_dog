@@ -45,6 +45,13 @@ function SpriterInput(_spriterGroup)
     });
 }
 
+function loadSpriterFiles(_game, _name)
+{
+    var path = "anim/";
+    _game.load.atlas(_name + "Atlas", path + _name + ".png", path + _name + ".json");
+    _game.load.json(_name + "JSON", path + _name + ".scon");
+}
+
 function loadSpriter(_game, _jsonSpriter, _atlas, _entityName)
 {
     var spriterLoader = new Spriter.Loader();

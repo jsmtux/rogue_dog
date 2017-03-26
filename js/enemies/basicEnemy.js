@@ -14,9 +14,7 @@ class BasicEnemy extends Enemy
     
     static preload(_game)
     {
-        var path = "anim/"
-        _game.load.atlas("basicEnemyAtlas", path + "basicEnemy.png", path + "basicEnemy.json");
-        _game.load.json("basicEnemyJSON", path + "basicEnemy.scon");
+        loadSpriterFiles(_game, "basicEnemy");
         _game.load.spritesheet('hit', './img/hit.png');
         _game.load.image('up', './img/arrowUp.png');
         _game.load.image('down', './img/arrowDown.png');
@@ -114,6 +112,7 @@ class BasicEnemy extends Enemy
                 this.sprite.animations.play('attack');
                 
                 var changeAnimationOnEnd = () => {
+                    this.sprite.onLoop.remove(changeAnimationOnEnd);
                     this.sprite.animations.play('idle');
                 }
                 this.sprite.onLoop.add(changeAnimationOnEnd);

@@ -27,8 +27,18 @@ class InputManager
         this.bg.input.priorityID = 0; // lower priority
         this.leftButton = {}
         this.leftButton.onDown = game.input.onDown;
+        this.leftButton.lastTouched = performance.now();
+        this.leftButton.getLastTouched = () => {
+            return performance.now() - this.leftButton.lastTouched;
+        }
+        this.leftButton.onDown.add(this.handleTouch, this);
         
         this.bmd = game.add.graphics(0, 0);
+    }
+    
+    handleTouch()
+    {
+        this.leftButton.lastTouched = performance.now();
     }
     
     getBmd()

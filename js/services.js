@@ -13,6 +13,7 @@ class Services
         this.renderer = {};
         this.lighting = {};
         this.cardManager = {};
+        this.inGameHelper = {};
 
         Object.preventExtensions(this);
     }
