@@ -220,7 +220,7 @@ var mainMenuUI = {
 		},
 		{
 		  id: 'playButton',
-		  text: 'Play',
+		  text: 'Story mode',
 		  component: 'Button',
 		  position: 'center',
 		  font: {
@@ -231,8 +231,8 @@ var mainMenuUI = {
 		  height: 60
 		},
 		{
-		  id: 'howToPlayButton',
-		  text: 'How To Play',
+		  id: 'endlessButton',
+		  text: 'Endless',
 		  component: 'Button',
 		  position: 'center',
 		  font: {

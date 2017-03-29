@@ -12,14 +12,6 @@ class CombatLootMode extends GameMode
     update()
     {
     }
-
-    getNextMode()
-    {
-        if (this.finished)
-        {
-            return "WalkManager";
-        }
-    }
     
     startMode(_cardList)
     {
@@ -35,6 +27,11 @@ class CombatLootMode extends GameMode
             curCard.setYAngle(Math.PI);
             curCard.setHandler((card) => {card.flip(this.cardFlipped, this)});
         }
+    }
+    
+    isFinished()
+    {
+        return this.finished;
     }
     
     cardFlipped(_card)

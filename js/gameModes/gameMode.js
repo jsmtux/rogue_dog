@@ -21,6 +21,11 @@ class GameMode
     finishMode()
     {
     }
+    
+    isFinished()
+    {
+        return false;
+    }
 
     getNextMode()
     {

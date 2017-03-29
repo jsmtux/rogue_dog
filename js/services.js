@@ -14,6 +14,7 @@ class Services
         this.lighting = {};
         this.cardManager = {};
         this.inGameHelper = {};
+        this.dialogManager = {};
 
         Object.preventExtensions(this);
     }

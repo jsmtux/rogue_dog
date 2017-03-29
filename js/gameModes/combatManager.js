@@ -152,14 +152,9 @@ class CombatManager extends GameMode
         delete this.enemies[_index];
     }
     
-    getNextMode()
+    isFinished()
     {
-        var ret;
-        if (this.state == CombatManager.State.FINISHED)
-        {
-            ret = "CombatLootMode";
-        }
-        return ret;
+        return this.state == CombatManager.State.FINISHED;
     }
     
     getNextModeArguments()

@@ -201,15 +201,9 @@ class WalkManager extends GameMode
         this.player.jump(_angle);
     }
     
-    getNextMode()
+    isFinished()
     {
-        var finished = this.currentWalkLevel && this.currentWalkLevel.isFinished() && this.player.onGround() && this.getVisibleObstacles().length == 0;
-        var ret;
-        if (finished)
-        {
-            ret = "CombatManager";
-        }
-        return ret;
+        return this.currentWalkLevel && this.currentWalkLevel.isFinished() && this.player.onGround() && this.getVisibleObstacles().length == 0;
     }
     
     startMode()

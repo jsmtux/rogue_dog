@@ -1,7 +1,7 @@
-function MainState(game)
+function MainState(_game)
 {
-    this.game = game;
-    
+    this.game = _game;
+        
     this.gameModes = {};
     this.currentGameMode;
 };
@@ -21,7 +21,6 @@ MainState.prototype.create = function ()
 
     this.player = new DogPlayer();
     
-    ServiceLocator.initialize('difficultyManager', new DifficultyManager());
     ServiceLocator.initialize('camera', new Camera());
     ServiceLocator.initialize('infoManager', new InfoManager(this));
     ServiceLocator.initialize('combatManager', new CombatManager(this, this.player));
@@ -32,6 +31,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('renderer', new Renderer(this));
     ServiceLocator.initialize('cardManager', new CardManager(this));
     ServiceLocator.initialize('inGameHelper', new InGameHelper(this));
+    ServiceLocator.initialize('dialogManager', new DialogManager());
 
     this.game.world.setBounds(0, 0, 192000, 192000);
 
@@ -41,7 +41,6 @@ MainState.prototype.create = function ()
     ServiceLocator.infoManager.create();
     ServiceLocator.camera.create(this, this.player);
     ServiceLocator.walkManager.create(this);
-    ServiceLocator.difficultyManager.create();
     ServiceLocator.inGameHelper.create();
 
     this.player.create(this);
@@ -55,36 +54,43 @@ MainState.prototype.create = function ()
     this.currentGameMode = undefined;
     this.addGameMode(ServiceLocator.walkManager);
     this.addGameMode(ServiceLocator.combatManager);
+    this.addGameMode(ServiceLocator.dialogManager);
     this.addGameMode(new CombatLootMode(this, this.player));
+    
+    MenuState.gameConfiguration.resetGameState(this);
 }
 
 MainState.prototype.addGameMode = function(_mode)
 {
-    if (!this.currentGameMode)
-    {
-        this.currentGameMode = _mode;
-        this.currentGameMode.startMode();
-    }
     this.gameModes[_mode.getModeName()] = _mode;
 }
 
 MainState.prototype.update = function ()
 {
+    MenuState.gameConfiguration.update();
     this.updateSignal.dispatch();
     if (this.statePaused)
     {
+        if (this.overlayGameMode !== undefined)
+        {
+            this.overlayGameMode.update();
+        }
         return;
     }
     
-    this.currentGameMode.update();
-    var nextMode = this.currentGameMode.getNextMode();
+    var nextMode = MenuState.gameConfiguration.getNextMode(this.currentGameMode);
     if (nextMode)
     {
-        this.currentGameMode.finishMode();
-        var gameModeArguments = this.currentGameMode.getNextModeArguments();
+        var gameModeArguments = [];
+        if (this.currentGameMode)
+        {
+            this.currentGameMode.finishMode();
+            gameModeArguments = this.currentGameMode.getNextModeArguments();
+        }
         this.currentGameMode = this.gameModes[nextMode];
         this.currentGameMode.startMode(gameModeArguments);
     }
+    this.currentGameMode.update();
 }
 
 MainState.prototype.render = function ()
@@ -135,4 +141,16 @@ MainState.prototype.setPaused = function(_value)
 MainState.prototype.isPaused = function()
 {
     return this.statePaused;
+}
+
+MainState.prototype.setOverlayGameMode = function(_mode)
+{
+    this.overlayGameMode = this.gameModes[""];
+    this.setPaused(true);
+}
+
+MainState.prototype.resetOverlayGameMode = function()
+{
+    this.overlayGameMode = undefined;
+    this.setPaused(false);
 }

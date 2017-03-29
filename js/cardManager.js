@@ -18,13 +18,13 @@ class CardManager
         CardManager.addNewCard(SmEnergyCard);
         CardManager.addNewCard(MedEnergyCard);
         CardManager.addNewCard(BigEnergyCard);
-        CardManager.addNewCard(NewEnemyCard, 1);
-        CardManager.addNewCard(StrongerBasicEnemyCard, 2);
-        CardManager.addNewCard(StrongerBeeEnemyCard, 2);
-        CardManager.addNewCard(NewObstacleCard, 3);
+        CardManager.addNewCard(NewEnemyCard);
+        CardManager.addNewCard(StrongerBasicEnemyCard);
+        CardManager.addNewCard(StrongerBeeEnemyCard);
+        CardManager.addNewCard(NewObstacleCard);
         CardManager.addNewCard(MoreObstaclesCard);
-        CardManager.addNewCard(TwoEnemiesCard, 1);
-        CardManager.addNewCard(ThreeEnemiesCard, 1);
+        CardManager.addNewCard(TwoEnemiesCard);
+        CardManager.addNewCard(ThreeEnemiesCard);
         
         for(var ind in CardManager.cardDefinitions)
         {
@@ -32,15 +32,28 @@ class CardManager
         }
     };
     
-    static addNewCard(_cardClass, _numberInDeck)
+    static addNewCard(_cardClass)
     {
         var newCardDefinition = {
             "class": _cardClass,
             "instance": new _cardClass(),
             "renderedImage":undefined,
-            "numberInDeck":_numberInDeck
+            "numberInDeck":undefined
         };
         CardManager.cardDefinitions[_cardClass.ID] = newCardDefinition;        
+    }
+    
+    setDeckNumbers(_deckNumbers)
+    {
+        for(var ind in CardManager.cardDefinitions)
+        {
+            CardManager.cardDefinitions[ind].numberInDeck = 0;
+        }
+        
+        for(var ind in _deckNumbers)
+        {
+            CardManager.cardDefinitions[ind].numberInDeck = _deckNumbers[ind];
+        }
     }
     
     getCardClassFromID(_id)
