@@ -304,6 +304,78 @@ var cardUI = {
 	]	
 }
 
+var dialogUI =
+{
+	id: 'dialogUI',
+	component: 'Window',
+	
+	padding: 0,
+	position: { x: 50, y: 50 },
+	width: 700,
+	height: 350,
+	layout:[1, 2],
+	children: [
+		{
+		  component: 'Label',
+		  text : 'Dialog thing',
+		  position: 'center',
+		  font: {
+		      size: '20px',
+		      color: 'black',
+              wordWrap: true,
+              wordWrapWidth: 700
+		  },
+		  width: 600,
+		  height: 100,
+		},
+		{
+		    component: 'Layout',
+	        layout:[1, 3],
+	        position: { x: 50, y: -50 },
+		    width: 600,
+		    height: 200,
+		    children: [
+		        {
+        		  id: 'option1Button',
+        		  text: 'option1',
+        		  component: 'Button',
+        		  position: 'center',
+        		  font: {
+        		      size: '25px',
+        		      color: 'white'
+        		  },		  
+        		  width: 400,
+        		  height: 50
+        		},
+        		{
+        		  id: 'option2Button',
+        		  text: 'option2',
+        		  component: 'Button',
+        		  position: 'center',
+        		  font: {
+        		      size: '25px',
+        		      color: 'white'
+        		  },		  
+        		  width: 400,
+        		  height: 50
+        		},
+        		{
+        		  id: 'option3Button',
+        		  text: 'option3',
+        		  component: 'Button',
+        		  position: 'center',
+        		  font: {
+        		      size: '25px',
+        		      color: 'white'
+        		  },		  
+        		  width: 400,
+        		  height: 50
+        		}
+    		]
+		}
+	]
+}
+
 class GUIManager
 {
     constructor()
@@ -354,15 +426,58 @@ class GUIManager
 
     getCardUI(_title, _text, _logoName)
     {
-        var currentCardUI = cardUI;
+        var currentCardUI = cloneObject(cardUI);
         currentCardUI.children[0].text = _title;
         currentCardUI.children[1].image = _logoName;
         currentCardUI.children[2].text = _text;
         
-        var cardGuiContainer = new GUIElement(cardUI);
+        var cardGuiContainer = new GUIElement(currentCardUI);
         cardGuiContainer.visible = false;
         
         return cardGuiContainer;
+    }
+    
+    getDialogUI(_text, _options, _callback, _callbackCtx)
+    {
+        var currentDialogUI = cloneObject(dialogUI);
+        currentDialogUI.children[0].text = _text;
+        if (_options.length != 0)
+        {
+            for(var ind = 0; ind < 3; ind++)
+            {
+                if (_options.length <= ind)
+                {
+                    currentDialogUI.children[1].children[ind] = null;
+                }
+                else
+                {
+                    currentDialogUI.children[1].children[ind].text = _options[ind].text;
+                }
+            }
+        }
+        else
+        {
+            currentDialogUI.children[1].children[0].text = "continue";
+            currentDialogUI.children[1].children[1] = null;
+            currentDialogUI.children[1].children[2] = null;
+        }
+        
+        var ret = new GUIElement(currentDialogUI);
+        
+        if (_options.length != 0)
+        {
+            for (var i = 0; i < _options.length; i++)
+            {
+                ret.addCallback('option' + (i+1) + 'Button', 'click', i + 'optionClicked');
+            }
+        }
+        else
+        {
+            ret.addCallback('option1Button', 'click', 'continue');
+        }
+        ret.registerCbReceiver(_callback, _callbackCtx);
+        
+        return ret;
     }
 }
 

@@ -6,7 +6,7 @@ class StoryConfiguration
         this.waitCondition;
         this.iteration = 0;
         
-        this.story = new inkjs.Story(storyContent);        
+        this.story = new inkjs.Story(storyContent);
     }
         
     resetGameState(_mainState)
@@ -21,10 +21,15 @@ class StoryConfiguration
         if (!this.waitCondition || this.waitCondition())
         {
             this.waitCondition = undefined;
-            var paragraphText = this.story.Continue();
-            var options = this.story.currentChoices;
+            var fullText = [];
+            fullText.push(this.story.Continue());
+            var options = [];
+            if (!this.story.canContinue)
+            {
+                var options = this.story.currentChoices;
+            }
     
-            return {paragraphText, options};
+            return {fullText, options};
         }
     }
     
@@ -41,9 +46,21 @@ class StoryConfiguration
         }
         if (_curMode.isFinished())
         {
-            ServiceLocator.dialogManager.setLine(this.getNextDialog());
+            ServiceLocator.dialogManager.setLine(this.getNextDialog(), this.callback, this);
             return "DialogManager";
         }
+    }
+    
+    callback(_option)
+    {
+        console.log("Chosen");
+        var optionIndex = parseInt(_option.charAt(0));
+        console.log(optionIndex);
+        if (!this.story.canContinue)
+        {
+            this.chooseOptionIndex(optionIndex);
+        }
+        ServiceLocator.dialogManager.setLine(this.getNextDialog(), this.callback, this);
     }
     
     update()
