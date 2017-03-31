@@ -5,8 +5,10 @@ class StoryConfiguration
         this.mainState = _mainState;
         this.waitCondition;
         this.iteration = 0;
+        this.nextModeArguments;
         
         this.story = new inkjs.Story(storyContent);
+        this.currentCommand;
     }
         
     resetGameState(_mainState)
@@ -52,16 +54,35 @@ class StoryConfiguration
         {
             return "WalkManager";
         }
-        if (_curMode.isFinished())
+        if (_curMode.getModeName() !== "DialogManager" && _curMode.isFinished())
         {
             this.storyCallback();
             return "DialogManager";
         }
+
+        if (this.currentCommand === "GOTO TRIALS")
+        {
+            this.currentCommand = undefined;
+            ServiceLocator.difficultyManager.setInitialValues(0, 0, 5, DifficultyManager.ObstacleLevelsName.STORY_TRIALS);
+            return "WalkManager";
+        }
+        else if (this.currentCommand === "GOTO JUMP_TUTORIAL")
+        {
+            this.currentCommand = undefined;
+            return "JumpTutorial";
+        }
+    }
+
+    getNextModeArguments()
+    {
+        /*if (this.currentCommand == "GOTO TRIALS")
+        {
+        }*/
     }
     
     readCommand(commandArray)
     {
-        console.log(commandArray);
+        this.currentCommand = commandArray[0];
     }
     
     storyCallback(_option)

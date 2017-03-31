@@ -2,6 +2,7 @@ class EndlessConfiguration
 {
     constructor()
     {
+        this.nextModeArguments;
     }
     
     resetGameState(_mainState)
@@ -35,6 +36,7 @@ class EndlessConfiguration
         if (_curMode.isFinished())
         {
             var modeName = _curMode.getModeName();
+            this.nextModeArguments = _curMode.getNextModeArguments();
             if (modeName === "CombatLootMode")
                 return "WalkManager";
             if (modeName === "CombatManager")
@@ -42,5 +44,10 @@ class EndlessConfiguration
             if (modeName === "WalkManager")
                 return "CombatManager";
         }
+    }
+    
+    getNextModeArguments()
+    {
+        return this.nextModeArguments;
     }
 }

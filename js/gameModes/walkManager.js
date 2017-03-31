@@ -91,8 +91,6 @@ class WalkManager extends GameMode
 
         this.background = new Background(this.game);
         
-        this.stagePrototype = undefined;
-        
         this.walkLevels = [];
         this.walkLevels.push(new WalkLevel('grassTile', GROUND_LEVEL, this));
         this.walkLevels.push(new WalkLevel('undergroundTile', 880, this));

@@ -51,10 +51,13 @@ MainState.prototype.create = function ()
     
     ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
     
+    this.jumpTutorial = new JumpTutorial(this, this.player);
+
     this.currentGameMode = undefined;
     this.addGameMode(ServiceLocator.walkManager);
     this.addGameMode(ServiceLocator.combatManager);
     this.addGameMode(ServiceLocator.dialogManager);
+    this.addGameMode(this.jumpTutorial);
     this.addGameMode(new CombatLootMode(this, this.player));
     
     MenuState.gameConfiguration.resetGameState(this);
@@ -85,7 +88,7 @@ MainState.prototype.update = function ()
         if (this.currentGameMode)
         {
             this.currentGameMode.finishMode();
-            gameModeArguments = this.currentGameMode.getNextModeArguments();
+            gameModeArguments = MenuState.gameConfiguration.getNextModeArguments();
         }
         this.currentGameMode = this.gameModes[nextMode];
         this.currentGameMode.startMode(gameModeArguments);
