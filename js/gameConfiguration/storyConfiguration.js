@@ -24,12 +24,20 @@ class StoryConfiguration
             var fullText = [];
             fullText.push(this.story.Continue());
             var options = [];
-            if (!this.story.canContinue)
+            if (fullText[0].substring(0,7) === "COMMAND")
             {
-                var options = this.story.currentChoices;
+                this.readCommand(this.story.currentTags);
+                return;
             }
-    
-            return {fullText, options};
+            else
+            {
+                if (!this.story.canContinue)
+                {
+                    var options = this.story.currentChoices;
+                }
+        
+                return {fullText, options};
+            }
         }
     }
     
@@ -46,21 +54,28 @@ class StoryConfiguration
         }
         if (_curMode.isFinished())
         {
-            ServiceLocator.dialogManager.setLine(this.getNextDialog(), this.callback, this);
+            this.storyCallback();
             return "DialogManager";
         }
     }
     
-    callback(_option)
+    readCommand(commandArray)
     {
-        console.log("Chosen");
-        var optionIndex = parseInt(_option.charAt(0));
-        console.log(optionIndex);
+        console.log(commandArray);
+    }
+    
+    storyCallback(_option)
+    {
         if (!this.story.canContinue)
         {
+            var optionIndex = parseInt(_option.charAt(0));
             this.chooseOptionIndex(optionIndex);
         }
-        ServiceLocator.dialogManager.setLine(this.getNextDialog(), this.callback, this);
+        var nextDialog = this.getNextDialog();
+        if (nextDialog)
+        {
+            ServiceLocator.dialogManager.setLine(nextDialog, this.storyCallback, this);
+        }
     }
     
     update()
