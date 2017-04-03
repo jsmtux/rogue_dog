@@ -5,10 +5,10 @@ class StoryConfiguration
         this.mainState = _mainState;
         this.waitCondition;
         this.iteration = 0;
-        this.nextModeArguments;
         
         this.story = new inkjs.Story(storyContent);
-        this.currentCommand;
+        
+        this.currentStoryStep = new EmptyStoryStep();
     }
         
     resetGameState(_mainState)
@@ -16,6 +16,14 @@ class StoryConfiguration
         ServiceLocator.difficultyManager.setInitialValues(0, 0, 0, DifficultyManager.ObstacleLevelsName.STORY_BEGIN);
         ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:1});
         this.mainState = _mainState;
+        this.setStoryStep(new DogEnteringStoryStep());
+    }
+    
+    setStoryStep(_step)
+    {
+        this.currentStoryStep.finish(this, this.mainState);
+        this.currentStoryStep = _step;
+        this.currentStoryStep.start(this, this.mainState);
     }
     
     getNextDialog()
@@ -48,41 +56,17 @@ class StoryConfiguration
         this.story.ChooseChoiceIndex(_ind);
     }
     
-    getNextMode(_curMode)
-    {
-        if (!_curMode)
-        {
-            return "WalkManager";
-        }
-        if (_curMode.getModeName() !== "DialogManager" && _curMode.isFinished())
-        {
-            this.storyCallback();
-            return "DialogManager";
-        }
-
-        if (this.currentCommand === "GOTO TRIALS")
-        {
-            this.currentCommand = undefined;
-            ServiceLocator.difficultyManager.setInitialValues(0, 0, 5, DifficultyManager.ObstacleLevelsName.STORY_TRIALS);
-            return "WalkManager";
-        }
-        else if (this.currentCommand === "GOTO JUMP_TUTORIAL")
-        {
-            this.currentCommand = undefined;
-            return "JumpTutorial";
-        }
-    }
-
-    getNextModeArguments()
-    {
-        /*if (this.currentCommand == "GOTO TRIALS")
-        {
-        }*/
-    }
-    
     readCommand(commandArray)
     {
-        this.currentCommand = commandArray[0];
+        var command = commandArray[0];
+        if(command === "GOTO TRIALS")
+        {
+            this.setStoryStep(new JumpingTutorialStoryStep());
+        }
+        else if (command === "GOTO JUMP_TUTORIAL")
+        {
+            this.setStoryStep(new ShowJumpingInteractionStoryStep());
+        }
     }
     
     storyCallback(_option)
@@ -99,8 +83,84 @@ class StoryConfiguration
         }
     }
     
-    update()
+    update(_curMode, _mainState)
     {
-        
+        this.currentStoryStep.update(this, _curMode, _mainState);
+    }
+}
+
+class EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState) {}
+    finish(_storyConfiguration, _mainState) {}
+    update(_storyConfiguration, _curGameMode, _mainState) {}
+}
+
+class DialogStep extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        _mainState.setNextMode("DialogManager");
+        _storyConfiguration.storyCallback();
+    }
+    
+}
+
+class DogEnteringStoryStep extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        _mainState.setNextMode("WalkManager");
+    }
+
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if(_curGameMode.isFinished())
+        {
+            _storyConfiguration.setStoryStep(new DialogStep());
+        }
+    }
+}
+
+class ShowJumpingInteractionStoryStep extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        _mainState.setNextMode("JumpTutorial");
+        setTimeout(function() {_storyConfiguration.setStoryStep(new DialogStep())}, 3000);
+    }
+    
+    finish(_storyConfiguration, _mainState)
+    {
+    }
+}
+
+class JumpingTutorialStoryStep extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        this.numTimesFailed = 0;
+        ServiceLocator.difficultyManager.setInitialValues(0, 0, 5, DifficultyManager.ObstacleLevelsName.STORY_TRIALS);
+        _mainState.setNextMode("WalkManager");
+        ServiceLocator.registerListener(this.jumpFailed, this, "JumpFailedMessage");
+    }
+    
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if(_curGameMode.isFinished())
+        {
+            _storyConfiguration.setStoryStep(new DialogStep());
+        }        
+    }
+    
+    finish(_storyConfiguration, _mainState)
+    {
+        ServiceLocator.removeListener(this.jumpFailed, this, "JumpFailedMessage");
+        console.log("Should be setting " + this.numTimesFailed + " to ink variable");
+    }
+    
+    jumpFailed()
+    {
+        this.numTimesFailed++;
     }
 }

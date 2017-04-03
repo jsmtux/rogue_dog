@@ -70,7 +70,7 @@ MainState.prototype.addGameMode = function(_mode)
 
 MainState.prototype.update = function ()
 {
-    MenuState.gameConfiguration.update();
+    MenuState.gameConfiguration.update(this.currentGameMode, this);
     this.updateSignal.dispatch();
     if (this.statePaused)
     {
@@ -81,19 +81,17 @@ MainState.prototype.update = function ()
         return;
     }
     
-    var nextMode = MenuState.gameConfiguration.getNextMode(this.currentGameMode);
-    if (nextMode)
-    {
-        var gameModeArguments = [];
-        if (this.currentGameMode)
-        {
-            this.currentGameMode.finishMode();
-            gameModeArguments = MenuState.gameConfiguration.getNextModeArguments();
-        }
-        this.currentGameMode = this.gameModes[nextMode];
-        this.currentGameMode.startMode(gameModeArguments);
-    }
     this.currentGameMode.update();
+}
+
+MainState.prototype.setNextMode = function(_modeName, _args = [])
+{
+    if (this.currentGameMode)
+    {
+        this.currentGameMode.finishMode();
+    }
+    this.currentGameMode = this.gameModes[_modeName];
+    this.currentGameMode.startMode(_args);
 }
 
 MainState.prototype.render = function ()

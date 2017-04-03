@@ -2,7 +2,6 @@ class EndlessConfiguration
 {
     constructor()
     {
-        this.nextModeArguments;
     }
     
     resetGameState(_mainState)
@@ -22,32 +21,23 @@ class EndlessConfiguration
             ThreeEnemiesCard:1});
     }
     
-    update()
-    {
-        
-    }
     
-    getNextMode(_curMode)
+    update(_curMode, _mainState)
     {
         if (!_curMode)
         {
-            return "WalkManager";
+            _mainState.setNextMode("WalkManager");
         }
-        if (_curMode.isFinished())
+        else if (_curMode.isFinished())
         {
             var modeName = _curMode.getModeName();
-            this.nextModeArguments = _curMode.getNextModeArguments();
+            var nextModeArguments = _curMode.getNextModeArguments();
             if (modeName === "CombatLootMode")
-                return "WalkManager";
+                _mainState.setNextMode("WalkManager", nextModeArguments);
             if (modeName === "CombatManager")
-                return "CombatLootMode";
+            _mainState.setNextMode("CombatLootMode", nextModeArguments);
             if (modeName === "WalkManager")
-                return "CombatManager";
+            _mainState.setNextMode("CombatManager", nextModeArguments);
         }
-    }
-    
-    getNextModeArguments()
-    {
-        return this.nextModeArguments;
     }
 }

@@ -376,7 +376,7 @@ class Obstacle extends VisibleObject
     {
         if (this.collides(_player))
         {
-            _player.obstacleHit();
+            ServiceLocator.publish(new JumpFailedMessage());
             this.break();
         }
     }

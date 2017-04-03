@@ -120,6 +120,7 @@ class DogPlayer extends GameObject
     startWalk()
     {
         ServiceLocator.inputManager.playerDirectionGesture.add(this.jump, this);
+        ServiceLocator.registerListener(this.obstacleHit, this, "JumpFailedMessage");
         this.curSpeed = this.walkSpeed;
         this.play("walk");
     }
@@ -127,6 +128,7 @@ class DogPlayer extends GameObject
     finishWalk()
     {
         ServiceLocator.inputManager.playerDirectionGesture.remove(this.jump, this);
+        ServiceLocator.removeListener(this.obstacleHit, this, "JumpFailedMessage");
         this.curSpeed = 0;
         this.play("idle");
     }
