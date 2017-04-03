@@ -12,7 +12,7 @@ class WalkLevel
     
     fillEmpty()
     {
-        while(this.lastX - 80 < ServiceLocator.camera.getVisibleArea().right)
+        while(this.lastX - 160 < ServiceLocator.camera.getVisibleArea().right)
         {
             this.walkManager.addTile(this.groundTileName, new Phaser.Point(this.lastX, this.height), undefined, this);
             this.lastX += 80;
@@ -31,10 +31,13 @@ class WalkLevel
             var newCell = StagePrototype.cellType.GRASS;
             if (this.stagePrototype)
             {
-                newCell = this.stagePrototype.getNextCellType();
                 if (this.stagePrototype.isStageFinished())
                 {
                     this.stagePrototype = undefined;
+                }
+                else
+                {
+                    newCell = this.stagePrototype.getNextCellType();
                 }
             }
             
