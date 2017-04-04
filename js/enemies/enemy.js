@@ -54,7 +54,6 @@ class Enemy extends GameObject
         if (this.health <= 0)
         {
             ServiceLocator.combatManager.killEnemy(this.index);
-            ServiceLocator.infoManager.unregister(this.sprite);
         }
     }
     

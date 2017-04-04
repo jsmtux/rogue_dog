@@ -3,7 +3,6 @@ class Services
     constructor()
     {
         this.difficultyManager = {};
-        this.infoManager = {};
         this.combatManager = {};
         this.walkManager = {};
         this.guiManager = {};

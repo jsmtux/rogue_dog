@@ -70,8 +70,6 @@ class DogPlayer extends GameObject
         this.sprite.scale.set(0.3, 0.3);
         this.sprite.pushCharMap("NoWool");
         
-        ServiceLocator.infoManager.register("player", this.sprite);
-        
         this.healthBar.create();
         this.energyBar.create();
         

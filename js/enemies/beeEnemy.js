@@ -23,8 +23,6 @@ class BeeEnemy extends Enemy
     {
         this.setSprite(this.game.add.sprite(0, this.height, 'bee', 5));
         this.sprite.animations.add('walk');
-        
-        ServiceLocator.infoManager.register("BeeEnemy", this.sprite);
     }
     
     update()

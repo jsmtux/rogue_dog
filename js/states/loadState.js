@@ -9,7 +9,6 @@ LoadState.prototype.preload = function()
     BasicEnemy.preload(this.game);
     BeeEnemy.preload(this.game);
     WalkManager.preload(this.game);
-    InfoManager.preload(this.game);
     DogPlayer.preload(this.game);
     Renderer.preload(this.game);
     CardManager.preload(this.game);

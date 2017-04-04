@@ -33,8 +33,6 @@ class BasicEnemy extends Enemy
         this.position.y = 320;
         this.sprite.animations.play('walk');
         
-        ServiceLocator.infoManager.register("BasicEnemy", this.sprite);
-        
         if (BasicEnemy.attackOptions == undefined)
         {
             BasicEnemy.attackOptions = [

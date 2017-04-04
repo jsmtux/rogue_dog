@@ -22,7 +22,6 @@ MainState.prototype.create = function ()
     this.player = new DogPlayer();
     
     ServiceLocator.initialize('camera', new Camera());
-    ServiceLocator.initialize('infoManager', new InfoManager(this));
     ServiceLocator.initialize('combatManager', new CombatManager(this, this.player));
     ServiceLocator.initialize('walkManager', new WalkManager(this, this.player));
     ServiceLocator.initialize('inputManager', new InputManager(this));
@@ -38,7 +37,6 @@ MainState.prototype.create = function ()
     ServiceLocator.renderer.create(this);
     ServiceLocator.inputManager.create(this);
     ServiceLocator.guiManager.create(this);
-    ServiceLocator.infoManager.create();
     ServiceLocator.camera.create(this, this.player);
     ServiceLocator.walkManager.create(this);
     ServiceLocator.inGameHelper.create();
