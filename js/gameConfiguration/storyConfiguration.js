@@ -87,6 +87,16 @@ class StoryConfiguration
     {
         this.currentStoryStep.update(this, _curMode, _mainState);
     }
+    
+    choosePathString(_name)
+    {
+        this.story.ChoosePathString(_name);
+    }
+    
+    setStoryVariable(_name, _value)
+    {
+        this.story.variablesState[_name] = _value
+    }
 }
 
 class EmptyStoryStep
@@ -149,6 +159,15 @@ class JumpingTutorialStoryStep extends EmptyStoryStep
     {
         if(_curGameMode.isFinished())
         {
+            if (this.numTimesFailed > 0)
+            {
+                _storyConfiguration.setStoryVariable("training_times_failed", this.numTimesFailed)
+                _storyConfiguration.choosePathString("Training.trials_finished_retry");
+            }
+            else
+            {
+                _storyConfiguration.choosePathString("Training.trials_finished_ok");
+            }
             _storyConfiguration.setStoryStep(new DialogStep());
         }        
     }
@@ -156,7 +175,6 @@ class JumpingTutorialStoryStep extends EmptyStoryStep
     finish(_storyConfiguration, _mainState)
     {
         ServiceLocator.removeListener(this.jumpFailed, this, "JumpFailedMessage");
-        console.log("Should be setting " + this.numTimesFailed + " to ink variable");
     }
     
     jumpFailed()
