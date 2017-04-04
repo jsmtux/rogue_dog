@@ -38,7 +38,7 @@ class CombatManager extends GameMode
             {
                 this.state = CombatManager.State.DEFEND;
                 var defendSprite = this.game.add.sprite(100,100,'defend');
-                ServiceLocator.guiManager.addToUI(defendSprite);
+                ServiceLocator.renderer.addToUI(defendSprite);
                 setTimeout(function() {defendSprite.destroy();}, 1000);
             }
         }
@@ -98,7 +98,7 @@ class CombatManager extends GameMode
     {
         this.state = CombatManager.State.ATTACK;
         var attackSprite = this.game.add.sprite(100,100,'attack');
-        ServiceLocator.guiManager.addToUI(attackSprite);
+        ServiceLocator.renderer.addToUI(attackSprite);
         setTimeout(function() {attackSprite.destroy();}, 1000);
         this.player.startAttack(this);
     }

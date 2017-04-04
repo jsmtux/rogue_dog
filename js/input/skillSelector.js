@@ -18,7 +18,7 @@ class SkillSelector
     add(_function, _context)
     {
         this.spriteGroup = this.game.add.group();
-        ServiceLocator.guiManager.addToUI(this.spriteGroup);
+        ServiceLocator.renderer.addToUI(this.spriteGroup);
         this.sprite = this.game.add.sprite(0, 0, 'skillbar');
         this.spriteGroup.add(this.sprite);
         this.skillselector = this.game.add.sprite(10, 0, 'skillselector');

@@ -36,16 +36,18 @@ MainState.prototype.create = function ()
 
     ServiceLocator.renderer.create(this);
     ServiceLocator.inputManager.create(this);
-    ServiceLocator.guiManager.create(this);
     ServiceLocator.camera.create(this, this.player);
     ServiceLocator.walkManager.create(this);
     ServiceLocator.inGameHelper.create();
+    
+    ServiceLocator.guiManager.addToRenderer();
 
     this.player.create(this);
     
-    ServiceLocator.guiManager.lostUI.addCallback('reloadButton', 'click', 'reload');
-    ServiceLocator.guiManager.lostUI.addCallback('backMenuButton', 'click', 'back');
-    ServiceLocator.guiManager.lostUI.registerCbReceiver(this.handleUI, this)
+    this.lostUI = new GameOverGuiElement();
+    ServiceLocator.guiManager.createUI(this.lostUI);
+    this.lostUI.addListener(this.handleUI, this);
+    this.lostUI.hide();
     
     ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
     
@@ -56,6 +58,7 @@ MainState.prototype.create = function ()
     this.addGameMode(ServiceLocator.combatManager);
     this.addGameMode(ServiceLocator.dialogManager);
     this.addGameMode(this.jumpTutorial);
+    this.addGameMode(new EmptyGameMode());
     this.addGameMode(new CombatLootMode(this, this.player));
     
     MenuState.gameConfiguration.resetGameState(this);
@@ -72,10 +75,6 @@ MainState.prototype.update = function ()
     this.updateSignal.dispatch();
     if (this.statePaused)
     {
-        if (this.overlayGameMode !== undefined)
-        {
-            this.overlayGameMode.update();
-        }
         return;
     }
     
@@ -102,21 +101,22 @@ MainState.prototype.handleUI = function(_name, _event)
     //this is only on 'reload' event
     if (_name === "reload")
     {
-        ServiceLocator.guiManager.lostUI.hide();
+        this.lostUI.hide();
         this.setPaused(false);
         this.restart();
     }
     else if (_name === "back")
     {
-        ServiceLocator.guiManager.lostUI.hide();
+        this.lostUI.hide();
         this.state.start('Menu');
     }
 }
 
 MainState.prototype.die = function()
 {
-    ServiceLocator.guiManager.lostUI.show();
+    this.lostUI.show();
     this.setPaused(true);
+    this.setNextMode("EmptyGameMode");
 }
 
 MainState.prototype.restart = function()

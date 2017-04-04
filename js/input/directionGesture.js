@@ -126,7 +126,7 @@ class PlayerDirectionGesture extends DirectionGesture
         this.arrowSprite = this.game.add.sprite(mousePos.x, mousePos.y, "jumpArrow");
         this.arrowSprite.anchor.x = 0.5;
         this.arrowSprite.anchor.y = 0.5;
-        ServiceLocator.guiManager.addToUI(this.arrowSprite);
+        ServiceLocator.renderer.addToUI(this.arrowSprite);
     }
     
     update()

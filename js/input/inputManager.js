@@ -45,7 +45,7 @@ class InputManager
     
     getBmd()
     {
-        ServiceLocator.guiManager.addToUI(this.bmd);
+        ServiceLocator.renderer.addToUI(this.bmd);
         return this.bmd;
     }
 }

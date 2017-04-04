@@ -1,6 +1,8 @@
 function LoadState(_game)
 {
     this.game = _game;
+    
+    this.loaded = false;
 }
 
 LoadState.prototype.preload = function()
@@ -15,8 +17,6 @@ LoadState.prototype.preload = function()
     InGameHelper.preload(this.game);
     InputManager.preload(this.game);
     this.game.load.onLoadComplete.add(this.loadComplete, this);
-    
-    this.loaded = false;
 }
 
 LoadState.prototype.update = function()

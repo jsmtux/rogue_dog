@@ -5,11 +5,15 @@ function InitState(_game)
 
 InitState.prototype.preload = function()
 {
-    this.game.load.image('menu_bg', './img/ui/menu_dog.png');
     GUIManager.preload(this.game);
+    this.game.load.image('menu_bg', './img/ui/menu_dog.png');
     this.game.load.onLoadComplete.add(this.loadComplete, this);
     
     this.loaded = false;
+}
+
+InitState.prototype.create = function()
+{
 }
 
 InitState.prototype.update = function()

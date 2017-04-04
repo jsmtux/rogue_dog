@@ -23,8 +23,9 @@ class DialogManager extends GameMode
     
     setLine(_line, _callback, _callbackCtx)
     {
-        this.currentDialogUI = ServiceLocator.guiManager.getDialogUI(_line.fullText, _line.options, this.callback, this);
-        this.currentDialogUI.show();
+        this.currentDialogUI = new DialogGuiElement(_line.fullText, _line.options);
+        ServiceLocator.guiManager.createUI(this.currentDialogUI);
+        this.currentDialogUI.addListener(this.callback, this);
         
         this.callback = _callback;
         this.callbackCtx = _callbackCtx;

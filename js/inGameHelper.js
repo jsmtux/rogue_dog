@@ -19,7 +19,7 @@ class InGameHelper
         var sprite = loadSpriter(this.game, "pointerJSON", "pointerAtlas", "entity_000");
         this.pointer = sprite;
         this.pointer.visible = false;
-        ServiceLocator.guiManager.addToUI(this.pointer);
+        ServiceLocator.renderer.addToUI(this.pointer);
     }
     
     showJumpHelp()

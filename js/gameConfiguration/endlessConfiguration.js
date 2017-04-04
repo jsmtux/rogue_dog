@@ -19,9 +19,10 @@ class EndlessConfiguration
             MoreObstaclesCard:undefined,
             TwoEnemiesCard:1,
             ThreeEnemiesCard:1});
+        
+        _mainState.setNextMode("WalkManager");
     }
-    
-    
+        
     update(_curMode, _mainState)
     {
         if (!_curMode)

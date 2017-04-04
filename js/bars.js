@@ -17,7 +17,7 @@ class StatsBar
         var width = (_percentage) * 142
         
         this.mask = game.add.graphics(20, 20);
-        ServiceLocator.guiManager.addToUI(this.mask);
+        ServiceLocator.renderer.addToUI(this.mask);
         this.mask.beginFill(0x0000FF);
         this.mask.lineStyle(2, 0x0000FF, 1);
         this.mask.drawRect(0, 0, 50 + width, 300);
@@ -38,9 +38,9 @@ class HealthBar extends StatsBar
     {
         var renderer = ServiceLocator.renderer;
         this.sprite = game.add.sprite(20, 20, 'health_bar', 0, renderer.uiGroup);
-        ServiceLocator.guiManager.addToUI(this.sprite);
+        ServiceLocator.renderer.addToUI(this.sprite);
         this.spriteFill = game.add.sprite(20, 20, 'health_bar_fill', 0, renderer.uiGroup);
-        ServiceLocator.guiManager.addToUI(this.spriteFill);
+        ServiceLocator.renderer.addToUI(this.spriteFill);
         this.setPercentage(100);
     }
 }
@@ -56,9 +56,9 @@ class ShieldBar extends StatsBar
     create()
     {
         this.sprite = game.add.sprite(20, 75, 'shield_bar');
-        ServiceLocator.guiManager.addToUI(this.sprite);
+        ServiceLocator.renderer.addToUI(this.sprite);
         this.spriteFill = game.add.sprite(20, 80, 'shield_bar_fill');
-        ServiceLocator.guiManager.addToUI(this.spriteFill);
+        ServiceLocator.renderer.addToUI(this.spriteFill);
         this.setPercentage(0);
     }
 }
@@ -74,9 +74,9 @@ class EnergyBar extends StatsBar
     create()
     {
         this.sprite = game.add.sprite(20, 75, 'energy_bar');
-        ServiceLocator.guiManager.addToUI(this.sprite);
+        ServiceLocator.renderer.addToUI(this.sprite);
         this.spriteFill = game.add.sprite(20, 80, 'energy_bar_fill');
-        ServiceLocator.guiManager.addToUI(this.spriteFill);
+        ServiceLocator.renderer.addToUI(this.spriteFill);
         this.setPercentage(0);
     }
 }

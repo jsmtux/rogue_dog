@@ -18,3 +18,15 @@ function cloneObject(_object)
   // http://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript/5344074#5344074
   return JSON.parse(JSON.stringify(_object));
 }
+
+Phaser.Plugin.SlickUI.prototype.removeAll         =
+SlickUI.Element.Button.prototype.removeAll        =
+SlickUI.Element.Checkbox.prototype.removeAll      =
+SlickUI.Element.DisplayObject.prototype.removeAll =
+SlickUI.Element.Panel.prototype.removeAll         =
+SlickUI.Element.Slider.prototype.removeAll        =
+SlickUI.Element.Text.prototype.removeAll          =
+SlickUI.Element.TextField.prototype.removeAll     =
+function(destroy, silent, destroyTexture) {
+  this.container.displayGroup.removeAll(destroy, silent, destroyTexture);
+};

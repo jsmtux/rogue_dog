@@ -26,10 +26,10 @@ class Card
     
     buildImage(_game)
     {
-        var cardGUIContainer = ServiceLocator.guiManager.getCardUI(this.title, this.text, this.logoName);
-        cardGUIContainer.show();
+        var cardGUIContainer = new CardGuiElement(this.title, this.text, this.logoName);
+        ServiceLocator.guiManager.createUI(cardGUIContainer);
 
-        var spriteGroup = cardGUIContainer.guiContainer.phaserGroup;
+        var spriteGroup = cardGUIContainer.rootElement.container.displayGroup;
         
         var renderTexture = _game.add.renderTexture(280, 400, this.logoName + 'cardRT');
         
@@ -44,7 +44,7 @@ class Card
     {
         this.frontImage = ServiceLocator.cardManager.getCardImage(this);
         this.sprite = _game.add.sprite(0, 0, this.frontImage);
-        ServiceLocator.guiManager.addToUI(this.sprite);
+        ServiceLocator.renderer.addToUI(this.sprite);
         this.game = _game;
     }
     

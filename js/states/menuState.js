@@ -2,6 +2,7 @@ function MenuState(_game)
 {
     this.game = _game;
     this.bgSprite;
+    this.menuGUI;
 }
 
 MenuState.prototype.preload = function()
@@ -9,26 +10,25 @@ MenuState.prototype.preload = function()
     ServiceLocator.initialize('guiManager', new GUIManager());
     ServiceLocator.initialize('difficultyManager', new DifficultyManager());
     
-    ServiceLocator.guiManager.mainMenuUI.show();
+    ServiceLocator.guiManager.addToState(this.game);
 }
 
 MenuState.prototype.update = function()
 {
-    if (!this.bgSprite || !this.bgSprite.alive)
-    {
-        this.bgSprite = this.game.add.sprite(-400, 200, 'menu_bg');
-        ServiceLocator.guiManager.mainMenuUI.addCallback('playButton', 'click', 'playButtonClicked');
-        ServiceLocator.guiManager.mainMenuUI.addCallback('endlessButton', 'click', 'endlessButtonClicked');
-        ServiceLocator.guiManager.mainMenuUI.registerCbReceiver(this.menuHandler, this);
-    }
 }
 
 MenuState.prototype.create = function ()
 {
     ServiceLocator.difficultyManager.create(); 
+    ServiceLocator.guiManager.create(this);
+    this.bgSprite = this.game.add.sprite(-400, 200, 'menu_bg');
+    
+    this.menuGUI = new MenuGuiElement();
+    ServiceLocator.guiManager.createUI(this.menuGUI);
+    this.menuGUI.addListener(this.menuHandler, this);
 }
 
-MenuState.prototype.menuHandler = function(_name, _event)
+MenuState.prototype.menuHandler = function(_name)
 {
     if(_name === "playButtonClicked")
     {
@@ -40,7 +40,6 @@ MenuState.prototype.menuHandler = function(_name, _event)
     }
 
     this.state.start('Load');
-    ServiceLocator.guiManager.mainMenuUI.hide();
 }
 
 MenuState.gameConfiguration;

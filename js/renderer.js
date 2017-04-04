@@ -18,11 +18,13 @@ class Renderer
         this.sceneGroup = this.game.add.group();
         this.sceneGroup.visible = false;
         this.overlay = this.game.add.group();
-        this.uiGroup = this.game.add.group();
         
         this.maskRenderTexture = this.game.add.renderTexture(resolution.x, resolution.y, 'maskRT');
         this.maskGroup = this.game.add.group();
         this.maskGroup.visible = false;
+        
+        this.UIGroup = _game.add.group();
+        this.UIGroup.fixedToCamera = true;
         
         this.outputSprite.fixedToCamera = true;
         
@@ -63,5 +65,10 @@ class Renderer
     addToMask(_element)
     {
         this.maskGroup.add(_element);
+    }
+    
+    addToUI(_sprite)
+    {
+        this.UIGroup.add(_sprite);
     }
 }

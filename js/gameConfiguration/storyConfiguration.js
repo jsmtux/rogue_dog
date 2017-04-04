@@ -73,8 +73,7 @@ class StoryConfiguration
     {
         if (!this.story.canContinue)
         {
-            var optionIndex = parseInt(_option.charAt(0));
-            this.chooseOptionIndex(optionIndex);
+            this.chooseOptionIndex(_option);
         }
         var nextDialog = this.getNextDialog();
         if (nextDialog)
