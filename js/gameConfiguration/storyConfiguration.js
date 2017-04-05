@@ -67,6 +67,14 @@ class StoryConfiguration
         {
             this.setStoryStep(new ShowJumpingInteractionStoryStep());
         }
+        else if (command === "GOTO JUMPFENCE")
+        {
+            this.setStoryStep(new JumpFenceStoryStep());
+        }
+        else
+        {
+            console.error("Reached unknown command: " + command);
+        }
     }
     
     storyCallback(_option)
@@ -179,5 +187,23 @@ class JumpingTutorialStoryStep extends EmptyStoryStep
     jumpFailed()
     {
         this.numTimesFailed++;
+    }
+}
+
+class JumpFenceStoryStep extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        ServiceLocator.difficultyManager.setInitialValues(0, 0, 1, DifficultyManager.ObstacleLevelsName.STORY_TRIALS);
+        _mainState.setNextMode("WalkManager");
+    }
+    
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if(_curGameMode.isFinished())
+        {
+            _storyConfiguration.choosePathString("Forest");
+            _storyConfiguration.setStoryStep(new DialogStep());
+        }        
     }
 }
