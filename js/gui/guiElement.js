@@ -95,9 +95,11 @@ class CardGuiElement extends GuiElement
     create(_slickUI, _game)
     {
         var background = _slickUI.add(new SlickUI.Element.DisplayObject(0, 0, game.make.sprite(0, 0, 'cardbg')));
+        var panel;
         background.add(new SlickUI.Element.Text(0,40, this.title)).centerHorizontally();
         background.add(new SlickUI.Element.DisplayObject(0, 90, game.make.sprite(0, 0, this.logoName)));
-        background.add(new SlickUI.Element.Text(0,285, this.description)).centerHorizontally();
+        background.add(panel = new SlickUI.Element.Panel(30, 285, 220, 80));
+        panel.add(new SlickUI.Element.Text(0,0, this.description)).centerHorizontally();
         
         super.create(_slickUI, _game, background);
     }
@@ -108,8 +110,10 @@ class DialogGuiElement extends GuiElement
     constructor(_text, _options)
     {
         super();
-        this.text = _text;
+        this.fullText = _text[0];
         this.options = _options;
+        this.currentText = "";
+        this.finishedShowing = false;
     }
     
     create(_slickUI, _game)
@@ -118,17 +122,35 @@ class DialogGuiElement extends GuiElement
         {
             this.options = [{text:"continue"}];
         }
-        var panel;
-        _slickUI.add(panel = new SlickUI.Element.Panel(50, 150, 700, 150 + 50 * this.options.length));
-        panel.add(new SlickUI.Element.Text(0,10, this.text)).centerHorizontally();
-        for(var ind in this.options)
-        {
-            ind = parseInt(ind);
-            var button;
-            panel.add(button = new SlickUI.Element.Button(0, 160 + 50 * ind, 680, 40)).events.onInputUp.add(this.getSignalCall(ind));
-            button.add(new SlickUI.Element.Text(0,0, this.options[ind].text)).center();
-        }
+        _slickUI.add(this.panel = new SlickUI.Element.Panel(50, 150, 700, 150/* + 50 * this.options.length*/));
+        this.panel.add(this.text = new SlickUI.Element.Text(0,10, ""));//.centerHorizontally();
         
-        super.create(_slickUI, _game, panel);
+        super.create(_slickUI, _game, this.panel);
+    }
+    
+    update()
+    {
+        var desiredHeight = 160 + 50 * this.options.length;
+        if (this.currentText.length < this.fullText.length)
+        {
+            this.currentText += this.fullText.charAt(this.currentText.length);
+        }
+        else if(this.panel.height < desiredHeight)
+        {
+            this.panel.height += 5;
+        }
+        else if (!this.finishedShowing)
+        {
+            this.finishedShowing = true;
+            for(var ind in this.options)
+            {
+                ind = parseInt(ind);
+                var button;
+                this.panel.add(button = new SlickUI.Element.Button(0, 160 + 50 * ind, 690, 40)).events.onInputUp.add(this.getSignalCall(ind));
+                button.add(new SlickUI.Element.Text(0,0, this.options[ind].text)).center();
+            }
+        }
+        this.text.value = this.currentText;
+        //this.text.centerHorizontally();
     }
 }

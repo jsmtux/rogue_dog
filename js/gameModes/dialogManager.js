@@ -15,6 +15,10 @@ class DialogManager extends GameMode
 
     update()
     {
+        if (this.currentDialogUI)
+        {
+            this.currentDialogUI.update();
+        }
     }
     
     startMode()
