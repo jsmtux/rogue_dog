@@ -50,6 +50,8 @@ class Renderer
         this.sceneGroup.visible = true;
         this.diffuseRenderTexture.renderXY(this.sceneGroup, -cameraPos.x, -cameraPos.y, true);
         this.sceneGroup.visible = false;
+        
+        this.game.world.bringToTop(this.UIGroup);
     }
     
     addToScene(_element)
