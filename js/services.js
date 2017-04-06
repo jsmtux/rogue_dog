@@ -69,28 +69,3 @@ class Services
 }
 
 var ServiceLocator = new Services();
-
-class Message
-{
-    constructor(_name, _arguments)
-    {
-        this.name = _name;
-        this.arguments = _arguments;
-    }
-}
-
-class JumpFailedMessage extends Message
-{
-    constructor()
-    {
-        super("JumpFailedMessage", {});
-    }
-}
-
-class ObstacleShownMessge extends Message
-{
-    constructor()
-    {
-        super("ObstacleShownMessge", {});
-    }
-}

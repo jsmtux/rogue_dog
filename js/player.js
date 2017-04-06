@@ -226,18 +226,20 @@ class DogPlayer extends GameObject
     
     startAttack()
     {
-        ServiceLocator.inputManager.skillSelector.add(this.skillCallback, this);
+        ServiceLocator.inputManager.skillSelector.add();
+        ServiceLocator.registerListener(this.skillCallback, this, "SkillSelectorResult");
         ServiceLocator.inputManager.skillSelector.setPosition(100, 270);
         this.attackFinished = false;
     }
     
-    skillCallback(_success)
+    skillCallback(_message)
     {
-        if (_success)
+        if (_message.getSuccess())
         {
             ServiceLocator.combatManager.hitFirstEnemy();
         }
-        ServiceLocator.inputManager.skillSelector.remove(this.skillCallback, this);
+        ServiceLocator.inputManager.skillSelector.remove();
+        ServiceLocator.removeListener(this.skillCallback, this, "SkillSelectorResult");
         this.attackFinished = true;
     }
     

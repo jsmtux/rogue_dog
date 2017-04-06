@@ -28,7 +28,7 @@ class GuiElement
     
     destroy()
     {
-        this.rootElement.destroy();
+        this.getSpriteGroup().destroy();
     }
     
     getSignalCall(_name)

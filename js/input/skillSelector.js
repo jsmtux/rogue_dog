@@ -15,7 +15,7 @@ class SkillSelector
         _game.load.image('skillselector', './img/skillbar/skillselector.png');
     }
     
-    add(_function, _context)
+    add()
     {
         this.spriteGroup = this.game.add.group();
         ServiceLocator.renderer.addToUI(this.spriteGroup);
@@ -23,16 +23,13 @@ class SkillSelector
         this.spriteGroup.add(this.sprite);
         this.skillselector = this.game.add.sprite(10, 0, 'skillselector');
         this.spriteGroup.add(this.skillselector);
-
-        this.cbFunction = _function;
-        this.cbContext = _context;
         
         this.game.updateSignal.add(this.update, this);
         
         ServiceLocator.inputManager.leftButton.onDown.add(this.sendSignal, this);
     }
     
-    remove(_function, _cont)
+    remove()
     {
         this.skillselector.destroy();
         this.sprite.destroy();
@@ -60,6 +57,6 @@ class SkillSelector
     sendSignal()
     {
         var success = this.skillselector.x > 85 && this.skillselector.x < 108;
-        this.cbFunction.call(this.cbContext, success);
+        ServiceLocator.publish(new SkillSelectorResult(success));
     }
 }
