@@ -86,3 +86,11 @@ class JumpFailedMessage extends Message
         super("JumpFailedMessage", {});
     }
 }
+
+class ObstacleShownMessge extends Message
+{
+    constructor()
+    {
+        super("ObstacleShownMessge", {});
+    }
+}

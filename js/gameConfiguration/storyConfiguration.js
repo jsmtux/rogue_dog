@@ -16,7 +16,7 @@ class StoryConfiguration
         ServiceLocator.difficultyManager.setInitialValues(0, 0, 0, DifficultyManager.ObstacleLevelsName.STORY_BEGIN);
         ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:1});
         this.mainState = _mainState;
-        this.setStoryStep(new DogEnteringStoryStep());
+        this.setStoryStep(new JumpFenceStoryStep());
     }
     
     setStoryStep(_step)
@@ -70,6 +70,14 @@ class StoryConfiguration
         else if (command === "GOTO JUMPFENCE")
         {
             this.setStoryStep(new JumpFenceStoryStep());
+        }
+        else if (command === "GOTO EXPLOREFOREST")
+        {
+            this.setStoryStep(new ExploreForestStoryStep());
+        }
+        else if (command === "GOTO MOVEOBSTACLE")
+        {
+            this.setStoryStep(new DefeatObstacleStoryStep());
         }
         else
         {
@@ -206,4 +214,45 @@ class JumpFenceStoryStep extends EmptyStoryStep
             _storyConfiguration.setStoryStep(new DialogStep());
         }        
     }
+}
+
+class ExploreForestStoryStep extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        ServiceLocator.difficultyManager.setInitialValues(0, 0, 1, DifficultyManager.ObstacleLevelsName.STORY_ENEMY_OBSTACLE);
+        _mainState.setNextMode("WalkManager");
+        ServiceLocator.registerListener(this.obstacleFound, this, "ObstacleShownMessge");
+        this.iterationsSinceObstacleFound = -1;
+    }
+    
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if (this.iterationsSinceObstacleFound >= 0)
+        {
+            this.iterationsSinceObstacleFound++;
+        }
+        if (this.iterationsSinceObstacleFound > 40)
+        {
+            this.iterationsSinceObstacleFound = -1;
+            
+            _storyConfiguration.choosePathString("Forest.found_obstacle");
+            _storyConfiguration.setStoryStep(new DialogStep());
+        }
+    }
+    
+    obstacleFound()
+    {
+        this.iterationsSinceObstacleFound = 0;
+    }
+}
+
+class DefeatObstacleStoryStep extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        console.log("should set up fight with stupid obstacle");
+        console.log("should fix problem if dog jumped right before");
+    }
+    
 }

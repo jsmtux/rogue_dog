@@ -57,6 +57,10 @@ class WalkLevel
                 {
                     obstacle = TallObstacle;
                 }
+                else if (newCell === StagePrototype.cellType.TUTORIAL_OBSTACLE)
+                {
+                    obstacle = EnemyObstacle;
+                }
                 this.walkManager.addTile(this.groundTileName, new Phaser.Point(this.lastX, this.height), obstacle, this);
             }
             
@@ -302,6 +306,7 @@ class GroundTile extends VisibleObject
     {
         _game.load.image('grassTile', './img/tiles/grass_block.png');
         _game.load.image('undergroundTile', './img/tiles/underground_block.png');
+        _game.load.image('tutorialObstacle', './img/tutorial_obstacle.png');
     }
     
     create(_game)
@@ -400,6 +405,32 @@ class Obstacle extends VisibleObject
         }
         
         return xCol && yCol;
+    }
+}
+
+class EnemyObstacle extends Obstacle
+{
+    constructor(_position)
+    {
+        super(_position);
+    }
+    
+    
+    create(_game)
+    {
+        this.sprite = _game.add.sprite(this.position.x, 0, 'tutorialObstacle');
+        ServiceLocator.renderer.addToScene(this.sprite);
+        this.sprite.y = this.position.y - this.sprite.height;
+        ServiceLocator.publish(new ObstacleShownMessge());
+    }
+    
+    update(_player)
+    {
+    }
+    
+    collides(_player)
+    {
+        return false;
     }
 }
 

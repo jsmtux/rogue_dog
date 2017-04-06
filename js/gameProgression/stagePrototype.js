@@ -35,8 +35,9 @@ PrototypeRules.ruleTypes = {
     DOUBLE_OBSTACLE: 3,
     TRIPLE_OBSTACLE: 4,
     TALL_OBSTACLE: 5,
-    PLATFORM: 6,
-    RULES_SIZE: 7
+    TUTORIAL_OBSTACLE: 6,
+    PLATFORM: 7,
+    RULES_SIZE: 8
 }
 
 class StagePrototype
@@ -87,6 +88,11 @@ class StagePrototype
                     numberEmptyFollowing = 6;
                     this.obstaclesPlaced++;
                     break;
+                case PrototypeRules.ruleTypes.TUTORIAL_OBSTACLE:
+                    ret = StagePrototype.cellType.TUTORIAL_OBSTACLE;
+                    numberEmptyFollowing = 6;
+                    this.obstaclesPlaced++;
+                    break;
                 case PrototypeRules.ruleTypes.DOUBLE_OBSTACLE:
                     ret = StagePrototype.cellType.OBSTACLE;
                     this.itemsToPlaceQeue.push(StagePrototype.cellType.OBSTACLE);
@@ -128,5 +134,6 @@ StagePrototype.cellType = {
     HOLE: 1,
     OBSTACLE: 2,
     TALL_OBSTACLE: 3,
-    PLATFORM: 4
+    TUTORIAL_OBSTACLE: 4,
+    PLATFORM: 5
 }
