@@ -28,7 +28,7 @@ class GuiElement
     
     destroy()
     {
-        this.rootElement.removeAll();
+        this.rootElement.destroy();
     }
     
     getSignalCall(_name)
@@ -114,6 +114,7 @@ class DialogGuiElement extends GuiElement
         this.options = _options;
         this.currentText = "";
         this.finishedShowing = false;
+        this.buttons = [];
     }
     
     create(_slickUI, _game)
@@ -122,10 +123,11 @@ class DialogGuiElement extends GuiElement
         {
             this.options = [{text:"continue"}];
         }
-        _slickUI.add(this.panel = new SlickUI.Element.Panel(50, 150, 700, 150/* + 50 * this.options.length*/));
-        this.panel.add(this.text = new SlickUI.Element.Text(0,10, ""));//.centerHorizontally();
+        _slickUI.add(this.panel = new SlickUI.Element.Panel(50, 150, 700, 150));
+        this.panel.add(this.text = new SlickUI.Element.Text(0,10, ""));
         
         super.create(_slickUI, _game, this.panel);
+        ServiceLocator.inputManager.leftButton.onDown.add(this.finishWritingText, this);
     }
     
     update()
@@ -141,6 +143,7 @@ class DialogGuiElement extends GuiElement
         }
         else if (!this.finishedShowing)
         {
+            ServiceLocator.inputManager.leftButton.onDown.remove(this.finishWritingText, this);
             this.finishedShowing = true;
             for(var ind in this.options)
             {
@@ -148,9 +151,24 @@ class DialogGuiElement extends GuiElement
                 var button;
                 this.panel.add(button = new SlickUI.Element.Button(0, 160 + 50 * ind, 690, 40)).events.onInputUp.add(this.getSignalCall(ind));
                 button.add(new SlickUI.Element.Text(0,0, this.options[ind].text)).center();
+                this.buttons.push(button);
             }
         }
         this.text.value = this.currentText;
-        //this.text.centerHorizontally();
+    }
+    
+    finishWritingText()
+    {
+        this.currentText = this.fullText;
+    }
+    
+    destroy()
+    {
+        for(var ind in this.buttons)
+        {
+            this.buttons[parseInt(ind)].events.destroy();
+            this.buttons[parseInt(ind)].sprite.destroy();
+        }
+        super.destroy();
     }
 }
