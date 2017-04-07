@@ -118,6 +118,11 @@ class DifficultyManager
                 prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.4);
                 prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TUTORIAL_OBSTACLE, 0.2);
                 break;
+            case DifficultyManager.ObstacleLevelsName.STORY_BEFORE_FIRST_COMBAT:
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.4);
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.HOLE, 0.2);
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.4);
+                break;
         }
         return new StagePrototype(prototypeRules, this.obstacleNumber);
     }
@@ -140,5 +145,6 @@ DifficultyManager.UnlockableEnemies = [BasicEnemy, BeeEnemy];
 DifficultyManager.ObstacleLevelsName = {
     STORY_BEGIN : 4,
     STORY_TRIALS : 5,
-    STORY_ENEMY_OBSTACLE: 6
+    STORY_ENEMY_OBSTACLE: 6,
+    STORY_BEFORE_FIRST_COMBAT: 7
 }

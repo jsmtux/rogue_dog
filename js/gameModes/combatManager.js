@@ -29,6 +29,7 @@ class CombatManager extends GameMode
         {
             if(this.enemiesInPlace())
             {
+                ServiceLocator.publish(new EnemiesInPlaceMessage());
                 this.startAttack();
             }
         }
@@ -162,9 +163,13 @@ class CombatManager extends GameMode
         return this.cardsToLoot;
     }
     
-    startMode()
+    startMode(_enemies)
     {
-        ServiceLocator.combatManager.startCombat(ServiceLocator.difficultyManager.getEnemies());
+        if (_enemies === undefined)
+        {
+            _enemies = ServiceLocator.difficultyManager.getEnemies();
+        }
+        ServiceLocator.combatManager.startCombat(_enemies);
         this.cardsToLoot = [];
     }
 }

@@ -227,7 +227,7 @@ class DogPlayer extends GameObject
     startAttack()
     {
         ServiceLocator.inputManager.skillSelector.add();
-        ServiceLocator.registerListener(this.skillCallback, this, "SkillSelectorResult");
+        ServiceLocator.registerListener(this.skillCallback, this, "SkillSelectorResultMessage");
         ServiceLocator.inputManager.skillSelector.setPosition(100, 270);
         this.attackFinished = false;
     }
@@ -239,7 +239,7 @@ class DogPlayer extends GameObject
             ServiceLocator.combatManager.hitFirstEnemy();
         }
         ServiceLocator.inputManager.skillSelector.remove();
-        ServiceLocator.removeListener(this.skillCallback, this, "SkillSelectorResult");
+        ServiceLocator.removeListener(this.skillCallback, this, "SkillSelectorResultMessage");
         this.attackFinished = true;
     }
     

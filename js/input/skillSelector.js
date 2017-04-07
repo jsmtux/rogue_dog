@@ -57,6 +57,6 @@ class SkillSelector
     sendSignal()
     {
         var success = this.skillselector.x > 85 && this.skillselector.x < 108;
-        ServiceLocator.publish(new SkillSelectorResult(success));
+        ServiceLocator.publish(new SkillSelectorResultMessage(success));
     }
 }

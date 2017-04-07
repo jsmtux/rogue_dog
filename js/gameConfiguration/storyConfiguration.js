@@ -16,7 +16,7 @@ class StoryConfiguration
         ServiceLocator.difficultyManager.setInitialValues(0, 0, 0, DifficultyManager.ObstacleLevelsName.STORY_BEGIN);
         ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:1});
         this.mainState = _mainState;
-        this.setStoryStep(new JumpFenceStoryStep());
+        this.setStoryStep(new WaitForFirstEncounter());
     }
     
     setStoryStep(_step)
@@ -220,6 +220,7 @@ class JumpFenceStoryStep extends EmptyStoryStep
     }
 }
 
+//TODO: find better solution for this
 var storyObstacle;
 
 class ExploreForestStoryStep extends EmptyStoryStep
@@ -258,9 +259,8 @@ class DefeatObstacleStoryStep extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
-        console.log("should set up fight with stupid obstacle");
         console.log("should fix problem if dog jumped right before");
-        ServiceLocator.registerListener(this.skillCallback, this, "SkillSelectorResult");
+        ServiceLocator.registerListener(this.skillCallback, this, "SkillSelectorResultMessage");
         _mainState.setNextMode("CombatManager");
         this.success;
     }
@@ -293,10 +293,52 @@ class DefeatObstacleStoryStep extends EmptyStoryStep
     
     finish()
     {
-        ServiceLocator.removeListener(this.skillCallback, this, "SkillSelectorResult");
+        ServiceLocator.removeListener(this.skillCallback, this, "SkillSelectorResultMessage");
     }
 }
 
 class WaitForFirstEncounter extends EmptyStoryStep
 {
+    start(_storyConfiguration, _mainState)
+    {
+        ServiceLocator.difficultyManager.setInitialValues(0, 0, 7, DifficultyManager.ObstacleLevelsName.STORY_BEFORE_FIRST_COMBAT);
+        _mainState.setNextMode("WalkManager");
+    }
+    
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if(_curGameMode.isFinished())
+        {
+            _storyConfiguration.setStoryStep(new FirstEncounter());
+        }
+    }
+}
+
+class FirstEncounter extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        _mainState.setNextMode("CombatManager", [BasicEnemy]);
+        ServiceLocator.registerListener(this.enemiesInPlace, this, "EnemiesInPlaceMessage");
+        this.enemiesAlreadyInPlace = false;
+    }
+    
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if (this.enemiesAlreadyInPlace)
+        {
+            _storyConfiguration.choosePathString("Forest.enemy_encounter");
+            _storyConfiguration.setStoryStep(new DialogStep());
+        }
+    }
+    
+    enemiesInPlace()
+    {
+        this.enemiesAlreadyInPlace = true;
+    }
+    
+    finish()
+    {
+        ServiceLocator.removeListener(this.enemiesInPlace, this, "EnemiesInPlaceMessage");
+    }
 }

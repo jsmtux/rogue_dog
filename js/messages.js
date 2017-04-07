@@ -28,15 +28,23 @@ class ObstacleShownMessge extends Message
     }
 }
 
-class SkillSelectorResult extends Message
+class SkillSelectorResultMessage extends Message
 {
     constructor(_succeeded)
     {
-        super("SkillSelectorResult", {"success":_succeeded});
+        super("SkillSelectorResultMessage", {"success":_succeeded});
     }
     
     getSuccess()
     {
         return this.arguments["success"];
+    }
+}
+
+class EnemiesInPlaceMessage extends Message
+{
+    constructor()
+    {
+        super("EnemiesInPlaceMessage", {});
     }
 }
