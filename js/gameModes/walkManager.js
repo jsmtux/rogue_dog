@@ -421,11 +421,16 @@ class EnemyObstacle extends Obstacle
         this.sprite = _game.add.sprite(this.position.x, 0, 'tutorialObstacle');
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.y = this.position.y - this.sprite.height;
-        ServiceLocator.publish(new ObstacleShownMessge());
+        ServiceLocator.publish(new ObstacleShownMessge(this));
     }
     
     update(_player)
     {
+    }
+    
+    break()
+    {
+        this.sprite.alpha = 0.2;
     }
     
     collides(_player)

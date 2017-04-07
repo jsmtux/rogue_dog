@@ -17,9 +17,14 @@ class JumpFailedMessage extends Message
 
 class ObstacleShownMessge extends Message
 {
-    constructor()
+    constructor(_obstacle)
     {
-        super("ObstacleShownMessge", {});
+        super("ObstacleShownMessge", {"obstacle":_obstacle});
+    }
+    
+    getObstacle()
+    {
+        return this.arguments["obstacle"];
     }
 }
 

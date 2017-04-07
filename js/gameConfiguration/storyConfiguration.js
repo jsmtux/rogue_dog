@@ -79,6 +79,10 @@ class StoryConfiguration
         {
             this.setStoryStep(new DefeatObstacleStoryStep());
         }
+        else if (command === "GOTO WAITFORFIRSTENCOUNTER")
+        {
+            this.setStoryStep(new WaitForFirstEncounter());
+        }
         else
         {
             console.error("Reached unknown command: " + command);
@@ -216,6 +220,8 @@ class JumpFenceStoryStep extends EmptyStoryStep
     }
 }
 
+var storyObstacle;
+
 class ExploreForestStoryStep extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
@@ -241,8 +247,9 @@ class ExploreForestStoryStep extends EmptyStoryStep
         }
     }
     
-    obstacleFound()
+    obstacleFound(_message)
     {
+        storyObstacle = _message.getObstacle();
         this.iterationsSinceObstacleFound = 0;
     }
 }
@@ -253,6 +260,43 @@ class DefeatObstacleStoryStep extends EmptyStoryStep
     {
         console.log("should set up fight with stupid obstacle");
         console.log("should fix problem if dog jumped right before");
+        ServiceLocator.registerListener(this.skillCallback, this, "SkillSelectorResult");
+        _mainState.setNextMode("CombatManager");
+        this.success;
     }
     
+    skillCallback(_message)
+    {
+        this.success = _message.getSuccess();
+        if(_message.getSuccess())
+        {
+            storyObstacle.break();
+        }
+    }
+    
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if (this.success !== undefined)
+        {
+            if(this.success)
+            {
+                storyObstacle.break();
+                _storyConfiguration.choosePathString("Forest.obstacle_moved");
+            }
+            else
+            {
+                _storyConfiguration.choosePathString("Forest.failed_moving_obstacle");
+            }
+            _storyConfiguration.setStoryStep(new DialogStep());
+        }
+    }
+    
+    finish()
+    {
+        ServiceLocator.removeListener(this.skillCallback, this, "SkillSelectorResult");
+    }
+}
+
+class WaitForFirstEncounter extends EmptyStoryStep
+{
 }
