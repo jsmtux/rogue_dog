@@ -226,7 +226,7 @@ class ExploreForestStoryStep extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(0, 0, 1, DifficultyManager.ObstacleLevelsName.STORY_ENEMY_OBSTACLE);
+        ServiceLocator.difficultyManager.setInitialValues(0, 0, 100, DifficultyManager.ObstacleLevelsName.STORY_ENEMY_OBSTACLE);
         _mainState.setNextMode("WalkManager");
         ServiceLocator.registerListener(this.obstacleFound, this, "ObstacleShownMessge");
         this.iterationsSinceObstacleFound = -1;
