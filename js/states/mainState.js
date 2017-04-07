@@ -11,6 +11,7 @@ MainState.prototype.preload = function ()
     this.game.load.image('attack', './img/attack.png');
     this.game.load.image('defend', './img/defend.png');
     
+    CombatLootMode.preload(this.game);
 }
 
 MainState.prototype.create = function ()
@@ -81,7 +82,7 @@ MainState.prototype.update = function ()
     this.currentGameMode.update();
 }
 
-MainState.prototype.setNextMode = function(_modeName, _args = [])
+MainState.prototype.setNextMode = function(_modeName, _args)
 {
     if (this.currentGameMode)
     {

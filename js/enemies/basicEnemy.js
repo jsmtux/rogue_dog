@@ -22,6 +22,8 @@ class BasicEnemy extends Enemy
         _game.load.image('right', './img/arrowRight.png');
         _game.load.image('good', './img/checkmark.png');
         _game.load.image('bad', './img/cross.png');
+        _game.load.audio('basicEnemyStepAudio', 'sounds/basicEnemy_step.wav');
+        _game.load.audio('basicEnemyHitAudio', 'sounds/basicEnemy_hit.wav');
         this.sprite;
     }
     
@@ -32,6 +34,10 @@ class BasicEnemy extends Enemy
         this.sprite.scale.set(0.4, 0.4);
         this.position.y = 320;
         this.sprite.animations.play('walk');
+        this.sprite.onEvent.add(this.playStepSound, this);
+        
+        this.stepAudio = this.game.add.audio('basicEnemyStepAudio');
+        this.hitAudio = this.game.add.audio('basicEnemyHitAudio');
         
         if (BasicEnemy.attackOptions == undefined)
         {
@@ -42,6 +48,11 @@ class BasicEnemy extends Enemy
                     {image: 'down', key: ServiceLocator.inputManager.down}
                 ];
         }
+    }
+    
+    playStepSound()
+    {
+        this.stepAudio.play();
     }
     
     update()
@@ -108,6 +119,7 @@ class BasicEnemy extends Enemy
             if (_result == 'bad')
             {
                 this.sprite.animations.play('attack');
+                this.hitAudio.play();
                 
                 var changeAnimationOnEnd = () => {
                     this.sprite.onLoop.remove(changeAnimationOnEnd);

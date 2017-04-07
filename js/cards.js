@@ -1,11 +1,13 @@
 class Card
 {
-    constructor(_title, _text, _logoName)
+    constructor(_title, _text, _logoName, _cardType)
     {
         this.sprite;
         this.title = _title;
         this.text = _text;
         this.logoName = _logoName;
+        
+        this.cardType = _cardType;
         
         this.handlerFunction;
         this.handlerContext;
@@ -157,13 +159,24 @@ class Card
     {
         this.destroy();
     }
+    
+    getType()
+    {
+        return this.cardType;
+    }
+}
+
+Card.Type = {
+    'ITEM': 0,
+    'TRAP': 1,
+    'GEAR': 2
 }
 
 class SmMedkitCard extends Card
 {
     constructor(_game)
     {
-        super("Small cake", "A bit of health", "small_cake_icon", _game);
+        super("Small cake", "A bit of health", "small_cake_icon", Card.Type.ITEM, _game);
     }
     
     apply(_arguments)
@@ -177,7 +190,7 @@ class SmEnergyCard extends Card
 {
     constructor(_game)
     {
-        super("Small Crystal", "Small energy increase", "small_energy_icon", _game);
+        super("Small Crystal", "Small energy increase", "small_energy_icon", Card.Type.ITEM, _game);
     }
     
     apply(_arguments)
@@ -191,7 +204,7 @@ class MedEnergyCard extends Card
 {
     constructor(_game)
     {
-        super("Med. Crystal", "Medium energy increase", "medium_energy_icon", _game);
+        super("Med. Crystal", "Medium energy increase", "medium_energy_icon", Card.Type.ITEM, _game);
     }
     
     apply(_arguments)
@@ -205,7 +218,7 @@ class BigEnergyCard extends Card
 {
     constructor(_game)
     {
-        super("Big Crystal", "Big energy increase", "big_energy_icon", _game);
+        super("Big Crystal", "Big energy increase", "big_energy_icon", Card.Type.ITEM, _game);
     }
     
     apply(_arguments)
@@ -219,7 +232,7 @@ class NewEnemyCard extends Card
 {
     constructor(_game)
     {
-        super("Shiny Pig", "A new type of enemy will appear!", "new_enemy_icon", _game);
+        super("Shiny Pig", "A new type of enemy will appear!", "new_enemy_icon", Card.Type.TRAP, _game);
     }
     
     apply(_arguments)
@@ -233,7 +246,7 @@ class MoreObstaclesCard extends Card
 {
     constructor(_game)
     {
-        super("Wood Wood Wood", "You'll probably find more obstacles along your way!", "wood_logs_icon", _game);
+        super("Wood Wood Wood", "You'll probably find more obstacles along your way!", "wood_logs_icon", Card.Type.TRAP, _game);
     }
     
     apply(_arguments)
@@ -247,7 +260,7 @@ class StrongerBasicEnemyCard extends Card
 {
     constructor(_game)
     {
-        super("Ancient Mask", "BasicEnemy will be stronger!", "stronger_enemy_icon", _game);
+        super("Ancient Mask", "BasicEnemy will be stronger!", "stronger_enemy_icon", Card.Type.TRAP, _game);
     }
     
     apply(_arguments)
@@ -261,7 +274,7 @@ class StrongerBeeEnemyCard extends Card
 {
     constructor(_game)
     {
-        super("Ancient Mask", "BeeEnemy will be stronger!", "stronger_enemy_icon", _game);
+        super("Ancient Mask", "BeeEnemy will be stronger!", "stronger_enemy_icon", Card.Type.TRAP, _game);
     }
     
     apply(_arguments)
@@ -275,7 +288,7 @@ class NewObstacleCard extends Card
 {
     constructor(_game)
     {
-        super("Stupid Map", "Harder obstacles may appear!", "new_obstacle_icon", _game);
+        super("Stupid Map", "Harder obstacles may appear!", "new_obstacle_icon", Card.Type.TRAP, _game);
     }
     
     apply(_arguments)
@@ -289,7 +302,7 @@ class TwoEnemiesCard extends Card
 {
     constructor(_game)
     {
-        super("Let's Hang Out", "You will find multiple enemies in combat!", "enemy_friend_icon", _game);
+        super("Let's Hang Out", "You will find multiple enemies in combat!", "enemy_friend_icon", Card.Type.TRAP, _game);
     }
     
     apply(_arguments)
@@ -303,7 +316,7 @@ class ThreeEnemiesCard extends Card
 {
     constructor(_game)
     {
-        super("Three's a crowd", "You will find up to three enemies in combat!", "enemy_friends_icon", _game);
+        super("Three's a crowd", "You will find up to three enemies in combat!", "enemy_friends_icon", Card.Type.TRAP, _game);
     }
     
     apply(_arguments)

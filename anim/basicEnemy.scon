@@ -3,6 +3,21 @@
 		{
 			"animation": [
 				{
+					"eventline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0
+								},
+								{
+									"id": 1,
+									"time": 400
+								}
+							],
+							"name": "step"
+						}
+					],
 					"gline": [
 						{
 							"pos": -296

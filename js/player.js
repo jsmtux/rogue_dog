@@ -40,6 +40,10 @@ class DogPlayer extends GameObject
         _game.load.atlas("dogAnimAtlas", path + "dog.png", path + "dog.json");
         _game.load.json("dogJSON", path + "dog.scon");
         
+        _game.load.audio('playerAttackAudio', 'sounds/player_attack.wav');
+        _game.load.audio('playerJumpAudio', 'sounds/player_jump.wav');
+        _game.load.audio('playerLandAudio', 'sounds/player_land.wav');
+
         DogHatAccesory.preload(_game);
         DogWoolHatAccesory.preload(_game);
     }
@@ -75,6 +79,10 @@ class DogPlayer extends GameObject
         
         this.ownLight = new spotLight(new Phaser.Point(this.sprite.x + 25, this.sprite.y), 250, 0xFFFF00, 0.5);
         ServiceLocator.lighting.addLight(this.ownLight);
+        
+        this.attackAudio = this.game.add.audio('playerAttackAudio');
+        this.jumpAudio = this.game.add.audio('playerJumpAudio');
+        this.landAudio = this.game.add.audio('playerLandAudio');
     }
     
     updateWalk()
@@ -103,6 +111,7 @@ class DogPlayer extends GameObject
             var groundLevel = this.getGroundLevel();
             if (groundLevel)
             {
+                this.landAudio.play();
                 this.jumpAcceleration.y = 0;
                 this.sprite.y = groundLevel;
             }
@@ -237,6 +246,7 @@ class DogPlayer extends GameObject
         if (_message.getSuccess())
         {
             ServiceLocator.combatManager.hitFirstEnemy();
+            this.attackAudio.play();
         }
         ServiceLocator.inputManager.skillSelector.remove();
         ServiceLocator.removeListener(this.skillCallback, this, "SkillSelectorResultMessage");
@@ -256,6 +266,7 @@ class DogPlayer extends GameObject
     {
         if (this.onGround())
         {
+            this.jumpAudio.play();
             this.jumpAcceleration.y = this.jumpStrenght * -Math.sin(Math.radians(_angle));
             this.jumpAcceleration.x = this.jumpStrenght * Math.cos(Math.radians(_angle));
         }
