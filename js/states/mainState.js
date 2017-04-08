@@ -73,12 +73,16 @@ MainState.prototype.addGameMode = function(_mode)
 MainState.prototype.update = function ()
 {
     MenuState.gameConfiguration.update(this.currentGameMode, this);
-    this.updateSignal.dispatch();
+    this.updateSignal.dispatch(); 
     if (this.statePaused)
     {
+        if (this.overlayGameMode)
+        {
+            this.overlayGameMode.update();
+        }
         return;
     }
-    
+   
     this.currentGameMode.update();
 }
 
@@ -145,7 +149,7 @@ MainState.prototype.isPaused = function()
 
 MainState.prototype.setOverlayGameMode = function(_mode)
 {
-    this.overlayGameMode = this.gameModes[""];
+    this.overlayGameMode = this.gameModes[_mode];
     this.setPaused(true);
 }
 

@@ -25,15 +25,19 @@ class CombatManager extends GameMode
             }
         }
         
-        if (this.state == CombatManager.State.WAITING_MONSTERS)
+        if (this.state === CombatManager.State.WAITING_MONSTERS)
         {
             if(this.enemiesInPlace())
             {
                 ServiceLocator.publish(new EnemiesInPlaceMessage());
-                this.startAttack();
+                this.state = CombatManager.State.ATTACK_NEXT
             }
         }
-        else if (this.state == CombatManager.State.ATTACK)
+        else if (this.state === CombatManager.State.ATTACK_NEXT)
+        {
+            this.startAttack();
+        }
+        else if (this.state === CombatManager.State.ATTACK)
         {
             if (this.player.isAttackFinished())
             {
@@ -43,15 +47,15 @@ class CombatManager extends GameMode
                 setTimeout(function() {defendSprite.destroy();}, 1000);
             }
         }
-        else if (this.state == CombatManager.State.DEFEND)
+        else if (this.state === CombatManager.State.DEFEND)
         {
             for (ind in this.enemies)
             {
-                if (this.enemies[ind].state == Enemy.States.ATTACKING)
+                if (this.enemies[ind].state === Enemy.States.ATTACKING)
                 {
                     return;
                 }
-                if (this.enemies[ind].state == Enemy.States.WAITING)
+                if (this.enemies[ind].state === Enemy.States.WAITING)
                 {
                     this.enemies[ind].startAttack(this.player);
                     return;
@@ -65,7 +69,7 @@ class CombatManager extends GameMode
             {
                 this.startAttack();
             }
-            else if (this.getNumberOfDyingEnemies() == 0)
+            else if (this.getNumberOfDyingEnemies() === 0)
             {
                 this.state = CombatManager.State.FINISHED;
             }
@@ -176,9 +180,10 @@ class CombatManager extends GameMode
 
 CombatManager.State = {
     WAITING_MONSTERS : 1,
-    ATTACK : 2,
-    DEFEND : 3,
-    FINISHED: 4
+    ATTACK_NEXT: 2,
+    ATTACK : 3,
+    DEFEND : 4,
+    FINISHED: 5
 }
 
 CombatManager.NAME = "CombatManager";

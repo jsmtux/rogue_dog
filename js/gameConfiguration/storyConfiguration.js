@@ -16,7 +16,7 @@ class StoryConfiguration
         ServiceLocator.difficultyManager.setInitialValues(0, 0, 0, DifficultyManager.ObstacleLevelsName.STORY_BEGIN);
         ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:1});
         this.mainState = _mainState;
-        this.setStoryStep(new WaitForFirstEncounter());
+        this.setStoryStep(new DogEnteringStoryStep());
     }
     
     setStoryStep(_step)
@@ -36,7 +36,9 @@ class StoryConfiguration
             var options = [];
             if (fullText[0].substring(0,7) === "COMMAND")
             {
-                this.readCommand(this.story.currentTags);
+                var command = this.story.currentTags[0];
+                this.readCommand(command);
+                ServiceLocator.publish(new StoryCommandReceived(command));
                 return;
             }
             else
@@ -56,9 +58,8 @@ class StoryConfiguration
         this.story.ChooseChoiceIndex(_ind);
     }
     
-    readCommand(commandArray)
+    readCommand(command)
     {
-        var command = commandArray[0];
         if(command === "GOTO TRIALS")
         {
             this.setStoryStep(new JumpingTutorialStoryStep());
@@ -83,9 +84,13 @@ class StoryConfiguration
         {
             this.setStoryStep(new WaitForFirstEncounter());
         }
+        else if (command === "GOTO PICKCARDFIRSTENCOUNTER")
+        {
+            this.setStoryStep(new PickFirstLootCard());
+        }
         else
         {
-            console.error("Reached unknown command: " + command);
+            console.log("Reached unknown command: " + command);
         }
     }
     
@@ -318,17 +323,36 @@ class FirstEncounter extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
+        ServiceLocator.difficultyManager.unlockEnemy();
         _mainState.setNextMode("CombatManager", [BasicEnemy]);
         ServiceLocator.registerListener(this.enemiesInPlace, this, "EnemiesInPlaceMessage");
+        ServiceLocator.registerListener(this.finishedDialog, this, "StoryCommandReceived");
         this.enemiesAlreadyInPlace = false;
+        this.commentShown = false;
+        this.dialogFinished = false;
     }
     
     update(_storyConfiguration, _curGameMode, _mainState)
     {
-        if (this.enemiesAlreadyInPlace)
+        if (this.dialogFinished && _curGameMode.isFinished())
+        {
+            _storyConfiguration.choosePathString("Forest.enemy_encounter_defeated");
+            _storyConfiguration.setStoryStep(new DialogStep());
+        }
+        if (this.dialogFinished)
+        {
+            _mainState.resetOverlayGameMode();
+        }
+        else if (this.commentShown)
+        {
+            
+        }
+        else if (this.enemiesAlreadyInPlace)
         {
             _storyConfiguration.choosePathString("Forest.enemy_encounter");
-            _storyConfiguration.setStoryStep(new DialogStep());
+            _mainState.setOverlayGameMode("DialogManager");
+            _storyConfiguration.storyCallback();
+            this.commentShown = true;
         }
     }
     
@@ -337,8 +361,35 @@ class FirstEncounter extends EmptyStoryStep
         this.enemiesAlreadyInPlace = true;
     }
     
+    finishedDialog()
+    {
+        this.dialogFinished = true;
+    }
+    
     finish()
     {
         ServiceLocator.removeListener(this.enemiesInPlace, this, "EnemiesInPlaceMessage");
+        ServiceLocator.removeListener(this.finishedDialog, this, "StoryCommandReceived");
+    }
+}
+
+class PickFirstLootCard extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        _mainState.setNextMode("CombatLootMode", [SmMedkitCard]);
+    }
+    
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if (_curGameMode.isFinished())
+        {
+            _storyConfiguration.choosePathString("Forest.enemy_encounter_finished");
+            _storyConfiguration.setStoryStep(new DialogStep());
+        }
+    }
+    
+    finish()
+    {
     }
 }

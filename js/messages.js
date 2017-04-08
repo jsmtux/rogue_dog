@@ -48,3 +48,16 @@ class EnemiesInPlaceMessage extends Message
         super("EnemiesInPlaceMessage", {});
     }
 }
+
+class StoryCommandReceived extends Message
+{
+    constructor(_command)
+    {
+        super("StoryCommandReceived", {"command": _command});
+    }
+    
+    getCommand()
+    {
+        return this.arguments["command"];
+    }
+}
