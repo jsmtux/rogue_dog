@@ -4,11 +4,6 @@ class CardManager
     {
         this.game = _game;
         this.remainingCards = {};
-        
-        for(var ind in CardManager.cardDefinitions)
-        {
-            this.remainingCards[ind] = CardManager.cardDefinitions[ind].numberInDeck;
-        }
     }
     
     static preload(_game)
@@ -53,6 +48,11 @@ class CardManager
         for(var ind in _deckNumbers)
         {
             CardManager.cardDefinitions[ind].numberInDeck = _deckNumbers[ind];
+        }
+        
+        for(var ind in CardManager.cardDefinitions)
+        {
+            this.remainingCards[ind] = CardManager.cardDefinitions[ind].numberInDeck;
         }
     }
     
