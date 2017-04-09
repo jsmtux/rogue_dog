@@ -43,6 +43,7 @@ class DogPlayer extends GameObject
         _game.load.audio('playerAttackAudio', 'sounds/player_attack.wav');
         _game.load.audio('playerJumpAudio', 'sounds/player_jump.wav');
         _game.load.audio('playerLandAudio', 'sounds/player_land.wav');
+        _game.load.audio('playerStepAudio', 'sounds/player_step.wav');
 
         DogHatAccesory.preload(_game);
         DogWoolHatAccesory.preload(_game);
@@ -55,6 +56,7 @@ class DogPlayer extends GameObject
         super.create(sprite, true);
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.position.setTo(0, this.playerInitialY);
+        this.sprite.onEvent.add(this.playStepSound, this);
         
         var self = this;
         this.sprite.events = {'onInputDown' : {
@@ -83,6 +85,8 @@ class DogPlayer extends GameObject
         this.attackAudio = this.game.add.audio('playerAttackAudio');
         this.jumpAudio = this.game.add.audio('playerJumpAudio');
         this.landAudio = this.game.add.audio('playerLandAudio');
+        this.stepAudio = this.game.add.audio('playerStepAudio');
+        this.stepAudio.volume = 0.5;
     }
     
     updateWalk()
@@ -157,6 +161,11 @@ class DogPlayer extends GameObject
     updateEnergyPercentage()
     {
         this.energyBar.setPercentage(this.energy / this.maxEnergy);
+    }
+    
+    playStepSound()
+    {
+        this.stepAudio.play();
     }
     
     obstacleHit()

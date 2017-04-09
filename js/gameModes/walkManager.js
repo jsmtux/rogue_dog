@@ -357,6 +357,7 @@ class Obstacle extends VisibleObject
     {
         _game.load.image('spike', './img/spike.png');
         _game.load.image('brokenspike', './img/brokenspike.png');
+        _game.load.audio('obstacleBreakAudio', 'sounds/obstacle_break.wav');
     }
     
     create(_game)
@@ -364,12 +365,14 @@ class Obstacle extends VisibleObject
         this.sprite = _game.add.sprite(this.position.x, 0, 'spike');
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.y = this.position.y - this.sprite.height;
+        this.breakAudio = _game.add.audio('obstacleBreakAudio');
     }
     
     break()
     {
         this.broken = true;
         this.sprite.loadTexture('brokenspike');
+        this.breakAudio.play();
     }
     
     destroy()
