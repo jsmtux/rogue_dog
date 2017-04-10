@@ -8,7 +8,7 @@ class DogPlayer extends GameObject
         this.maxHealth = 40;
         this.health = this.maxHealth;
         this.maxEnergy = 40;
-        this.energy = 0;
+        this.energy = 30;
         this.healthBar = new HealthBar();
         this.energyBar = new EnergyBar();
         this.jumpAcceleration = new Phaser.Point(0, 0);
@@ -86,7 +86,7 @@ class DogPlayer extends GameObject
         this.jumpAudio = this.game.add.audio('playerJumpAudio');
         this.landAudio = this.game.add.audio('playerLandAudio');
         this.stepAudio = this.game.add.audio('playerStepAudio');
-        this.stepAudio.volume = 0.5;
+        this.stepAudio.volume = 0.25;
     }
     
     updateWalk()
@@ -95,7 +95,7 @@ class DogPlayer extends GameObject
         this.sprite.x += this.curSpeed + this.jumpAcceleration.x;
         this.ownLight.position = new Phaser.Point(this.sprite.x + 100, this.sprite.y - 25);
 
-        if (this.onGround() && this.jumpAcceleration.y == 0)
+        if (this.onGround() && this.jumpAcceleration.y === 0)
         {
             shouldPlay = 'walk';
             this.jumpAcceleration.x = 0;

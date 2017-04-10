@@ -51,6 +51,7 @@ class Renderer
         this.diffuseRenderTexture.renderXY(this.sceneGroup, -cameraPos.x, -cameraPos.y, true);
         this.sceneGroup.visible = false;
         
+        this.game.world.bringToTop(this.overlay);
         this.game.world.bringToTop(this.UIGroup);
     }
     

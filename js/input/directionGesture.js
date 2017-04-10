@@ -97,9 +97,14 @@ class PlayerDirectionGesture extends DirectionGesture
     {
         if (this.initialPos)
         {
-            this.initialPos = undefined;
-            this.cbFunction.call(this.cbContext, this.curAngle);
             
+            var distance = this.getMousePos().subtract(this.initialPos.x, this.initialPos.y).getMagnitude();
+            if (distance > 25)
+            {
+                this.cbFunction.call(this.cbContext, this.curAngle);
+            }
+
+            this.initialPos = undefined;
             this.curAngle = undefined;
         }
         

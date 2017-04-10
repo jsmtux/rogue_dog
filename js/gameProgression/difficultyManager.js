@@ -139,6 +139,11 @@ class DifficultyManager
         prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.PLATFORM, 0.2);
         return new StagePrototype(prototypeRules);
     }
+    
+    getCardSpawnChance()
+    {
+        return 0.02;
+    }
 }
 
 DifficultyManager.UnlockableEnemies = [BasicEnemy, BeeEnemy];

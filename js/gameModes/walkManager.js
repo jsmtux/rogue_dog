@@ -84,6 +84,43 @@ class WalkLevel
     }
 }
 
+class UndergroundWalkLevel extends WalkLevel
+{
+    constructor(_groundTileName, _height, _walkManager)
+    {
+        super(_groundTileName, _height, _walkManager);
+        this.lastProcessedX = this.lastX;
+        this.game = _walkManager.game;
+        this.cardPieces = [];
+        this.gap = 10;
+    }
+    
+    update()
+    {
+        super.update();
+        while(this.lastProcessedX < this.lastX)
+        {
+            this.lastProcessedX += this.gap;
+            if (this.active && Math.random() < ServiceLocator.difficultyManager.getCardSpawnChance())
+            {
+                this.addCardPiece();
+            }
+        }
+        
+        for(var ind in this.cardPieces)
+        {
+            this.cardPieces[ind].update();
+        }
+    }
+    
+    addCardPiece()
+    {
+        var cardPiece = new CardPiece(new Phaser.Point(this.lastProcessedX - Math.random() * this.gap, this.height));
+        cardPiece.create(this.game);
+        this.cardPieces.push(cardPiece);
+    }
+}
+
 class WalkManager extends GameMode
 {
     constructor(_game, _player)
@@ -100,7 +137,7 @@ class WalkManager extends GameMode
         
         this.walkLevels = [];
         this.walkLevels.push(new WalkLevel('grassTile', GROUND_LEVEL, this));
-        this.walkLevels.push(new WalkLevel('undergroundTile', 880, this));
+        this.walkLevels.push(new UndergroundWalkLevel('undergroundTile', 880, this));
         
         this.currentWalkLevel;
         
@@ -112,6 +149,7 @@ class WalkManager extends GameMode
         Obstacle.preload(_game);
         TallObstacle.preload(_game);
         GroundTile.preload(_game);
+        CardPiece.preload(_game);
     }
     
     create(_game)
@@ -490,4 +528,44 @@ class TallObstacle extends Obstacle
         return xCol && yCol;
     }
     
+}
+
+class CardPiece extends VisibleObject
+{
+    constructor(_position)
+    {
+        super();
+        this.position = _position;
+        this.position.y -=  (230*Math.random() + 50.0);
+        this.glowSprite;
+        this.glowDifference = 0.01;
+    }
+    
+    static preload(_game)
+    {
+        _game.load.image('card_piece', './img/card/piece.png');
+        _game.load.image('card_piece_glow', './img/card/piece_glow.png');
+    }
+    
+    create(_game)
+    {
+        var sprite = _game.add.sprite(this.position.x, this.position.y, 'card_piece');
+        ServiceLocator.renderer.addToScene(sprite);
+        super.create(sprite);
+        var sprite = _game.add.sprite(this.position.x, this.position.y, 'card_piece_glow');
+        ServiceLocator.renderer.addToOverlay(sprite);
+        this.glowSprite = sprite;
+        this.glowSprite.alpha = 0.7;
+        this.glowSprite.inputEnabled = true;
+        this.glowSprite.events.onInputDown.add(function(){console.log("clicked!")});
+    }
+    
+    update()
+    {
+        if (this.glowSprite.alpha >= 0.7 || this.glowSprite.alpha <= 0.3)
+        {
+            this.glowDifference *= -1.0;
+        }
+        this.glowSprite.alpha += this.glowDifference;
+    }
 }
