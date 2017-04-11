@@ -585,12 +585,12 @@ class CardPiece extends VisibleObject
             }
             this.glowSprite.scale.setTo(this.scale, this.scale);
             this.scale += 0.1;
-            this.glowSprite.alpha -= 0.02;
+            this.glowSprite.alpha -= 0.03;
             this.sprite.alpha -= 0.05;
         }
         else
         {
-            if (this.glowSprite.alpha >= 0.7 || this.glowSprite.alpha <= 0.3)
+            if (this.glowSprite.alpha >= 0.8 || this.glowSprite.alpha <= 0.1)
             {
                 this.glowDifference *= -1.0;
             }
@@ -603,5 +603,6 @@ class CardPiece extends VisibleObject
         this.collectSound.play();
         this.dying = true;
         this.glowSprite.events.onInputDown.remove(this.clicked, this);
+        ServiceLocator.publish(new CardPieceFoundMessage());
     }
 }

@@ -61,3 +61,11 @@ class StoryCommandReceived extends Message
         return this.arguments["command"];
     }
 }
+
+class CardPieceFoundMessage extends Message
+{
+    constructor(_command)
+    {
+        super("CardPieceFoundMessage", {});
+    }
+}

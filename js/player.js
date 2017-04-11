@@ -28,6 +28,8 @@ class DogPlayer extends GameObject
         this.appliedItems = [];
         
         this.ownLight;
+        
+        this.cardPieceUI = new CardPieceUI();
     }
     
     static preload(_game)
@@ -47,6 +49,7 @@ class DogPlayer extends GameObject
 
         DogHatAccesory.preload(_game);
         DogWoolHatAccesory.preload(_game);
+        CardPieceUI.preload(_game);
     }
     
     create(_game)
@@ -78,6 +81,9 @@ class DogPlayer extends GameObject
         
         this.healthBar.create();
         this.energyBar.create();
+        
+        this.cardPieceUI.create(this.game);
+        ServiceLocator.registerListener(this.cardPiecePicked, this, "CardPieceFoundMessage");
         
         this.ownLight = new spotLight(new Phaser.Point(this.sprite.x + 25, this.sprite.y), 250, 0xFFFF00, 0.5);
         ServiceLocator.lighting.addLight(this.ownLight);
@@ -345,6 +351,11 @@ class DogPlayer extends GameObject
     getPosition()
     {
         return new Phaser.Point(this.sprite.x, this.sprite.y);
+    }
+    
+    cardPiecePicked()
+    {
+        this.cardPieceUI.addPiece();
     }
 }
 

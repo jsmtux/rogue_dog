@@ -42,6 +42,11 @@ class Services
         receiver.dispatch(_msg);
     }
     
+    resetMessageListeners()
+    {
+        this.namedMessageListeners = {};
+    }
+    
     registerListener(_callback, _callbackContext, _msgName)
     {
         if (_msgName)
