@@ -539,12 +539,14 @@ class CardPiece extends VisibleObject
         this.position.y -=  (230*Math.random() + 50.0);
         this.glowSprite;
         this.glowDifference = 0.01;
+        this.dying = false;
     }
     
     static preload(_game)
     {
         _game.load.image('card_piece', './img/card/piece.png');
         _game.load.image('card_piece_glow', './img/card/piece_glow.png');
+        _game.load.audio('cardPieceCollectedAudio', 'sounds/card_piece_collected.wav');
     }
     
     create(_game)
@@ -553,19 +555,53 @@ class CardPiece extends VisibleObject
         ServiceLocator.renderer.addToScene(sprite);
         super.create(sprite);
         var sprite = _game.add.sprite(this.position.x, this.position.y, 'card_piece_glow');
+        this.sprite.anchor.x = 0.5;
+        this.sprite.anchor.y = 0.5;
         ServiceLocator.renderer.addToOverlay(sprite);
         this.glowSprite = sprite;
         this.glowSprite.alpha = 0.7;
         this.glowSprite.inputEnabled = true;
-        this.glowSprite.events.onInputDown.add(function(){console.log("clicked!")});
+        this.glowSprite.events.onInputDown.add(this.clicked, this);
+        this.glowSprite.anchor.x = 0.5;
+        this.glowSprite.anchor.y = 0.5;
+        
+        this.collectSound = _game.add.audio('cardPieceCollectedAudio');
+    }
+    
+    destroy()
+    {
+        this.sprite.destroy();
+        this.glowSprite.destroy();
     }
     
     update()
     {
-        if (this.glowSprite.alpha >= 0.7 || this.glowSprite.alpha <= 0.3)
+        if (this.dying)
         {
-            this.glowDifference *= -1.0;
+            if (this.scale === undefined)
+            {
+                this.scale = 1.0;
+                this.glowSprite.alpha = 0.7;
+            }
+            this.glowSprite.scale.setTo(this.scale, this.scale);
+            this.scale += 0.1;
+            this.glowSprite.alpha -= 0.02;
+            this.sprite.alpha -= 0.05;
         }
-        this.glowSprite.alpha += this.glowDifference;
+        else
+        {
+            if (this.glowSprite.alpha >= 0.7 || this.glowSprite.alpha <= 0.3)
+            {
+                this.glowDifference *= -1.0;
+            }
+            this.glowSprite.alpha += this.glowDifference;
+        }
+    }
+    
+    clicked()
+    {
+        this.collectSound.play();
+        this.dying = true;
+        this.glowSprite.events.onInputDown.remove(this.clicked, this);
     }
 }
