@@ -4,6 +4,7 @@ class CardPieceUI
     {
         this.currentPieceNumber = 0;
         this.cardGroup;
+        this.maxPieces = 7;
     }
     
     static preload(_game)
@@ -25,29 +26,50 @@ class CardPieceUI
         this.cardGroup.x = resolution.x - 100;
         this.cardGroup.y = 25;
         this.setNumberOfPieces(0);
+        this.game = _game;
     }
     
     setNumberOfPieces(_number)
     {
-        this.cardGroup.removeAll(true);
-        this.baseSprite = this.cardGroup.create(0, 0, "piecesUI0");
+        if (this.baseSprite === undefined || _number < this.currentPieceNumber)
+        {
+            this.cardGroup.removeAll(true);
+            this.baseSprite = this.cardGroup.create(0, 0, "piecesUI0");
+        }
         
-        if (_number > 7)
+        if (_number > this.maxPieces)
         {
             console.error("CardPieceUI can only display up to 7 pieces")
-            _number = 7;
+            _number = this.maxPieces;
         }
         
         this.currentPieceNumber = _number;
         
         for(var i = 1; i <= _number; i++)
         {
-            this.baseSprite = this.cardGroup.create(0, 0, "piecesUI" + i);
+            var newPiece = this.cardGroup.create(0, 0, "piecesUI" + i);
+            if (i == _number)
+            {
+                this.game.updateSignal.addOnce(() => {this.updateAddedPiece(newPiece, 2.0)}, this);
+            }
+        }
+    }
+    
+    updateAddedPiece(_piece, _currentScale)
+    {
+        _piece.scale.setTo(_currentScale, _currentScale);
+        if (_currentScale > 1.0)
+        {
+            this.game.updateSignal.addOnce(() => {this.updateAddedPiece(_piece, _currentScale - 0.01)}, this);
         }
     }
     
     addPiece()
     {
         this.setNumberOfPieces(this.currentPieceNumber + 1);
+        if (this.currentPieceNumber === this.maxPieces)
+        {
+            ServiceLocator.publish(new GearCardCompletedMessage());
+        }
     }
 }

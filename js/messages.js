@@ -69,3 +69,11 @@ class CardPieceFoundMessage extends Message
         super("CardPieceFoundMessage", {});
     }
 }
+
+class GearCardCompletedMessage extends Message
+{
+    constructor(_command)
+    {
+        super("GearCardCompletedMessage", {});
+    }
+}

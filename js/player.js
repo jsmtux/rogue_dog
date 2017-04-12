@@ -84,6 +84,7 @@ class DogPlayer extends GameObject
         
         this.cardPieceUI.create(this.game);
         ServiceLocator.registerListener(this.cardPiecePicked, this, "CardPieceFoundMessage");
+        ServiceLocator.registerListener(this.gearCardCompleted, this, "GearCardCompletedMessage");
         
         this.ownLight = new spotLight(new Phaser.Point(this.sprite.x + 25, this.sprite.y), 250, 0xFFFF00, 0.5);
         ServiceLocator.lighting.addLight(this.ownLight);
@@ -356,6 +357,10 @@ class DogPlayer extends GameObject
     cardPiecePicked()
     {
         this.cardPieceUI.addPiece();
+    }
+    
+    gearCardCompleted()
+    {
     }
 }
 
