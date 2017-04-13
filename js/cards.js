@@ -331,3 +331,18 @@ class ThreeEnemiesCard extends Card
     }
 }
 ThreeEnemiesCard.ID = "ThreeEnemiesCard"
+
+class MagicianHatCard extends Card
+{
+    constructor(_game)
+    {
+        super("Magician's hat", "You got a cool hat!", "tophat_gear_icon", Card.Type.GEAR, _game);
+    }
+    
+    apply(_arguments)
+    {
+        var player = _arguments;
+        player.addItem(DogHatAccesory);
+    }
+}
+MagicianHatCard.ID = "MagicianHatCard"

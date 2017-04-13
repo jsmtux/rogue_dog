@@ -77,3 +77,11 @@ class GearCardCompletedMessage extends Message
         super("GearCardCompletedMessage", {});
     }
 }
+
+class GearCardCollectedMessage extends Message
+{
+    constructor(_command)
+    {
+        super("GearCardCollectedMessage", {});
+    }
+}

@@ -20,6 +20,7 @@ class CardManager
         CardManager.addNewCard(MoreObstaclesCard);
         CardManager.addNewCard(TwoEnemiesCard);
         CardManager.addNewCard(ThreeEnemiesCard);
+        CardManager.addNewCard(MagicianHatCard);
         
         for(var ind in CardManager.cardDefinitions)
         {

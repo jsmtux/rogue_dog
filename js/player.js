@@ -24,7 +24,6 @@ class DogPlayer extends GameObject
         this.currentAnimation = '';
         this.playerInitialY = GROUND_LEVEL - 90;
         
-        this.itemsList = [new DogHatAccesory(), new DogWoolHatAccesory()];
         this.appliedItems = [];
         
         this.ownLight;
@@ -314,27 +313,27 @@ class DogPlayer extends GameObject
         return this.getGroundLevel() !== undefined;
     }
     
-    getItemsList()
-    {
-        return this.itemsList;
-    }
-    
     getFeetArea()
     {
         return [this.sprite.x - 40, this.sprite.x + 109];
     }
     
-    setAppliedItems(_items)
+    addItem(_itemClass)
     {
-        for (var itemInd in this.appliedItems)
+        var newItem = new _itemClass();
+        newItem.apply(this.game.player.sprite);
+        this.appliedItems.push(newItem);
+    }
+    
+    removeItem(_itemClass)
+    {
+        for (var ind in this.appliedItems)
         {
-            this.appliedItems[itemInd].remove(this.sprite);
-        }
-        this.appliedItems = [];
-        for(var itemInd in _items)
-        {
-            this.appliedItems.push(_items[itemInd]);
-           _items[itemInd].apply(this.game.player.sprite)
+            if (this.appliedItems[ind].getClassName() === _itemClass.NAME)
+            {
+                this.appliedItems[ind].remove(this.game.player.sprite);
+                this.appliedItems.splice(ind, 1);
+            }
         }
     }
     
@@ -362,6 +361,13 @@ class DogPlayer extends GameObject
     gearCardCompleted()
     {
         this.game.setOverlayGameMode("GearCardCompletedMode");
+        var self = this;
+        function cardCollectedCallback()
+        {
+            self.game.resetOverlayGameMode();
+            ServiceLocator.removeListener(cardCollectedCallback, undefined, "GearCardCollectedMessage");
+        };
+        ServiceLocator.registerListener(cardCollectedCallback, undefined, "GearCardCollectedMessage");
     }
 }
 
@@ -380,6 +386,11 @@ class Accesory
     getRestriction()
     {
         return this.restriction;
+    }
+    
+    getClassName()
+    {
+        return this.constructor.NAME;
     }
 }
 
@@ -414,6 +425,7 @@ class DogHatAccesory extends Accesory
         _dogSprite.removeCharMap("hat");
     }
 }
+DogHatAccesory.NAME = "DogHatAccesory"
 
 class DogWoolHatAccesory extends Accesory
 {
@@ -440,3 +452,4 @@ class DogWoolHatAccesory extends Accesory
         _dogSprite.pushCharMap("NoWool");
     }
 }
+DogWoolHatAccesory.NAME = "DogWoolHatAccesory"

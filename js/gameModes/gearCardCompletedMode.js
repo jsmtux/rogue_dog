@@ -33,18 +33,23 @@ class GearCardCompletedMode extends GameMode
     animationFinished()
     {
         this.joinSprite.visible = false;
-        var curCard = new ThreeEnemiesCard();
+        var curCard = new MagicianHatCard();
         curCard.create(this.game);
         curCard.show();
         curCard.setPosition(new Phaser.Point(resolution.x /2, resolution.y /2));
         curCard.setAnchor(new Phaser.Point(0.0, 0.5));
         curCard.setYAngle(Math.PI);
         curCard.setHandler((card) => {card.flip(this.cardFlipped, this)});
+        this.card = curCard;
     }
     
     cardFlipped()
     {
-        console.log("flipped!!!");
+        this.card.setHandler((card) => {
+            card.apply(this.game.player);
+            ServiceLocator.publish(new GearCardCollectedMessage());
+            this.card.destroy();
+        });
     }
     
     isFinished()
