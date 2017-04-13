@@ -361,6 +361,7 @@ class DogPlayer extends GameObject
     
     gearCardCompleted()
     {
+        this.game.setOverlayGameMode("GearCardCompletedMode");
     }
 }
 

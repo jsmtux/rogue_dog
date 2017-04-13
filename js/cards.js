@@ -134,6 +134,12 @@ class Card
         this.sprite.y = _position.y;
     }
     
+    setAnchor(_position)
+    {
+        this.sprite.anchor.x = _position.x;
+        this.sprite.anchor.y = _position.y;
+    }
+    
     clickHandler()
     {
         this.handlerFunction.call(this.handlerContext, this);

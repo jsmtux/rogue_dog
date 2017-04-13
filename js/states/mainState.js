@@ -12,6 +12,7 @@ MainState.prototype.preload = function ()
     this.game.load.image('defend', './img/defend.png');
     
     CombatLootMode.preload(this.game);
+    GearCardCompletedMode.preload(this.game);
 }
 
 MainState.prototype.create = function ()
@@ -54,11 +55,15 @@ MainState.prototype.create = function ()
     
     this.jumpTutorial = new JumpTutorial(this, this.player);
 
+    this.gearCardCompletedMode = new GearCardCompletedMode();
+    this.gearCardCompletedMode.create(this);
+
     this.currentGameMode = undefined;
     this.addGameMode(ServiceLocator.walkManager);
     this.addGameMode(ServiceLocator.combatManager);
     this.addGameMode(ServiceLocator.dialogManager);
     this.addGameMode(this.jumpTutorial);
+    this.addGameMode(this.gearCardCompletedMode);
     this.addGameMode(new EmptyGameMode());
     this.addGameMode(new CombatLootMode(this, this.player));
     
@@ -147,14 +152,19 @@ MainState.prototype.isPaused = function()
     return this.statePaused;
 }
 
-MainState.prototype.setOverlayGameMode = function(_mode)
+MainState.prototype.setOverlayGameMode = function(_mode, _arguments)
 {
     this.overlayGameMode = this.gameModes[_mode];
+    this.overlayGameMode.startMode(_arguments);
     this.setPaused(true);
 }
 
 MainState.prototype.resetOverlayGameMode = function()
 {
+    if (this.overlayGameMode)
+    {
+        this.overlayGameMode.finishMode();
+    }
     this.overlayGameMode = undefined;
     this.setPaused(false);
 }

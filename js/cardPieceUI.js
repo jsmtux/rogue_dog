@@ -60,7 +60,7 @@ class CardPieceUI
         _piece.scale.setTo(_currentScale, _currentScale);
         if (_currentScale > 1.0)
         {
-            this.game.updateSignal.addOnce(() => {this.updateAddedPiece(_piece, _currentScale - 0.01)}, this);
+            this.game.updateSignal.addOnce(() => {this.updateAddedPiece(_piece, _currentScale - 0.05)}, this);
         }
     }
     
