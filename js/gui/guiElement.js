@@ -95,11 +95,9 @@ class CardGuiElement extends GuiElement
     create(_slickUI, _game)
     {
         var background = _slickUI.add(new SlickUI.Element.DisplayObject(0, 0, game.make.sprite(0, 0, 'cardbg')));
-        var panel;
-        background.add(new SlickUI.Element.Text(0,40, this.title)).centerHorizontally();
-        background.add(new SlickUI.Element.DisplayObject(0, 90, game.make.sprite(0, 0, this.logoName)));
-        background.add(panel = new SlickUI.Element.Panel(30, 285, 220, 80));
-        panel.add(new SlickUI.Element.Text(0,0, this.description)).centerHorizontally();
+        background.add(new SlickUI.Element.Text(40,40, this.title));
+        background.add(new SlickUI.Element.DisplayObject(50, 90, game.make.sprite(0, 0, this.logoName)));
+        background.add(new SlickUI.Element.Text(30,285, this.description, undefined, undefined, 220, 80));
         
         super.create(_slickUI, _game, background);
     }
