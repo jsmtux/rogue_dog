@@ -115,8 +115,8 @@ class DifficultyManager
                 break;
             case DifficultyManager.ObstacleLevelsName.STORY_ENEMY_OBSTACLE:
                 prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.4);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.4);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TUTORIAL_OBSTACLE, 0.2);
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.55);
+                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TUTORIAL_OBSTACLE, 0.05);
                 break;
             case DifficultyManager.ObstacleLevelsName.STORY_BEFORE_FIRST_COMBAT:
                 prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.4);

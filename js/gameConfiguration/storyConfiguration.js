@@ -16,7 +16,7 @@ class StoryConfiguration
         ServiceLocator.difficultyManager.setInitialValues(0, 0, 0, DifficultyManager.ObstacleLevelsName.STORY_BEGIN);
         ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:1});
         this.mainState = _mainState;
-        this.setStoryStep(new DogEnteringStoryStep());
+        this.setStoryStep(new WaitForEnergyComplete());
     }
     
     setStoryStep(_step)
@@ -87,6 +87,10 @@ class StoryConfiguration
         else if (command === "GOTO PICKCARDFIRSTENCOUNTER")
         {
             this.setStoryStep(new PickFirstLootCard());
+        }
+        else if (command === "GOTO CONTINUEUNTILENERGYFINISHED")
+        {
+            this.setStoryStep(new WaitForEnergyComplete());            
         }
         else
         {
@@ -386,6 +390,66 @@ class PickFirstLootCard extends EmptyStoryStep
         {
             _storyConfiguration.choosePathString("Forest.enemy_encounter_finished");
             _storyConfiguration.setStoryStep(new DialogStep());
+        }
+    }
+    
+    finish()
+    {
+    }
+}
+
+
+class WaitForEnergyComplete extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        ServiceLocator.difficultyManager.setInitialValues(1, 1, 3, 0);
+        _mainState.setNextMode("WalkManager");
+        ServiceLocator.registerListener(this.cardPicked, this, "CardLootedMessage");
+        
+        this.energyLooted = 0;
+        
+        ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:undefined,
+            SmEnergyCard:undefined,
+            MedEnergyCard:undefined,
+            BigEnergyCard:undefined,
+            NewEnemyCard:0,
+            StrongerBasicEnemyCard:2,
+            NewObstacleCard:3,
+            MoreObstaclesCard:undefined,
+            TwoEnemiesCard:1});
+    }
+    
+    cardPicked(_msg)
+    {
+        var card = _msg.getCard();
+        
+        if (card && card.getEnergyIncrease)
+        {
+            this.energyLooted += card.getEnergyIncrease();
+        }
+    }
+    
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if (_curGameMode.isFinished())
+        {
+            if (this.energyLooted >= 4)
+            {
+                _storyConfiguration.choosePathString("Forest.found_energy");
+                _storyConfiguration.setStoryStep(new DialogStep());
+            }
+            else
+            {
+                var modeName = _curGameMode.getModeName();
+                var nextModeArguments = _curGameMode.getNextModeArguments();
+                if (modeName === "CombatLootMode")
+                    _mainState.setNextMode("WalkManager", nextModeArguments);
+                if (modeName === "CombatManager")
+                _mainState.setNextMode("CombatLootMode", nextModeArguments);
+                if (modeName === "WalkManager")
+                _mainState.setNextMode("CombatManager", nextModeArguments);
+            }
         }
     }
     

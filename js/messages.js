@@ -64,7 +64,7 @@ class StoryCommandReceived extends Message
 
 class CardPieceFoundMessage extends Message
 {
-    constructor(_command)
+    constructor()
     {
         super("CardPieceFoundMessage", {});
     }
@@ -72,7 +72,7 @@ class CardPieceFoundMessage extends Message
 
 class GearCardCompletedMessage extends Message
 {
-    constructor(_command)
+    constructor()
     {
         super("GearCardCompletedMessage", {});
     }
@@ -80,8 +80,21 @@ class GearCardCompletedMessage extends Message
 
 class GearCardCollectedMessage extends Message
 {
-    constructor(_command)
+    constructor()
     {
         super("GearCardCollectedMessage", {});
+    }
+}
+
+class CardLootedMessage extends Message
+{
+    constructor(_card)
+    {
+        super("CardLootedMessage", {"card":_card});
+    }
+    
+    getCard()
+    {
+        return this.arguments["card"];
     }
 }

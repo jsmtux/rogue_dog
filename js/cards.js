@@ -203,6 +203,11 @@ class SmEnergyCard extends Card
     {
         _arguments.player.addEnergy(2);
     }
+    
+    getEnergyIncrease()
+    {
+        return 2;
+    }
 }
 SmEnergyCard.ID = "SmEnergyCard";
 
@@ -217,6 +222,11 @@ class MedEnergyCard extends Card
     {
         _arguments.player.addEnergy(5);
     }
+    
+    getEnergyIncrease()
+    {
+        return 5;
+    }
 }
 MedEnergyCard.ID = "MedEnergyCard";
 
@@ -230,6 +240,11 @@ class BigEnergyCard extends Card
     apply(_arguments)
     {
         _arguments.player.addEnergy(10);
+    }
+    
+    getEnergyIncrease()
+    {
+        return 10;
     }
 }
 BigEnergyCard.ID = "BigEnergyCard";

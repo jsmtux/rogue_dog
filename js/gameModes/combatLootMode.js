@@ -64,6 +64,7 @@ class CombatLootMode extends GameMode
     {
         _card.apply({'player':this.player});
         _card.hide();
+        ServiceLocator.publish(new CardLootedMessage(_card));
         this.cardList.splice(this.cardList.indexOf(_card), 1);
         
         if (this.cardList.length === 0)
