@@ -39,7 +39,7 @@ class CardManager
         CardManager.cardDefinitions[_cardClass.ID] = newCardDefinition;        
     }
     
-    setDeckNumbers(_deckNumbers)
+    setDeckNumbers(_deckNumbers, resetRemaining = true)
     {
         for(var ind in CardManager.cardDefinitions)
         {
@@ -51,9 +51,12 @@ class CardManager
             CardManager.cardDefinitions[ind].numberInDeck = _deckNumbers[ind];
         }
         
-        for(var ind in CardManager.cardDefinitions)
+        if (resetRemaining)
         {
-            this.remainingCards[ind] = CardManager.cardDefinitions[ind].numberInDeck;
+            for(var ind in CardManager.cardDefinitions)
+            {
+                this.remainingCards[ind] = CardManager.cardDefinitions[ind].numberInDeck;
+            }
         }
     }
     

@@ -92,6 +92,10 @@ class StoryConfiguration
         {
             this.setStoryStep(new WaitForEnergyComplete());            
         }
+        else if (command === "GOTO CONTINUEUNTILPIECESPICKED")
+        {
+            this.setStoryStep(new WaitForPiecesPicked());
+        }
         else
         {
             console.log("Reached unknown command: " + command);
@@ -132,6 +136,18 @@ class EmptyStoryStep
     start(_storyConfiguration, _mainState) {}
     finish(_storyConfiguration, _mainState) {}
     update(_storyConfiguration, _curGameMode, _mainState) {}
+    
+    followDefaultRules(_curGameMode, _mainState)
+    {
+        var modeName = _curGameMode.getModeName();
+        var nextModeArguments = _curGameMode.getNextModeArguments();
+        if (modeName === "CombatLootMode")
+            _mainState.setNextMode("WalkManager", nextModeArguments);
+        if (modeName === "CombatManager")
+        _mainState.setNextMode("CombatLootMode", nextModeArguments);
+        if (modeName === "WalkManager")
+        _mainState.setNextMode("CombatManager", nextModeArguments);
+    }
 }
 
 class DialogStep extends EmptyStoryStep
@@ -398,7 +414,6 @@ class PickFirstLootCard extends EmptyStoryStep
     }
 }
 
-
 class WaitForEnergyComplete extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
@@ -441,15 +456,52 @@ class WaitForEnergyComplete extends EmptyStoryStep
             }
             else
             {
-                var modeName = _curGameMode.getModeName();
-                var nextModeArguments = _curGameMode.getNextModeArguments();
-                if (modeName === "CombatLootMode")
-                    _mainState.setNextMode("WalkManager", nextModeArguments);
-                if (modeName === "CombatManager")
-                _mainState.setNextMode("CombatLootMode", nextModeArguments);
-                if (modeName === "WalkManager")
-                _mainState.setNextMode("CombatManager", nextModeArguments);
+                this.followDefaultRules(_curGameMode, _mainState);
             }
+        }
+    }
+    
+    finish()
+    {
+    }
+}
+
+class WaitForPiecesPicked extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        ServiceLocator.difficultyManager.setInitialValues(1, 1, 3, 0);
+        _mainState.setNextMode("WalkManager");
+        ServiceLocator.registerListener(this.cardPicked, this, "GearCardCollectedMessage");
+        
+        this.taskFinished = false;
+        
+        ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:undefined,
+            SmEnergyCard:undefined,
+            MedEnergyCard:undefined,
+            BigEnergyCard:undefined,
+            NewEnemyCard:0,
+            StrongerBasicEnemyCard:2,
+            NewObstacleCard:3,
+            MoreObstaclesCard:undefined,
+            TwoEnemiesCard:1});
+    }
+    
+    cardPicked(_msg)
+    {
+        this.taskFinished = true;
+    }
+    
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if (this.taskFinished)
+        {
+            _storyConfiguration.choosePathString("Forest.found_gear");
+            _storyConfiguration.setStoryStep(new DialogStep());
+        }
+        if (_curGameMode.isFinished())
+        {
+            this.followDefaultRules(_curGameMode, _mainState);
         }
     }
     
