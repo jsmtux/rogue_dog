@@ -121,8 +121,15 @@ class DialogGuiElement extends GuiElement
         {
             this.options = [{text:"continue"}];
         }
+        var thumbnailPanel;
         _slickUI.add(this.panel = new SlickUI.Element.Panel(50, 150, 700, 150));
-        this.panel.add(this.text = new SlickUI.Element.Text(0,10, ""));
+        this.panel.add(thumbnailPanel = new SlickUI.Element.Panel(10, 10, 120, 120));
+        this.panel.add(this.text = new SlickUI.Element.Text(150,10, ""));
+        
+        if (true || this.options.characterFace != undefined)
+        {
+            thumbnailPanel.add(new SlickUI.Element.DisplayObject(5, 5, game.make.sprite(0, 0, 'collarThumbnail')));
+        }
         
         super.create(_slickUI, _game, this.panel);
         ServiceLocator.inputManager.leftButton.onDown.add(this.finishWritingText, this);

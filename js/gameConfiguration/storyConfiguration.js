@@ -16,7 +16,7 @@ class StoryConfiguration
         ServiceLocator.difficultyManager.setInitialValues(0, 0, 0, DifficultyManager.ObstacleLevelsName.STORY_BEGIN);
         ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:1});
         this.mainState = _mainState;
-        this.setStoryStep(new WaitForEnergyComplete());
+        this.setStoryStep(new DogEnteringStoryStep());
     }
     
     setStoryStep(_step)

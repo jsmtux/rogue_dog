@@ -7,8 +7,8 @@ class DogPlayer extends GameObject
         this.character;
         this.maxHealth = 40;
         this.health = this.maxHealth;
-        this.maxEnergy = 40;
-        this.energy = 30;
+        this.maxEnergy = 20;
+        this.energy = 0;
         this.healthBar = new HealthBar();
         this.energyBar = new EnergyBar();
         this.jumpAcceleration = new Phaser.Point(0, 0);
@@ -91,6 +91,7 @@ class DogPlayer extends GameObject
         this.attackAudio = this.game.add.audio('playerAttackAudio');
         this.jumpAudio = this.game.add.audio('playerJumpAudio');
         this.landAudio = this.game.add.audio('playerLandAudio');
+        this.landAudio.volume = 0.25;
         this.stepAudio = this.game.add.audio('playerStepAudio');
         this.stepAudio.volume = 0.25;
     }

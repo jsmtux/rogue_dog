@@ -31,9 +31,13 @@ class CardPieceUI
     
     setNumberOfPieces(_number)
     {
-        if (this.baseSprite === undefined || _number < this.currentPieceNumber)
+        if (_number < this.currentPieceNumber)
         {
             this.cardGroup.removeAll(true);
+        }
+        
+        if (this.baseSprite === undefined && _number > 0)
+        {
             this.baseSprite = this.cardGroup.create(0, 0, "piecesUI0");
         }
         

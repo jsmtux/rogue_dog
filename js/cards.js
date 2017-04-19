@@ -201,7 +201,7 @@ class SmEnergyCard extends Card
     
     apply(_arguments)
     {
-        _arguments.player.addEnergy(2);
+        _arguments.player.addEnergy(5);
     }
     
     getEnergyIncrease()
@@ -220,7 +220,7 @@ class MedEnergyCard extends Card
     
     apply(_arguments)
     {
-        _arguments.player.addEnergy(5);
+        _arguments.player.addEnergy(10);
     }
     
     getEnergyIncrease()
@@ -239,7 +239,7 @@ class BigEnergyCard extends Card
     
     apply(_arguments)
     {
-        _arguments.player.addEnergy(10);
+        _arguments.player.addEnergy(15);
     }
     
     getEnergyIncrease()

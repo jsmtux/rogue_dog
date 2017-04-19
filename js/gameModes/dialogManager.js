@@ -12,6 +12,12 @@ class DialogManager extends GameMode
         this.callback;
         this.callbackCtx;
     }
+    
+    static preload(_game)
+    {
+        _game.load.image('collarThumbnail', './img/dialog_thumbnails/collar.png');
+        _game.load.image('dogThumbnail', './img/dialog_thumbnails/dog.png');
+    }
 
     update()
     {

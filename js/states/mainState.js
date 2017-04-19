@@ -13,6 +13,7 @@ MainState.prototype.preload = function ()
     
     CombatLootMode.preload(this.game);
     GearCardCompletedMode.preload(this.game);
+    DialogManager.preload(this.game);
 }
 
 MainState.prototype.create = function ()
