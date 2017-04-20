@@ -105,7 +105,7 @@ class CardGuiElement extends GuiElement
 
 class DialogGuiElement extends GuiElement
 {
-    constructor(_text, _options)
+    constructor(_text, _options, _talkingCharacter)
     {
         super();
         this.fullText = _text[0];
@@ -113,6 +113,7 @@ class DialogGuiElement extends GuiElement
         this.currentText = "";
         this.finishedShowing = false;
         this.buttons = [];
+        this.talkingCharacter = _talkingCharacter;
     }
     
     create(_slickUI, _game)
@@ -126,9 +127,9 @@ class DialogGuiElement extends GuiElement
         this.panel.add(thumbnailPanel = new SlickUI.Element.Panel(10, 10, 120, 120));
         this.panel.add(this.text = new SlickUI.Element.Text(150,10, ""));
         
-        if (true || this.options.characterFace != undefined)
+        if (this.talkingCharacter)
         {
-            thumbnailPanel.add(new SlickUI.Element.DisplayObject(5, 5, game.make.sprite(0, 0, 'collarThumbnail')));
+            thumbnailPanel.add(new SlickUI.Element.DisplayObject(5, 5, game.make.sprite(0, 0, this.talkingCharacter.getImageId())));
         }
         
         super.create(_slickUI, _game, this.panel);

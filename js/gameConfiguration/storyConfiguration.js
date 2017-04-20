@@ -36,9 +36,7 @@ class StoryConfiguration
             var options = [];
             if (fullText[0].substring(0,7) === "COMMAND")
             {
-                var command = this.story.currentTags[0];
-                this.readCommand(command);
-                ServiceLocator.publish(new StoryCommandReceived(command));
+                this.readCommand(this.story.currentTags);
                 return;
             }
             else
@@ -47,8 +45,9 @@ class StoryConfiguration
                 {
                     var options = this.story.currentChoices;
                 }
+                var tags = this.story.currentTags;
         
-                return {fullText, options};
+                return {fullText, options, tags};
             }
         }
     }
@@ -58,47 +57,54 @@ class StoryConfiguration
         this.story.ChooseChoiceIndex(_ind);
     }
     
-    readCommand(command)
+    readCommand(_commands)
     {
-        if(command === "GOTO TRIALS")
+        for (var ind in _commands)
         {
-            this.setStoryStep(new JumpingTutorialStoryStep());
-        }
-        else if (command === "GOTO JUMP_TUTORIAL")
-        {
-            this.setStoryStep(new ShowJumpingInteractionStoryStep());
-        }
-        else if (command === "GOTO JUMPFENCE")
-        {
-            this.setStoryStep(new JumpFenceStoryStep());
-        }
-        else if (command === "GOTO EXPLOREFOREST")
-        {
-            this.setStoryStep(new ExploreForestStoryStep());
-        }
-        else if (command === "GOTO MOVEOBSTACLE")
-        {
-            this.setStoryStep(new DefeatObstacleStoryStep());
-        }
-        else if (command === "GOTO WAITFORFIRSTENCOUNTER")
-        {
-            this.setStoryStep(new WaitForFirstEncounter());
-        }
-        else if (command === "GOTO PICKCARDFIRSTENCOUNTER")
-        {
-            this.setStoryStep(new PickFirstLootCard());
-        }
-        else if (command === "GOTO CONTINUEUNTILENERGYFINISHED")
-        {
-            this.setStoryStep(new WaitForEnergyComplete());            
-        }
-        else if (command === "GOTO CONTINUEUNTILPIECESPICKED")
-        {
-            this.setStoryStep(new WaitForPiecesPicked());
-        }
-        else
-        {
-            console.log("Reached unknown command: " + command);
+            var command = _commands[ind];
+            if(command === "GOTO TRIALS")
+            {
+                this.setStoryStep(new JumpingTutorialStoryStep());
+            }
+            else if (command === "GOTO JUMP_TUTORIAL")
+            {
+                this.setStoryStep(new ShowJumpingInteractionStoryStep());
+            }
+            else if (command === "GOTO JUMPFENCE")
+            {
+                this.setStoryStep(new JumpFenceStoryStep());
+            }
+            else if (command === "GOTO EXPLOREFOREST")
+            {
+                this.setStoryStep(new ExploreForestStoryStep());
+            }
+            else if (command === "GOTO MOVEOBSTACLE")
+            {
+                this.setStoryStep(new DefeatObstacleStoryStep());
+            }
+            else if (command === "GOTO WAITFORFIRSTENCOUNTER")
+            {
+                this.setStoryStep(new WaitForFirstEncounter());
+            }
+            else if (command === "GOTO PICKCARDFIRSTENCOUNTER")
+            {
+                this.setStoryStep(new PickFirstLootCard());
+            }
+            else if (command === "GOTO CONTINUEUNTILENERGYFINISHED")
+            {
+                this.setStoryStep(new WaitForEnergyComplete());            
+            }
+            else if (command === "GOTO CONTINUEUNTILPIECESPICKED")
+            {
+                this.setStoryStep(new WaitForPiecesPicked());
+            }
+            else
+            {
+                console.log("Reached unknown command: " + command);
+                continue;
+            }
+            
+            ServiceLocator.publish(new StoryCommandReceived(command));
         }
     }
     

@@ -11,12 +11,21 @@ class DialogManager extends GameMode
         
         this.callback;
         this.callbackCtx;
+        
+        this.talkingCharacters = {};
     }
     
     static preload(_game)
     {
-        _game.load.image('collarThumbnail', './img/dialog_thumbnails/collar.png');
-        _game.load.image('dogThumbnail', './img/dialog_thumbnails/dog.png');
+        DialogManager.addTalkingCharacter("collar", _game);
+        DialogManager.addTalkingCharacter("dog", _game);
+    }
+    
+    static addTalkingCharacter(_name, _game)
+    {
+        var character = new TalkingCharacter(_name);
+        character.preload(_game);
+        DialogManager.talkingCharacters[_name] = character;
     }
 
     update()
@@ -33,7 +42,21 @@ class DialogManager extends GameMode
     
     setLine(_line, _callback, _callbackCtx)
     {
-        this.currentDialogUI = new DialogGuiElement(_line.fullText, _line.options);
+        var currentCharacter;
+        for (var ind in _line.tags)
+        {
+            var tag = _line.tags[ind];
+            var tokens = tag.split(":");
+            if (tokens.length >= 2)
+            {
+                if (tokens[0] === "c")
+                {
+                    currentCharacter = DialogManager.talkingCharacters[tokens[1]];
+                }
+            }
+        }
+        
+        this.currentDialogUI = new DialogGuiElement(_line.fullText, _line.options, currentCharacter);
         ServiceLocator.guiManager.createUI(this.currentDialogUI);
         this.currentDialogUI.addListener(this.dialogHandler, this);
         
@@ -54,4 +77,25 @@ class DialogManager extends GameMode
     }
 }
 
+DialogManager.talkingCharacters = {};
+
 DialogManager.NAME = "DialogManager";
+
+class TalkingCharacter
+{
+    constructor(_name)
+    {
+        this.name = _name;
+        this.imageId = this.name + 'Thumbnail';
+    }
+    
+    preload(_game)
+    {
+        _game.load.image(this.imageId, './img/dialog_thumbnails/' + this.name + '.png');
+    }
+    
+    getImageId()
+    {
+        return this.imageId;
+    }
+}
