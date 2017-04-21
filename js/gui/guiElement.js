@@ -114,6 +114,7 @@ class DialogGuiElement extends GuiElement
         this.finishedShowing = false;
         this.buttons = [];
         this.talkingCharacter = _talkingCharacter;
+        this.talkingAudio;
     }
     
     create(_slickUI, _game)
@@ -129,8 +130,14 @@ class DialogGuiElement extends GuiElement
         
         if (this.talkingCharacter)
         {
-            thumbnailPanel.add(new SlickUI.Element.DisplayObject(5, 5, game.make.sprite(0, 0, this.talkingCharacter.getImageId())));
+            thumbnailPanel.add(new SlickUI.Element.DisplayObject(5, 5, _game.make.sprite(0, 0, this.talkingCharacter.getImageId())));
+            var audioID = this.talkingCharacter.getAudioId();
+            if (audioID)
+            {
+                this.talkingAudio = _game.add.audio(audioID);
+            }
         }
+        this.talkingAudio.play();
         
         super.create(_slickUI, _game, this.panel);
         ServiceLocator.inputManager.leftButton.onDown.add(this.finishWritingText, this);

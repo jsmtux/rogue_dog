@@ -87,15 +87,27 @@ class TalkingCharacter
     {
         this.name = _name;
         this.imageId = this.name + 'Thumbnail';
+        this.soundName = this.name + 'Talk';
+        this.audioLoadId;
     }
     
     preload(_game)
     {
         _game.load.image(this.imageId, './img/dialog_thumbnails/' + this.name + '.png');
+        this.audioLoadId = _game.load.audio(this.soundName, 'sounds/' + this.name + '_talk.wav');
     }
     
     getImageId()
     {
         return this.imageId;
+    }
+    
+    getAudioId()
+    {
+        if (this.audioLoadId.hasLoaded)
+        {
+            return this.soundName;
+        }
+        return "";
     }
 }

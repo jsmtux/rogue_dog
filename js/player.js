@@ -245,7 +245,7 @@ class DogPlayer extends GameObject
         this.updateEnergyPercentage();
         if (this.energy <= 0)
         {
-            this.game.die();
+            this.subtractHealth(0.1);
         }
     }
     
