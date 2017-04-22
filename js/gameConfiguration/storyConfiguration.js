@@ -62,6 +62,7 @@ class StoryConfiguration
         for (var ind in _commands)
         {
             var command = _commands[ind];
+            ServiceLocator.publish(new StoryCommandReceived(command));
             if(command === "GOTO TRIALS")
             {
                 this.setStoryStep(new JumpingTutorialStoryStep());
@@ -103,8 +104,6 @@ class StoryConfiguration
                 console.log("Reached unknown command: " + command);
                 continue;
             }
-            
-            ServiceLocator.publish(new StoryCommandReceived(command));
         }
     }
     

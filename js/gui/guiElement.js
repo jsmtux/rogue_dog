@@ -137,7 +137,10 @@ class DialogGuiElement extends GuiElement
                 this.talkingAudio = _game.add.audio(audioID);
             }
         }
-        this.talkingAudio.play();
+        if (this.talkingAudio)
+        {
+            this.talkingAudio.play();
+        }
         
         super.create(_slickUI, _game, this.panel);
         ServiceLocator.inputManager.leftButton.onDown.add(this.finishWritingText, this);
