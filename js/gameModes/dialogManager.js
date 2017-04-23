@@ -40,19 +40,30 @@ class DialogManager extends GameMode
     {
     }
     
+    findCharacter(_line)
+    {
+        var ret;
+        var separator = _line.fullText.indexOf(":");
+        if (separator >= 0)
+        {
+            var characterName = _line.fullText.substring(0, separator);
+            ret = DialogManager.talkingCharacters[characterName];
+            _line.fullText = _line.fullText.substring(separator + 1);
+        }
+        return ret;
+    }
+    
     setLine(_line, _callback, _callbackCtx)
     {
-        var currentCharacter;
-        for (var ind in _line.tags)
+        var currentCharacter = this.findCharacter(_line);
+        
+        for(var i = 0; i < _line.options.length; i++)
         {
-            var tag = _line.tags[ind];
-            var tokens = tag.split(":");
-            if (tokens.length >= 2)
+            var curLine = _line.options[i].text;
+            var separator;
+            if ((separator = curLine.indexOf(":")) >= 0)
             {
-                if (tokens[0] === "c")
-                {
-                    currentCharacter = DialogManager.talkingCharacters[tokens[1]];
-                }
+                _line.options[i].text = curLine.substring(separator + 1);
             }
         }
         

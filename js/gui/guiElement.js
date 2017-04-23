@@ -108,7 +108,7 @@ class DialogGuiElement extends GuiElement
     constructor(_text, _options, _talkingCharacter)
     {
         super();
-        this.fullText = _text[0];
+        this.fullText = _text;
         this.options = _options;
         this.currentText = "";
         this.finishedShowing = false;
@@ -155,7 +155,7 @@ class DialogGuiElement extends GuiElement
         }
         else if(this.panel.height < desiredHeight)
         {
-            this.panel.height += 5;
+            this.panel.height = desiredHeight;
         }
         else if (!this.finishedShowing)
         {

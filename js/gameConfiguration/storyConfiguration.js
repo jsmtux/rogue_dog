@@ -31,10 +31,10 @@ class StoryConfiguration
         if (!this.waitCondition || this.waitCondition())
         {
             this.waitCondition = undefined;
-            var fullText = [];
-            fullText.push(this.story.Continue());
+            var fullText;
+            fullText = this.story.Continue();
             var options = [];
-            if (fullText[0].substring(0,7) === "COMMAND")
+            if (fullText.substring(0,7) === "COMMAND")
             {
                 this.readCommand(this.story.currentTags);
                 return;
