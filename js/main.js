@@ -1,8 +1,11 @@
 var GROUND_LEVEL = 525;
 
-var resolution = new Phaser.Point(800, 600);
+var viewportHandler = new ViewportHandler(4.0/3.0, 18.0/9.0);
+InitState.viewportHandler = viewportHandler;
 
-var game = new Phaser.Game(resolution.x, resolution.y, Phaser.WEBGL, 'test', null, true, false);
+var resolution = new Phaser.Point(viewportHandler.w, viewportHandler.h);
+
+var game = new Phaser.Game(resolution.x, resolution.y, Phaser.WEBGL, 'container', null, true, false);
 
 game.state.onStateChange.add(function()
 {
