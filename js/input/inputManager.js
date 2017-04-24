@@ -23,8 +23,11 @@ class InputManager
         this.left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         this.right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
     
-        this.bg = game.add.sprite(0, 0);
-        this.bg.scale.setTo(resolution.x, resolution.y);
+        var nativeResolution = ServiceLocator.viewportHandler.nativeResolution;
+        var offset = ServiceLocator.viewportHandler.getSceneOffset();
+
+        this.bg = game.add.sprite(-offset.x, -offset.y);
+        this.bg.scale.setTo(nativeResolution.x, nativeResolution.y);
         this.bg.inputEnabled = true;
         this.bg.input.priorityID = 0; // lower priority
         this.leftButton = {}
@@ -35,7 +38,7 @@ class InputManager
         }
         this.leftButton.onDown.add(this.handleTouch, this);
         
-        this.bmd = game.add.graphics(0, 0);
+        this.bmd = game.add.graphics(-offset.x, -offset.y);
     }
     
     handleTouch()

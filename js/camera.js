@@ -2,7 +2,7 @@ class Camera
 {
     constructor()
     {
-        this.offset = new Phaser.Point(140, 435)
+        this.offset = new Phaser.Point(260, 435)
         this.yOffset = 435;
     }
     
@@ -29,9 +29,19 @@ class Camera
         return new Phaser.Point(this.game.camera.x, this.game.camera.y);
     }
 
-    getResolution()
+    getRenderArea()
     {
-        return resolution;
+        var ret;
+        if (this.game)
+        {
+            var res = ServiceLocator.viewportHandler.nativeResolution;
+            ret = new Phaser.Rectangle(this.game.camera.x, this.game.camera.y, res.x, res.y);
+        }
+        else
+        {
+            return new Phaser.Rectangle();
+        }
+        return ret;
     }
 
     getVisibleArea()

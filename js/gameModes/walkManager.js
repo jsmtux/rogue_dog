@@ -12,7 +12,7 @@ class WalkLevel
     
     fillEmpty()
     {
-        while(this.lastX - 160 < ServiceLocator.camera.getVisibleArea().right)
+        while(this.lastX - 160 < ServiceLocator.camera.getVisibleArea().right + 400)
         {
             this.walkManager.addTile(this.groundTileName, new Phaser.Point(this.lastX, this.height), undefined, this);
             this.lastX += 80;
@@ -26,7 +26,7 @@ class WalkLevel
             this.fillEmpty();
             return;
         }
-        while(this.lastX < ServiceLocator.camera.getVisibleArea().right)
+        while(this.lastX < ServiceLocator.camera.getVisibleArea().right + 400)
         {
             var newCell = StagePrototype.cellType.GRASS;
             if (this.stagePrototype)
@@ -156,8 +156,8 @@ class WalkManager extends GameMode
     {
         this.background.create(_game, [
             {'name':'bg0', 'speed':0.2},
-            {'name':'bg1', 'speed':0.5},
-            {'name':'bg2', 'speed':0.7, 'yOffset':360}]);
+            {'name':'bg1', 'speed':0.5, 'yOffset':360},
+            {'name':'bg2', 'speed':0.7, 'yOffset':550}]);
     }
     
     addTile(_grassName, _position, _obstacle, _walkLevel)

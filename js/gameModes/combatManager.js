@@ -78,6 +78,7 @@ class CombatManager extends GameMode
     
     startCombat(_enemyTypes)
     {
+        var renderArea = ServiceLocator.camera.getRenderArea();
         var visibleArea = ServiceLocator.camera.getVisibleArea();
         var padding = 220;
         var numberOfEnemies = _enemyTypes.length;
@@ -89,8 +90,8 @@ class CombatManager extends GameMode
             var enemy = new type(this.game, spec, ind);
             enemy.create();
 
-            var initPos = visibleArea.bottomRight.x + 20 + padding * ind;
-            var endPos = visibleArea.bottomRight.x + padding * (ind - numberOfEnemies);
+            var initPos = renderArea.bottomRight.x + 20 + padding * ind;
+            var endPos = renderArea.bottomRight.x + padding * (ind - numberOfEnemies) - 120;
             
             
             enemy.setWalkPath(initPos, endPos);

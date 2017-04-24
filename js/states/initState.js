@@ -14,7 +14,7 @@ InitState.prototype.preload = function()
 
 InitState.prototype.create = function()
 {
-    InitState.viewportHandler.onGameCreation(this.game);
+    ServiceLocator.viewportHandler.onGameCreation(this.game);
 }
 
 InitState.prototype.update = function()
@@ -29,5 +29,3 @@ InitState.prototype.loadComplete = function()
 {
     this.loaded = true;
 }
-
-InitState.viewportHandler = undefined;

@@ -16,6 +16,7 @@ class Services
         this.dialogManager = {};
         this.messageListeners = new Phaser.Signal();
         this.namedMessageListeners = {};
+        this.viewportHandler = {};
 
         Object.preventExtensions(this);
     }

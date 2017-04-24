@@ -35,7 +35,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('inGameHelper', new InGameHelper(this));
     ServiceLocator.initialize('dialogManager', new DialogManager(this));
 
-    this.game.world.setBounds(0, 0, 192000, 192000);
+    this.game.world.setBounds(0, 0, 192000, 900);
 
     ServiceLocator.renderer.create(this);
     ServiceLocator.inputManager.create(this);

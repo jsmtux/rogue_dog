@@ -12,12 +12,19 @@ class Renderer
     
     create(_game)
     {
-        this.diffuseRenderTexture = this.game.add.renderTexture(resolution.x, resolution.y, 'diffuseRT');
-        this.outputSprite = this.game.add.sprite(0, 0, this.diffuseRenderTexture);
+        var nativeResolution = ServiceLocator.viewportHandler.nativeResolution;
+        var resolution = ServiceLocator.viewportHandler.resolution;
+        this.diffuseRenderTexture = this.game.add.renderTexture(nativeResolution.x, nativeResolution.y, 'diffuseRT');
+        
+        var offset = ServiceLocator.viewportHandler.getSceneOffset();
+        
+        this.outputSprite = this.game.add.sprite(-offset.x, -offset.y, this.diffuseRenderTexture);
         
         this.sceneGroup = this.game.add.group();
         this.sceneGroup.visible = false;
         this.overlay = this.game.add.group();
+        this.overlay.x = -offset.x;
+        this.overlay.y = -offset.y;
         
         this.maskRenderTexture = this.game.add.renderTexture(resolution.x, resolution.y, 'maskRT');
         this.maskGroup = this.game.add.group();
@@ -33,7 +40,7 @@ class Renderer
         this.grayFilter.mask = this.maskRenderTexture;
         this.outputSprite.filters = [this.grayFilter];
         
-        this.graphics = _game.add.graphics(0, 0);
+        this.graphics = _game.add.graphics(-offset.x, -offset.y);
         this.addToMask(this.graphics);
     }
 

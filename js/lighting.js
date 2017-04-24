@@ -13,6 +13,7 @@ class Lighting
         
         var cameraBounds = ServiceLocator.camera.getVisibleArea();
         _graphics.beginFill(this.clearColor, this.clearAlpha);
+        var resolution = ServiceLocator.viewportHandler.nativeResolution;
         _graphics.drawRect(cameraBounds.x, cameraBounds.y, resolution.x, resolution.y);
         
         for(var ind in this.lights)
@@ -84,6 +85,8 @@ class OvergroundLight extends BaseLight
         var groundLevel = GROUND_LEVEL + 40;
         //if (cameraBounds.y < )
         var difference = groundLevel - cameraBounds.y;
+        var resolution = ServiceLocator.viewportHandler.nativeResolution;
+
         if(difference > resolution.y)
         {
             difference = resolution.y;

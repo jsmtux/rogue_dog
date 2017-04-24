@@ -23,7 +23,7 @@ class CardPieceUI
     {
         this.cardGroup = _game.add.group();
         ServiceLocator.renderer.addToUI(this.cardGroup);
-        this.cardGroup.x = resolution.x - 100;
+        this.cardGroup.x = ServiceLocator.viewportHandler.resolution.x - 100;
         this.cardGroup.y = 25;
         this.setNumberOfPieces(0);
         this.game = _game;
