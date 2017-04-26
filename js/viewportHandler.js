@@ -12,8 +12,8 @@ class ViewportHandler
         var nativeAspectRatio = this.nativeResolution.x / this.nativeResolution.y;
         
         var ratio = window.devicePixelRatio || 1;
-        var windowW = window.innerWidth * ratio;
-        var windowH = window.innerHeight * ratio;
+        var windowW = window.innerWidth;
+        var windowH = window.innerHeight;
         var aspectRatio = windowW / windowH;
 
         if (aspectRatio < this.minAspectRatio)

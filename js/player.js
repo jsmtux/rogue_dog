@@ -75,7 +75,6 @@ class DogPlayer extends GameObject
             }
         }
         
-        this.sprite.scale.set(0.3, 0.3);
         this.sprite.pushCharMap("NoWool");
         
         this.healthBar.create();

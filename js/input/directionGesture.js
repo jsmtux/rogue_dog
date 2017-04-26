@@ -9,7 +9,7 @@ class DirectionGesture
     
     getMousePos()
     {
-        return new Phaser.Point(this.game.input.mousePointer.x, this.game.input.mousePointer.y);
+        return new Phaser.Point(this.game.input.pointer1.x, this.game.input.pointer1.y);
     }
     
     add(_function, _context)
