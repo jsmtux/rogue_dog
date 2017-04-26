@@ -70,8 +70,10 @@ class GameOverGuiElement extends GuiElement
 {
     create(_slickUI, _game)
     {
+        var res = ServiceLocator.viewportHandler.resolution;
+        var pos = new Phaser.Point((res.x - 300) / 2, (res.y - 150) / 2);
         var button, panel;
-        _slickUI.add(panel = new SlickUI.Element.Panel(300, 200, 300, 150));
+        _slickUI.add(panel = new SlickUI.Element.Panel(pos.x, pos.y, 300, 150));
         panel.add(new SlickUI.Element.Text(10,0, "You Lost!")).centerHorizontally().text.alpha = 0.5;
         panel.add(button = new SlickUI.Element.Button(0, 50, 380, 40)).events.onInputUp.add(this.getSignalCall("reload"));
         button.add(new SlickUI.Element.Text(0,0, "Restart")).center();
@@ -124,7 +126,9 @@ class DialogGuiElement extends GuiElement
             this.options = [{text:"continue"}];
         }
         var thumbnailPanel;
-        _slickUI.add(this.panel = new SlickUI.Element.Panel(50, 150, 700, 150));
+        var res = ServiceLocator.viewportHandler.resolution;
+        var pos = new Phaser.Point((res.x - 700) / 2, (res.y - 150) / 2);
+        _slickUI.add(this.panel = new SlickUI.Element.Panel(pos.x, 150, 700, 150));
         this.panel.add(thumbnailPanel = new SlickUI.Element.Panel(10, 10, 120, 120));
         this.panel.add(this.text = new SlickUI.Element.Text(150,10, ""));
         

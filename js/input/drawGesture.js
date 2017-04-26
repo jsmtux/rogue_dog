@@ -120,7 +120,8 @@ class DrawGesture
     {
         if (pointer.isDown && !this.game.isPaused())
         {
-            this.points.push({'point':new Phaser.Point(x, y), 'time':performance.now()});
+            var inputOffset = ServiceLocator.viewportHandler.getSceneOffset();
+            this.points.push({'point':new Phaser.Point(x + inputOffset.x, y + inputOffset.y), 'time':performance.now()});
         }
     }
 }
