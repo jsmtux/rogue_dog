@@ -252,7 +252,7 @@ class DogPlayer extends GameObject
     {
         ServiceLocator.inputManager.skillSelector.add();
         ServiceLocator.registerListener(this.skillCallback, this, "SkillSelectorResultMessage");
-        ServiceLocator.inputManager.skillSelector.setPosition(this.sprite.x - 50, this.sprite.y - 100);
+        ServiceLocator.inputManager.skillSelector.setPosition(this.sprite.x - 100, this.sprite.y - 140);
         this.attackFinished = false;
     }
     

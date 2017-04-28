@@ -47,16 +47,22 @@ class SkillSelector
     
     update()
     {
-        this.skillselector.x += this.direction * 5;
-        if (this.skillselector.x > 150 || this.skillselector.x < 10)
+        this.skillselector.x += this.direction * 10;
+        if (this.skillselector.x > 270 || this.skillselector.x < 0)
         {
             this.direction *= -1;
         }
+        console.log(this.getCurrentPrecentage());
+    }
+    
+    getCurrentPrecentage()
+    {
+        return 1 - Math.abs(this.skillselector.x - 135) / 135;
     }
     
     sendSignal()
     {
-        var success = this.skillselector.x > 85 && this.skillselector.x < 108;
+        var success = this.getCurrentPrecentage() > 0.8;
         ServiceLocator.publish(new SkillSelectorResultMessage(success));
     }
 }
