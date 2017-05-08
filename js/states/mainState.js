@@ -8,12 +8,10 @@ function MainState(_game)
 
 MainState.prototype.preload = function ()
 {
-    this.game.load.image('attack', './img/attack.png');
-    this.game.load.image('defend', './img/defend.png');
-    
     CombatLootMode.preload(this.game);
     GearCardCompletedMode.preload(this.game);
     DialogManager.preload(this.game);
+    BannerShow.preload(this.game);
 }
 
 MainState.prototype.create = function ()
@@ -67,6 +65,8 @@ MainState.prototype.create = function ()
     this.addGameMode(this.gearCardCompletedMode);
     this.addGameMode(new EmptyGameMode());
     this.addGameMode(new CombatLootMode(this, this.player));
+    
+    this.bannerShow = new BannerShow(this.game);
     
     MenuState.gameConfiguration.resetGameState(this);
 }

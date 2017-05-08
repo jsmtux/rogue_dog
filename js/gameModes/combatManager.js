@@ -42,9 +42,7 @@ class CombatManager extends GameMode
             if (this.player.isAttackFinished())
             {
                 this.state = CombatManager.State.DEFEND;
-                var defendSprite = this.game.add.sprite(100,100,'defend');
-                ServiceLocator.renderer.addToUI(defendSprite);
-                setTimeout(function() {defendSprite.destroy();}, 1000);
+                ServiceLocator.publish(new NewBannerMessage(NewBannerMessage.Types.Defend));
             }
         }
         else if (this.state === CombatManager.State.DEFEND)
@@ -103,9 +101,7 @@ class CombatManager extends GameMode
     startAttack()
     {
         this.state = CombatManager.State.ATTACK;
-        var attackSprite = this.game.add.sprite(100,100,'attack');
-        ServiceLocator.renderer.addToUI(attackSprite);
-        setTimeout(function() {attackSprite.destroy();}, 1000);
+        ServiceLocator.publish(new NewBannerMessage(NewBannerMessage.Types.Attack));
         this.player.startAttack(this);
     }
     

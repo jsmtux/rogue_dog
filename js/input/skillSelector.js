@@ -56,7 +56,10 @@ class SkillSelector
     
     getCurrentPrecentage()
     {
-        return 1 - Math.abs(this.skillselector.x - 135) / 135;
+        var ret = 1 - Math.abs(this.skillselector.x - 135) / 135;
+        ret = ret * ret; // exponential curve!
+        
+        return ret;
     }
     
     sendSignal()

@@ -98,3 +98,21 @@ class CardLootedMessage extends Message
         return this.arguments["card"];
     }
 }
+
+class NewBannerMessage extends Message
+{
+    constructor(_messageType)
+    {
+        super("NewBannerMessage", {"type":_messageType})
+    }
+    
+    getMessageType()
+    {
+        return this.arguments["type"];
+    }
+}
+
+NewBannerMessage.Types = {
+    "Attack": 0,
+    "Defend": 1
+}
