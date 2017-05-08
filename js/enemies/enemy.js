@@ -41,7 +41,7 @@ class Enemy extends GameObject
         return ret;
     }
 
-    takeHit()
+    takeHit(_combatManager, _hitPoints)
     {
         ServiceLocator.camera.shake(0.02, 200);
         var posX = this.position.x;
@@ -50,7 +50,8 @@ class Enemy extends GameObject
         ServiceLocator.renderer.addToOverlay(this.hit);
         var self = this;
         setTimeout(function() {self.hit.destroy();}, 500);
-        this.health -= 5;
+        this.health -= _hitPoints;
+        console.log("HP is now " + this.health + " after it of " + _hitPoints);
         if (this.health <= 0)
         {
             ServiceLocator.combatManager.killEnemy(this.index);

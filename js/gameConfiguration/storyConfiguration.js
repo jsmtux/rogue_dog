@@ -297,8 +297,8 @@ class DefeatObstacleStoryStep extends EmptyStoryStep
     
     skillCallback(_message)
     {
-        this.success = _message.getSuccess();
-        if(_message.getSuccess())
+        this.success = _message.getHitPercentage() > 0.8;
+        if(this.success)
         {
             storyObstacle.break();
         }

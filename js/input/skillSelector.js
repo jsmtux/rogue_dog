@@ -52,7 +52,6 @@ class SkillSelector
         {
             this.direction *= -1;
         }
-        console.log(this.getCurrentPrecentage());
     }
     
     getCurrentPrecentage()
@@ -62,7 +61,6 @@ class SkillSelector
     
     sendSignal()
     {
-        var success = this.getCurrentPrecentage() > 0.8;
-        ServiceLocator.publish(new SkillSelectorResultMessage(success));
+        ServiceLocator.publish(new SkillSelectorResultMessage(this.getCurrentPrecentage()));
     }
 }

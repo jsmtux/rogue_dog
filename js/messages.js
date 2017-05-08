@@ -30,14 +30,14 @@ class ObstacleShownMessge extends Message
 
 class SkillSelectorResultMessage extends Message
 {
-    constructor(_succeeded)
+    constructor(_hitPercentage)
     {
-        super("SkillSelectorResultMessage", {"success":_succeeded});
+        super("SkillSelectorResultMessage", {"percentage":_hitPercentage});
     }
     
-    getSuccess()
+    getHitPercentage()
     {
-        return this.arguments["success"];
+        return this.arguments["percentage"];
     }
 }
 

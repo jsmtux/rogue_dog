@@ -29,6 +29,8 @@ class DogPlayer extends GameObject
         this.ownLight;
         
         this.cardPieceUI = new CardPieceUI();
+        
+        this.attackPower = 5.0;
     }
     
     static preload(_game)
@@ -258,9 +260,11 @@ class DogPlayer extends GameObject
     
     skillCallback(_message)
     {
-        if (_message.getSuccess())
+        var hitPercentage = _message.getHitPercentage();
+        if (hitPercentage)
         {
-            ServiceLocator.combatManager.hitFirstEnemy();
+            ServiceLocator.combatManager.hitFirstEnemy(hitPercentage * this.attackPower);
+            this.attackAudio.volume = hitPercentage;
             this.attackAudio.play();
         }
         ServiceLocator.inputManager.skillSelector.remove();
