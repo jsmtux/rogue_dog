@@ -88,7 +88,7 @@ class CombatManager extends GameMode
             var enemy = new type(this.game, spec, ind);
             enemy.create();
 
-            var initPos = renderArea.bottomRight.x + 20 + padding * ind;
+            var initPos = visibleArea.bottomRight.x + 120 + padding * ind;
             var endPos = renderArea.bottomRight.x + padding * (ind - numberOfEnemies) - 120;
             
             
