@@ -117,15 +117,26 @@ NewBannerMessage.Types = {
     "Defend": 1
 }
 
-class EmmitParticle extends Message
+class EmitParticle extends Message
 {
-    constructor(_position)
+    constructor(_type, _position)
     {
-        super("EmmitParticle", {"position":_position});
+        super("EmitParticle", {"type":_type, "position":_position});
     }
     
     getPosition()
     {
         return this.arguments["position"];
     }
+    
+    getType()
+    {
+        return this.arguments["type"];
+    }
+}
+
+EmitParticle.Types = {
+    "GrassLand": 0,
+    "HealthIncrease": 1,
+    "EnergyIncrease": 2
 }

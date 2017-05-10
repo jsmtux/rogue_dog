@@ -124,7 +124,7 @@ class DogPlayer extends GameObject
             if (groundLevel)
             {
                 this.landAudio.play();
-                ServiceLocator.publish(new EmmitParticle(new Phaser.Point(this.sprite.x - 150, this.sprite.y + 90)))
+                ServiceLocator.publish(new EmitParticle(EmitParticle.Types.GrassLand, new Phaser.Point(this.sprite.x - 150, this.sprite.y + 90)));
                 this.jumpAcceleration.y = 0;
                 this.sprite.y = groundLevel;
             }

@@ -188,6 +188,7 @@ class SmMedkitCard extends Card
     apply(_arguments)
     {
         _arguments.player.addHealth(5);
+        ServiceLocator.publish(new EmitParticle(EmitParticle.Types.HealthIncrease));
     }
 }
 SmMedkitCard.ID = "SmMedkitCard";
@@ -202,6 +203,7 @@ class SmEnergyCard extends Card
     apply(_arguments)
     {
         _arguments.player.addEnergy(5);
+        ServiceLocator.publish(new EmitParticle(EmitParticle.Types.EnergyIncrease));
     }
     
     getEnergyIncrease()
@@ -221,6 +223,7 @@ class MedEnergyCard extends Card
     apply(_arguments)
     {
         _arguments.player.addEnergy(10);
+        ServiceLocator.publish(new EmitParticle(EmitParticle.Types.EnergyIncrease));
     }
     
     getEnergyIncrease()
@@ -240,6 +243,7 @@ class BigEnergyCard extends Card
     apply(_arguments)
     {
         _arguments.player.addEnergy(15);
+        ServiceLocator.publish(new EmitParticle(EmitParticle.Types.EnergyIncrease));
     }
     
     getEnergyIncrease()
