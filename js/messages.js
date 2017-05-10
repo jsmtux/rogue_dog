@@ -116,3 +116,16 @@ NewBannerMessage.Types = {
     "Attack": 0,
     "Defend": 1
 }
+
+class EmmitParticle extends Message
+{
+    constructor(_position)
+    {
+        super("EmmitParticle", {"position":_position});
+    }
+    
+    getPosition()
+    {
+        return this.arguments["position"];
+    }
+}

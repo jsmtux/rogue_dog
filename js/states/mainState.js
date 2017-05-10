@@ -11,7 +11,9 @@ MainState.prototype.preload = function ()
     CombatLootMode.preload(this.game);
     GearCardCompletedMode.preload(this.game);
     DialogManager.preload(this.game);
+
     BannerShow.preload(this.game);
+    ParticleEmitter.preload(this.game);
 }
 
 MainState.prototype.create = function ()
@@ -67,6 +69,8 @@ MainState.prototype.create = function ()
     this.addGameMode(new CombatLootMode(this, this.player));
     
     this.bannerShow = new BannerShow(this.game);
+    this.particleEmitter = new ParticleEmitter(this.game);
+    this.particleEmitter.create();
     
     MenuState.gameConfiguration.resetGameState(this);
 }
