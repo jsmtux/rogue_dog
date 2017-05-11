@@ -23,6 +23,7 @@ class ParticleEmitter
         this.grassemitter.setYSpeed(-30,-100);
         this.grassemitter.setAlpha(1.0, 0.0, 1000)
         this.grassemitter.width = 150;
+        ServiceLocator.renderer.addToScene(this.grassemitter);
         
         this.healthEmitter = game.add.emitter(40, 50, 25);
         this.healthEmitter.makeParticles('health_particle');
