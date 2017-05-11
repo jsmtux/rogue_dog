@@ -105,11 +105,11 @@ class CombatManager extends GameMode
         this.player.startAttack(this);
     }
     
-    hitFirstEnemy(_hitPoints)
+    hitFirstEnemy(_skill, _hitPoints)
     {
         for (var ind in this.enemies)
         {
-            this.enemies[ind].takeHit(this, _hitPoints);
+            this.enemies[ind].takeHit(this, _skill, _hitPoints);
             break;
         }
     }

@@ -15,7 +15,6 @@ class BasicEnemy extends Enemy
     static preload(_game)
     {
         loadSpriterFiles(_game, "basicEnemy");
-        _game.load.spritesheet('hit', './img/hit.png');
         _game.load.image('up', './img/arrowUp.png');
         _game.load.image('down', './img/arrowDown.png');
         _game.load.image('left', './img/arrowLeft.png');

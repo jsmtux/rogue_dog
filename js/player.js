@@ -30,7 +30,7 @@ class DogPlayer extends GameObject
         
         this.cardPieceUI = new CardPieceUI();
         
-        this.attackPower = 5.0;
+        this.attackPower = 4.0;
     }
     
     static preload(_game)
@@ -264,7 +264,7 @@ class DogPlayer extends GameObject
         var hitPercentage = _message.getHitPercentage();
         if (hitPercentage)
         {
-            ServiceLocator.combatManager.hitFirstEnemy(hitPercentage * this.attackPower);
+            ServiceLocator.combatManager.hitFirstEnemy(hitPercentage, this.attackPower);
             this.attackAudio.volume = hitPercentage;
             this.attackAudio.play();
         }

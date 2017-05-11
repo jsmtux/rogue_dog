@@ -19,6 +19,13 @@ class Enemy extends GameObject
         this.spriteOffset = new Phaser.Point(0, 0);
     }
     
+    static preload(_game)
+    {
+        _game.load.spritesheet('hit', './img/hit.png');
+        _game.load.spritesheet('hit_miss', './img/hit_miss.png');
+        _game.load.spritesheet('hit_critical', './img/hit_critical.png');
+    }
+    
     setSprite(_sprite)
     {
         ServiceLocator.renderer.addToScene(_sprite);
@@ -41,21 +48,49 @@ class Enemy extends GameObject
         return ret;
     }
 
-    takeHit(_combatManager, _hitPoints)
+    takeHit(_combatManager, _skillCheck, _hitPoints)
     {
-        ServiceLocator.camera.shake(0.02, 200);
-        var posX = this.position.x;
-        var posY = this.position.y;
-        this.hit = game.add.sprite(posX, posY, 'hit');
-        ServiceLocator.renderer.addToOverlay(this.hit);
-        var self = this;
-        setTimeout(function() {self.hit.destroy();}, 500);
-        this.health -= _hitPoints;
-        console.log("HP is now " + this.health + " after it of " + _hitPoints);
-        if (this.health <= 0)
+        console.log("Evaluating attack of skill " + _skillCheck + " and str " + _hitPoints);
+        var attackOutCome = Enemy.AttackOutcome.MISS;
+        if (_skillCheck > 0.7)
         {
-            ServiceLocator.combatManager.killEnemy(this.index);
+            attackOutCome = Enemy.AttackOutcome.HIT;
         }
+        if (_skillCheck > 0.95)
+        {
+            attackOutCome = Enemy.AttackOutcome.CRITICAL;
+        }
+        
+        if (attackOutCome != Enemy.AttackOutcome.MISS)
+        {
+            ServiceLocator.camera.shake(0.02, 200);
+            this.health -= _hitPoints;
+            if (attackOutCome == Enemy.AttackOutcome.CRITICAL)
+            {
+                this.health -= _hitPoints * 1.5;
+            }
+            if (this.health <= 0)
+            {
+                ServiceLocator.combatManager.killEnemy(this.index);
+            }
+        }
+        
+        var posX = this.position.x - 50;
+        var posY = this.position.y - 50;
+        switch(attackOutCome)
+        {
+            case Enemy.AttackOutcome.MISS:
+                this.hit = game.add.sprite(posX, posY, 'hit_miss');
+                break;
+            case Enemy.AttackOutcome.HIT:
+                this.hit = game.add.sprite(posX, posY, 'hit');
+                break;
+            case Enemy.AttackOutcome.CRITICAL:
+                this.hit = game.add.sprite(posX, posY, 'hit_critical');
+                break;
+        }
+        ServiceLocator.renderer.addToOverlay(this.hit);
+        setTimeout(() => {this.hit.destroy();}, 500);
     }
     
     updateDeath()
@@ -128,4 +163,10 @@ Enemy.cardProbability = {
     LOW: 1,
     MED: 3,
     HIGH: 9
+}
+
+Enemy.AttackOutcome = {
+    MISS: 0,
+    HIT: 1,
+    CRITICAL: 2
 }

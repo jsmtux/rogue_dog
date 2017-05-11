@@ -8,6 +8,7 @@ function LoadState(_game)
 LoadState.prototype.preload = function()
 {
     Background.preload(this.game);
+    Enemy.preload(this.game);
     BasicEnemy.preload(this.game);
     BeeEnemy.preload(this.game);
     WalkManager.preload(this.game);
