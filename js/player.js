@@ -19,8 +19,6 @@ class DogPlayer extends GameObject
         this.walkSpeed = 6;
         this.curSpeed = 0;
         
-        this.attackFinished = false;
-        
         this.currentAnimation = '';
         this.playerInitialY = GROUND_LEVEL - 90;
         
@@ -152,6 +150,13 @@ class DogPlayer extends GameObject
         this.curSpeed = 0;
         this.play("idle");
     }
+    
+    doAttack(_hitPercentage, _enemy)
+    {
+        this.attackAudio.volume = _hitPercentage;
+        this.attackAudio.play();
+        _enemy.takeHit(this, _hitPercentage, this.attackPower);
+    }
 
     play(_animationName)
     {
@@ -249,37 +254,6 @@ class DogPlayer extends GameObject
         {
             this.subtractHealth(0.1);
         }
-    }
-    
-    startAttack()
-    {
-        ServiceLocator.inputManager.skillSelector.add();
-        ServiceLocator.registerListener(this.skillCallback, this, "SkillSelectorResultMessage");
-        ServiceLocator.inputManager.skillSelector.setPosition(this.sprite.x - 100, this.sprite.y - 140);
-        this.attackFinished = false;
-    }
-    
-    skillCallback(_message)
-    {
-        var hitPercentage = _message.getHitPercentage();
-        if (hitPercentage)
-        {
-            ServiceLocator.combatManager.hitFirstEnemy(hitPercentage, this.attackPower);
-            this.attackAudio.volume = hitPercentage;
-            this.attackAudio.play();
-        }
-        ServiceLocator.inputManager.skillSelector.remove();
-        ServiceLocator.removeListener(this.skillCallback, this, "SkillSelectorResultMessage");
-        this.attackFinished = true;
-    }
-    
-    isAttackFinished()
-    {
-        return this.attackFinished;
-    }
-    
-    enemyKilledNotification(_enemy)
-    {
     }
     
     jump(_angle)

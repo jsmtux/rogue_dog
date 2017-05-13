@@ -25,8 +25,6 @@ class SkillSelector
         this.spriteGroup.add(this.skillselector);
         
         this.game.updateSignal.add(this.update, this);
-        
-        ServiceLocator.inputManager.leftButton.onDown.add(this.sendSignal, this);
     }
     
     remove()
@@ -36,7 +34,6 @@ class SkillSelector
         this.skillselector = this.sprite = undefined;
         
         this.game.updateSignal.remove(this.update, this);
-        ServiceLocator.inputManager.leftButton.onDown.remove(this.sendSignal, this);
     }
     
     setPosition(_x, _y)
@@ -60,8 +57,8 @@ class SkillSelector
         return ret;
     }
     
-    sendSignal()
+    sendSignal(_msg)
     {
-        ServiceLocator.publish(new SkillSelectorResultMessage(this.getCurrentPrecentage()));
+        ServiceLocator.publish(new SkillSelectorResultMessage(this.getCurrentPrecentage(), _msg.getEnemy()));
     }
 }

@@ -25,6 +25,11 @@ class BeeEnemy extends Enemy
         this.sprite.animations.add('walk');
     }
     
+    showCrosshair()
+    {
+        this.crosshair = new Crosshair(this.game, this, this.position, new Phaser.Point(0, 0));
+    }
+    
     update()
     {
         if (this.bullet)

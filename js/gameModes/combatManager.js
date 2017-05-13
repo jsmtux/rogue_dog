@@ -39,11 +39,6 @@ class CombatManager extends GameMode
         }
         else if (this.state === CombatManager.State.ATTACK)
         {
-            if (this.player.isAttackFinished())
-            {
-                this.state = CombatManager.State.DEFEND;
-                ServiceLocator.publish(new NewBannerMessage(NewBannerMessage.Types.Defend));
-            }
         }
         else if (this.state === CombatManager.State.DEFEND)
         {
@@ -69,7 +64,7 @@ class CombatManager extends GameMode
             }
             else if (this.getNumberOfDyingEnemies() === 0)
             {
-                this.state = CombatManager.State.FINISHED;
+                this.finishAttack();
             }
         }
     }
@@ -102,16 +97,31 @@ class CombatManager extends GameMode
     {
         this.state = CombatManager.State.ATTACK;
         ServiceLocator.publish(new NewBannerMessage(NewBannerMessage.Types.Attack));
-        this.player.startAttack(this);
-    }
-    
-    hitFirstEnemy(_skill, _hitPoints)
-    {
         for (var ind in this.enemies)
         {
-            this.enemies[ind].takeHit(this, _skill, _hitPoints);
-            break;
+            this.enemies[ind].showCrosshair();
         }
+        ServiceLocator.inputManager.skillSelector.add();
+        ServiceLocator.inputManager.skillSelector.setPosition(this.player.sprite.x - 100, this.player.sprite.y - 140);
+        ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
+    }
+    
+    finishAttack()
+    {
+        this.state = CombatManager.State.FINISHED;
+        ServiceLocator.removeListener(this.enemyTargeted, this, "EnemyTargeted");        
+    }
+    
+    enemyTargeted(_message)
+    {
+        var hitPercentage = ServiceLocator.inputManager.skillSelector.getCurrentPrecentage();
+        if (hitPercentage)
+        {
+            this.player.doAttack(hitPercentage, _message.getEnemy());
+        }
+        ServiceLocator.inputManager.skillSelector.remove();
+        this.state = CombatManager.State.DEFEND;
+        ServiceLocator.publish(new NewBannerMessage(NewBannerMessage.Types.Defend));
     }
     
     enemiesInPlace() {

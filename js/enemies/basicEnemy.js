@@ -49,9 +49,15 @@ class BasicEnemy extends Enemy
         }
     }
     
-    playStepSound()
+    startAttack(_player)
     {
-        this.stepAudio.play();
+        this.state = Enemy.States.ATTACKING;
+        setTimeout(() => {this.startNewCommand()}, 500);
+    }
+    
+    showCrosshair()
+    {
+        this.crosshair = new Crosshair(this.game, this, this.position, new Phaser.Point(-40, -60));
     }
     
     update()
@@ -71,10 +77,9 @@ class BasicEnemy extends Enemy
         super.update();
     }
     
-    startAttack(_player)
+    playStepSound()
     {
-        this.state = Enemy.States.ATTACKING;
-        setTimeout(() => {this.startNewCommand()}, 500);
+        this.stepAudio.play();
     }
     
     startNewCommand()
