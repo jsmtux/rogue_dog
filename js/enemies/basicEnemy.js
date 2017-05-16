@@ -71,6 +71,29 @@ class BasicEnemy extends Enemy
         super.update();
     }
     
+    updateDeath()
+    {
+        if (!this.startedDying)
+        {
+            this.startedDying = true;
+            this.sprite.animations.play('death');
+            this.finishedDying = false;
+            
+            var changeAnimationOnEnd = () => {
+                this.sprite.onFinish.remove(changeAnimationOnEnd);
+                this.finishedDying = true;
+            }
+            this.sprite.onFinish.add(changeAnimationOnEnd);
+        }
+        
+        if (this.finishedDying)
+        {
+            return super.updateDeath();
+        }
+        
+        return false;
+    }
+    
     startAttack(_player)
     {
         this.state = Enemy.States.ATTACKING;
