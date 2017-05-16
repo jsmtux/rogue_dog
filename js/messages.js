@@ -28,19 +28,6 @@ class ObstacleShownMessge extends Message
     }
 }
 
-class SkillSelectorResultMessage extends Message
-{
-    constructor(_hitPercentage)
-    {
-        super("SkillSelectorResultMessage", {"percentage":_hitPercentage});
-    }
-    
-    getHitPercentage()
-    {
-        return this.arguments["percentage"];
-    }
-}
-
 class EnemiesInPlaceMessage extends Message
 {
     constructor()
@@ -139,4 +126,17 @@ EmitParticle.Types = {
     "GrassLand": 0,
     "HealthIncrease": 1,
     "EnergyIncrease": 2
+}
+
+class EnemyTargeted extends Message
+{
+    constructor(_enemy)
+    {
+        super("EnemyTargeted", {"enemy":_enemy});
+    }
+    
+    getEnemy()
+    {
+        return this.arguments["enemy"];
+    }
 }
