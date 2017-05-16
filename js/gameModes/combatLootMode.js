@@ -34,9 +34,23 @@ class CombatLootMode extends GameMode
             var curCard = new this.cardList[ind]();
             curCard.create(this.game);
             curCard.show();
-            curCard.setPosition(new Phaser.Point(150 + 300 * ind,50));
+            curCard.setPosition(new Phaser.Point(-50,50));
             curCard.setYAngle(Math.PI);
             curCard.setHandler((card) => {this.flipCard.play(), card.flip(this.cardFlipped, this)});
+
+            var finishX = 300 + 300 * ind;
+            
+            var entering = this.game.add.tween(curCard.sprite);
+
+            entering.to({ x: finishX }, 1000, Phaser.Easing.Elastic.Out);
+            entering.onComplete.add( () => {
+                curCard.setHandler((card) => {
+                    this.flipCard.play(), card.flip(this.cardFlipped, this);
+                });
+                console.log("Current x pos is " + curCard.sprite.x + " should be " + finishX);
+                curCard.setPosition(new Phaser.Point(finishX, 50));
+            });
+            entering.start();
         }
     }
     

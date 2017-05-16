@@ -12,9 +12,6 @@ class Card
         this.handlerFunction;
         this.handlerContext;
         
-        
-        this.position = new Phaser.Point(0,0);
-        
         this.yRotAngle = 0.0;
         this.yDesiredAngle = undefined;
         this.flipCb;
@@ -47,6 +44,7 @@ class Card
         this.frontImage = ServiceLocator.cardManager.getCardImage(this);
         this.sprite = _game.add.sprite(0, 0, this.frontImage);
         ServiceLocator.renderer.addToUI(this.sprite);
+        this.sprite.anchor.x = 0.5;
         this.game = _game;
     }
     
@@ -90,7 +88,6 @@ class Card
         {
             this.sprite.loadTexture(this.frontImage);
         }
-        this.setPosition(this.position);
     }
     
     flip(_cb, _cbCtxt)
@@ -129,15 +126,8 @@ class Card
     
     setPosition(_position)
     {
-        this.position = _position;
-        this.sprite.x = _position.x - 0.5 * 280 * Math.cos(this.yRotAngle);
+        this.sprite.x = _position.x;
         this.sprite.y = _position.y;
-    }
-    
-    setAnchor(_position)
-    {
-        this.sprite.anchor.x = _position.x;
-        this.sprite.anchor.y = _position.y;
     }
     
     clickHandler()
