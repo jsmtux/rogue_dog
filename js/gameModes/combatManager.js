@@ -42,8 +42,13 @@ class CombatManager extends GameMode
         {
             this.startAttack();
         }
-        else if (this.state === CombatManager.State.ATTACK)
+        else if (this.state === CombatManager.State.FINISH_ATTACK)
         {
+            if (this.getNumberOfDyingEnemies() === 0)
+            {
+                ServiceLocator.publish(new NewBannerMessage(NewBannerMessage.Types.Defend));
+                this.state = CombatManager.State.DEFEND;
+            }
         }
         else if (this.state === CombatManager.State.DEFEND)
         {
@@ -69,7 +74,7 @@ class CombatManager extends GameMode
             }
             else if (this.getNumberOfDyingEnemies() === 0)
             {
-                this.finishAttack();
+                this.finishCombat();
             }
         }
     }
@@ -96,6 +101,13 @@ class CombatManager extends GameMode
 
             this.enemies[ind] = enemy;
         }
+        ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
+    }
+    
+    finishCombat()
+    {
+        this.state = CombatManager.State.FINISHED;
+        ServiceLocator.removeListener(this.enemyTargeted, this, "EnemyTargeted");        
     }
     
     startAttack()
@@ -108,13 +120,6 @@ class CombatManager extends GameMode
         }
         ServiceLocator.inputManager.skillSelector.add();
         ServiceLocator.inputManager.skillSelector.setPosition(this.player.sprite.x - 100, this.player.sprite.y - 140);
-        ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
-    }
-    
-    finishAttack()
-    {
-        this.state = CombatManager.State.FINISHED;
-        ServiceLocator.removeListener(this.enemyTargeted, this, "EnemyTargeted");        
     }
     
     enemyTargeted(_message)
@@ -125,8 +130,7 @@ class CombatManager extends GameMode
             this.player.doAttack(hitPercentage, _message.getEnemy());
         }
         ServiceLocator.inputManager.skillSelector.remove();
-        this.state = CombatManager.State.DEFEND;
-        ServiceLocator.publish(new NewBannerMessage(NewBannerMessage.Types.Defend));
+        this.state = CombatManager.State.FINISH_ATTACK;
     }
     
     enemiesInPlace() {
@@ -175,7 +179,7 @@ class CombatManager extends GameMode
         var card_loot = this.game.add.sprite(_initialPos.x, _initialPos.y, 'card_loot');
         card_loot.alpha = 0.0;
         var alpha_tween = this.game.add.tween(card_loot).to({ alpha: 1.0 }, 500, Phaser.Easing.Cubic.Out, true);
-        var fall_tween = this.game.add.tween(card_loot).to({ y: GROUND_LEVEL - 50 }, 1000, Phaser.Easing.Bounce.Out);
+        var fall_tween = this.game.add.tween(card_loot).to({ y: GROUND_LEVEL - 125 }, 1000, Phaser.Easing.Bounce.Out);
         var leave_tween = this.game.add.tween(card_loot).to({ x: card_loot.x - 1000, y: - 50 }, 500, Phaser.Easing.Cubic.Out);
         
         alpha_tween.onComplete.add(() =>{fall_tween.start()});
@@ -208,8 +212,9 @@ CombatManager.State = {
     WAITING_MONSTERS : 1,
     ATTACK_NEXT: 2,
     ATTACK : 3,
-    DEFEND : 4,
-    FINISHED: 5
+    FINISH_ATTACK: 4,
+    DEFEND : 5,
+    FINISHED: 6
 }
 
 CombatManager.NAME = "CombatManager";
