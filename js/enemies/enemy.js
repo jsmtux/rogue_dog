@@ -79,22 +79,28 @@ class Enemy extends GameObject
             }
         }
         
-        var posX = this.position.x - 50;
-        var posY = this.position.y - 50;
         switch(attackOutCome)
         {
             case Enemy.AttackOutcome.MISS:
-                this.hit = game.add.sprite(posX, posY, 'hit_miss');
+                this.hit = this.game.add.sprite(this.position.x, this.position.y, 'hit_miss');
                 break;
             case Enemy.AttackOutcome.HIT:
-                this.hit = game.add.sprite(posX, posY, 'hit');
+                this.hit = this.game.add.sprite(this.position.x, this.position.y, 'hit');
                 break;
             case Enemy.AttackOutcome.CRITICAL:
-                this.hit = game.add.sprite(posX, posY, 'hit_critical');
+                this.hit = this.game.add.sprite(this.position.x, this.position.y, 'hit_critical');
                 break;
         }
         ServiceLocator.renderer.addToOverlay(this.hit);
         setTimeout(() => {this.hit.destroy();}, 500);
+        this.hit.anchor.x = 0.5;
+        this.hit.anchor.y = 0.5;
+        
+        this.hit.scale.x = 0.5;
+        this.hit.scale.y = 0.5;
+        this.hit.alpha = 0.0;
+        this.game.add.tween(this.hit).to({ alpha: 1.0 }, 500, Phaser.Easing.Cubic.Out, true);
+        this.game.add.tween(this.hit.scale).to({ x: 1.0, y: 1.0}, 500, Phaser.Easing.Elastic.Out, true);
     }
     
     updateDeath()
