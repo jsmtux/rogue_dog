@@ -11,6 +11,7 @@ MainState.prototype.preload = function ()
     CombatLootMode.preload(this.game);
     GearCardCompletedMode.preload(this.game);
     DialogManager.preload(this.game);
+    CombatManager.preload(this.game);
 
     BannerShow.preload(this.game);
     ParticleEmitter.preload(this.game);

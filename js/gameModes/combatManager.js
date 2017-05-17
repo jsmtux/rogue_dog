@@ -11,6 +11,11 @@ class CombatManager extends GameMode
         this.cardsToLoot = [];
     }
     
+    static preload(_game)
+    {
+        _game.load.image('card_loot', './img/card_loot.png');
+    }
+    
     update()
     {
         for (var ind in this.enemies)
@@ -161,7 +166,21 @@ class CombatManager extends GameMode
         this.dyingEnemies.push(this.enemies[_index]);
         var droppedCards = this.enemies[_index].getDroppedCards();
         this.cardsToLoot = this.cardsToLoot.concat(droppedCards);
+        this.showCardDrop(this.enemies[_index].position);
         delete this.enemies[_index];
+    }
+    
+    showCardDrop(_initialPos)
+    {
+        var card_loot = this.game.add.sprite(_initialPos.x, _initialPos.y, 'card_loot');
+        card_loot.alpha = 0.0;
+        var alpha_tween = this.game.add.tween(card_loot).to({ alpha: 1.0 }, 500, Phaser.Easing.Cubic.Out, true);
+        var fall_tween = this.game.add.tween(card_loot).to({ y: GROUND_LEVEL - 50 }, 1000, Phaser.Easing.Bounce.Out);
+        var leave_tween = this.game.add.tween(card_loot).to({ x: card_loot.x - 1000, y: - 50 }, 500, Phaser.Easing.Cubic.Out);
+        
+        alpha_tween.onComplete.add(() =>{fall_tween.start()});
+        fall_tween.onComplete.add(() =>{leave_tween.start()});
+        leave_tween.onComplete.add(() =>{card_loot.destroy()});
     }
     
     isFinished()
