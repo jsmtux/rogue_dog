@@ -54,22 +54,11 @@ class Enemy extends GameObject
 
     takeHit(_combatManager, _skillCheck, _hitPoints)
     {
-        console.log("Evaluating attack of skill " + _skillCheck + " and str " + _hitPoints);
-        var attackOutCome = Enemy.AttackOutcome.MISS;
-        if (_skillCheck > 0.7)
-        {
-            attackOutCome = Enemy.AttackOutcome.HIT;
-        }
-        if (_skillCheck > 0.95)
-        {
-            attackOutCome = Enemy.AttackOutcome.CRITICAL;
-        }
-        
-        if (attackOutCome != Enemy.AttackOutcome.MISS)
+        if (_skillCheck != Enemy.AttackOutcome.MISS)
         {
             ServiceLocator.camera.shake(0.02, 200);
             this.health -= _hitPoints;
-            if (attackOutCome == Enemy.AttackOutcome.CRITICAL)
+            if (_skillCheck == Enemy.AttackOutcome.CRITICAL)
             {
                 this.health -= _hitPoints * 1.5;
             }
@@ -79,7 +68,7 @@ class Enemy extends GameObject
             }
         }
         
-        switch(attackOutCome)
+        switch(_skillCheck)
         {
             case Enemy.AttackOutcome.MISS:
                 this.hit = this.game.add.sprite(this.position.x, this.position.y, 'hit_miss');
@@ -182,7 +171,8 @@ Enemy.States = {
 Enemy.cardProbability = {
     LOW: 1,
     MED: 3,
-    HIGH: 9
+    HIGH: 9,
+    VERY_HIGH: 20
 }
 
 Enemy.AttackOutcome = {
@@ -197,43 +187,58 @@ class Crosshair
     {
         this.game = _game;
         this.enemy = _enemy;
+        this.sprite_bg = this.game.add.sprite(0, 0, 'crosshair_bg');
         this.sprite = this.game.add.sprite(0, 0, 'crosshair');
-        ServiceLocator.renderer.addToOverlay(this.sprite);
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
+        this.sprite_bg.anchor.x = 0.5;
+        this.sprite_bg.anchor.y = 0.5;
+        ServiceLocator.renderer.addToOverlay(this.sprite_bg);
+        ServiceLocator.renderer.addToOverlay(this.sprite);
         this.offset = _offset;
         this.updatePosition(_position);
-        ServiceLocator.registerListener(this.receiveSignal, this, "EnemyTargeted");
 
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(this.sendSignal, this);
+        
+        this.movement = 0;
     }
     
     static preload(_game)
     {
-        _game.load.image('crosshair', './img/crosshair.png');
+        _game.load.image('crosshair_bg', './img/circle_skill_bg.png');
+        _game.load.image('crosshair', './img/circle_skill_selector.png');
     }
     
     destroy()
     {
-        ServiceLocator.removeListener(this.receiveSignal, this, "EnemyTargeted");
         this.sprite.destroy();
+        this.sprite_bg.destroy();
     }
     
     updatePosition(_position)
     {
         this.sprite.x = _position.x + this.offset.x;
         this.sprite.y = _position.y + this.offset.y;
-        this.sprite.angle += 1;
-    }
-    
-    receiveSignal()
-    {
-        this.enemy.hideCrosshair();
+        this.sprite_bg.x = _position.x + this.offset.x;
+        this.sprite_bg.y = _position.y + this.offset.y;
+        
+        this.movement += 0.1;
+        this.sprite.angle = Math.sin(this.movement) * 68;
     }
     
     sendSignal()
     {
-        ServiceLocator.publish(new EnemyTargeted(this.enemy));
+        var hitType = Enemy.AttackOutcome.MISS;
+        if (Math.abs(this.sprite.angle) <= 35)
+        {
+            hitType = Enemy.AttackOutcome.HIT;
+        }
+        if (Math.abs(this.sprite.angle) <= 6)
+        {
+            hitType = Enemy.AttackOutcome.CRITICAL;
+        }
+        
+        ServiceLocator.publish(new EnemyTargeted(this.enemy, hitType));
     }
 }

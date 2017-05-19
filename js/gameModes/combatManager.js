@@ -9,6 +9,8 @@ class CombatManager extends GameMode
         this.enemies = {};
         this.dyingEnemies = [];
         this.cardsToLoot = [];
+        
+        this.cardsDisappearing = 0;
     }
     
     static preload(_game)
@@ -44,7 +46,7 @@ class CombatManager extends GameMode
         }
         else if (this.state === CombatManager.State.FINISH_ATTACK)
         {
-            if (this.getNumberOfDyingEnemies() === 0)
+            if (this.getNumberOfDyingEnemies() === 0 && this.cardsDisappearing === 0)
             {
                 ServiceLocator.publish(new NewBannerMessage(NewBannerMessage.Types.Defend));
                 this.state = CombatManager.State.DEFEND;
@@ -101,13 +103,11 @@ class CombatManager extends GameMode
 
             this.enemies[ind] = enemy;
         }
-        ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
     }
     
     finishCombat()
     {
-        this.state = CombatManager.State.FINISHED;
-        ServiceLocator.removeListener(this.enemyTargeted, this, "EnemyTargeted");        
+        this.state = CombatManager.State.FINISHED;     
     }
     
     startAttack()
@@ -118,19 +118,19 @@ class CombatManager extends GameMode
         {
             this.enemies[ind].showCrosshair();
         }
-        ServiceLocator.inputManager.skillSelector.add();
-        ServiceLocator.inputManager.skillSelector.setPosition(this.player.sprite.x - 100, this.player.sprite.y - 140);
+        ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
     }
     
     enemyTargeted(_message)
     {
-        var hitPercentage = ServiceLocator.inputManager.skillSelector.getCurrentPrecentage();
-        if (hitPercentage)
+        this.state = CombatManager.State.DEFEND;
+        ServiceLocator.removeListener(this.enemyTargeted, this, "EnemyTargeted");
+        for (var ind in this.enemies)
         {
-            this.player.doAttack(hitPercentage, _message.getEnemy());
+            this.enemies[ind].hideCrosshair();
         }
-        ServiceLocator.inputManager.skillSelector.remove();
         this.state = CombatManager.State.FINISH_ATTACK;
+        this.player.doAttack(_message.getHitType(), _message.getEnemy());
     }
     
     enemiesInPlace() {
@@ -176,6 +176,7 @@ class CombatManager extends GameMode
     
     showCardDrop(_initialPos)
     {
+        this.cardsDisappearing++;
         var card_loot = this.game.add.sprite(_initialPos.x, _initialPos.y, 'card_loot');
         card_loot.alpha = 0.0;
         var alpha_tween = this.game.add.tween(card_loot).to({ alpha: 1.0 }, 500, Phaser.Easing.Cubic.Out, true);
@@ -184,7 +185,10 @@ class CombatManager extends GameMode
         
         alpha_tween.onComplete.add(() =>{fall_tween.start()});
         fall_tween.onComplete.add(() =>{leave_tween.start()});
-        leave_tween.onComplete.add(() =>{card_loot.destroy()});
+        leave_tween.onComplete.add(() =>{
+            card_loot.destroy();
+            this.cardsDisappearing--;
+        });
     }
     
     isFinished()

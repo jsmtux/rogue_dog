@@ -130,13 +130,18 @@ EmitParticle.Types = {
 
 class EnemyTargeted extends Message
 {
-    constructor(_enemy)
+    constructor(_enemy, _hitType)
     {
-        super("EnemyTargeted", {"enemy":_enemy});
+        super("EnemyTargeted", {"enemy":_enemy, "hitType":_hitType});
     }
     
     getEnemy()
     {
         return this.arguments["enemy"];
+    }
+    
+    getHitType()
+    {
+        return this.arguments["hitType"];
     }
 }

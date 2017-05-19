@@ -7,12 +7,10 @@ class InputManager
         this.directionGesture = new DirectionGesture(_game, this);
         this.playerDirectionGesture = new PlayerDirectionGesture(_game, this);
         this.drawGesture = new DrawGesture(_game, this);
-        this.skillSelector = new SkillSelector(_game);
     }
     
     static preload(_game)
     {
-        SkillSelector.preload(game);
         PlayerDirectionGesture.preload(game);
     }
     

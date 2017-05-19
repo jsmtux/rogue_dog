@@ -35,7 +35,6 @@ class DogPlayer extends GameObject
     {
         HealthBar.preload(_game);
         EnergyBar.preload(_game);
-        SkillSelector.preload(_game);
 
         var path = "anim/"
         _game.load.atlas("dogAnimAtlas", path + "dog.png", path + "dog.json");
@@ -151,11 +150,10 @@ class DogPlayer extends GameObject
         this.play("idle");
     }
     
-    doAttack(_hitPercentage, _enemy)
+    doAttack(_hitType, _enemy)
     {
-        this.attackAudio.volume = _hitPercentage;
         this.attackAudio.play();
-        _enemy.takeHit(this, _hitPercentage, this.attackPower);
+        _enemy.takeHit(this, _hitType, this.attackPower);
     }
 
     play(_animationName)
