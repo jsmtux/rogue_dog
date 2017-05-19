@@ -3,9 +3,9 @@ class BasicEnemySpec
     constructor(_level)
     {
         this.cardProbabilities = {}
-        this.cardProbabilities["NewEnemyCard"] = Enemy.cardProbability.VERY_HIGH;
+        this.cardProbabilities["NewEnemyCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["StrongerBasicEnemyCard"] = Enemy.cardProbability.LOW;
-        this.cardProbabilities["TwoEnemiesCard"] = Enemy.cardProbability.VERY_HIGH;
+        this.cardProbabilities["TwoEnemiesCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["SmEnergyCard"] = Enemy.cardProbability.LOW;
         this.cardProbabilities["SmMedkitCard"] = Enemy.cardProbability.LOW;
         if (_level > 0)
