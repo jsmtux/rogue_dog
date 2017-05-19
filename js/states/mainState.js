@@ -69,7 +69,7 @@ MainState.prototype.create = function ()
     this.addGameMode(new EmptyGameMode());
     this.addGameMode(new CombatLootMode(this, this.player));
     
-    this.bannerShow = new BannerShow(this.game);
+    this.bannerShow = new BannerShow(this);
     this.particleEmitter = new ParticleEmitter(this.game);
     this.particleEmitter.create();
     

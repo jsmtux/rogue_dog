@@ -1,0 +1,84 @@
+{"frames": [
+
+{
+	"filename": "arrow1",
+	"frame": {"x":181,"y":0,"w":23,"h":26},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":26},
+	"sourceSize": {"w":23,"h":26},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "arrow2",
+	"frame": {"x":0,"y":0,"w":18,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":16},
+	"sourceSize": {"w":18,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "arrow3",
+	"frame": {"x":141,"y":0,"w":12,"h":19},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":19},
+	"sourceSize": {"w":12,"h":19},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "arrow4",
+	"frame": {"x":0,"y":26,"w":34,"h":27},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":27},
+	"sourceSize": {"w":34,"h":27},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "arrow5",
+	"frame": {"x":18,"y":0,"w":21,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":17},
+	"sourceSize": {"w":21,"h":17},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "arrow6",
+	"frame": {"x":153,"y":0,"w":28,"h":20},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":28,"h":20},
+	"sourceSize": {"w":28,"h":20},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "bg",
+	"frame": {"x":34,"y":26,"w":155,"h":94},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":155,"h":94},
+	"sourceSize": {"w":155,"h":94},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "text",
+	"frame": {"x":39,"y":0,"w":102,"h":18},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":102,"h":18},
+	"sourceSize": {"w":102,"h":18},
+	"pivot": {"x":0.5,"y":0.5}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "attack.png",
+	"format": "RGBA8888",
+	"size": {"w":204,"h":120},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:b659bb1ebdff2056195c46ad8d91cbe5:f7a5a465abe6350e79c0bf850418613d:c558c2d9773adf0f4ef6f0e9687f205f$"
+}
+}
