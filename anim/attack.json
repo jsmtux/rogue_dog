@@ -2,74 +2,74 @@
 
 {
 	"filename": "arrow1",
-	"frame": {"x":181,"y":0,"w":23,"h":26},
+	"frame": {"x":0,"y":0,"w":69,"h":78},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":26},
-	"sourceSize": {"w":23,"h":26},
+	"spriteSourceSize": {"x":0,"y":0,"w":69,"h":78},
+	"sourceSize": {"w":69,"h":78},
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
 	"filename": "arrow2",
-	"frame": {"x":0,"y":0,"w":18,"h":16},
+	"frame": {"x":69,"y":0,"w":54,"h":50},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":16},
-	"sourceSize": {"w":18,"h":16},
+	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":50},
+	"sourceSize": {"w":54,"h":50},
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
 	"filename": "arrow3",
-	"frame": {"x":141,"y":0,"w":12,"h":19},
+	"frame": {"x":123,"y":0,"w":36,"h":58},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":19},
-	"sourceSize": {"w":12,"h":19},
+	"spriteSourceSize": {"x":0,"y":0,"w":36,"h":58},
+	"sourceSize": {"w":36,"h":58},
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
 	"filename": "arrow4",
-	"frame": {"x":0,"y":26,"w":34,"h":27},
+	"frame": {"x":159,"y":0,"w":102,"h":83},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":34,"h":27},
-	"sourceSize": {"w":34,"h":27},
+	"spriteSourceSize": {"x":0,"y":0,"w":102,"h":83},
+	"sourceSize": {"w":102,"h":83},
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
 	"filename": "arrow5",
-	"frame": {"x":18,"y":0,"w":21,"h":17},
+	"frame": {"x":261,"y":0,"w":63,"h":51},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":17},
-	"sourceSize": {"w":21,"h":17},
+	"spriteSourceSize": {"x":0,"y":0,"w":63,"h":51},
+	"sourceSize": {"w":63,"h":51},
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
 	"filename": "arrow6",
-	"frame": {"x":153,"y":0,"w":28,"h":20},
+	"frame": {"x":324,"y":0,"w":84,"h":62},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":28,"h":20},
-	"sourceSize": {"w":28,"h":20},
+	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":62},
+	"sourceSize": {"w":84,"h":62},
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
 	"filename": "bg",
-	"frame": {"x":34,"y":26,"w":155,"h":94},
+	"frame": {"x":0,"y":83,"w":465,"h":282},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":155,"h":94},
-	"sourceSize": {"w":155,"h":94},
+	"spriteSourceSize": {"x":0,"y":0,"w":465,"h":282},
+	"sourceSize": {"w":465,"h":282},
 	"pivot": {"x":0.5,"y":0.5}
 },
 {
 	"filename": "text",
-	"frame": {"x":39,"y":0,"w":102,"h":18},
+	"frame": {"x":0,"y":365,"w":306,"h":54},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":102,"h":18},
-	"sourceSize": {"w":102,"h":18},
+	"spriteSourceSize": {"x":0,"y":0,"w":306,"h":54},
+	"sourceSize": {"w":306,"h":54},
 	"pivot": {"x":0.5,"y":0.5}
 }],
 "meta": {
@@ -77,8 +77,8 @@
 	"version": "1.0",
 	"image": "attack.png",
 	"format": "RGBA8888",
-	"size": {"w":204,"h":120},
+	"size": {"w":465,"h":419},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:b659bb1ebdff2056195c46ad8d91cbe5:f7a5a465abe6350e79c0bf850418613d:c558c2d9773adf0f4ef6f0e9687f205f$"
+	"smartupdate": "$TexturePacker:SmartUpdate:abc28dff76e05bbc28e4b6745f1db921:3e3815477a73a25a6cccc67067deaf65:c558c2d9773adf0f4ef6f0e9687f205f$"
 }
 }

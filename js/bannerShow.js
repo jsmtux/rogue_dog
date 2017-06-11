@@ -24,16 +24,16 @@ class BannerShow
         {
             case NewBannerMessage.Types.Attack:
                 this.sprite = loadSpriter(this.game, "attackJSON", "attackAnimAtlas", "entity_000");
+                this.sprite.animations.play();
                 this.sprite.x = 400;
                 this.sprite.y = 300;
-                this.sprite.animations.play();
                 break;
             case NewBannerMessage.Types.Defend:
                 this.sprite = this.game.add.sprite(100,100,'defend');
                 break;
         }
         ServiceLocator.renderer.addToUI(this.sprite);
-        this.timeout = setTimeout(() => this.destroyCurrentBanner(), 1000);
+        this.timeout = setTimeout(() => this.destroyCurrentBanner(), 1200);
         
     }
     
