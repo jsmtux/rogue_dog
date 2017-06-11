@@ -14,6 +14,8 @@ class DogPlayer extends GameObject
         this.jumpAcceleration = new Phaser.Point(0, 0);
         this.dizzy = false;
         
+        this.gravity = 0.3;
+        
         this.jumpStrenght = 10.5;
         
         this.walkSpeed = 6;
@@ -29,6 +31,9 @@ class DogPlayer extends GameObject
         this.cardPieceUI = new CardPieceUI();
         
         this.attackPower = 4.0;
+
+        this.iterationsShowingTrajectory = 0;
+        this.trajectoryShowRate = 2.0;
     }
     
     static preload(_game)
@@ -108,7 +113,7 @@ class DogPlayer extends GameObject
         else
         {
             this.sprite.y -= this.jumpAcceleration.y;
-            this.jumpAcceleration.y -= 0.3;
+            this.jumpAcceleration.y -= this.gravity;
             if (this.jumpAcceleration.y > 0)
             {
                 shouldPlay = 'jump';
@@ -131,6 +136,58 @@ class DogPlayer extends GameObject
         if (this.isUnderground())
         {
             this.subtractEnergy(0.01);
+        }
+        
+        this.updateTrajectoryImage();
+    }
+    
+    updateTrajectoryImage()
+    {
+        var bmd = ServiceLocator.inputManager.getBmd();
+        bmd.clear();
+        var curAngle = ServiceLocator.inputManager.playerDirectionGesture.curAngle;
+        if (curAngle !== undefined && this.onGround())
+        {
+            this.iterationsShowingTrajectory++;
+            var playerPos = this.getPosition();
+            var cameraPos = ServiceLocator.camera.getPosition();
+            var relativePlayerPos = playerPos.subtract(cameraPos.x, cameraPos.y);
+            
+            bmd.moveTo(relativePlayerPos.x,relativePlayerPos.y);
+            var curPos = relativePlayerPos.clone();
+            var iterationAdvance = 1;
+            var jumpAcceleration = new Phaser.Point();
+            var jumpStrength = this.jumpStrenght;
+            jumpAcceleration.y = jumpStrength * -Math.sin(Math.radians(curAngle));
+            jumpAcceleration.x = jumpStrength * Math.cos(Math.radians(curAngle)) + this.curSpeed;
+            
+            var iteration = 0;
+            while(relativePlayerPos.y >= curPos.y && iteration++ < this.iterationsShowingTrajectory * this.trajectoryShowRate)
+            {
+                curPos.x += iterationAdvance * jumpAcceleration.x;
+                curPos.y -= iterationAdvance * jumpAcceleration.y;
+                jumpAcceleration.y -= this.gravity;
+                bmd.lineStyle(10, 0x000000, 1.0);
+                bmd.lineTo(curPos.x, curPos.y);
+            }
+            
+            jumpAcceleration.y = jumpStrength * -Math.sin(Math.radians(curAngle));
+            curPos = relativePlayerPos.clone();
+            bmd.moveTo(curPos.x, curPos.y);
+            iteration = 0;
+            while(relativePlayerPos.y >= curPos.y && iteration++ < this.iterationsShowingTrajectory * this.trajectoryShowRate)
+            {
+                curPos.x += iterationAdvance * jumpAcceleration.x;
+                curPos.y -= iterationAdvance * jumpAcceleration.y;
+                jumpAcceleration.y -= this.gravity;
+                bmd.lineStyle(6, 0xffffff, 1.0);
+                bmd.lineTo(curPos.x, curPos.y);
+            }
+            
+        }
+        else
+        {
+            this.iterationsShowingTrajectory = 0;
         }
     }
     
