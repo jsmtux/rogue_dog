@@ -33,7 +33,9 @@ class DogPlayer extends GameObject
         this.attackPower = 4.0;
 
         this.iterationsShowingTrajectory = 0;
-        this.trajectoryShowRate = 2.0;
+        this.trajectoryShowRate = 1.0;
+        
+        this.trajectoryArrow;
     }
     
     static preload(_game)
@@ -49,6 +51,8 @@ class DogPlayer extends GameObject
         _game.load.audio('playerJumpAudio', 'sounds/player_jump.wav');
         _game.load.audio('playerLandAudio', 'sounds/player_land.wav');
         _game.load.audio('playerStepAudio', 'sounds/player_step.wav');
+        
+        _game.load.image('trajectory_arrow', './img/trajectory_arrow.png');
 
         DogHatAccesory.preload(_game);
         DogWoolHatAccesory.preload(_game);
@@ -97,6 +101,11 @@ class DogPlayer extends GameObject
         this.landAudio.volume = 0.25;
         this.stepAudio = this.game.add.audio('playerStepAudio');
         this.stepAudio.volume = 0.25;
+        
+        this.trajectoryArrow = _game.add.sprite(0, 0, 'trajectory_arrow');
+        this.trajectoryArrow.visible = false;
+        this.trajectoryArrow.anchor = new Phaser.Point(0.16, 0.5);
+        ServiceLocator.renderer.addToUI(this.trajectoryArrow);
     }
     
     updateWalk()
@@ -145,6 +154,7 @@ class DogPlayer extends GameObject
     {
         var bmd = ServiceLocator.inputManager.getBmd();
         bmd.clear();
+        this.trajectoryArrow.visible = false;
         var curAngle = ServiceLocator.inputManager.playerDirectionGesture.curAngle;
         if (curAngle !== undefined && this.onGround())
         {
@@ -175,8 +185,10 @@ class DogPlayer extends GameObject
             curPos = relativePlayerPos.clone();
             bmd.moveTo(curPos.x, curPos.y);
             iteration = 0;
+            var prevPos;
             while(relativePlayerPos.y >= curPos.y && iteration++ < this.iterationsShowingTrajectory * this.trajectoryShowRate)
             {
+                prevPos = curPos.clone();
                 curPos.x += iterationAdvance * jumpAcceleration.x;
                 curPos.y -= iterationAdvance * jumpAcceleration.y;
                 jumpAcceleration.y -= this.gravity;
@@ -184,6 +196,10 @@ class DogPlayer extends GameObject
                 bmd.lineTo(curPos.x, curPos.y);
             }
             
+            this.trajectoryArrow.visible = true;
+            this.trajectoryArrow.x = curPos.x - 120;
+            this.trajectoryArrow.y = curPos.y;
+            this.trajectoryArrow.angle = Math.degrees(Phaser.Point.angle(curPos, prevPos));
         }
         else
         {
@@ -203,6 +219,7 @@ class DogPlayer extends GameObject
     {
         ServiceLocator.inputManager.playerDirectionGesture.remove(this.jump, this);
         ServiceLocator.removeListener(this.obstacleHit, this, "JumpFailedMessage");
+        this.trajectoryArrow.visible = false;
         this.curSpeed = 0;
         this.play("idle");
     }
