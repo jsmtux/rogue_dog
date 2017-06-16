@@ -35,6 +35,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('cardManager', new CardManager(this));
     ServiceLocator.initialize('inGameHelper', new InGameHelper(this));
     ServiceLocator.initialize('dialogManager', new DialogManager(this));
+    ServiceLocator.initialize('physics', new Physics(this));
 
     this.game.world.setBounds(0, 0, 192000, 900);
 
@@ -84,6 +85,7 @@ MainState.prototype.addGameMode = function(_mode)
 MainState.prototype.update = function ()
 {
     MenuState.gameConfiguration.update(this.currentGameMode, this);
+    
     this.updateSignal.dispatch(); 
     if (this.statePaused)
     {

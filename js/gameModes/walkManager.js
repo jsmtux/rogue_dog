@@ -165,7 +165,7 @@ class WalkManager extends GameMode
         var newTile = new GroundTile(new Phaser.Point(_position.x, _position.y), _grassName, _obstacle, _walkLevel);
 
         newTile.create(this.game);
-        this.groundTiles.push(newTile);        
+        this.groundTiles.push(newTile);       
     }
 
     update()
@@ -371,6 +371,7 @@ class Obstacle extends VisibleObject
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.y = this.position.y - this.sprite.height;
         this.breakAudio = _game.add.audio('obstacleBreakAudio');
+        ServiceLocator.physics.addToWorld(this.sprite);
     }
     
     break()
@@ -383,6 +384,7 @@ class Obstacle extends VisibleObject
     destroy()
     {
         this.sprite.destroy();
+        ServiceLocator.physics.removeFromWorld(this.sprite);
     }
     
     update(_player)
@@ -400,19 +402,8 @@ class Obstacle extends VisibleObject
         {
             return false;
         }
-        var characterArea = _player.getFeetArea();
-        var xCol = this.sprite.x < characterArea[1]
-            && (this.sprite.x + this.sprite.width) > characterArea[0];
         
-        var yCol = false;
-        
-        if (xCol)
-        {
-            var yDiff = _player.sprite.y - this.sprite.y;
-            yCol = yDiff  <= 0 && yDiff > - this.sprite.height;
-        }
-        
-        return xCol && yCol;
+        return ServiceLocator.physics.isCollidingWith(this.sprite, _player.getCollisionbody());
     }
 }
 
@@ -465,6 +456,7 @@ class TallObstacle extends Obstacle
         this.sprite = _game.add.sprite(this.position.x, 0, 'tall_spike');
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.y = this.position.y - this.sprite.height;
+        ServiceLocator.physics.addToWorld(this.sprite);
     }
     
     break()
@@ -472,29 +464,6 @@ class TallObstacle extends Obstacle
         this.broken = true;
         this.sprite.loadTexture('brokentall_spike');
     }
-    
-    collides(_player)
-    {
-        if (this.broken)
-        {
-            return false;
-        }
-        var characterArea = _player.getFeetArea();
-        var xCol = this.sprite.x < characterArea[1]
-            && (this.sprite.x + this.sprite.width) > characterArea[0];
-        
-        var yCol = false;
-        
-        if (xCol)
-        {
-            var playerBottom = _player.getHitAreaBottom();
-            var height = this.sprite.y - playerBottom;
-            yCol = height < 0;
-        }
-        
-        return xCol && yCol;
-    }
-    
 }
 
 class CardPiece extends VisibleObject

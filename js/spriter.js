@@ -58,6 +58,24 @@ function loadSpriter(_game, _jsonSpriter, _atlas, _entityName)
     var spriterFile = new Spriter.SpriterJSON(_game.cache.getJSON(_jsonSpriter), { imageNameType: Spriter.eImageNameType.NAME_ONLY });
     var spriterData = spriterLoader.load(spriterFile);
     var spriterGroup = new Spriter.SpriterGroup(_game, spriterData, _atlas, _entityName, 0, 100);
+    
+    for (var ind in spriterGroup.children)
+    {
+        spriterGroup.children[ind].name = spriterGroup.children[ind]._frame.name;
+        console.log(spriterGroup.children[ind].name);
+    }
+    
+    spriterGroup.getSpriteByName = function(name)
+    {
+        for (var ind in spriterGroup.children)
+        {
+            if(spriterGroup.children[ind].name == name)
+            {
+                return spriterGroup.children[ind];
+            }
+        }
+    }
+    
     spriterGroup.animations = new SpriterAnimation(_game, spriterGroup);
     spriterGroup.input = new SpriterInput(spriterGroup);
     spriterGroup.destroy = (

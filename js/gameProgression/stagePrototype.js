@@ -88,6 +88,11 @@ class StagePrototype
                     numberEmptyFollowing = 6;
                     this.obstaclesPlaced++;
                     break;
+                case PrototypeRules.ruleTypes.TALL_OBSTACLE:
+                    ret = StagePrototype.cellType.TALL_OBSTACLE;
+                    numberEmptyFollowing = 4;
+                    this.obstaclesPlaced++;
+                    break;
                 case PrototypeRules.ruleTypes.TUTORIAL_OBSTACLE:
                     ret = StagePrototype.cellType.TUTORIAL_OBSTACLE;
                     numberEmptyFollowing = 6;

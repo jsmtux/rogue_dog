@@ -42,12 +42,31 @@ class Renderer
         
         this.graphics = _game.add.graphics(-offset.x, -offset.y);
         this.addToMask(this.graphics);
+        
+        
+        //setting up proper debug canvas
+        var debug = this.game.game.debug;
+        var phaserGame = this.game.game;
+        
+        debug.bmd.resize(nativeResolution.x, nativeResolution.y);
+        debug.canvas.width = nativeResolution.x;
+        debug.canvas.height = nativeResolution.y;
+        
+        debug.sprite.destroy();
+        debug.sprite = phaserGame.make.image(0, 0, debug.bmd);
+        
+        phaserGame.stage.addChild(debug.sprite);
+        
+        debug.sprite.width = nativeResolution.x;
+        debug.sprite.height = -nativeResolution.y;
+        debug.sprite.position.y = nativeResolution.y - offset.y;
+        debug.sprite.position.x = -offset.x;
     }
 
     render()
     {
         var cameraPos = ServiceLocator.camera.getPosition();
-        
+
         ServiceLocator.lighting.draw(this.graphics);
 
         this.maskGroup.visible = true;

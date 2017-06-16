@@ -11,6 +11,7 @@ class Services
         this.animationManager = {};
         this.renderer = {};
         this.lighting = {};
+        this.physics = {}
         this.cardManager = {};
         this.inGameHelper = {};
         this.dialogManager = {};

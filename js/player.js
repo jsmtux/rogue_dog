@@ -36,6 +36,8 @@ class DogPlayer extends GameObject
         this.trajectoryShowRate = 1.0;
         
         this.trajectoryArrow;
+        
+        this.collisionBody;
     }
     
     static preload(_game)
@@ -67,6 +69,9 @@ class DogPlayer extends GameObject
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.position.setTo(0, this.playerInitialY);
         this.sprite.onEvent.add(this.playStepSound, this);
+        
+        this.collisionBody = this.sprite.getSpriteByName("body");
+        ServiceLocator.physics.addToWorld(this.collisionBody);
         
         var self = this;
         this.sprite.events = {'onInputDown' : {
@@ -148,6 +153,11 @@ class DogPlayer extends GameObject
         }
         
         this.updateTrajectoryImage();
+    }
+    
+    getCollisionbody()
+    {
+        return this.collisionBody;
     }
     
     updateTrajectoryImage()
