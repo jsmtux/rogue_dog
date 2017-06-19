@@ -1,6 +1,6 @@
 class DogPlayer extends GameObject
 {
-    constructor()
+    constructor(_game)
     {
         super();
         this.game;
@@ -24,8 +24,6 @@ class DogPlayer extends GameObject
         this.currentAnimation = '';
         this.playerInitialY = GROUND_LEVEL - 90;
         
-        this.appliedItems = [];
-        
         this.ownLight;
         
         this.cardPieceUI = new CardPieceUI();
@@ -38,6 +36,12 @@ class DogPlayer extends GameObject
         this.trajectoryArrow;
         
         this.collisionBody;
+        
+        this.appliedItems = {};
+        
+        _game.updateSignal.add(this.update, this);
+        _game.renderSignal.add(this.updateRender, this);
+        this.updateModeCallback;
     }
     
     static preload(_game)
@@ -69,6 +73,7 @@ class DogPlayer extends GameObject
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.position.setTo(0, this.playerInitialY);
         this.sprite.onEvent.add(this.playStepSound, this);
+        this.sprite.onPointUpdated.add(this.updateItemHandlePoints, this);
         
         this.collisionBody = this.sprite.getSpriteByName("body");
         ServiceLocator.physics.addToWorld(this.collisionBody);
@@ -87,8 +92,6 @@ class DogPlayer extends GameObject
             'onRemovedFromGroup$dispatch' : function(){
             }
         }
-        
-        this.sprite.pushCharMap("NoWool");
         
         this.healthBar.create();
         this.energyBar.create();
@@ -111,6 +114,29 @@ class DogPlayer extends GameObject
         this.trajectoryArrow.visible = false;
         this.trajectoryArrow.anchor = new Phaser.Point(0.16, 0.5);
         ServiceLocator.renderer.addToUI(this.trajectoryArrow);
+
+        this.addItem(DogWoolHatAccesory);
+    }
+    
+    update()
+    {
+        if (this.updateModeCallback)
+        {
+            this.updateModeCallback();
+        }
+    }
+    
+    updateRender()
+    {
+        for(var ind in this.appliedItems)
+        {
+            if (this.appliedItems[ind])
+            {
+                var transformed = this.appliedItems[ind].transformed;
+                this.appliedItems[ind].sprite.position.set(this.sprite.x + transformed.x, this.sprite.y + transformed.y);
+                this.appliedItems[ind].sprite.angle = this.sprite.angle + transformed.angle;
+            }
+        }
     }
     
     updateWalk()
@@ -217,12 +243,32 @@ class DogPlayer extends GameObject
         }
     }
     
+    updateItemHandlePoints(spriter, pointObj)
+    {
+        var item;
+        switch(pointObj.name)
+        {
+            case "headitem_handle":
+                item = this.appliedItems[Accesory.BodyParts.HEAD];
+                break;
+            default:
+                console.error("Invalid point handler in dog animation.");
+        }
+        
+        if (item)
+        {
+            var transformed = pointObj.transformed;
+            item.transformed = transformed;
+        }
+    }
+    
     startWalk()
     {
         ServiceLocator.inputManager.playerDirectionGesture.add(this.jump, this);
         ServiceLocator.registerListener(this.obstacleHit, this, "JumpFailedMessage");
         this.curSpeed = this.walkSpeed;
         this.play("walk");
+        this.updateModeCallback = this.updateWalk;
     }
     
     finishWalk()
@@ -232,6 +278,7 @@ class DogPlayer extends GameObject
         this.trajectoryArrow.visible = false;
         this.curSpeed = 0;
         this.play("idle");
+        this.updateModeCallback = undefined;
     }
     
     doAttack(_hitType, _enemy)
@@ -381,21 +428,14 @@ class DogPlayer extends GameObject
     
     addItem(_itemClass)
     {
-        var newItem = new _itemClass();
-        newItem.apply(this.game.player.sprite);
-        this.appliedItems.push(newItem);
+        var newItem = new _itemClass(this.game);
+        this.appliedItems[newItem.getBodyPart()] = newItem;
     }
     
-    removeItem(_itemClass)
+    removeItem(_bodyPosition)
     {
-        for (var ind in this.appliedItems)
-        {
-            if (this.appliedItems[ind].getClassName() === _itemClass.NAME)
-            {
-                this.appliedItems[ind].remove(this.game.player.sprite);
-                this.appliedItems.splice(ind, 1);
-            }
-        }
+        this.appliedItems[_bodyPosition].destroy();
+        this.appliedItems[_bodyPosition] = undefined;
     }
     
     getHitAreaBottom()
@@ -434,28 +474,32 @@ class DogPlayer extends GameObject
 
 class Accesory
 {
+    constructor(_bodyPart, _name, _sprite, _anchor = new Phaser.Point(0,0))
+    {
+        this.bodyPart = _bodyPart;
+        this.name = _name;
+        this.sprite = _sprite;
+        ServiceLocator.renderer.addToScene(_sprite);
+        this.sprite.anchor.set(_anchor.x, _anchor.y);
+    }
+    
+    destroy()
+    {
+        this.sprite.destroy();
+    }
+    
     getName()
     {
         return this.name;
     }
     
-    getImageName()
+    getBodyPart()
     {
-        return this.imageName;
-    }
-    
-    getRestriction()
-    {
-        return this.restriction;
-    }
-    
-    getClassName()
-    {
-        return this.constructor.NAME;
+        return this.bodyPart;
     }
 }
 
-Accesory.Restrictions = {
+Accesory.BodyParts = {
     HEAD: 0,
     NECK: 1,
     FEET: 2
@@ -463,54 +507,26 @@ Accesory.Restrictions = {
 
 class DogHatAccesory extends Accesory
 {
-    constructor()
+    constructor(_game)
     {
-        super();
-        this.name = "Magician hat";
-        this.imageName = 'hat01';
-        this.restriction = Accesory.Restrictions.HEAD;
+        super(Accesory.BodyParts.HEAD, "Magician hat", _game.add.sprite(0, 0, "hat01"), new Phaser.Point(0.37, 0.31));
     }
     
     static preload(_game)
     {
-        _game.load.image('hat01', './img/items/hat_icon.png');
-    }
-    
-    apply(_dogSprite)
-    {
-        _dogSprite.pushCharMap("hat");
-    }
-    
-    remove(_dogSprite)
-    {
-        _dogSprite.removeCharMap("hat");
+        _game.load.image('hat01', './img/items/tophat.png');
     }
 }
-DogHatAccesory.NAME = "DogHatAccesory"
 
 class DogWoolHatAccesory extends Accesory
 {
-    constructor()
+    constructor(_game)
     {
-        super();
-        this.name = "Wool hat";
-        this.imageName = 'hat02';
-        this.restriction = Accesory.Restrictions.HEAD;
+        super(Accesory.BodyParts.HEAD, "Wool hat", _game.add.sprite(0, 0, "hat02"), new Phaser.Point(0.37, 0.31));
     }
     
     static preload(_game)
     {
-        //_game.load.image('hat01', './img/items/hat_icon.png');
-    }
-    
-    apply(_dogSprite)
-    {
-        _dogSprite.removeCharMap("NoWool");
-    }
-    
-    remove(_dogSprite)
-    {
-        _dogSprite.pushCharMap("NoWool");
+        _game.load.image('hat02', './img/items/woolhat.png');
     }
 }
-DogWoolHatAccesory.NAME = "DogWoolHatAccesory"

@@ -179,8 +179,6 @@ class WalkManager extends GameMode
             ServiceLocator.inGameHelper.hideJumpHelp();
         }
         
-        this.player.updateWalk();
-        
         for(var levelInd in this.walkLevels)
         {
             this.walkLevels[levelInd].update();

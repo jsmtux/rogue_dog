@@ -22,8 +22,9 @@ MainState.prototype.create = function ()
     this.statePaused = false;
 
     this.updateSignal = new Phaser.Signal();
+    this.renderSignal = new Phaser.Signal();
 
-    this.player = new DogPlayer();
+    this.player = new DogPlayer(this);
     
     ServiceLocator.initialize('camera', new Camera());
     ServiceLocator.initialize('combatManager', new CombatManager(this, this.player));
@@ -111,6 +112,7 @@ MainState.prototype.setNextMode = function(_modeName, _args)
 
 MainState.prototype.render = function ()
 {
+    this.renderSignal.dispatch(); 
     ServiceLocator.renderer.render();
 }
 

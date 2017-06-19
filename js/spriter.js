@@ -62,7 +62,6 @@ function loadSpriter(_game, _jsonSpriter, _atlas, _entityName)
     for (var ind in spriterGroup.children)
     {
         spriterGroup.children[ind].name = spriterGroup.children[ind]._frame.name;
-        console.log(spriterGroup.children[ind].name);
     }
     
     spriterGroup.getSpriteByName = function(name)
