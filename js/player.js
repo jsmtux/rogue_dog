@@ -113,7 +113,7 @@ class DogPlayer extends GameObject
         this.trajectoryArrow = _game.add.sprite(0, 0, 'trajectory_arrow');
         this.trajectoryArrow.visible = false;
         this.trajectoryArrow.anchor = new Phaser.Point(0.16, 0.5);
-        ServiceLocator.renderer.addToUI(this.trajectoryArrow);
+        ServiceLocator.renderer.addToOverlay(this.trajectoryArrow);
 
         this.addItem(DogWoolHatAccesory);
     }
@@ -233,8 +233,8 @@ class DogPlayer extends GameObject
             }
             
             this.trajectoryArrow.visible = true;
-            this.trajectoryArrow.x = curPos.x - 120;
-            this.trajectoryArrow.y = curPos.y;
+            this.trajectoryArrow.x = curPos.x - relativePlayerPos.x + this.sprite.x + 5;
+            this.trajectoryArrow.y = curPos.y - relativePlayerPos.y + this.sprite.y;
             this.trajectoryArrow.angle = Math.degrees(Phaser.Point.angle(curPos, prevPos));
         }
         else
