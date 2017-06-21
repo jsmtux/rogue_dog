@@ -84,44 +84,44 @@ class DifficultyManager
         switch(this.obstacleLevel)
         {
             case 0:
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.4);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.HOLE, 0.2);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.4);
+                prototypeRules.setRuleProbability(GrassStagePiece, 0.4);
+                prototypeRules.setRuleProbability(HoleStagePiece, 0.2);
+                prototypeRules.setRuleProbability(ObstacleStagePiece, 0.4);
                 break;
             case 1:
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.4);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.HOLE, 0.2);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.2);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.DOUBLE_OBSTACLE, 0.2);
+                prototypeRules.setRuleProbability(GrassStagePiece, 0.4);
+                prototypeRules.setRuleProbability(HoleStagePiece, 0.2);
+                prototypeRules.setRuleProbability(ObstacleStagePiece, 0.2);
+                prototypeRules.setRuleProbability(DoubleObstacleStagePiece, 0.2);
                 break;
             case 2:
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.4);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.HOLE, 0.2);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.DOUBLE_OBSTACLE, 0.3);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TRIPLE_OBSTACLE, 0.1);
+                prototypeRules.setRuleProbability(GrassStagePiece, 0.4);
+                prototypeRules.setRuleProbability(HoleStagePiece, 0.2);
+                prototypeRules.setRuleProbability(DoubleObstacleStagePiece, 0.3);
+                prototypeRules.setRuleProbability(TripleObstacleStagePiece, 0.1);
                 break;
             case 3:
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.4);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.HOLE, 0.2);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.DOUBLE_OBSTACLE, 0.2);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TRIPLE_OBSTACLE, 0.2);
+                prototypeRules.setRuleProbability(GrassStagePiece, 0.4);
+                prototypeRules.setRuleProbability(HoleStagePiece, 0.2);
+                prototypeRules.setRuleProbability(DoubleObstacleStagePiece, 0.2);
+                prototypeRules.setRuleProbability(TripleObstacleStagePiece, 0.2);
                 break;
             case DifficultyManager.ObstacleLevelsName.STORY_BEGIN:
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 1.0);
+                prototypeRules.setRuleProbability(GrassStagePiece, 1.0);
                 break;
             case DifficultyManager.ObstacleLevelsName.STORY_TRIALS:
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.5);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.5);
+                prototypeRules.setRuleProbability(GrassStagePiece, 0.5);
+                prototypeRules.setRuleProbability(ObstacleStagePiece, 0.5);
                 break;
             case DifficultyManager.ObstacleLevelsName.STORY_ENEMY_OBSTACLE:
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.4);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.50);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.TUTORIAL_OBSTACLE, 0.1);
+                prototypeRules.setRuleProbability(GrassStagePiece, 0.4);
+                prototypeRules.setRuleProbability(ObstacleStagePiece, 0.50);
+                prototypeRules.setRuleProbability(TripleObstacleStagePiece, 0.1);
                 break;
             case DifficultyManager.ObstacleLevelsName.STORY_BEFORE_FIRST_COMBAT:
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.4);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.HOLE, 0.2);
-                prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.OBSTACLE, 0.4);
+                prototypeRules.setRuleProbability(GrassStagePiece, 0.4);
+                prototypeRules.setRuleProbability(HoleStagePiece, 0.2);
+                prototypeRules.setRuleProbability(ObstacleStagePiece, 0.4);
                 break;
         }
         return new StagePrototype(prototypeRules, this.obstacleNumber);
@@ -135,8 +135,8 @@ class DifficultyManager
     getUndergroundStagePrototype()
     {
         var prototypeRules = new PrototypeRules();
-        prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.GRASS, 0.8);
-        prototypeRules.setRuleProbability(PrototypeRules.ruleTypes.PLATFORM, 0.2);
+        prototypeRules.setRuleProbability(GrassStagePiece, 0.8);
+        prototypeRules.setRuleProbability(PlatformStagePiece, 0.2);
         return new StagePrototype(prototypeRules);
     }
     
