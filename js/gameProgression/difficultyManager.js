@@ -86,7 +86,7 @@ class DifficultyManager
             case 0:
                 prototypeRules.setRuleProbability(GrassStagePiece, 0.4);
                 prototypeRules.setRuleProbability(HoleStagePiece, 0.2);
-                prototypeRules.setRuleProbability(ObstacleStagePiece, 0.4);
+                prototypeRules.setRuleProbability(Bonus1StagePiece, 0.4);
                 break;
             case 1:
                 prototypeRules.setRuleProbability(GrassStagePiece, 0.4);

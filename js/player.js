@@ -35,7 +35,7 @@ class DogPlayer extends GameObject
         
         this.trajectoryArrow;
         
-        this.collisionBody;
+        this.collisionBodies = {};
         
         this.appliedItems = {};
         
@@ -75,8 +75,10 @@ class DogPlayer extends GameObject
         this.sprite.onEvent.add(this.playStepSound, this);
         this.sprite.onPointUpdated.add(this.updateItemHandlePoints, this);
         
-        this.collisionBody = this.sprite.getSpriteByName("body");
-        ServiceLocator.physics.addToWorld(this.collisionBody);
+        this.collisionBodies[DogPlayer.CollisionBoxes.BODY] = this.sprite.getSpriteByName("body");
+        ServiceLocator.physics.addToWorld(this.collisionBodies[DogPlayer.CollisionBoxes.BODY]);
+        this.collisionBodies[DogPlayer.CollisionBoxes.HEAD] = this.sprite.getSpriteByName("head");
+        ServiceLocator.physics.addToWorld(this.collisionBodies[DogPlayer.CollisionBoxes.HEAD]);
         
         var self = this;
         this.sprite.events = {'onInputDown' : {
@@ -116,6 +118,8 @@ class DogPlayer extends GameObject
         ServiceLocator.renderer.addToOverlay(this.trajectoryArrow);
 
         this.addItem(DogWoolHatAccesory);
+        
+        ServiceLocator.registerListener(this.itemPicked, this, "ItemPickedMessage");
     }
     
     update()
@@ -181,9 +185,9 @@ class DogPlayer extends GameObject
         this.updateTrajectoryImage();
     }
     
-    getCollisionbody()
+    getCollisionBox(_part)
     {
-        return this.collisionBody;
+        return this.collisionBodies[_part];
     }
     
     updateTrajectoryImage()
@@ -470,6 +474,17 @@ class DogPlayer extends GameObject
         };
         ServiceLocator.registerListener(cardCollectedCallback, undefined, "GearCardCollectedMessage");
     }
+    
+    itemPicked(_msg)
+    {
+        console.log("Picked item:");
+        console.log(_msg.getItem());
+    }
+}
+
+DogPlayer.CollisionBoxes = {
+    HEAD: 0,
+    BODY: 1
 }
 
 class Accesory
@@ -514,7 +529,7 @@ class DogHatAccesory extends Accesory
     
     static preload(_game)
     {
-        _game.load.image('hat01', './img/items/tophat.png');
+        _game.load.image('hat01', './img/objects/tophat.png');
     }
 }
 
@@ -527,6 +542,6 @@ class DogWoolHatAccesory extends Accesory
     
     static preload(_game)
     {
-        _game.load.image('hat02', './img/items/woolhat.png');
+        _game.load.image('hat02', './img/objects/woolhat.png');
     }
 }

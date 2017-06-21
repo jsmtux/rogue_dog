@@ -1,6 +1,6 @@
 class Physics
 {
-    constructor(_game, _debugEnabled = false)
+    constructor(_game, _debugEnabled = true)
     {
         this.game = _game
         this.debugEnabled = _debugEnabled;
@@ -12,12 +12,12 @@ class Physics
     
     update()
     {
-        if (this.debugEnabled)
+        for (var ind in this.registeredSprites)
         {
-            for (var ind in this.registeredSprites)
+            if (this.debugEnabled)
             {
-                //this.game.game.debug.body(this.registeredSprites[ind]);
-                this.game.game.debug.spriteBounds(this.registeredSprites[ind], 'pink', false);
+                this.game.game.debug.body(this.registeredSprites[ind]);
+                //this.game.game.debug.spriteBounds(this.registeredSprites[ind], 'pink', false);
             }
         }
     }

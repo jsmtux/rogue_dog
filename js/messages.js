@@ -145,3 +145,16 @@ class EnemyTargeted extends Message
         return this.arguments["hitType"];
     }
 }
+
+class ItemPickedMessage extends Message
+{
+    constructor(_item)
+    {
+        super("ItemPickedMessage", {"item":_item});
+    }
+    
+    getItem()
+    {
+        return this.arguments["item"];
+    }
+}

@@ -14,7 +14,7 @@ class WalkLevel
     {
         while(this.columnsDrawn - 2 < (ServiceLocator.camera.getVisibleArea().right) / 80 + 5)
         {
-            this.walkManager.addTile(this.groundTileName, new Phaser.Point(this.columnsDrawn * 80, this.height), undefined, this);
+            this.walkManager.addTile(this.groundTileName, new Phaser.Point(this.columnsDrawn * 80, this.height), undefined, undefined, this);
             this.columnsDrawn ++;
         }
     }
@@ -43,7 +43,7 @@ class WalkLevel
             
             for (var ind in newCell.walkLevels)
             {
-                this.walkManager.addTile(this.groundTileName, new Phaser.Point(this.columnsDrawn * 80, this.height + newCell.walkLevels[ind]), newCell.obstacle, this);
+                this.walkManager.addTile(this.groundTileName, new Phaser.Point(this.columnsDrawn * 80, this.height + newCell.walkLevels[ind]), newCell.obstacle, newCell.item, this);
             }
             
             this.columnsDrawn ++;
@@ -94,13 +94,6 @@ class UndergroundWalkLevel extends WalkLevel
             this.cardPieces[ind].update();
         }*/
     }
-    
-    addCardPiece()
-    {
-        var cardPiece = new CardPiece(new Phaser.Point(this.lastProcessedX - Math.random() * this.gap, this.height));
-        cardPiece.create(this.game);
-        this.cardPieces.push(cardPiece);
-    }
 }
 
 class WalkManager extends GameMode
@@ -130,6 +123,7 @@ class WalkManager extends GameMode
         TallObstacle.preload(_game);
         GroundTile.preload(_game);
         CardPiece.preload(_game);
+        Stick.preload(_game);
     }
     
     create(_game)
@@ -140,12 +134,12 @@ class WalkManager extends GameMode
             {'name':'bg2', 'speed':0.7, 'yOffset':550}]);
     }
     
-    addTile(_grassName, _position, _obstacle, _walkLevel)
+    addTile(_grassName, _position, _obstacle, _item, _walkLevel)
     {
-        var newTile = new GroundTile(new Phaser.Point(_position.x, _position.y), _grassName, _obstacle, _walkLevel);
+        var newTile = new GroundTile(new Phaser.Point(_position.x, _position.y), _grassName, _obstacle, _item, _walkLevel);
 
         newTile.create(this.game);
-        this.groundTiles.push(newTile);       
+        this.groundTiles.push(newTile);
     }
 
     update()
@@ -254,6 +248,11 @@ WalkManager.NAME = "WalkManager";
 
 class VisibleObject extends GameObject
 {
+    constructor()
+    {
+        super();
+    }
+
     isOut()
     {
         var camera = ServiceLocator.camera;
@@ -273,7 +272,7 @@ class VisibleObject extends GameObject
 
 class GroundTile extends VisibleObject
 {
-    constructor(_position, _imageName, _obstacle, _walkLevel)
+    constructor(_position, _imageName, _obstacle, _item, _walkLevel)
     {
         super();
         this.imageName = _imageName;
@@ -281,7 +280,11 @@ class GroundTile extends VisibleObject
         this.walkLevel = _walkLevel;
         if (_obstacle)
         {
-            this.obstacle = new _obstacle(_position);
+            this.obstacle = new _obstacle(_position.clone());
+        }
+        if (_item)
+        {
+            this.item = new _item(_position.clone());
         }
     }
     
@@ -301,14 +304,22 @@ class GroundTile extends VisibleObject
         {
             this.obstacle.create(_game);
         }
+        if (this.item)
+        {
+            this.item.create(_game);            
+        }
     }
     
     destroy()
     {
-        this.sprite.destroy()
+        super.destroy()
         if (this.obstacle)
         {
             this.obstacle.destroy();
+        }
+        if (this.item)
+        {
+            this.item.destroy();
         }
     }
     
@@ -317,6 +328,10 @@ class GroundTile extends VisibleObject
         if (this.obstacle)
         {
             this.obstacle.update(_player);
+        }
+        if (this.item)
+        {
+            this.item.update(_player);
         }
     }
     
@@ -331,8 +346,8 @@ class Obstacle extends VisibleObject
     constructor(_position)
     {
         super();
-        this.sprite;
         this.broken = false;
+        this.sprite;
         this.position = _position;
     }
     
@@ -345,7 +360,8 @@ class Obstacle extends VisibleObject
     
     create(_game)
     {
-        this.sprite = _game.add.sprite(this.position.x, 0, 'spike');
+        var sprite = _game.add.sprite(this.position.x, 0, 'spike');
+        super.create(sprite)
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.y = this.position.y - this.sprite.height;
         this.breakAudio = _game.add.audio('obstacleBreakAudio');
@@ -381,7 +397,7 @@ class Obstacle extends VisibleObject
             return false;
         }
         
-        return ServiceLocator.physics.isCollidingWith(this.sprite, _player.getCollisionbody());
+        return ServiceLocator.physics.isCollidingWith(this.sprite, _player.getCollisionBox(DogPlayer.CollisionBoxes.BODY));
     }
 }
 
@@ -395,7 +411,8 @@ class EnemyObstacle extends Obstacle
     
     create(_game)
     {
-        this.sprite = _game.add.sprite(this.position.x, 0, 'tutorialObstacle');
+        var sprite = _game.add.sprite(this.position.x, 0, 'tutorialObstacle');
+        super.create(sprite)
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.y = this.position.y - this.sprite.height;
         ServiceLocator.publish(new ObstacleShownMessge(this));
@@ -431,7 +448,8 @@ class TallObstacle extends Obstacle
     
     create(_game)
     {
-        this.sprite = _game.add.sprite(this.position.x, 0, 'tall_spike');
+        var sprite = _game.add.sprite(this.position.x, 0, 'tall_spike');
+        super.create(sprite)
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.y = this.position.y - this.sprite.height;
         ServiceLocator.physics.addToWorld(this.sprite);
@@ -444,22 +462,71 @@ class TallObstacle extends Obstacle
     }
 }
 
-class CardPiece extends VisibleObject
+class Item extends VisibleObject
 {
     constructor(_position)
     {
         super();
         this.position = _position;
-        this.position.y -=  (230*Math.random() + 50.0);
-        this.glowSprite;
-        this.glowDifference = 0.01;
         this.dying = false;
+    }
+    
+    collides(_player)
+    {
+        return ServiceLocator.physics.isCollidingWith(this.sprite, _player.getCollisionBox(DogPlayer.CollisionBoxes.BODY));
+    }   
+}
+
+class Stick extends Item
+{
+    constructor(_position)
+    {
+        super(_position);
+        this.position.y -=  250;
+    }
+    
+    destroy()
+    {
+        ServiceLocator.physics.removeFromWorld(this.sprite);
+        super.destroy();
     }
     
     static preload(_game)
     {
-        _game.load.image('card_piece', './img/card/piece.png');
-        _game.load.image('card_piece_glow', './img/card/piece_glow.png');
+        _game.load.image('stick', './img/items/stick.png');
+    }
+    
+    create(_game)
+    {
+        var sprite = _game.add.sprite(this.position.x, this.position.y, 'stick');
+        super.create(sprite);
+        ServiceLocator.renderer.addToScene(this.sprite);
+        ServiceLocator.physics.addToWorld(this.sprite);
+    }
+    
+    update(_player)
+    {
+        if (this.collides(_player))
+        {
+            ServiceLocator.publish(new ItemPickedMessage(this));
+        }
+    }
+}
+
+class CardPiece extends Item
+{
+    constructor(_position)
+    {
+        super(_position);
+        this.position.y -=  (230*Math.random() + 50.0);
+        this.glowSprite;
+        this.glowDifference = 0.01;
+    }
+    
+    static preload(_game)
+    {
+        _game.load.image('card_piece', './img/items/piece.png');
+        _game.load.image('card_piece_glow', './img/items/piece_glow.png');
         _game.load.audio('cardPieceCollectedAudio', 'sounds/card_piece_collected.wav');
     }
     

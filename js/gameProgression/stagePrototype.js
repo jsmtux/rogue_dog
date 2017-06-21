@@ -84,6 +84,20 @@ class PlatformStageCell extends StageCell {
     }
 }
 
+class CardPieceStageCell extends StageCell {
+    constructor()
+    {
+        super(undefined, CardPiece);
+    }
+}
+
+class StickStageCell extends StageCell {
+    constructor()
+    {
+        super(undefined, Stick);
+    }
+}
+
 class StagePiece {
     constructor(_cellList, _emptyFollowing = 0, _obstacleNumber = 0)
     {
@@ -150,6 +164,13 @@ class PlatformStagePiece extends StagePiece {
     constructor()
     {
         super([new PlatformStageCell(), new PlatformStageCell(), new PlatformStageCell()], 4);
+    }
+}
+
+class Bonus1StagePiece extends StagePiece {
+    constructor()
+    {
+        super([new ObstacleStageCell(), new StickStageCell()], 4);
     }
 }
 
