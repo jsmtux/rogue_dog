@@ -123,14 +123,13 @@ class CombatManager extends GameMode
     
     enemyTargeted(_message)
     {
-        this.state = CombatManager.State.DEFEND;
         ServiceLocator.removeListener(this.enemyTargeted, this, "EnemyTargeted");
         for (var ind in this.enemies)
         {
             this.enemies[ind].hideCrosshair();
         }
-        this.state = CombatManager.State.FINISH_ATTACK;
-        this.player.doAttack(_message.getHitType(), _message.getEnemy());
+
+        this.player.doAttack(_message.getHitType(), _message.getEnemy(), () => {this.state = CombatManager.State.FINISH_ATTACK;});
     }
     
     enemiesInPlace() {

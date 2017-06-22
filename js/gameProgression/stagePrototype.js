@@ -183,7 +183,7 @@ class Bonus1StagePiece extends StagePiece {
                 list.push(new GrassStageCell());
             }
         }
-        super(list);
+        super(list, 0, 1);
     }
 }
 

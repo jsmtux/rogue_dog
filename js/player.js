@@ -290,10 +290,16 @@ class DogPlayer extends GameObject
         this.updateModeCallback = undefined;
     }
     
-    doAttack(_hitType, _enemy)
+    doAttack(_hitType, _enemy, _finishCallback)
     {
         this.attackAudio.play();
-        _enemy.takeHit(this, _hitType, this.attackPower);
+        var cb = () => {
+            _finishCallback(); 
+            _enemy.takeHit(this, _hitType, this.attackPower);
+        };
+        this.stickNumber--;
+        this.stickCounterGUI.setNumber(this.stickNumber);
+        new AttackStick(this.sprite.position, _enemy.position, cb, this.game);
     }
 
     play(_animationName)
@@ -432,7 +438,7 @@ class DogPlayer extends GameObject
     
     getFeetArea()
     {
-        return [this.sprite.x - 40, this.sprite.x + 109];
+        return [this.sprite.x - 40, this.sprite.x + 112];
     }
     
     addItem(_itemClass)
@@ -485,6 +491,54 @@ class DogPlayer extends GameObject
         _msg.getItem().pick();
         this.stickNumber++;
         this.stickCounterGUI.setNumber(this.stickNumber);
+    }
+}
+
+class AttackStick
+{
+    constructor(_initPosition, _endPosition, _callback, _game)
+    {
+        this.endPosition = _endPosition;
+        this.callback = _callback;
+        this.sprite = _game.add.sprite(_initPosition.x, _initPosition.y, 'stick');
+        ServiceLocator.renderer.addToScene(this.sprite);
+        _game.updateSignal.add(this.update, this);
+        this.game = _game;
+        this.x_accel = 10.0;
+        this.y_accel = 20.0;
+
+        var totalIterations = (_endPosition.x - _initPosition.x) / this.x_accel;
+        this.halfIterations = totalIterations / 2;
+        this.curIteration = 0;
+    }
+    
+    update()
+    {
+        this.sprite.x += 10.0;
+        var distance;
+        if (this.curIteration < this.halfIterations)
+        {
+            var distance = this.halfIterations - this.curIteration;
+        }
+        else
+        {
+            var distance = this.halfIterations - this.curIteration;
+        }
+        distance = distance / this.halfIterations;
+        this.sprite.y -= distance * this.y_accel;
+        if (this.sprite.x >= this.endPosition.x)
+        {
+            this.destroy();
+            this.callback();
+        }
+        this.curIteration ++;
+        this.sprite.angle -= 1 + Math.random();
+    }
+    
+    destroy()
+    {
+        this.sprite.destroy();
+        this.game.updateSignal.remove(this.update, this);
     }
 }
 
