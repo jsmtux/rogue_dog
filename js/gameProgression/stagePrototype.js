@@ -170,7 +170,20 @@ class PlatformStagePiece extends StagePiece {
 class Bonus1StagePiece extends StagePiece {
     constructor()
     {
-        super([new ObstacleStageCell(), new StickStageCell()], 4);
+        var itemPosition = randomInt(1,5);
+        var list = [new ObstacleStageCell()];
+        for(var i = 0; i < 6; i++)
+        {
+            if (itemPosition == i)
+            {
+                list.push(new StickStageCell())
+            }
+            else
+            {
+                list.push(new GrassStageCell());
+            }
+        }
+        super(list);
     }
 }
 

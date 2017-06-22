@@ -473,7 +473,7 @@ class Item extends VisibleObject
     
     collides(_player)
     {
-        return ServiceLocator.physics.isCollidingWith(this.sprite, _player.getCollisionBox(DogPlayer.CollisionBoxes.BODY));
+        return ServiceLocator.physics.isCollidingWith(this.sprite, _player.getCollisionBox(DogPlayer.CollisionBoxes.HEAD));
     }   
 }
 
@@ -483,6 +483,7 @@ class Stick extends Item
     {
         super(_position);
         this.position.y -=  250;
+        this.active = true;
     }
     
     destroy()
@@ -506,10 +507,16 @@ class Stick extends Item
     
     update(_player)
     {
-        if (this.collides(_player))
+        if (this.active && this.collides(_player))
         {
             ServiceLocator.publish(new ItemPickedMessage(this));
         }
+    }
+    
+    pick()
+    {
+        this.active = false;
+        this.sprite.alpha = 0.1;
     }
 }
 

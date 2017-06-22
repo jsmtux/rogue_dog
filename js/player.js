@@ -42,6 +42,8 @@ class DogPlayer extends GameObject
         _game.updateSignal.add(this.update, this);
         _game.renderSignal.add(this.updateRender, this);
         this.updateModeCallback;
+        
+        this.stickNumber = 0;
     }
     
     static preload(_game)
@@ -120,6 +122,9 @@ class DogPlayer extends GameObject
         this.addItem(DogWoolHatAccesory);
         
         ServiceLocator.registerListener(this.itemPicked, this, "ItemPickedMessage");
+        
+        this.stickCounterGUI = new StickCounterGuiElement()
+        ServiceLocator.guiManager.createUI(this.stickCounterGUI);
     }
     
     update()
@@ -477,8 +482,9 @@ class DogPlayer extends GameObject
     
     itemPicked(_msg)
     {
-        console.log("Picked item:");
-        console.log(_msg.getItem());
+        _msg.getItem().pick();
+        this.stickNumber++;
+        this.stickCounterGUI.setNumber(this.stickNumber);
     }
 }
 

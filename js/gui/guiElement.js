@@ -93,6 +93,11 @@ class CardGuiElement extends GuiElement
         this.description = _description;
         this.logoName = _logoName;
     }
+    
+    static preload(_game)
+    {
+        _game.load.image('cardbg', 'img/card/card_bg.png');
+    }
 
     create(_slickUI, _game)
     {
@@ -102,6 +107,26 @@ class CardGuiElement extends GuiElement
         background.add(new SlickUI.Element.Text(30,285, this.description, undefined, undefined, 220, 80));
         
         super.create(_slickUI, _game, background);
+    }
+}
+
+class StickCounterGuiElement extends GuiElement
+{
+    constructor()
+    {
+        super();
+    }
+    
+    create(_slickUI, _game)
+    {
+        _slickUI.add(new SlickUI.Element.DisplayObject(40, 150, game.make.sprite(0, 0, 'stick')));
+        this.text = _slickUI.add(new SlickUI.Element.Text(110,150, "x"));
+        this.setNumber(0);
+    }
+    
+    setNumber(_number)
+    {
+        this.text.value = "x" + _number;
     }
 }
 

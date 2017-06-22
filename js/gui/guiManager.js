@@ -7,7 +7,7 @@ class GUIManager
     static preload(_game)
     {
         GUIManager.slickUIPlugin = _game.plugins.add(Phaser.Plugin.SlickUI);
-        _game.load.image('cardbg', 'img/card/card_bg.png');
+        CardGuiElement.preload(_game);
     }
     
     create(_game)

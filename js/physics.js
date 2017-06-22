@@ -45,6 +45,8 @@ class Physics
     {
         this.game.physics.enable(_sprite, Phaser.Physics.ARCADE);
         this.registeredSprites.push(_sprite);
+        var body = _sprite.body;
+        body.setSize(body.width, body.height, 0, -body.height);
     }
     
     removeFromWorld(_sprite)
