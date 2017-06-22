@@ -125,6 +125,13 @@ class HoleStagePiece extends StagePiece {
     }
 }
 
+class HoleObstacleStagePiece extends StagePiece {
+    constructor()
+    {
+        super([new HoleStageCell(), new HoleStageCell(), new StageCell(CeilingObstacle, undefined, [-600]), new HoleStageCell(), new HoleStageCell()], 4);
+    }
+}
+
 class ObstacleStagePiece extends StagePiece {
     constructor()
     {

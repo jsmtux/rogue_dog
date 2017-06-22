@@ -124,6 +124,7 @@ class WalkManager extends GameMode
         GroundTile.preload(_game);
         CardPiece.preload(_game);
         Stick.preload(_game);
+        CeilingObstacle.preload(_game);
     }
     
     create(_game)
@@ -353,19 +354,24 @@ class Obstacle extends VisibleObject
     
     static preload(_game)
     {
-        _game.load.image('spike', './img/spike.png');
-        _game.load.image('brokenspike', './img/brokenspike.png');
+        _game.load.image('spike', './img/obstacles/spike.png');
+        _game.load.image('brokenspike', './img/obstacles/brokenspike.png');
         _game.load.audio('obstacleBreakAudio', 'sounds/obstacle_break.wav');
+    }
+    
+    createObstacle(_sprite, _game)
+    {
+        super.create(_sprite)
+        ServiceLocator.renderer.addToScene(this.sprite);
+        ServiceLocator.physics.addToWorld(this.sprite);
     }
     
     create(_game)
     {
         var sprite = _game.add.sprite(this.position.x, 0, 'spike');
-        super.create(sprite)
-        ServiceLocator.renderer.addToScene(this.sprite);
-        this.sprite.y = this.position.y - this.sprite.height;
+        sprite.y = this.position.y - sprite.height;
+        this.createObstacle(sprite, _game);
         this.breakAudio = _game.add.audio('obstacleBreakAudio');
-        ServiceLocator.physics.addToWorld(this.sprite);
     }
     
     break()
@@ -408,14 +414,11 @@ class EnemyObstacle extends Obstacle
         super(_position);
     }
     
-    
     create(_game)
     {
         var sprite = _game.add.sprite(this.position.x, 0, 'tutorialObstacle');
-        super.create(sprite)
-        ServiceLocator.renderer.addToScene(this.sprite);
-        this.sprite.y = this.position.y - this.sprite.height;
-        ServiceLocator.publish(new ObstacleShownMessge(this));
+        sprite.y = this.position.y - sprite.height;
+        super.createObstacle(sprite, _game);
     }
     
     update(_player)
@@ -442,23 +445,46 @@ class TallObstacle extends Obstacle
     
     static preload(_game)
     {
-        _game.load.image('tall_spike', './img/tall_spike.png');
-        _game.load.image('brokentall_spike', './img/tall_spike_broken.png');
+        _game.load.image('tall_spike', './img/obstacles/tall_spike.png');
+        _game.load.image('brokentall_spike', './img/obstacles/tall_spike_broken.png');
     }
     
     create(_game)
     {
         var sprite = _game.add.sprite(this.position.x, 0, 'tall_spike');
-        super.create(sprite)
-        ServiceLocator.renderer.addToScene(this.sprite);
-        this.sprite.y = this.position.y - this.sprite.height;
-        ServiceLocator.physics.addToWorld(this.sprite);
+        sprite.y = this.position.y - sprite.height;
+        this.createObstacle(sprite, _game);
     }
     
     break()
     {
         this.broken = true;
         this.sprite.loadTexture('brokentall_spike');
+    }
+}
+
+class CeilingObstacle extends Obstacle
+{
+    constructor(_position)
+    {
+        super(_position)
+    }
+    
+    static preload(_game)
+    {
+        _game.load.image('ceiling_spike', './img/obstacles/ceiling_spike.png');
+    }
+    
+    create(_game)
+    {
+        var sprite = _game.add.sprite(this.position.x, 0, 'ceiling_spike');
+        sprite.y = this.position.y + 80;
+        this.createObstacle(sprite, _game);
+    }
+    
+    break()
+    {
+        this.broken = true;
     }
 }
 
