@@ -50,6 +50,7 @@ class DogPlayer extends GameObject
     {
         HealthBar.preload(_game);
         EnergyBar.preload(_game);
+        AttackStick.preload(_game);
 
         var path = "anim/"
         _game.load.atlas("dogAnimAtlas", path + "dog.png", path + "dog.json");
@@ -59,6 +60,7 @@ class DogPlayer extends GameObject
         _game.load.audio('playerJumpAudio', 'sounds/player_jump.wav');
         _game.load.audio('playerLandAudio', 'sounds/player_land.wav');
         _game.load.audio('playerStepAudio', 'sounds/player_step.wav');
+        _game.load.audio('pickStickAudio', 'sounds/pick_stick.wav');
         
         _game.load.image('trajectory_arrow', './img/trajectory_arrow.png');
 
@@ -113,6 +115,8 @@ class DogPlayer extends GameObject
         this.landAudio.volume = 0.25;
         this.stepAudio = this.game.add.audio('playerStepAudio');
         this.stepAudio.volume = 0.25;
+        this.pickStickAudio = this.game.add.audio('pickStickAudio');
+        this.pickStickAudio.volume = 0.25;
         
         this.trajectoryArrow = _game.add.sprite(0, 0, 'trajectory_arrow');
         this.trajectoryArrow.visible = false;
@@ -491,6 +495,7 @@ class DogPlayer extends GameObject
         _msg.getItem().pick();
         this.stickNumber++;
         this.stickCounterGUI.setNumber(this.stickNumber);
+        this.pickStickAudio.play();
     }
 }
 
@@ -510,6 +515,13 @@ class AttackStick
         var totalIterations = (_endPosition.x - _initPosition.x) / this.x_accel;
         this.halfIterations = totalIterations / 2;
         this.curIteration = 0;
+        
+        this.hitStickAudio = this.game.add.audio('hitStickAudio');
+    }
+    
+    static preload(_game)
+    {
+        _game.load.audio('hitStickAudio', 'sounds/hit_stick.wav');
     }
     
     update()
@@ -528,6 +540,7 @@ class AttackStick
         this.sprite.y -= distance * this.y_accel;
         if (this.sprite.x >= this.endPosition.x)
         {
+            this.hitStickAudio.play();
             this.destroy();
             this.callback();
         }

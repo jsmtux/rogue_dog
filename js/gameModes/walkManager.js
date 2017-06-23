@@ -391,6 +391,7 @@ class Obstacle extends VisibleObject
     {
         if (this.collides(_player))
         {
+            console.log("Player collision");
             ServiceLocator.publish(new JumpFailedMessage());
             this.break();
         }
@@ -403,7 +404,8 @@ class Obstacle extends VisibleObject
             return false;
         }
         
-        return ServiceLocator.physics.isCollidingWith(this.sprite, _player.getCollisionBox(DogPlayer.CollisionBoxes.BODY));
+        return ServiceLocator.physics.isCollidingWith(this.sprite, _player.getCollisionBox(DogPlayer.CollisionBoxes.BODY)) 
+            || ServiceLocator.physics.isCollidingWith(this.sprite, _player.getCollisionBox(DogPlayer.CollisionBoxes.HEAD));
     }
 }
 
@@ -473,6 +475,7 @@ class CeilingObstacle extends Obstacle
     static preload(_game)
     {
         _game.load.image('ceiling_spike', './img/obstacles/ceiling_spike.png');
+        _game.load.image('ceiling_spike_broken', './img/obstacles/ceiling_spike_broken.png');
     }
     
     create(_game)
@@ -485,6 +488,7 @@ class CeilingObstacle extends Obstacle
     break()
     {
         this.broken = true;
+        this.sprite.loadTexture('ceiling_spike_broken');
     }
 }
 
