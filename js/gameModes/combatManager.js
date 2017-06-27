@@ -48,8 +48,15 @@ class CombatManager extends GameMode
         {
             if (this.getNumberOfDyingEnemies() === 0 && this.cardsDisappearing === 0)
             {
-                ServiceLocator.publish(new NewBannerMessage(NewBannerMessage.Types.Defend));
-                this.state = CombatManager.State.DEFEND;
+                if (this.getNumberOfEnemies() === 0)
+                {
+                    this.finishCombat();
+                }
+                else
+                {
+                    this.state = CombatManager.State.DEFEND;
+                    ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.DEFEND));
+                }
             }
         }
         else if (this.state === CombatManager.State.DEFEND)
@@ -78,6 +85,10 @@ class CombatManager extends GameMode
             {
                 this.finishCombat();
             }
+        }
+        else if(this.state === CombatManager.State.FLEE_COMBAT)
+        {
+            this.finishCombat();
         }
     }
     
@@ -113,12 +124,34 @@ class CombatManager extends GameMode
     startAttack()
     {
         this.state = CombatManager.State.ATTACK;
-        ServiceLocator.publish(new NewBannerMessage(NewBannerMessage.Types.Attack));
-        for (var ind in this.enemies)
+        if (this.player.canAttack())
         {
-            this.enemies[ind].showCrosshair();
+            ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.ATTACK));
+            for (var ind in this.enemies)
+            {
+                this.enemies[ind].showCrosshair();
+            }
+            ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
         }
-        ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
+        else
+        {
+            ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.ESCAPE));
+            this.player.startEscape(this.escapeSucceeded, this);
+        }
+    }
+    
+    escapeSucceeded(_success)
+    {
+        setTimeout(() => {
+            if (_success)
+            {
+                this.state = CombatManager.State.FLEE_COMBAT;
+            }
+            else
+            {
+                this.state = CombatManager.State.FINISH_ATTACK;
+            }
+        }, 1000);
     }
     
     enemyTargeted(_message)
@@ -217,7 +250,8 @@ CombatManager.State = {
     ATTACK : 3,
     FINISH_ATTACK: 4,
     DEFEND : 5,
-    FINISHED: 6
+    FINISHED: 6,
+    FLEE_COMBAT: 7
 }
 
 CombatManager.NAME = "CombatManager";

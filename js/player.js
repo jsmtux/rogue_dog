@@ -7,10 +7,7 @@ class DogPlayer extends GameObject
         this.character;
         this.maxHealth = 40;
         this.health = this.maxHealth;
-        this.maxEnergy = 20;
-        this.energy = 0;
         this.healthBar = new HealthBar();
-        this.energyBar = new EnergyBar();
         this.jumpAcceleration = new Phaser.Point(0, 0);
         this.dizzy = false;
         
@@ -49,7 +46,6 @@ class DogPlayer extends GameObject
     static preload(_game)
     {
         HealthBar.preload(_game);
-        EnergyBar.preload(_game);
         AttackStick.preload(_game);
 
         var path = "anim/"
@@ -100,7 +96,6 @@ class DogPlayer extends GameObject
         }
         
         this.healthBar.create();
-        this.energyBar.create();
         
         this.cardPieceUI.create(this.game);
         ServiceLocator.registerListener(this.cardPiecePicked, this, "CardPieceFoundMessage");
@@ -185,11 +180,6 @@ class DogPlayer extends GameObject
             }
         }
         this.play(shouldPlay);
-        
-        if (this.isUnderground())
-        {
-            this.subtractEnergy(0.01);
-        }
         
         this.updateTrajectoryImage();
     }
@@ -294,6 +284,11 @@ class DogPlayer extends GameObject
         this.updateModeCallback = undefined;
     }
     
+    canAttack()
+    {
+        return this.stickNumber > 0;
+    }
+    
     doAttack(_hitType, _enemy, _finishCallback)
     {
         this.attackAudio.play();
@@ -304,6 +299,15 @@ class DogPlayer extends GameObject
         this.stickNumber--;
         this.stickCounterGUI.setNumber(this.stickNumber);
         new AttackStick(this.sprite.position, _enemy.position, cb, this.game);
+    }
+    
+    startEscape(_callback, _cbContext)
+    {
+        ServiceLocator.inputManager.tapGesture.add();
+        setTimeout(function(){
+            _callback.call(_cbContext, ServiceLocator.inputManager.tapGesture.getSuccess());
+            ServiceLocator.inputManager.tapGesture.remove();
+        }, 3000);
     }
 
     play(_animationName)
@@ -318,11 +322,6 @@ class DogPlayer extends GameObject
     updateHealthPercentage()
     {
         this.healthBar.setPercentage(this.health / this.maxHealth);
-    }
-    
-    updateEnergyPercentage()
-    {
-        this.energyBar.setPercentage(this.energy / this.maxEnergy);
     }
     
     playStepSound()
@@ -381,26 +380,6 @@ class DogPlayer extends GameObject
         if (this.health <= 0)
         {
             this.game.die();
-        }
-    }
-    
-    addEnergy(_points)
-    {
-        this.energy += _points;
-        if (this.energy > this.maxEnergy)
-        {
-            this.energy = this.maxEnergy;
-        }
-        this.updateEnergyPercentage();
-    }
-    
-    subtractEnergy(_amount)
-    {
-        this.energy -= _amount;
-        this.updateEnergyPercentage();
-        if (this.energy <= 0)
-        {
-            this.subtractHealth(0.1);
         }
     }
     

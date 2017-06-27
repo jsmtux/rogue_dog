@@ -13,7 +13,7 @@ MainState.prototype.preload = function ()
     DialogManager.preload(this.game);
     CombatManager.preload(this.game);
 
-    BannerShow.preload(this.game);
+    GameModeUI.preload(this.game);
     ParticleEmitter.preload(this.game);
 }
 
@@ -71,11 +71,13 @@ MainState.prototype.create = function ()
     this.addGameMode(new EmptyGameMode());
     this.addGameMode(new CombatLootMode(this, this.player));
     
-    this.bannerShow = new BannerShow(this);
     this.particleEmitter = new ParticleEmitter(this.game);
     this.particleEmitter.create();
     
     MenuState.gameConfiguration.resetGameState(this);
+
+    this.gameModeUI = new GameModeUI(this.game);
+    this.gameModeUI.create();
 }
 
 MainState.prototype.addGameMode = function(_mode)

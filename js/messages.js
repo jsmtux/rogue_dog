@@ -86,24 +86,6 @@ class CardLootedMessage extends Message
     }
 }
 
-class NewBannerMessage extends Message
-{
-    constructor(_messageType)
-    {
-        super("NewBannerMessage", {"type":_messageType})
-    }
-    
-    getMessageType()
-    {
-        return this.arguments["type"];
-    }
-}
-
-NewBannerMessage.Types = {
-    "Attack": 0,
-    "Defend": 1
-}
-
 class EmitParticle extends Message
 {
     constructor(_type, _position)
@@ -156,5 +138,18 @@ class ItemPickedMessage extends Message
     getItem()
     {
         return this.arguments["item"];
+    }
+}
+
+class NewGameModeMessage extends Message
+{
+    constructor(_mode)
+    {
+        super("NewGameModeMessage", {"mode": _mode});
+    }
+    
+    getMode()
+    {
+        return this.arguments["mode"];
     }
 }

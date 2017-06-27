@@ -191,6 +191,7 @@ class WalkManager extends GameMode
     
     startMode()
     {
+        ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.JUMP));
         this.player.startWalk();
         this.walkLevels[0].setStagePrototype(ServiceLocator.difficultyManager.getStagePrototype());
         this.walkLevels[1].setStagePrototype(ServiceLocator.difficultyManager.getUndergroundStagePrototype());

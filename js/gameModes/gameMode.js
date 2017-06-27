@@ -37,3 +37,11 @@ class GameMode
         return undefined;
     }
 }
+
+GameMode.visibleTypes = {
+    ATTACK: 0,
+    DEFEND: 1,
+    JUMP: 2,
+    ESCAPE: 3,
+    LOOT: 4
+}

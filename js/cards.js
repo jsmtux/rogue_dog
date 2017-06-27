@@ -183,66 +183,6 @@ class SmMedkitCard extends Card
 }
 SmMedkitCard.ID = "SmMedkitCard";
 
-class SmEnergyCard extends Card
-{
-    constructor(_game)
-    {
-        super("Small Crystal", "Small energy increase", "small_energy_icon", Card.Type.ITEM, _game);
-    }
-    
-    apply(_arguments)
-    {
-        _arguments.player.addEnergy(5);
-        ServiceLocator.publish(new EmitParticle(EmitParticle.Types.EnergyIncrease));
-    }
-    
-    getEnergyIncrease()
-    {
-        return 2;
-    }
-}
-SmEnergyCard.ID = "SmEnergyCard";
-
-class MedEnergyCard extends Card
-{
-    constructor(_game)
-    {
-        super("Med. Crystal", "Medium energy increase", "medium_energy_icon", Card.Type.ITEM, _game);
-    }
-    
-    apply(_arguments)
-    {
-        _arguments.player.addEnergy(10);
-        ServiceLocator.publish(new EmitParticle(EmitParticle.Types.EnergyIncrease));
-    }
-    
-    getEnergyIncrease()
-    {
-        return 5;
-    }
-}
-MedEnergyCard.ID = "MedEnergyCard";
-
-class BigEnergyCard extends Card
-{
-    constructor(_game)
-    {
-        super("Big Crystal", "Big energy increase", "big_energy_icon", Card.Type.ITEM, _game);
-    }
-    
-    apply(_arguments)
-    {
-        _arguments.player.addEnergy(15);
-        ServiceLocator.publish(new EmitParticle(EmitParticle.Types.EnergyIncrease));
-    }
-    
-    getEnergyIncrease()
-    {
-        return 10;
-    }
-}
-BigEnergyCard.ID = "BigEnergyCard";
-
 class NewEnemyCard extends Card
 {
     constructor(_game)

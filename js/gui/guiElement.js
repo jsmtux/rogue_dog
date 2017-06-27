@@ -119,8 +119,8 @@ class StickCounterGuiElement extends GuiElement
     
     create(_slickUI, _game)
     {
-        _slickUI.add(new SlickUI.Element.DisplayObject(40, 150, game.make.sprite(0, 0, 'stick')));
-        this.text = _slickUI.add(new SlickUI.Element.Text(110,150, "x"));
+        _slickUI.add(new SlickUI.Element.DisplayObject(300, 23, game.make.sprite(0, 0, 'stick')));
+        this.text = _slickUI.add(new SlickUI.Element.Text(370,20, "x"));
         this.setNumber(0);
     }
     

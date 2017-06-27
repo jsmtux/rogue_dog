@@ -52,6 +52,8 @@ class CombatLootMode extends GameMode
             });
             entering.start();
         }
+        
+        ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.LOOT));
     }
     
     isFinished()

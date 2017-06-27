@@ -25,7 +25,7 @@ class ParticleEmitter
         this.grassemitter.width = 150;
         ServiceLocator.renderer.addToScene(this.grassemitter);
         
-        this.healthEmitter = game.add.emitter(40, 50, 25);
+        this.healthEmitter = game.add.emitter(40, 30, 25);
         this.healthEmitter.makeParticles('health_particle');
         this.healthEmitter.setXSpeed(130,70);
         this.healthEmitter.setYSpeed(0,0);

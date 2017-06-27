@@ -10,9 +10,6 @@ class CardManager
     {
         _game.load.image('cardBack', './img/card/back.png');
         CardManager.addNewCard(SmMedkitCard);
-        CardManager.addNewCard(SmEnergyCard);
-        CardManager.addNewCard(MedEnergyCard);
-        CardManager.addNewCard(BigEnergyCard);
         CardManager.addNewCard(NewEnemyCard);
         CardManager.addNewCard(StrongerBasicEnemyCard);
         CardManager.addNewCard(StrongerBeeEnemyCard);

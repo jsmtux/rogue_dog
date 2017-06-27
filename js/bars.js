@@ -16,14 +16,20 @@ class StatsBar
         
         var width = (_percentage) * 142
         
-        this.mask = game.add.graphics(20, 20);
+        this.mask = game.add.graphics(0, 0);
         ServiceLocator.renderer.addToUI(this.mask);
         this.mask.beginFill(0x0000FF);
         this.mask.lineStyle(2, 0x0000FF, 1);
         this.mask.drawRect(0, 0, 50 + width, 300);
         
         this.spriteFill.mask = this.mask;
-    }   
+    }
+    
+    setVisible(_visible)
+    {
+        this.sprite.visible = _visible;
+        this.spriteFill.visible = _visible;
+    }
 }
 
 class HealthBar extends StatsBar
@@ -37,9 +43,9 @@ class HealthBar extends StatsBar
     create()
     {
         var renderer = ServiceLocator.renderer;
-        this.sprite = game.add.sprite(20, 20, 'health_bar', 0, renderer.uiGroup);
+        this.sprite = game.add.sprite(20, 0, 'health_bar', 0, renderer.uiGroup);
         ServiceLocator.renderer.addToUI(this.sprite);
-        this.spriteFill = game.add.sprite(20, 20, 'health_bar_fill', 0, renderer.uiGroup);
+        this.spriteFill = game.add.sprite(20, 0, 'health_bar_fill', 0, renderer.uiGroup);
         ServiceLocator.renderer.addToUI(this.spriteFill);
         this.setPercentage(100);
     }

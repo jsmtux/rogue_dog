@@ -9,9 +9,6 @@ class EndlessConfiguration
         ServiceLocator.difficultyManager.setInitialValues(1, 1, 3, 0);
         
         ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:undefined,
-            SmEnergyCard:undefined,
-            MedEnergyCard:undefined,
-            BigEnergyCard:undefined,
             NewEnemyCard:1,
             StrongerBasicEnemyCard:2,
             StrongerBeeEnemyCard:2,
@@ -36,7 +33,16 @@ class EndlessConfiguration
             if (modeName === "CombatLootMode")
                 _mainState.setNextMode("WalkManager", nextModeArguments);
             if (modeName === "CombatManager")
-            _mainState.setNextMode("CombatLootMode", nextModeArguments);
+            {
+                if (nextModeArguments.length === 0)
+                {
+                    _mainState.setNextMode("WalkManager", nextModeArguments);
+                }
+                else
+                {
+                    _mainState.setNextMode("CombatLootMode", nextModeArguments);
+                }
+            }
             if (modeName === "WalkManager")
             _mainState.setNextMode("CombatManager", nextModeArguments);
         }
