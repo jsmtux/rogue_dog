@@ -26,25 +26,36 @@ class GameModeUI
     
     newGameMode(_msg)
     {
+        var textureName;
         switch(_msg.getMode())
         {
             case GameMode.visibleTypes.ATTACK:
-                this.sprite.loadTexture('AttackModeLabel');
+                textureName = 'AttackModeLabel';
                 break;
             case GameMode.visibleTypes.DEFEND:
-                this.sprite.loadTexture('DefendModeLabel');
+                textureName = 'DefendModeLabel';
                 break;
             case GameMode.visibleTypes.JUMP:
-                this.sprite.loadTexture('JumpModeLabel');
+                textureName = 'JumpModeLabel';
                 break;
             case GameMode.visibleTypes.ESCAPE:
-                this.sprite.loadTexture('EscapeModeLabel');
+                textureName = 'EscapeModeLabel';
                 break;
             case GameMode.visibleTypes.LOOT:
-                this.sprite.loadTexture('LootModeLabel');
+                textureName = 'LootModeLabel';
                 break;
         }
-        this.sprite.x = ServiceLocator.viewportHandler.resolution.x - 50 - this.sprite.width;
-        this.sprite.y = 15;
+        this.newSprite = this.game.add.sprite(0,0, textureName);
+        this.newSprite.x = ServiceLocator.viewportHandler.resolution.x - 50 - this.newSprite.width;
+        this.newSprite.y = -30;
+        ServiceLocator.renderer.addToUI(this.newSprite);
+        
+        var move = this.game.add.tween(this.newSprite);
+
+        move.to({ y: 15 }, 500, Phaser.Easing.Bounce.Out);
+        move.onComplete.add(() => {this.sprite.destroy(); this.sprite = this.newSprite; this.newSprite = undefined;});
+        move.start();
+        
+        this.game.add.tween(this.sprite).to( { alpha: 0 }, 400, "Linear", true);
     }
 }
