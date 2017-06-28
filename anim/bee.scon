@@ -1,0 +1,2345 @@
+{
+	"entity": [
+		{
+			"animation": [
+				{
+					"b": 17,
+					"gline": [
+						{
+							"pos": 0,
+							"v": 1
+						}
+					],
+					"id": 0,
+					"interval": 100,
+					"l": -170,
+					"length": 400,
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								]
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 1,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								],
+								"time": 100
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 2,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								],
+								"time": 200
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 3,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								],
+								"time": 300
+							}
+						]
+					},
+					"name": "Idle",
+					"r": 169,
+					"t": -302,
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 271.041627,
+										"file": 0,
+										"folder": 0,
+										"x": 125.761033,
+										"y": 179.315818
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 271.041627,
+										"file": 0,
+										"folder": 0,
+										"x": 125.761033,
+										"y": 179.315818
+									},
+									"spin": 0,
+									"time": 100
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 271.041627,
+										"file": 0,
+										"folder": 0,
+										"x": 125.761033,
+										"y": 179.315818
+									},
+									"spin": 0,
+									"time": 200
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 271.041627,
+										"file": 0,
+										"folder": 0,
+										"x": 125.761033,
+										"y": 179.315818
+									},
+									"spin": 0,
+									"time": 300
+								}
+							],
+							"name": "Body"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 271.041627,
+										"file": 1,
+										"folder": 0,
+										"x": 103.655596,
+										"y": 19.887622
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 271.041627,
+										"file": 1,
+										"folder": 0,
+										"x": 103.655596,
+										"y": 19.887622
+									},
+									"spin": 0,
+									"time": 100
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 271.041627,
+										"file": 1,
+										"folder": 0,
+										"x": 103.655596,
+										"y": 19.887622
+									},
+									"spin": 0,
+									"time": 200
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 271.041627,
+										"file": 1,
+										"folder": 0,
+										"x": 103.655596,
+										"y": 19.887622
+									},
+									"spin": 0,
+									"time": 300
+								}
+							],
+							"name": "Face 01"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 298.300756,
+										"file": 2,
+										"folder": 0,
+										"x": 65.069188,
+										"y": 57.218465
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 298.300756,
+										"file": 2,
+										"folder": 0,
+										"scale_y": -0.5,
+										"x": -41.467815,
+										"y": -0.147613
+									},
+									"spin": 0,
+									"time": 100
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 298.300756,
+										"file": 2,
+										"folder": 0,
+										"x": 65.069188,
+										"y": 57.218465
+									},
+									"spin": 0,
+									"time": 200
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 298.300756,
+										"file": 2,
+										"folder": 0,
+										"scale_y": -0.5,
+										"x": -41.467815,
+										"y": -0.147613
+									},
+									"spin": 0,
+									"time": 300
+								}
+							],
+							"name": "Left Wing"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 242.878697,
+										"file": 3,
+										"folder": 0,
+										"x": 102.541271,
+										"y": 12.826681
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 242.878697,
+										"file": 3,
+										"folder": 0,
+										"scale_y": -0.5,
+										"x": -6.13508,
+										"y": 70.478745
+									},
+									"spin": 0,
+									"time": 100
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 242.878697,
+										"file": 3,
+										"folder": 0,
+										"x": 102.541271,
+										"y": 12.826681
+									},
+									"spin": 0,
+									"time": 200
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 242.878697,
+										"file": 3,
+										"folder": 0,
+										"scale_y": -0.5,
+										"x": -6.13508,
+										"y": 70.478745
+									},
+									"spin": 0,
+									"time": 300
+								}
+							],
+							"name": "Right Wing"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"bone": {
+										"angle": 88.958373,
+										"y": 100
+									},
+									"id": 0,
+									"spin": 0
+								},
+								{
+									"bone": {
+										"angle": 88.958373,
+										"y": 116
+									},
+									"id": 1,
+									"spin": 0,
+									"time": 200
+								}
+							],
+							"name": "bone_000",
+							"obj": 0,
+							"object_type": "bone"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"bone": {
+										"angle": 28.162930000000017,
+										"x": 96.440937,
+										"y": 8.592209
+									},
+									"id": 0
+								},
+								{
+									"bone": {
+										"angle": 44.655843000000004,
+										"x": 80.443581,
+										"y": 8.301347
+									},
+									"id": 1,
+									"spin": -1,
+									"time": 100
+								},
+								{
+									"bone": {
+										"angle": 28.162930000000017,
+										"x": 96.440937,
+										"y": 8.592209
+									},
+									"id": 2,
+									"time": 200
+								},
+								{
+									"bone": {
+										"angle": 44.655843000000004,
+										"x": 80.443581,
+										"y": 8.301347
+									},
+									"id": 3,
+									"spin": -1,
+									"time": 300
+								}
+							],
+							"name": "bone_001",
+							"obj": 1,
+							"object_type": "bone"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"bone": {
+										"angle": 332.740871,
+										"x": 96.829373,
+										"y": -12.771782
+									},
+									"id": 0,
+									"spin": -1
+								},
+								{
+									"bone": {
+										"angle": 323.009871,
+										"x": 81.831852,
+										"y": -13.044464
+									},
+									"id": 1,
+									"time": 100
+								},
+								{
+									"bone": {
+										"angle": 332.740871,
+										"x": 96.829373,
+										"y": -12.771782
+									},
+									"id": 2,
+									"spin": -1,
+									"time": 200
+								},
+								{
+									"bone": {
+										"angle": 323.009871,
+										"x": 81.831852,
+										"y": -13.044464
+									},
+									"id": 3,
+									"time": 300
+								}
+							],
+							"name": "bone_002",
+							"obj": 2,
+							"object_type": "bone"
+						}
+					]
+				},
+				{
+					"b": 17,
+					"gline": [
+						{
+							"pos": 0,
+							"v": 1
+						}
+					],
+					"id": 1,
+					"interval": 100,
+					"l": -170,
+					"length": 400,
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								]
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 1,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								],
+								"time": 100
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 2,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								],
+								"time": 200
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 3,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								],
+								"time": 300
+							}
+						]
+					},
+					"name": "Idle Blinking",
+					"r": 169,
+					"t": -302,
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 271.041627,
+										"file": 0,
+										"folder": 0,
+										"x": 125.761033,
+										"y": 179.315818
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 271.041627,
+										"file": 0,
+										"folder": 0,
+										"x": 125.761033,
+										"y": 179.315818
+									},
+									"spin": 0,
+									"time": 100
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 271.041627,
+										"file": 0,
+										"folder": 0,
+										"x": 125.761033,
+										"y": 179.315818
+									},
+									"spin": 0,
+									"time": 200
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 271.041627,
+										"file": 0,
+										"folder": 0,
+										"x": 125.761033,
+										"y": 179.315818
+									},
+									"spin": 0,
+									"time": 300
+								}
+							],
+							"name": "Body"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 271.041627,
+										"file": 1,
+										"folder": 0,
+										"x": 103.655596,
+										"y": 19.887622
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 271.041627,
+										"file": 1,
+										"folder": 0,
+										"x": 103.655596,
+										"y": 19.887622
+									},
+									"spin": 0,
+									"time": 100
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 271.041627,
+										"file": 1,
+										"folder": 0,
+										"x": 103.655596,
+										"y": 19.887622
+									},
+									"spin": 0,
+									"time": 200
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 271.041627,
+										"file": 5,
+										"folder": 0,
+										"x": 103.655596,
+										"y": 19.887622
+									},
+									"spin": 0,
+									"time": 300
+								}
+							],
+							"name": "Face 01"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 298.300756,
+										"file": 2,
+										"folder": 0,
+										"x": 65.069188,
+										"y": 57.218465
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 298.300756,
+										"file": 2,
+										"folder": 0,
+										"scale_y": -0.5,
+										"x": -41.467815,
+										"y": -0.147613
+									},
+									"spin": 0,
+									"time": 100
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 298.300756,
+										"file": 2,
+										"folder": 0,
+										"x": 65.069188,
+										"y": 57.218465
+									},
+									"spin": 0,
+									"time": 200
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 298.300756,
+										"file": 2,
+										"folder": 0,
+										"scale_y": -0.5,
+										"x": -41.467815,
+										"y": -0.147613
+									},
+									"spin": 0,
+									"time": 300
+								}
+							],
+							"name": "Left Wing"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 242.878697,
+										"file": 3,
+										"folder": 0,
+										"x": 102.541271,
+										"y": 12.826681
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 242.878697,
+										"file": 3,
+										"folder": 0,
+										"scale_y": -0.5,
+										"x": -6.13508,
+										"y": 70.478745
+									},
+									"spin": 0,
+									"time": 100
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 242.878697,
+										"file": 3,
+										"folder": 0,
+										"x": 102.541271,
+										"y": 12.826681
+									},
+									"spin": 0,
+									"time": 200
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 242.878697,
+										"file": 3,
+										"folder": 0,
+										"scale_y": -0.5,
+										"x": -6.13508,
+										"y": 70.478745
+									},
+									"spin": 0,
+									"time": 300
+								}
+							],
+							"name": "Right Wing"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"bone": {
+										"angle": 88.958373,
+										"y": 100
+									},
+									"id": 0,
+									"spin": 0
+								},
+								{
+									"bone": {
+										"angle": 88.958373,
+										"y": 116
+									},
+									"id": 1,
+									"spin": 0,
+									"time": 200
+								}
+							],
+							"name": "bone_000",
+							"obj": 0,
+							"object_type": "bone"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"bone": {
+										"angle": 28.162930000000017,
+										"x": 96.440937,
+										"y": 8.592209
+									},
+									"id": 0
+								},
+								{
+									"bone": {
+										"angle": 44.655843000000004,
+										"x": 80.443581,
+										"y": 8.301347
+									},
+									"id": 1,
+									"spin": -1,
+									"time": 100
+								},
+								{
+									"bone": {
+										"angle": 28.162930000000017,
+										"x": 96.440937,
+										"y": 8.592209
+									},
+									"id": 2,
+									"time": 200
+								},
+								{
+									"bone": {
+										"angle": 44.655843000000004,
+										"x": 80.443581,
+										"y": 8.301347
+									},
+									"id": 3,
+									"spin": -1,
+									"time": 300
+								}
+							],
+							"name": "bone_001",
+							"obj": 1,
+							"object_type": "bone"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"bone": {
+										"angle": 332.740871,
+										"x": 96.829373,
+										"y": -12.771782
+									},
+									"id": 0,
+									"spin": -1
+								},
+								{
+									"bone": {
+										"angle": 323.009871,
+										"x": 81.831852,
+										"y": -13.044464
+									},
+									"id": 1,
+									"time": 100
+								},
+								{
+									"bone": {
+										"angle": 332.740871,
+										"x": 96.829373,
+										"y": -12.771782
+									},
+									"id": 2,
+									"spin": -1,
+									"time": 200
+								},
+								{
+									"bone": {
+										"angle": 323.009871,
+										"x": 81.831852,
+										"y": -13.044464
+									},
+									"id": 3,
+									"time": 300
+								}
+							],
+							"name": "bone_002",
+							"obj": 2,
+							"object_type": "bone"
+						}
+					]
+				},
+				{
+					"b": 17,
+					"gline": [
+						{
+							"pos": 0,
+							"v": 1
+						}
+					],
+					"id": 2,
+					"interval": 100,
+					"l": -170,
+					"length": 400,
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								]
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								],
+								"time": 25
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								],
+								"time": 75
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": 4
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"parent": 0,
+										"timeline": 5
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"parent": 0,
+										"timeline": 6
+									}
+								],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"parent": 2,
+										"timeline": "2",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"parent": 0,
+										"timeline": "1",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"parent": 1,
+										"timeline": "3",
+										"z_index": "3"
+									}
+								],
+								"time": 150
+							}
+						]
+					},
+					"name": "Hurt",
+					"r": 169,
+					"t": -302,
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 271.041627,
+										"file": 0,
+										"folder": 0,
+										"x": 125.761033,
+										"y": 179.315818
+									},
+									"spin": 0
+								}
+							],
+							"name": "Body"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 271.041627,
+										"file": 4,
+										"folder": 0,
+										"x": 103.655596,
+										"y": 19.887622
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 271.041627,
+										"file": 4,
+										"folder": 0,
+										"x": 113.549053,
+										"y": 23.892125
+									},
+									"spin": 0,
+									"time": 75
+								}
+							],
+							"name": "Face 01"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 298.300756,
+										"file": 2,
+										"folder": 0,
+										"x": 65.069188,
+										"y": 57.218465
+									},
+									"spin": 0
+								}
+							],
+							"name": "Left Wing"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 242.878697,
+										"file": 3,
+										"folder": 0,
+										"x": 102.541271,
+										"y": 12.826681
+									},
+									"spin": 0
+								}
+							],
+							"name": "Right Wing"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"bone": {
+										"angle": 88.958373,
+										"y": 100
+									},
+									"id": 0
+								},
+								{
+									"bone": {
+										"angle": 115.08482600000002,
+										"x": -2,
+										"y": 103
+									},
+									"id": 1,
+									"spin": -1,
+									"time": 75
+								}
+							],
+							"name": "bone_000",
+							"obj": 0,
+							"object_type": "bone"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"bone": {
+										"angle": 28.162930000000017,
+										"x": 96.440937,
+										"y": 8.592209
+									},
+									"id": 0,
+									"spin": -1
+								},
+								{
+									"bone": {
+										"angle": 16.211459999999988,
+										"x": 96.440937,
+										"y": 8.592209
+									},
+									"id": 1,
+									"time": 25
+								},
+								{
+									"bone": {
+										"angle": 52.77909,
+										"x": 96.440937,
+										"y": 8.592209
+									},
+									"id": 2,
+									"spin": -1,
+									"time": 150
+								}
+							],
+							"name": "bone_001",
+							"obj": 1,
+							"object_type": "bone"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"bone": {
+										"angle": 332.740871,
+										"x": 96.829373,
+										"y": -12.771782
+									},
+									"id": 0,
+									"spin": -1
+								},
+								{
+									"bone": {
+										"angle": 322.996333,
+										"x": 96.829373,
+										"y": -12.771782
+									},
+									"id": 1,
+									"time": 25
+								},
+								{
+									"bone": {
+										"angle": 0.015202999999985423,
+										"x": 96.829373,
+										"y": -12.771782
+									},
+									"id": 2,
+									"spin": -1,
+									"time": 150
+								}
+							],
+							"name": "bone_002",
+							"obj": 2,
+							"object_type": "bone"
+						}
+					]
+				},
+				{
+					"gline": [
+						{
+							"pos": 0,
+							"v": 1
+						}
+					],
+					"id": 3,
+					"interval": 100,
+					"length": 400,
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": 3
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": 4
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 0,
+										"timeline": 5
+									}
+								],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"parent": 2,
+										"timeline": "1",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 1,
+										"timeline": "2",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"parent": 0,
+										"timeline": "6",
+										"z_index": "3"
+									}
+								]
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": 3
+									},
+									{
+										"id": 1,
+										"key": 1,
+										"parent": 0,
+										"timeline": 4
+									},
+									{
+										"id": 2,
+										"key": 1,
+										"parent": 0,
+										"timeline": 5
+									}
+								],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"parent": 2,
+										"timeline": "1",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 1,
+										"timeline": "2",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"parent": 0,
+										"timeline": "6",
+										"z_index": "3"
+									},
+									{
+										"id": 4,
+										"key": 0,
+										"parent": 0,
+										"timeline": "7",
+										"z_index": "4"
+									}
+								],
+								"time": 25
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"timeline": 3
+									},
+									{
+										"id": 1,
+										"key": 2,
+										"parent": 0,
+										"timeline": 4
+									},
+									{
+										"id": 2,
+										"key": 2,
+										"parent": 0,
+										"timeline": 5
+									}
+								],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"parent": 2,
+										"timeline": "1",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 1,
+										"timeline": "2",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"parent": 0,
+										"timeline": "6",
+										"z_index": "3"
+									}
+								],
+								"time": 75
+							},
+							{
+								"bone_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"timeline": 3
+									},
+									{
+										"id": 1,
+										"key": 3,
+										"parent": 0,
+										"timeline": 4
+									},
+									{
+										"id": 2,
+										"key": 3,
+										"parent": 0,
+										"timeline": 5
+									}
+								],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"parent": 2,
+										"timeline": "1",
+										"z_index": "0"
+									},
+									{
+										"id": 1,
+										"key": 0,
+										"parent": 0,
+										"timeline": "0",
+										"z_index": "1"
+									},
+									{
+										"id": 2,
+										"key": 0,
+										"parent": 1,
+										"timeline": "2",
+										"z_index": "2"
+									},
+									{
+										"id": 3,
+										"key": 0,
+										"parent": 0,
+										"timeline": "6",
+										"z_index": "3"
+									}
+								],
+								"time": 150
+							}
+						]
+					},
+					"name": "Attack",
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 271.041627,
+										"file": 0,
+										"folder": 0,
+										"x": 125.76103299999993,
+										"y": 179.31581800000004
+									},
+									"spin": 0
+								}
+							],
+							"name": "Body"
+						},
+						{
+							"id": 1,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 298.300756,
+										"file": 2,
+										"folder": 0,
+										"x": 65.069188,
+										"y": 57.21846499999998
+									},
+									"spin": 0
+								}
+							],
+							"name": "Left Wing"
+						},
+						{
+							"id": 2,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 242.878697,
+										"file": 3,
+										"folder": 0,
+										"x": 102.54127099999998,
+										"y": 12.826681000000024
+									},
+									"spin": 0
+								}
+							],
+							"name": "Right Wing"
+						},
+						{
+							"id": 3,
+							"key": [
+								{
+									"bone": {
+										"angle": 88.958373,
+										"y": 100
+									},
+									"id": 0,
+									"spin": -1
+								},
+								{
+									"bone": {
+										"angle": 65.96267983656423,
+										"x": -0.6666666666666666,
+										"y": 101
+									},
+									"id": 1,
+									"spin": -1,
+									"time": 25
+								},
+								{
+									"bone": {
+										"angle": 50.61758059012686,
+										"x": -2,
+										"y": 103
+									},
+									"id": 2,
+									"time": 75
+								},
+								{
+									"bone": {
+										"angle": 122.02010967610568,
+										"x": 27.461538461538453,
+										"y": 120.30769230769229
+									},
+									"id": 3,
+									"spin": -1,
+									"time": 150
+								}
+							],
+							"name": "bone_000",
+							"obj": 0,
+							"object_type": "bone"
+						},
+						{
+							"id": 4,
+							"key": [
+								{
+									"bone": {
+										"angle": 28.162930000000017,
+										"x": 96.440937,
+										"y": 8.592209
+									},
+									"id": 0,
+									"spin": -1
+								},
+								{
+									"bone": {
+										"angle": 16.211459999999988,
+										"x": 96.440937,
+										"y": 8.592209
+									},
+									"id": 1,
+									"spin": -1,
+									"time": 25
+								},
+								{
+									"bone": {
+										"angle": 5.102209278874227,
+										"x": 96.440937,
+										"y": 8.592209
+									},
+									"id": 2,
+									"time": 75
+								},
+								{
+									"bone": {
+										"angle": 94.03617804543245,
+										"x": 96.44093700000006,
+										"y": 8.592208999999833
+									},
+									"id": 3,
+									"spin": -1,
+									"time": 150
+								}
+							],
+							"name": "bone_001",
+							"obj": 1,
+							"object_type": "bone"
+						},
+						{
+							"id": 5,
+							"key": [
+								{
+									"bone": {
+										"angle": 332.740871,
+										"x": 96.829373,
+										"y": -12.771782
+									},
+									"id": 0,
+									"spin": -1
+								},
+								{
+									"bone": {
+										"angle": 322.996333,
+										"x": 96.829373,
+										"y": -12.771782
+									},
+									"id": 1,
+									"spin": -1,
+									"time": 25
+								},
+								{
+									"bone": {
+										"angle": 314.10486237609734,
+										"x": 96.829373,
+										"y": -12.771781999999977
+									},
+									"id": 2,
+									"time": 75
+								},
+								{
+									"bone": {
+										"angle": 62.835305879957104,
+										"x": 96.82937300000005,
+										"y": -12.771781999999982
+									},
+									"id": 3,
+									"spin": -1,
+									"time": 150
+								}
+							],
+							"name": "bone_002",
+							"obj": 2,
+							"object_type": "bone"
+						},
+						{
+							"id": 6,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 271.041627,
+										"file": 1,
+										"folder": 0,
+										"x": 100.69244880352288,
+										"y": 17.833416777216996
+									},
+									"spin": 0
+								}
+							],
+							"name": "Face 01_000"
+						},
+						{
+							"id": 7,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 261.9987220144278,
+										"file": 5,
+										"folder": 0,
+										"x": 112.7679678793181,
+										"y": 2.482578930639285
+									},
+									"spin": 0,
+									"time": 25
+								}
+							],
+							"name": "Face 02"
+						}
+					]
+				},
+				{
+					"b": 17,
+					"gline": [
+						{
+							"pos": 1,
+							"v": 1
+						},
+						{
+							"pos": -134
+						}
+					],
+					"id": 4,
+					"interval": 100,
+					"l": -170,
+					"length": 360,
+					"mainline": {
+						"key": [
+							{
+								"bone_ref": [],
+								"id": 0,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 0,
+										"timeline": "0",
+										"z_index": "0"
+									}
+								]
+							},
+							{
+								"bone_ref": [],
+								"id": 1,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 1,
+										"timeline": "0",
+										"z_index": "0"
+									}
+								],
+								"time": 50
+							},
+							{
+								"bone_ref": [],
+								"id": 2,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 2,
+										"timeline": "0",
+										"z_index": "0"
+									}
+								],
+								"time": 100
+							},
+							{
+								"bone_ref": [],
+								"id": 3,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 3,
+										"timeline": "0",
+										"z_index": "0"
+									}
+								],
+								"time": 125
+							},
+							{
+								"bone_ref": [],
+								"id": 4,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 4,
+										"timeline": "0",
+										"z_index": "0"
+									}
+								],
+								"time": 200
+							},
+							{
+								"bone_ref": [],
+								"id": 5,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 5,
+										"timeline": "0",
+										"z_index": "0"
+									}
+								],
+								"time": 300
+							},
+							{
+								"bone_ref": [],
+								"id": 6,
+								"object_ref": [
+									{
+										"id": 0,
+										"key": 6,
+										"timeline": "0",
+										"z_index": "0"
+									}
+								],
+								"time": 360
+							}
+						]
+					},
+					"name": "Smoke",
+					"r": 169,
+					"t": -302,
+					"timeline": [
+						{
+							"id": 0,
+							"key": [
+								{
+									"id": 0,
+									"object": {
+										"angle": 0,
+										"file": 6,
+										"folder": 0,
+										"scale_x": 0.9,
+										"scale_y": 0.9,
+										"x": -142.972562,
+										"y": 278.258065
+									},
+									"spin": 0
+								},
+								{
+									"id": 1,
+									"object": {
+										"angle": 0,
+										"file": 7,
+										"folder": 0,
+										"scale_x": 0.925,
+										"scale_y": 0.925,
+										"x": -147.347034,
+										"y": 282.431978
+									},
+									"spin": 0,
+									"time": 50
+								},
+								{
+									"id": 2,
+									"object": {
+										"angle": 0,
+										"file": 8,
+										"folder": 0,
+										"scale_x": 0.95,
+										"scale_y": 0.95,
+										"x": -151.683834,
+										"y": 285.779813
+									},
+									"spin": 0,
+									"time": 100
+								},
+								{
+									"id": 3,
+									"object": {
+										"angle": 0,
+										"file": 8,
+										"folder": 0,
+										"scale_x": 0.954808,
+										"scale_y": 0.954808,
+										"x": -152.422299,
+										"y": 286.561585
+									},
+									"spin": 0,
+									"time": 125
+								},
+								{
+									"id": 4,
+									"object": {
+										"a": 0.75,
+										"angle": 0,
+										"file": 9,
+										"folder": 0,
+										"scale_x": 0.969231,
+										"scale_y": 0.969231,
+										"x": -154.637693,
+										"y": 288.9069
+									},
+									"spin": 0,
+									"time": 200
+								},
+								{
+									"id": 5,
+									"object": {
+										"a": 0.5,
+										"angle": 0,
+										"file": 10,
+										"folder": 0,
+										"scale_x": 0.988462,
+										"scale_y": 0.988462,
+										"x": -157.591551,
+										"y": 292.033987
+									},
+									"spin": 0,
+									"time": 300
+								},
+								{
+									"id": 6,
+									"object": {
+										"a": 0,
+										"angle": 0,
+										"file": 10,
+										"folder": 0,
+										"x": -159.363866,
+										"y": 293.910238
+									},
+									"spin": 0,
+									"time": 360
+								}
+							],
+							"name": "Smoke 00"
+						}
+					]
+				}
+			],
+			"character_map": [],
+			"id": 0,
+			"name": "Bee",
+			"obj_info": [
+				{
+					"h": 10,
+					"name": "bone_000",
+					"type": "bone",
+					"w": 95.668
+				},
+				{
+					"h": 10,
+					"name": "bone_001",
+					"type": "bone",
+					"w": 78.7439
+				},
+				{
+					"h": 10,
+					"name": "bone_002",
+					"type": "bone",
+					"w": 75.717
+				}
+			]
+		}
+	],
+	"folder": [
+		{
+			"file": [
+				{
+					"height": 240,
+					"id": 0,
+					"name": "Body.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 320
+				},
+				{
+					"height": 160,
+					"id": 1,
+					"name": "Face 01.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 160
+				},
+				{
+					"height": 100,
+					"id": 2,
+					"name": "Left Wing.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 80
+				},
+				{
+					"height": 100,
+					"id": 3,
+					"name": "Right Wing.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 80
+				},
+				{
+					"height": 160,
+					"id": 4,
+					"name": "Face 03.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 160
+				},
+				{
+					"height": 160,
+					"id": 5,
+					"name": "Face 02.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 160
+				},
+				{
+					"height": 320,
+					"id": 6,
+					"name": "Smoke 00.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 320
+				},
+				{
+					"height": 320,
+					"id": 7,
+					"name": "Smoke 01.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 320
+				},
+				{
+					"height": 320,
+					"id": 8,
+					"name": "Smoke 02.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 320
+				},
+				{
+					"height": 320,
+					"id": 9,
+					"name": "Smoke 03.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 320
+				},
+				{
+					"height": 320,
+					"id": 10,
+					"name": "Smoke 04.png",
+					"pivot_x": 0,
+					"pivot_y": 1,
+					"width": 320
+				}
+			],
+			"id": 0
+		}
+	],
+	"generator": "BrashMonkey Spriter",
+	"generator_version": "r11",
+	"scon_version": "1.0"
+}

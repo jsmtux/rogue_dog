@@ -147,7 +147,7 @@ class DifficultyManager
     }
 }
 
-DifficultyManager.UnlockableEnemies = [BasicEnemy, BeeEnemy];
+DifficultyManager.UnlockableEnemies = [BeeEnemy, BasicEnemy];
 DifficultyManager.ObstacleLevelsName = {
     STORY_BEGIN : 4,
     STORY_TRIALS : 5,

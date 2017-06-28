@@ -14,20 +14,36 @@ class BeeEnemy extends Enemy
 
     static preload(_game)
     {
-        _game.load.spritesheet('bee', './img/monster2.png', 205, 155);
+        loadSpriterFiles(_game, "bee");
         BeeBullet.Preload(_game);
         this.sprite;
     }
     
     create()
     {
-        this.setSprite(this.game.add.sprite(0, this.height, 'bee', 5));
-        this.sprite.animations.add('walk');
+        var sprite = loadSpriter(this.game, "beeJSON", "beeAtlas", "Bee");
+        this.setSprite(sprite);
+        this.position.y = this.height + 150;
+        this.sprite.animations.play('Idle');
+        this.sprite.scale.setTo(-0.5, 0.5);
     }
     
     showCrosshair()
     {
         this.crosshair = new Crosshair(this.game, this, this.position, new Phaser.Point(0, 0));
+    }
+    
+    takeHit(_combatManager, _skillCheck, _hitPoints)
+    {
+        super.takeHit(_combatManager, _skillCheck, _hitPoints)
+        
+        this.sprite.animations.play('Hurt');
+
+        var changeAnimationOnEnd = () => {
+            this.sprite.onFinish.remove(changeAnimationOnEnd);
+            this.sprite.animations.play('Idle');
+        }
+        this.sprite.onLoop.add(changeAnimationOnEnd);
     }
     
     update()
@@ -60,11 +76,11 @@ class BeeEnemy extends Enemy
     
         if (!this.inPlace())
         {
-            this.sprite.play('walk', 10, true);
+            //this.sprite.animations.play('idle', 10, true);
             this.position.x -= 1.5;
         }
     
-        this.position.y = this.height + Math.sin(this.rotationCounter++ / 10.0) * this.moveRadius;
+        //this.position.y = this.height + Math.sin(this.rotationCounter++ / 10.0) * this.moveRadius;
         
         super.update();
     }
@@ -76,12 +92,20 @@ class BeeEnemy extends Enemy
     
     startAttack(_player)
     {
-        if (!this.bullet)
-        {
+        this.state = Enemy.States.ATTACKING;
+        setTimeout(() => {
+            this.sprite.animations.play('Attack');
+            
+            var changeAnimationOnEnd = () => {
+                this.sprite.onFinish.remove(changeAnimationOnEnd);
+                this.sprite.animations.play('Idle');
+            }
+            this.sprite.onLoop.add(changeAnimationOnEnd);
+            
             ServiceLocator.inputManager.drawGesture.add(this.receivePolygonPoints, this);
             this.bullet = new BeeBullet(this.game, _player, this.spec.bulletSpeed);
             this.bullet.create(this.position.x, this.position.y);
-        }
+        }, 500);
     }
 }
 
@@ -105,7 +129,7 @@ class BeeBullet
     
     create(_x, _y)
     {
-        this.sprite = this.game.add.sprite(_x, _y + 90, 'beeBullet', 5);
+        this.sprite = this.game.add.sprite(_x - 20, _y - 80, 'beeBullet', 5);
         ServiceLocator.renderer.addToScene(this.sprite);
     }
     
