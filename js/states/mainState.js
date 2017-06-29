@@ -34,7 +34,6 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('lighting', new Lighting());
     ServiceLocator.initialize('renderer', new Renderer(this));
     ServiceLocator.initialize('cardManager', new CardManager(this));
-    ServiceLocator.initialize('inGameHelper', new InGameHelper(this));
     ServiceLocator.initialize('dialogManager', new DialogManager(this));
     ServiceLocator.initialize('physics', new Physics(this));
 
@@ -44,7 +43,6 @@ MainState.prototype.create = function ()
     ServiceLocator.inputManager.create(this);
     ServiceLocator.camera.create(this, this.player);
     ServiceLocator.walkManager.create(this);
-    ServiceLocator.inGameHelper.create();
     
     ServiceLocator.guiManager.addToRenderer();
 

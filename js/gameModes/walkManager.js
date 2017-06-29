@@ -145,15 +145,6 @@ class WalkManager extends GameMode
 
     update()
     {
-        if (ServiceLocator.inputManager.leftButton.getLastTouched() > 2000)
-        {
-            ServiceLocator.inGameHelper.showJumpHelp();
-        }
-        else
-        {
-            ServiceLocator.inGameHelper.hideJumpHelp();
-        }
-        
         for(var levelInd in this.walkLevels)
         {
             this.walkLevels[levelInd].update();
@@ -200,7 +191,6 @@ class WalkManager extends GameMode
     finishMode()
     {
         ServiceLocator.inputManager.getBmd().clear();
-        ServiceLocator.inGameHelper.hideJumpHelp();
         this.player.finishWalk();
     }
 

@@ -13,7 +13,6 @@ class Services
         this.lighting = {};
         this.physics = {}
         this.cardManager = {};
-        this.inGameHelper = {};
         this.dialogManager = {};
         this.messageListeners = new Phaser.Signal();
         this.namedMessageListeners = {};
