@@ -22,6 +22,6 @@ class GameObject
         {
             ServiceLocator.animationManager.unRegisterSprite(this.sprite);
         }
-        this.sprite.destroy;
+        this.sprite.destroy();
     }    
 }

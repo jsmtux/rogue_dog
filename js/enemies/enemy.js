@@ -4,7 +4,7 @@ class Enemy extends GameObject
     {
         super();
         this.game = _game;
-        this.dying = false;
+        this.dead = false;
         this.player = _game.player;
         this.health = _spec.health;
         
@@ -65,6 +65,7 @@ class Enemy extends GameObject
             if (this.health <= 0)
             {
                 ServiceLocator.combatManager.killEnemy(this.index);
+                this.startDeath();
             }
         }
         
@@ -92,16 +93,9 @@ class Enemy extends GameObject
         this.game.add.tween(this.hit.scale).to({ x: 1.0, y: 1.0}, 500, Phaser.Easing.Elastic.Out, true);
     }
     
-    updateDeath()
+    isDead()
     {
-        this.sprite.alpha -= 0.02;
-        if (this.sprite.alpha <= 0)
-        {
-            this.destroy();
-            return true;
-        }
-        
-        return false;
+        return this.dead;
     }
     
     getDroppedCards()

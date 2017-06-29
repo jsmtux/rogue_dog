@@ -30,7 +30,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('combatManager', new CombatManager(this, this.player));
     ServiceLocator.initialize('walkManager', new WalkManager(this, this.player));
     ServiceLocator.initialize('inputManager', new InputManager(this));
-    ServiceLocator.initialize('animationManager', new AnimationManager());
+    ServiceLocator.initialize('animationManager', new AnimationManager(this));
     ServiceLocator.initialize('lighting', new Lighting());
     ServiceLocator.initialize('renderer', new Renderer(this));
     ServiceLocator.initialize('cardManager', new CardManager(this));

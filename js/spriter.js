@@ -5,7 +5,7 @@ class SpriterAnimation
         this.spriterGroup = _spriterGroup;
         this.currentAnimation = -1;
         this.paused = true;
-        _game.updateSignal.add(this.update, this);
+        this.game = _game;
     }
     
     play(_name)

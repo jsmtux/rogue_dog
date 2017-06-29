@@ -10,6 +10,8 @@ class BeeEnemy extends Enemy
         this.rotationCounter = 0;
         
         this.spec = _spec;
+        
+        this.dying = false;
     }
 
     static preload(_game)
@@ -40,8 +42,20 @@ class BeeEnemy extends Enemy
         this.sprite.animations.play('Hurt');
 
         var changeAnimationOnEnd = () => {
-            this.sprite.onFinish.remove(changeAnimationOnEnd);
-            this.sprite.animations.play('Idle');
+            //this.sprite.onFinish.remove(changeAnimationOnEnd);
+            if (!this.dying)
+            {
+                this.sprite.animations.play('Idle');
+            }
+            else
+            {
+                this.sprite.animations.play('Smoke');
+                
+                var changeAnimationOnEnd = () => {
+                    this.dead = true;
+                }
+                this.sprite.onLoop.add(changeAnimationOnEnd);
+            }
         }
         this.sprite.onLoop.add(changeAnimationOnEnd);
     }
@@ -85,6 +99,11 @@ class BeeEnemy extends Enemy
         super.update();
     }
     
+    startDeath()
+    {
+        this.dying = true;
+    }
+    
     receivePolygonPoints(_points)
     {
         this.polygonPoints = _points;
@@ -97,7 +116,7 @@ class BeeEnemy extends Enemy
             this.sprite.animations.play('Attack');
             
             var changeAnimationOnEnd = () => {
-                this.sprite.onFinish.remove(changeAnimationOnEnd);
+                this.sprite.onLoop.remove(changeAnimationOnEnd);
                 this.sprite.animations.play('Idle');
             }
             this.sprite.onLoop.add(changeAnimationOnEnd);

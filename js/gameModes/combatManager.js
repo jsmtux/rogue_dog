@@ -26,8 +26,9 @@ class CombatManager extends GameMode
         }
         for (var ind in this.dyingEnemies)
         {
-            if(this.dyingEnemies[ind].updateDeath())
+            if(this.dyingEnemies[ind].isDead())
             {
+                this.dyingEnemies[ind].destroy();
                 this.dyingEnemies.splice(ind,1);
             }
         }

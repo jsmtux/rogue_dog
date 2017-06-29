@@ -10,6 +10,8 @@ class BasicEnemy extends Enemy
         this.isIdle = false;
         
         this.spriteOffset = new Phaser.Point(100, 120);
+        
+        this.dying = false;
     }
     
     static preload(_game)
@@ -77,27 +79,15 @@ class BasicEnemy extends Enemy
         super.update();
     }
     
-    updateDeath()
+    startDeath()
     {
-        if (!this.startedDying)
-        {
-            this.startedDying = true;
-            this.sprite.animations.play('death');
-            this.finishedDying = false;
-            
-            var changeAnimationOnEnd = () => {
-                this.sprite.onFinish.remove(changeAnimationOnEnd);
-                this.finishedDying = true;
-            }
-            this.sprite.onFinish.add(changeAnimationOnEnd);
+        this.dying = true;
+        this.sprite.animations.play('death');
+        var changeAnimationOnEnd = () => {
+            this.sprite.onFinish.remove(changeAnimationOnEnd);
+            this.dead = true;
         }
-        
-        if (this.finishedDying)
-        {
-            return super.updateDeath();
-        }
-        
-        return false;
+        this.sprite.onFinish.add(changeAnimationOnEnd);
     }
     
     playStepSound()

@@ -1,8 +1,10 @@
 class AnimationManager
 {
-    constructor()
+    constructor(_game)
     {
         this.sprites = [];
+        this.game = _game;
+        _game.updateSignal.add(this.update, this);
     }
     
     registerSprite(_sprite)
@@ -28,6 +30,14 @@ class AnimationManager
         for (var ind in this.sprites)
         {
             this.sprites[ind].animations.paused = false;
+        }
+    }
+    
+    update()
+    {
+        for (var ind in this.sprites)
+        {
+            this.sprites[ind].animations.update();
         }
     }
 }
