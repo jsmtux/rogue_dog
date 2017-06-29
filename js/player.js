@@ -117,8 +117,6 @@ class DogPlayer extends GameObject
         this.trajectoryArrow.visible = false;
         this.trajectoryArrow.anchor = new Phaser.Point(0.16, 0.5);
         ServiceLocator.renderer.addToOverlay(this.trajectoryArrow);
-
-        this.addItem(DogWoolHatAccesory);
         
         ServiceLocator.registerListener(this.itemPicked, this, "ItemPickedMessage");
         
@@ -297,8 +295,13 @@ class DogPlayer extends GameObject
             _enemy.takeHit(this, _hitType, this.attackPower);
         };
         this.stickNumber--;
-        this.stickCounterGUI.setNumber(this.stickNumber);
+        this.updateStickNumber();
         new AttackStick(this.sprite.position, _enemy.position, cb, this.game);
+    }
+    
+    updateStickNumber()
+    {
+        this.stickCounterGUI.setNumber(this.stickNumber);
     }
     
     startEscape(_callback, _cbContext)
@@ -426,7 +429,7 @@ class DogPlayer extends GameObject
     
     addItem(_itemClass)
     {
-        var newItem = new _itemClass(this.game);
+        var newItem = new _itemClass(this.game, this);
         this.appliedItems[newItem.getBodyPart()] = newItem;
     }
     
@@ -574,14 +577,28 @@ Accesory.BodyParts = {
 
 class DogHatAccesory extends Accesory
 {
-    constructor(_game)
+    constructor(_game, _player)
     {
         super(Accesory.BodyParts.HEAD, "Magician hat", _game.add.sprite(0, 0, "hat01"), new Phaser.Point(0.37, 0.31));
+        ServiceLocator.registerListener(this.attackDefended, this, "AttackDefendedMessage");
+        this.player = _player;
     }
     
     static preload(_game)
     {
         _game.load.image('hat01', './img/objects/tophat.png');
+    }
+    
+    attackDefended()
+    {
+        this.player.stickNumber++;
+        this.player.updateStickNumber();
+    }
+    
+    destroy()
+    {
+        super.destroy();
+        ServiceLocator.removeListener(this.attackDefended, this, "AttackDefendedMessage");
     }
 }
 

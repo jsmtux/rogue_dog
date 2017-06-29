@@ -79,6 +79,10 @@ class BeeEnemy extends Enemy
                 //
                 this.polygonPoints = undefined;
             }
+            if (inside)
+            {
+                ServiceLocator.publish(new AttackDefendedMessage());
+            }
             if (inside || this.bullet.isFinished())
             {
                 this.state = Enemy.States.FINISHED;

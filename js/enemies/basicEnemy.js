@@ -114,6 +114,8 @@ class BasicEnemy extends Enemy
         if (this.attackOption.image === _direction)
         {
             this.showResultSprite('good');
+            
+            ServiceLocator.publish(new AttackDefendedMessage());
         }
         else
         {

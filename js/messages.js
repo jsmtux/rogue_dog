@@ -153,3 +153,11 @@ class NewGameModeMessage extends Message
         return this.arguments["mode"];
     }
 }
+
+class AttackDefendedMessage extends Message
+{
+    constructor()
+    {
+        super("AttackDefendedMessage");
+    }
+}

@@ -11,6 +11,7 @@ class BasicEnemySpec
         {
             this.cardProbabilities["MoreObstaclesCard"] = Enemy.cardProbability.LOW;
             this.cardProbabilities["NewObstacleCard"] = Enemy.cardProbability.LOW;
+            this.cardProbabilities["MagicianHatCard"] = Enemy.cardProbability.LOW;
         }
         switch(_level)
         {

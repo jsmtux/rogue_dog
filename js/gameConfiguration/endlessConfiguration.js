@@ -15,7 +15,8 @@ class EndlessConfiguration
             NewObstacleCard:3,
             MoreObstaclesCard:undefined,
             TwoEnemiesCard:1,
-            ThreeEnemiesCard:1});
+            ThreeEnemiesCard:1,
+            MagicianHatCard:1});
         
         _mainState.setNextMode("WalkManager");
     }

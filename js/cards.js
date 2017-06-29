@@ -285,12 +285,12 @@ class MagicianHatCard extends Card
 {
     constructor(_game)
     {
-        super("Magician's hat", "You got a cool hat!", "tophat_gear_icon", Card.Type.GEAR, _game);
+        super("Magician's hat", "Sometimes you'll get a stick if you defend correctly!", "tophat_gear_icon", Card.Type.GEAR, _game);
     }
     
     apply(_arguments)
     {
-        var player = _arguments;
+        var player = _arguments.player;
         player.addItem(DogHatAccesory);
     }
 }
