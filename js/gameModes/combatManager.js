@@ -137,7 +137,22 @@ class CombatManager extends GameMode
         else
         {
             ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.ESCAPE));
-            this.player.startEscape(this.escapeSucceeded, this);
+            for (var ind in this.enemies)
+            {
+                this.enemies[ind].showEscapeCheck();
+            }
+            setTimeout(() => {
+                var success = true;
+                for (var ind in this.enemies)
+                {
+                    success = success && this.enemies[ind].crosshair.getSuccess();
+                }
+                this.escapeSucceeded(success);
+                for (var ind in this.enemies)
+                {
+                    this.enemies[ind].hideCrosshair();
+                }
+            }, 3000);
         }
     }
     

@@ -27,7 +27,9 @@ class Enemy extends GameObject
         _game.load.image('hit_miss', './img/hit_miss.png');
         _game.load.image('hit_critical', './img/hit_critical.png');
         
+        CircleSelector.preload(_game);
         Crosshair.preload(_game);
+        EscapeMeter.preload(_game);
     }
     
     setSprite(_sprite)
@@ -175,14 +177,14 @@ Enemy.AttackOutcome = {
     CRITICAL: 2
 }
 
-class Crosshair
+class CircleSelector
 {
-    constructor(_game, _enemy, _position, _offset)
+    constructor(_game, _enemy, _position, _offset, _bgSprite)
     {
         this.game = _game;
         this.enemy = _enemy;
-        this.sprite_bg = this.game.add.sprite(0, 0, 'crosshair_bg');
         this.sprite = this.game.add.sprite(0, 0, 'crosshair');
+        this.sprite_bg = _bgSprite;
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
         this.sprite_bg.anchor.x = 0.5;
@@ -190,17 +192,13 @@ class Crosshair
         ServiceLocator.renderer.addToOverlay(this.sprite_bg);
         ServiceLocator.renderer.addToOverlay(this.sprite);
         this.offset = _offset;
-        this.updatePosition(_position);
 
         this.sprite.inputEnabled = true;
-        this.sprite.events.onInputDown.add(this.sendSignal, this);
-        
-        this.movement = 0;
+        this.updatePosition(_position);
     }
     
     static preload(_game)
     {
-        _game.load.image('crosshair_bg', './img/circle_skill_bg.png');
         _game.load.image('crosshair', './img/circle_skill_selector.png');
     }
     
@@ -216,6 +214,26 @@ class Crosshair
         this.sprite.y = _position.y + this.offset.y;
         this.sprite_bg.x = _position.x + this.offset.x;
         this.sprite_bg.y = _position.y + this.offset.y;
+    }
+}
+
+class Crosshair extends CircleSelector
+{
+    constructor(_game, _enemy, _position, _offset)
+    {
+        super(_game, _enemy, _position, _offset, _game.add.sprite(0, 0, 'crosshair_bg'));
+        this.sprite.events.onInputDown.add(this.sendSignal, this);
+        this.movement = 0;
+    }
+    
+    static preload(_game)
+    {
+        _game.load.image('crosshair_bg', './img/circle_skill_bg.png');
+    }
+    
+    updatePosition(_position)
+    {
+        super.updatePosition(_position)
         
         this.movement += 0.1;
         this.sprite.angle = Math.sin(this.movement) * 68;
@@ -234,5 +252,43 @@ class Crosshair
         }
         
         ServiceLocator.publish(new EnemyTargeted(this.enemy, hitType));
+    }
+}
+
+class EscapeMeter extends CircleSelector
+{
+    constructor(_game, _enemy, _position, _offset)
+    {
+        super(_game, _enemy, _position, _offset, _game.add.sprite(0, 0, 'escape_bg'));
+        this.sprite.events.onInputDown.add(this.handleTap, this);
+        
+        this.escapeMeter = 0;
+    }
+    
+    static preload(_game)
+    {
+        _game.load.image('escape_bg', './img/circle_escape_bg.png');
+    }
+    
+    updatePosition(_position)
+    {
+        super.updatePosition(_position)
+        
+        this.sprite.angle = this.escapeMeter * 136 - 68;
+        if (this.escapeMeter > 0)
+        {
+            this.escapeMeter -= 0.003;
+        }
+    }
+    
+    handleTap()
+    {
+        if (this.escapeMeter < 1.0)
+        this.escapeMeter += 0.1;
+    }
+    
+    getSuccess()
+    {
+        return this.escapeMeter > 0.9;
     }
 }

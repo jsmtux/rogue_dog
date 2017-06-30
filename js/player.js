@@ -303,15 +303,6 @@ class DogPlayer extends GameObject
     {
         this.stickCounterGUI.setNumber(this.stickNumber);
     }
-    
-    startEscape(_callback, _cbContext)
-    {
-        ServiceLocator.inputManager.tapGesture.add();
-        setTimeout(function(){
-            _callback.call(_cbContext, ServiceLocator.inputManager.tapGesture.getSuccess());
-            ServiceLocator.inputManager.tapGesture.remove();
-        }, 3000);
-    }
 
     play(_animationName)
     {

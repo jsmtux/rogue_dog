@@ -62,6 +62,11 @@ class BasicEnemy extends Enemy
         this.crosshair = new Crosshair(this.game, this, this.position, new Phaser.Point(-40, -60));
     }
     
+    showEscapeCheck()
+    {
+        this.crosshair = new EscapeMeter(this.game, this, this.position, new Phaser.Point(-40, -60));
+    }
+    
     update()
     {
         if (!this.inPlace())

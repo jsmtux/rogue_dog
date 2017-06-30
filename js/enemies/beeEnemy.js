@@ -35,6 +35,11 @@ class BeeEnemy extends Enemy
         this.crosshair = new Crosshair(this.game, this, this.position, new Phaser.Point(0, 0));
     }
     
+    showEscapeCheck()
+    {
+        this.crosshair = new EscapeMeter(this.game, this, this.position, new Phaser.Point(0, 0));
+    }
+    
     takeHit(_combatManager, _skillCheck, _hitPoints)
     {
         super.takeHit(_combatManager, _skillCheck, _hitPoints)
