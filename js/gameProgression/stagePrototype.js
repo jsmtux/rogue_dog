@@ -210,6 +210,13 @@ class MultipleJumpsPiece extends StagePiece {
     }
 }
 
+class SmallJumpObstaclePiece extends StagePiece {
+    constructor()
+    {
+        super([new HoleStageCell(), new HoleStageCell(), new GrassStageCell(), new GrassStageCell(), new GrassStageCell(), new ObstacleStageCell()], 5);
+    }
+}
+
 class StagePrototype
 {
     constructor (_prototypeRules, _numberObstacles)
