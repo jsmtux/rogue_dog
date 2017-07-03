@@ -194,6 +194,22 @@ class Bonus1StagePiece extends StagePiece {
     }
 }
 
+class MultipleJumpsPiece extends StagePiece {
+    constructor()
+    {
+        var list = [];
+        for (var i = 0; i < 4; i++)
+        {
+            list.push(new ObstacleStageCell());
+            list.push(new GrassStageCell());
+            list.push(new GrassStageCell());
+            list.push(new GrassStageCell());
+            list.push(new GrassStageCell());
+        }
+        super(list, 0, 4);
+    }
+}
+
 class StagePrototype
 {
     constructor (_prototypeRules, _numberObstacles)
