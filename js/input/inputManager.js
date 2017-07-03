@@ -6,14 +6,12 @@ class InputManager
         this.game = _game;
         this.directionGesture = new DirectionGesture(_game, this);
         this.playerDirectionGesture = new PlayerDirectionGesture(_game, this);
-        this.tapGesture = new TapGesture(_game, this);
         this.drawGesture = new DrawGesture(_game, this);
     }
     
     static preload(_game)
     {
         PlayerDirectionGesture.preload(_game);
-        TapGesture.preload(_game);
     }
     
     create(game)

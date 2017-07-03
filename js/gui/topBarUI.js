@@ -5,7 +5,7 @@ class TopBarUI
         this.game = _game;
         
         this.topBarGroup = _game.add.group();
-        this.healthBar = new HealthBar();
+        //this.healthBar = new HealthBar();
     }
     
     static preload(_game)
@@ -14,7 +14,8 @@ class TopBarUI
         
         GameModeUI.preload(_game);
         
-        HealthBar.preload(_game);
+        //HealthBar.preload(_game);
+        HeartsUI.preload(_game);
     }
     
     create()
@@ -22,8 +23,8 @@ class TopBarUI
         ServiceLocator.renderer.addToUI(this.topBarGroup);
 
         this.sprite = this.game.add.sprite(0, 0, 'topUiBg');
-        ServiceLocator.renderer.addToUI(this.sprite);
         this.sprite.width = ServiceLocator.viewportHandler.resolution.x;
+        this.topBarGroup.add(this.sprite);
 
         this.gameModeUI = new GameModeUI(this.game);
         this.gameModeUI.create(this.topBarGroup);
@@ -31,7 +32,9 @@ class TopBarUI
         this.stickCounterGUI = new StickCounterGuiElement()
         var stickCounterUI = ServiceLocator.guiManager.createUI(this.stickCounterGUI);
         
-        this.healthBar.create(this.topBarGroup);
+        //this.healthBar.create(this.topBarGroup);
+        this.hearts = new HeartsUI(4, this.game);
+        this.hearts.create(this.topBarGroup);
     }
     
 }

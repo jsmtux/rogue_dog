@@ -17,9 +17,7 @@ class GameModeUI
     
     create(_group)
     {
-        this.sprite = this.game.add.sprite(100, 100, 'JumpModeLabel');
-        this.sprite.x = ServiceLocator.viewportHandler.resolution.x - 50 - this.sprite.width;
-        this.sprite.y = 15;
+        this.sprite = this.game.add.sprite(0, -30, 'JumpModeLabel');
         _group.add(this.sprite);
         ServiceLocator.registerListener(this.newGameMode, this, "NewGameModeMessage");
     }
@@ -52,7 +50,7 @@ class GameModeUI
         
         var move = this.game.add.tween(this.newSprite);
 
-        move.to({ y: 15 }, 500, Phaser.Easing.Bounce.Out);
+        move.to({ y: 10 }, 500, Phaser.Easing.Bounce.Out);
         move.onComplete.add(() => {this.sprite.destroy(); this.sprite = this.newSprite; this.newSprite = undefined;});
         move.start();
         
