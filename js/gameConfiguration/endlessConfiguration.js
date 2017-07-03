@@ -8,7 +8,7 @@ class EndlessConfiguration
     {
         ServiceLocator.difficultyManager.setInitialValues(1, 1, 3, 0);
         
-        ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:undefined,
+        ServiceLocator.cardManager.lootDeck.setCardNumbers({SmMedkitCard:undefined,
             NewEnemyCard:1,
             StrongerBasicEnemyCard:2,
             StrongerBeeEnemyCard:2,

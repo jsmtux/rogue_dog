@@ -106,7 +106,7 @@ class Enemy extends GameObject
         var cardPosition = {};
         for (var cardName in this.cardProbabilities)
         {
-            if (ServiceLocator.cardManager.stillInDeck(cardName))
+            if (ServiceLocator.cardManager.lootDeck.stillInDeck(cardName))
             {
                 var probabilities = this.cardProbabilities[cardName];
                 totalProbability += probabilities;
@@ -122,7 +122,7 @@ class Enemy extends GameObject
             if (ind >= roll)
             {
                 var cardName = cardPosition[ind];
-                ServiceLocator.cardManager.drawCard(cardName);
+                ServiceLocator.cardManager.lootDeck.drawCard(cardName);
                 break
             }
         }

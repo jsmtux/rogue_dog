@@ -3,7 +3,8 @@ class CardManager
     constructor(_game)
     {
         this.game = _game;
-        this.remainingCards = {};
+        this.lootDeck = new CardDeck();
+        this.attackDeck = new CardDeck();
     }
     
     static preload(_game)
@@ -30,31 +31,9 @@ class CardManager
         var newCardDefinition = {
             "class": _cardClass,
             "instance": new _cardClass(),
-            "renderedImage":undefined,
-            "numberInDeck":undefined
+            "renderedImage":undefined
         };
         CardManager.cardDefinitions[_cardClass.ID] = newCardDefinition;        
-    }
-    
-    setDeckNumbers(_deckNumbers, resetRemaining = true)
-    {
-        for(var ind in CardManager.cardDefinitions)
-        {
-            CardManager.cardDefinitions[ind].numberInDeck = 0;
-        }
-        
-        for(var ind in _deckNumbers)
-        {
-            CardManager.cardDefinitions[ind].numberInDeck = _deckNumbers[ind];
-        }
-        
-        if (resetRemaining)
-        {
-            for(var ind in CardManager.cardDefinitions)
-            {
-                this.remainingCards[ind] = CardManager.cardDefinitions[ind].numberInDeck;
-            }
-        }
     }
     
     getCardClassFromID(_id)
@@ -76,6 +55,33 @@ class CardManager
     getCardNames()
     {
         return Object.keys(CardManager.cardDefinitions);
+    }
+}
+
+CardManager.cardDefinitions = {}
+
+class CardDeck
+{
+    constructor()
+    {
+        this.totalNumber = {};
+        this.remainingCards = {};
+    }
+    
+    setCardNumbers(_deckNumbers, resetRemaining = true)
+    {
+        for(var ind in _deckNumbers)
+        {
+            this.totalNumber[ind] = _deckNumbers[ind];
+        }
+        
+        if (resetRemaining)
+        {
+            for(var ind in this.totalNumber)
+            {
+                this.remainingCards[ind] = this.totalNumber[ind];
+            }
+        }
     }
     
     stillInDeck(_cardName)
@@ -105,5 +111,3 @@ class CardManager
         }
     }
 }
-
-CardManager.cardDefinitions = {}

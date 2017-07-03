@@ -14,7 +14,7 @@ class StoryConfiguration
     resetGameState(_mainState)
     {
         ServiceLocator.difficultyManager.setInitialValues(0, 0, 0, DifficultyManager.ObstacleLevelsName.STORY_BEGIN);
-        ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:1});
+        ServiceLocator.cardManager.lootDeck.setCardNumbers({SmMedkitCard:1});
         this.mainState = _mainState;
         this.setStoryStep(new DogEnteringStoryStep());
     }
@@ -429,7 +429,7 @@ class WaitForEnergyComplete extends EmptyStoryStep
         
         this.energyLooted = 0;
         
-        ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:undefined,
+        ServiceLocator.cardManager.lootDeck.setCardNumbers({SmMedkitCard:undefined,
             SmEnergyCard:undefined,
             MedEnergyCard:undefined,
             BigEnergyCard:undefined,
@@ -481,7 +481,7 @@ class WaitForPiecesPicked extends EmptyStoryStep
         
         this.taskFinished = false;
         
-        ServiceLocator.cardManager.setDeckNumbers({SmMedkitCard:undefined,
+        ServiceLocator.cardManager.lootDeck.setCardNumbers({SmMedkitCard:undefined,
             SmEnergyCard:undefined,
             MedEnergyCard:undefined,
             BigEnergyCard:undefined,
