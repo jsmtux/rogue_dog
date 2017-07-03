@@ -161,3 +161,29 @@ class AttackDefendedMessage extends Message
         super("AttackDefendedMessage");
     }
 }
+
+class StickNumberUpdated extends Message
+{
+    constructor(_number)
+    {
+        super("StickNumberUpdated", {"number": _number});
+    }
+    
+    getNumber()
+    {
+        return this.arguments["number"];
+    }
+}
+
+class HealthPercentageUpdated extends Message
+{
+    constructor(_percentage)
+    {
+        super("HealthPercentageUpdated", {"percentage": _percentage});
+    }
+    
+    getPercentage()
+    {
+        return this.arguments["percentage"];
+    }
+}

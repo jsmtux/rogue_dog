@@ -2,8 +2,7 @@ class Camera
 {
     constructor()
     {
-        this.offset = new Phaser.Point(260, 435)
-        this.yOffset = 435;
+        this.offset = new Phaser.Point(260, 500)
     }
     
     create(_game, _player)

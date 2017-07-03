@@ -13,8 +13,8 @@ MainState.prototype.preload = function ()
     DialogManager.preload(this.game);
     CombatManager.preload(this.game);
 
-    GameModeUI.preload(this.game);
     ParticleEmitter.preload(this.game);
+    TopBarUI.preload(this.game);
 }
 
 MainState.prototype.create = function ()
@@ -37,7 +37,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('dialogManager', new DialogManager(this));
     ServiceLocator.initialize('physics', new Physics(this));
 
-    this.game.world.setBounds(0, 0, 192000, 900);
+    this.game.world.setBounds(0, -65, 192000, 900);
 
     ServiceLocator.renderer.create(this);
     ServiceLocator.inputManager.create(this);
@@ -45,6 +45,8 @@ MainState.prototype.create = function ()
     ServiceLocator.walkManager.create(this);
     
     ServiceLocator.guiManager.addToRenderer();
+    this.topBarUI = new TopBarUI(this.game);
+    this.topBarUI.create();
 
     this.player.create(this);
     
@@ -73,9 +75,6 @@ MainState.prototype.create = function ()
     this.particleEmitter.create();
     
     MenuState.gameConfiguration.resetGameState(this);
-
-    this.gameModeUI = new GameModeUI(this.game);
-    this.gameModeUI.create();
 }
 
 MainState.prototype.addGameMode = function(_mode)
@@ -85,6 +84,8 @@ MainState.prototype.addGameMode = function(_mode)
 
 MainState.prototype.update = function ()
 {
+    ServiceLocator.guiManager.update();
+
     MenuState.gameConfiguration.update(this.currentGameMode, this);
     
     this.updateSignal.dispatch(); 

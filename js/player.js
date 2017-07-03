@@ -7,7 +7,6 @@ class DogPlayer extends GameObject
         this.character;
         this.maxHealth = 40;
         this.health = this.maxHealth;
-        this.healthBar = new HealthBar();
         this.jumpAcceleration = new Phaser.Point(0, 0);
         this.dizzy = false;
         
@@ -45,7 +44,6 @@ class DogPlayer extends GameObject
     
     static preload(_game)
     {
-        HealthBar.preload(_game);
         AttackStick.preload(_game);
 
         var path = "anim/"
@@ -95,7 +93,6 @@ class DogPlayer extends GameObject
             }
         }
         
-        this.healthBar.create();
         
         this.cardPieceUI.create(this.game);
         ServiceLocator.registerListener(this.cardPiecePicked, this, "CardPieceFoundMessage");
@@ -119,9 +116,6 @@ class DogPlayer extends GameObject
         ServiceLocator.renderer.addToOverlay(this.trajectoryArrow);
         
         ServiceLocator.registerListener(this.itemPicked, this, "ItemPickedMessage");
-        
-        this.stickCounterGUI = new StickCounterGuiElement()
-        ServiceLocator.guiManager.createUI(this.stickCounterGUI);
     }
     
     update()
@@ -301,7 +295,7 @@ class DogPlayer extends GameObject
     
     updateStickNumber()
     {
-        this.stickCounterGUI.setNumber(this.stickNumber);
+        ServiceLocator.publish(new StickNumberUpdated(this.stickNumber));
     }
 
     play(_animationName)
@@ -315,7 +309,7 @@ class DogPlayer extends GameObject
     
     updateHealthPercentage()
     {
-        this.healthBar.setPercentage(this.health / this.maxHealth);
+        ServiceLocator.publish(new HealthPercentageUpdated(this.health / this.maxHealth));
     }
     
     playStepSound()
@@ -467,7 +461,7 @@ class DogPlayer extends GameObject
     {
         _msg.getItem().pick();
         this.stickNumber++;
-        this.stickCounterGUI.setNumber(this.stickNumber);
+        this.updateStickNumber();
         this.pickStickAudio.play();
     }
 }

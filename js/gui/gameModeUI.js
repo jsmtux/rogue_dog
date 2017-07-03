@@ -15,12 +15,12 @@ class GameModeUI
         _game.load.image("LootModeLabel", "img/mode_labels/loot.png");
     }
     
-    create()
+    create(_group)
     {
         this.sprite = this.game.add.sprite(100, 100, 'JumpModeLabel');
         this.sprite.x = ServiceLocator.viewportHandler.resolution.x - 50 - this.sprite.width;
         this.sprite.y = 15;
-        ServiceLocator.renderer.addToUI(this.sprite);
+        _group.add(this.sprite);
         ServiceLocator.registerListener(this.newGameMode, this, "NewGameModeMessage");
     }
     

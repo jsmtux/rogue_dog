@@ -27,6 +27,7 @@ class GUIManager
     
     update()
     {
+        this.game.world.bringToTop(GUIManager.slickUIPlugin.container.displayGroup);
     }
 
     createUI(_constructor)

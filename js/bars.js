@@ -40,14 +40,20 @@ class HealthBar extends StatsBar
         _game.load.image('health_bar_fill', './img/statBars/health_bar_fill.png');
     }
     
-    create()
+    create(_group)
     {
         var renderer = ServiceLocator.renderer;
-        this.sprite = game.add.sprite(20, 0, 'health_bar', 0, renderer.uiGroup);
+        this.sprite = game.add.sprite(20, 0, 'health_bar', 0);
         ServiceLocator.renderer.addToUI(this.sprite);
-        this.spriteFill = game.add.sprite(20, 0, 'health_bar_fill', 0, renderer.uiGroup);
+        this.spriteFill = game.add.sprite(20, 0, 'health_bar_fill', 0);
         ServiceLocator.renderer.addToUI(this.spriteFill);
         this.setPercentage(100);
+        ServiceLocator.registerListener(this.updateHealthPercentage, this, "HealthPercentageUpdated");
+    }
+    
+    updateHealthPercentage(_msg)
+    {
+        this.setPercentage(_msg.getPercentage());
     }
 }
 
