@@ -96,6 +96,14 @@ class CardManager
             }
         }
     }
+    
+    restoreCardsToDeck(_cardList)
+    {
+        for(var ind in _cardList)
+        {
+            this.remainingCards[_cardList[ind].ID] ++;
+        }
+    }
 }
 
 CardManager.cardDefinitions = {}

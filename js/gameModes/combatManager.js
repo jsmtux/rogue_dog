@@ -161,6 +161,8 @@ class CombatManager extends GameMode
         setTimeout(() => {
             if (_success)
             {
+                ServiceLocator.cardManager.restoreCardsToDeck(this.cardsToLoot);
+                this.cardsToLoot = [];
                 this.state = CombatManager.State.FLEE_COMBAT;
             }
             else
