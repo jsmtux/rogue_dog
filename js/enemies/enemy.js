@@ -137,8 +137,11 @@ class Enemy extends GameObject
     
     hideCrosshair()
     {
-        this.crosshair.destroy();
-        this.crosshair = undefined;
+        if(this.crosshair)
+        {
+            this.crosshair.destroy();
+            this.crosshair = undefined;
+        }
     }
     
     getName()

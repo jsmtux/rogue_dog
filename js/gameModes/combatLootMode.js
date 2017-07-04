@@ -79,7 +79,7 @@ class CombatLootMode extends GameMode
     cardChosen(_card)
     {
         _card.apply({'player':this.player});
-        _card.hide();
+        _card.destroy();
         ServiceLocator.publish(new CardLootedMessage(_card));
         this.cardList.splice(this.cardList.indexOf(_card), 1);
         

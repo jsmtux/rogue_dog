@@ -127,9 +127,9 @@ class CombatManager extends GameMode
     startAttack()
     {
         this.state = CombatManager.State.ATTACK;
+        ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.ATTACK));
         if (this.player.canAttack())
         {
-            ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.ATTACK));
             for (var ind in this.enemies)
             {
                 this.enemies[ind].showCrosshair();
