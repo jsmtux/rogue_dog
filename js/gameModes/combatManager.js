@@ -11,6 +11,8 @@ class CombatManager extends GameMode
         this.cardsToLoot = [];
         
         this.cardsDisappearing = 0;
+        
+        this.cardButton;
     }
     
     static preload(_game)
@@ -119,7 +121,7 @@ class CombatManager extends GameMode
     
     finishCombat()
     {
-        this.state = CombatManager.State.FINISHED;     
+        this.state = CombatManager.State.FINISHED;
     }
     
     startAttack()
@@ -134,26 +136,15 @@ class CombatManager extends GameMode
             }
             ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
         }
-        else
+        
+        if (this.cardButton === undefined)
         {
-            ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.ESCAPE));
-            for (var ind in this.enemies)
-            {
-                this.enemies[ind].showEscapeCheck();
-            }
-            setTimeout(() => {
-                var success = true;
-                for (var ind in this.enemies)
-                {
-                    success = success && this.enemies[ind].crosshair.getSuccess();
-                }
-                this.escapeSucceeded(success);
-                for (var ind in this.enemies)
-                {
-                    this.enemies[ind].hideCrosshair();
-                }
-            }, 3000);
+            this.cardButton = this.game.add.sprite(100, 100, "card_loot");
+            ServiceLocator.renderer.addToUI(this.cardButton);
         }
+        this.cardButton.visible = true;
+        this.cardButton.inputEnabled = true;
+        this.cardButton.events.onInputDown.add(this.wildCardRequested, this);
     }
     
     escapeSucceeded(_success)
@@ -172,14 +163,41 @@ class CombatManager extends GameMode
         }, 1000);
     }
     
-    enemyTargeted(_message)
+    wildCardRequested()
     {
+        this.removeCombatUI();
+        var curCard = new SmMedkitCard();
+        curCard.create(this.game);
+        curCard.show();
+        curCard.setPosition(new Phaser.Point(150,150));
+        curCard.setYAngle(Math.PI);
+        curCard.setHandler((card) => {card.flip(() => {this.cardFlipped(curCard)})});
+    }
+    
+    cardFlipped(_card)
+    {
+        _card.setHandler(() =>{
+            _card.apply({'player':this.player});
+            _card.destroy();
+            this.state = CombatManager.State.FINISH_ATTACK;
+        });
+    }
+    
+    removeCombatUI()
+    {
+        this.cardButton.visible = false;
+        this.cardButton.inputEnabled = false;
+        this.cardButton.events.onInputDown.remove(this.wildCardRequested, this);
         ServiceLocator.removeListener(this.enemyTargeted, this, "EnemyTargeted");
         for (var ind in this.enemies)
         {
             this.enemies[ind].hideCrosshair();
         }
-
+    }
+    
+    enemyTargeted(_message)
+    {
+        this.removeCombatUI();
         this.player.doAttack(_message.getHitType(), _message.getEnemy(), () => {this.state = CombatManager.State.FINISH_ATTACK;});
     }
     
