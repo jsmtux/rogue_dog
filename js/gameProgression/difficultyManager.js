@@ -85,9 +85,8 @@ class DifficultyManager
         {
             case 0:
                 prototypeRules.setRuleProbability(GrassStagePiece, 0.4);
-                prototypeRules.setRuleProbability(HoleStagePiece, 0.2);
-                prototypeRules.setRuleProbability(Bonus1StagePiece, 0.3);
-                prototypeRules.setRuleProbability(HoleStagePiece, 0.1);
+                prototypeRules.setRuleProbability(HoleStagePiece, 0.25);
+                prototypeRules.setRuleProbability(Bonus1StagePiece, 0.35);
                 break;
             case 1:
                 prototypeRules.setRuleProbability(GrassStagePiece, 0.25);
@@ -116,23 +115,6 @@ class DifficultyManager
                 prototypeRules.setRuleProbability(MultipleJumpsPiece, 0.15);
                 prototypeRules.setRuleProbability(TripleObstacleStagePiece, 0.2);
                 break;
-            case DifficultyManager.ObstacleLevelsName.STORY_BEGIN:
-                prototypeRules.setRuleProbability(GrassStagePiece, 1.0);
-                break;
-            case DifficultyManager.ObstacleLevelsName.STORY_TRIALS:
-                prototypeRules.setRuleProbability(GrassStagePiece, 0.5);
-                prototypeRules.setRuleProbability(ObstacleStagePiece, 0.5);
-                break;
-            case DifficultyManager.ObstacleLevelsName.STORY_ENEMY_OBSTACLE:
-                prototypeRules.setRuleProbability(GrassStagePiece, 0.4);
-                prototypeRules.setRuleProbability(ObstacleStagePiece, 0.50);
-                prototypeRules.setRuleProbability(TripleObstacleStagePiece, 0.1);
-                break;
-            case DifficultyManager.ObstacleLevelsName.STORY_BEFORE_FIRST_COMBAT:
-                prototypeRules.setRuleProbability(GrassStagePiece, 0.4);
-                prototypeRules.setRuleProbability(HoleStagePiece, 0.2);
-                prototypeRules.setRuleProbability(ObstacleStagePiece, 0.4);
-                break;
         }
         return new StagePrototype(prototypeRules, this.obstacleNumber);
     }
@@ -154,12 +136,4 @@ class DifficultyManager
     {
         return 0.02;
     }
-}
-
-DifficultyManager.UnlockableEnemies = [BasicEnemy, BeeEnemy];
-DifficultyManager.ObstacleLevelsName = {
-    STORY_BEGIN : 4,
-    STORY_TRIALS : 5,
-    STORY_ENEMY_OBSTACLE: 6,
-    STORY_BEFORE_FIRST_COMBAT: 7
 }

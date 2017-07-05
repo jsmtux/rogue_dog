@@ -11,11 +11,6 @@ class EndlessConfiguration
         ServiceLocator.cardManager.lootDeck.addCards({
             SmMedkitCard:undefined,
             MagicianHatCard:1});
-            
-        ServiceLocator.cardManager.lootDeck.addCards({
-            StrongerBasicEnemyCard:1});
-        ServiceLocator.cardManager.lootDeck.addCards({
-            StrongerBasicEnemyCard:2});
 
         ServiceLocator.cardManager.wildDeck.addCards({
             BeeEnemyCard:1,
