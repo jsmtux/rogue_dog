@@ -8,15 +8,11 @@ class DifficultyManager
     {
     }
     
-    setInitialValues(_enemyNumber, _combatEnemyNumber, _obstacleNumber, _obstacleLevel)
+    setInitialValues(_combatEnemyNumber, _obstacleNumber, _obstacleLevel)
     {
         this.enemiesDifficulty = {};
 
         this.unlockedEnemies = [];
-        for (var i = 0; i < _enemyNumber; i++)
-        {
-            this.unlockEnemy();
-        }
 
         this.combatEnemyNumber = _combatEnemyNumber;
 
@@ -47,11 +43,10 @@ class DifficultyManager
         return 600;
     }
     
-    unlockEnemy()
+    unlockEnemy(_enemyClass)
     {
-        var newEnemyType = DifficultyManager.UnlockableEnemies[this.unlockedEnemies.length];
-        this.unlockedEnemies.push(newEnemyType);
-        this.enemiesDifficulty[newEnemyType.NAME] = 0;
+        this.unlockedEnemies.push(_enemyClass);
+        this.enemiesDifficulty[_enemyClass.NAME] = 0;
     }
     
     setNumberOfEnemies(_amount)
@@ -62,6 +57,11 @@ class DifficultyManager
     getEnemies()
     {
         var ret = [];
+        
+        if (this.unlockedEnemies.length === 0)
+        {
+            return ret;
+        }
         
         for (var i = 0; i < this.combatEnemyNumber; i++)
         {

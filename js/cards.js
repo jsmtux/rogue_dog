@@ -183,19 +183,62 @@ class SmMedkitCard extends Card
 }
 SmMedkitCard.ID = "SmMedkitCard";
 
-class NewEnemyCard extends Card
+class BasicEnemyCard extends Card
 {
     constructor(_game)
     {
-        super("Shiny Pig", "A new type of enemy will appear!", "new_enemy_icon", Card.Type.TRAP, _game);
+        super("Dirt monster", "Dirt monster has been awakened!\nFollowing its orders might save you", "basic_monster_icon", Card.Type.TRAP, _game);
     }
     
     apply(_arguments)
     {
-        ServiceLocator.difficultyManager.unlockEnemy();
+        ServiceLocator.difficultyManager.unlockEnemy(BasicEnemy);
+        ServiceLocator.cardManager.wildDeck.addCards({
+            StrongerBasicEnemyCard:2,
+            NewObstacleCard:3,
+            TwoEnemiesCard:1,
+            MoreObstaclesCard:undefined,
+            OneStickCard:undefined
+        })
     }
 }
-NewEnemyCard.ID = "NewEnemyCard";
+BasicEnemyCard.ID = "BasicEnemyCard";
+
+class BeeEnemyCard extends Card
+{
+    constructor(_game)
+    {
+        super("Bee monster", "Bee monster has been awakened!\nDraw a circle around the missile to disarm it", "bee_monster_icon", Card.Type.TRAP, _game);
+    }
+    
+    apply(_arguments)
+    {
+        ServiceLocator.difficultyManager.unlockEnemy(BeeEnemy);
+        ServiceLocator.cardManager.wildDeck.addCards({
+            OneStickCard:undefined,
+            StrongerBeeEnemyCard:2,
+            NewObstacleCard:3,
+            TwoEnemiesCard:1
+        })
+    }
+}
+BeeEnemyCard.ID = "BeeEnemyCard";
+
+class OneStickCard extends Card
+{
+    constructor(_game)
+    {
+        super("One stick", "You found a stick!", "wood_logs_icon", Card.Type.ITEM, _game);
+    }
+    
+    apply(_arguments)
+    {
+        var player = _arguments.player;
+        player.stickNumber++;
+        player.updateStickNumber();
+    }
+}
+OneStickCard.ID = "OneStickCard";
 
 class MoreObstaclesCard extends Card
 {

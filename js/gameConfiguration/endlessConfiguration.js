@@ -6,17 +6,21 @@ class EndlessConfiguration
     
     resetGameState(_mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(1, 1, 3, 0);
+        ServiceLocator.difficultyManager.setInitialValues(1, 3, 0);
         
-        ServiceLocator.cardManager.lootDeck.setCardNumbers({SmMedkitCard:undefined,
-            NewEnemyCard:1,
-            StrongerBasicEnemyCard:2,
-            StrongerBeeEnemyCard:2,
-            NewObstacleCard:3,
-            MoreObstaclesCard:undefined,
-            TwoEnemiesCard:1,
-            ThreeEnemiesCard:1,
+        ServiceLocator.cardManager.lootDeck.addCards({
+            SmMedkitCard:undefined,
             MagicianHatCard:1});
+            
+        ServiceLocator.cardManager.lootDeck.addCards({
+            StrongerBasicEnemyCard:1});
+        ServiceLocator.cardManager.lootDeck.addCards({
+            StrongerBasicEnemyCard:2});
+
+        ServiceLocator.cardManager.wildDeck.addCards({
+            BeeEnemyCard:1,
+            BasicEnemyCard:1
+        });
         
         _mainState.setNextMode("WalkManager");
     }
@@ -45,7 +49,9 @@ class EndlessConfiguration
                 }
             }
             if (modeName === "WalkManager")
-            _mainState.setNextMode("CombatManager", nextModeArguments);
+            {
+                _mainState.setNextMode("CombatManager", nextModeArguments);
+            }
         }
     }
 }

@@ -122,7 +122,7 @@ class Enemy extends GameObject
             if (ind >= roll)
             {
                 var cardName = cardPosition[ind];
-                ServiceLocator.cardManager.lootDeck.drawCard(cardName);
+                ServiceLocator.cardManager.lootDeck.removeOneCard(cardName);
                 break
             }
         }

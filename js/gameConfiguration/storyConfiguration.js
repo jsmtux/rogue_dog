@@ -13,8 +13,8 @@ class StoryConfiguration
         
     resetGameState(_mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(0, 0, 0, DifficultyManager.ObstacleLevelsName.STORY_BEGIN);
-        ServiceLocator.cardManager.lootDeck.setCardNumbers({SmMedkitCard:1});
+        ServiceLocator.difficultyManager.setInitialValues(0, 0, DifficultyManager.ObstacleLevelsName.STORY_BEGIN);
+        ServiceLocator.cardManager.lootDeck.addCards({SmMedkitCard:1});
         this.mainState = _mainState;
         this.setStoryStep(new DogEnteringStoryStep());
     }
@@ -199,7 +199,7 @@ class JumpingTutorialStoryStep extends EmptyStoryStep
     start(_storyConfiguration, _mainState)
     {
         this.numTimesFailed = 0;
-        ServiceLocator.difficultyManager.setInitialValues(0, 0, 5, DifficultyManager.ObstacleLevelsName.STORY_TRIALS);
+        ServiceLocator.difficultyManager.setInitialValues(0, 5, DifficultyManager.ObstacleLevelsName.STORY_TRIALS);
         _mainState.setNextMode("WalkManager");
         ServiceLocator.registerListener(this.jumpFailed, this, "JumpFailedMessage");
     }
@@ -236,7 +236,7 @@ class JumpFenceStoryStep extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(0, 0, 1, DifficultyManager.ObstacleLevelsName.STORY_TRIALS);
+        ServiceLocator.difficultyManager.setInitialValues(0, 1, DifficultyManager.ObstacleLevelsName.STORY_TRIALS);
         _mainState.setNextMode("WalkManager");
     }
     
@@ -257,7 +257,7 @@ class ExploreForestStoryStep extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(0, 0, 100, DifficultyManager.ObstacleLevelsName.STORY_ENEMY_OBSTACLE);
+        ServiceLocator.difficultyManager.setInitialValues(0, 100, DifficultyManager.ObstacleLevelsName.STORY_ENEMY_OBSTACLE);
         _mainState.setNextMode("WalkManager");
         ServiceLocator.registerListener(this.obstacleFound, this, "ObstacleShownMessge");
         this.iterationsSinceObstacleFound = -1;
@@ -331,7 +331,7 @@ class WaitForFirstEncounter extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(0, 0, 7, DifficultyManager.ObstacleLevelsName.STORY_BEFORE_FIRST_COMBAT);
+        ServiceLocator.difficultyManager.setInitialValues(0, 7, DifficultyManager.ObstacleLevelsName.STORY_BEFORE_FIRST_COMBAT);
         _mainState.setNextMode("WalkManager");
     }
     
@@ -423,13 +423,13 @@ class WaitForEnergyComplete extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(1, 1, 3, 0);
+        ServiceLocator.difficultyManager.setInitialValues(1, 3, 0);
         _mainState.setNextMode("WalkManager");
         ServiceLocator.registerListener(this.cardPicked, this, "CardLootedMessage");
         
         this.energyLooted = 0;
         
-        ServiceLocator.cardManager.lootDeck.setCardNumbers({SmMedkitCard:undefined,
+        ServiceLocator.cardManager.lootDeck.addCards({SmMedkitCard:undefined,
             SmEnergyCard:undefined,
             MedEnergyCard:undefined,
             BigEnergyCard:undefined,
@@ -475,13 +475,14 @@ class WaitForPiecesPicked extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(1, 1, 3, 0);
+        ServiceLocator.difficultyManager.setInitialValues(1, 3, 0);
         _mainState.setNextMode("WalkManager");
         ServiceLocator.registerListener(this.cardPicked, this, "GearCardCollectedMessage");
         
         this.taskFinished = false;
         
-        ServiceLocator.cardManager.lootDeck.setCardNumbers({SmMedkitCard:undefined,
+        ServiceLocator.cardManager.lootDeck.addCards({
+            SmMedkitCard:undefined,
             SmEnergyCard:undefined,
             MedEnergyCard:undefined,
             BigEnergyCard:undefined,

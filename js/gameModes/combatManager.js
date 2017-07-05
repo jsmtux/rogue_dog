@@ -134,8 +134,8 @@ class CombatManager extends GameMode
             {
                 this.enemies[ind].showCrosshair();
             }
-            ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
         }
+        ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
         
         if (this.cardButton === undefined)
         {
@@ -166,7 +166,8 @@ class CombatManager extends GameMode
     wildCardRequested()
     {
         this.removeCombatUI();
-        var curCard = new SmMedkitCard();
+        var cardClass = ServiceLocator.cardManager.wildDeck.getRandomCard();
+        var curCard = new cardClass();
         curCard.create(this.game);
         curCard.show();
         curCard.setPosition(new Phaser.Point(150,150));
