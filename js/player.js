@@ -40,6 +40,9 @@ class DogPlayer extends GameObject
         this.updateModeCallback;
         
         this.stickNumber = 0;
+        
+        this.position = new Phaser.Point(0,0);
+        this.offset = new Phaser.Point(0,90);
     }
     
     static preload(_game)
@@ -47,8 +50,8 @@ class DogPlayer extends GameObject
         AttackStick.preload(_game);
 
         var path = "anim/"
-        _game.load.atlas("dogAnimAtlas", path + "dog.png", path + "dog.json");
-        _game.load.json("dogJSON", path + "dog.scon");
+        _game.load.atlas("dogAnimAtlas", path + "dog 2.png", path + "dog 2.json");
+        _game.load.json("dogJSON", path + "dog 2.scon");
         
         _game.load.audio('playerAttackAudio', 'sounds/player_attack.wav');
         _game.load.audio('playerJumpAudio', 'sounds/player_jump.wav');
@@ -66,16 +69,17 @@ class DogPlayer extends GameObject
     create(_game)
     {
         this.game = _game;
-        var sprite = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "entity_000");
+        var sprite = loadSpriter(this.game, "dogJSON", "dogAnimAtlas", "Dog");
         super.create(sprite, true);
         ServiceLocator.renderer.addToScene(this.sprite);
-        this.sprite.position.setTo(0, this.playerInitialY);
         this.sprite.onEvent.add(this.playStepSound, this);
         this.sprite.onPointUpdated.add(this.updateItemHandlePoints, this);
         
-        this.collisionBodies[DogPlayer.CollisionBoxes.BODY] = this.sprite.getSpriteByName("body");
+        this.position.setTo(0, this.playerInitialY);
+        
+        this.collisionBodies[DogPlayer.CollisionBoxes.BODY] = this.sprite.getSpriteByName("Dog-13");
         ServiceLocator.physics.addToWorld(this.collisionBodies[DogPlayer.CollisionBoxes.BODY]);
-        this.collisionBodies[DogPlayer.CollisionBoxes.HEAD] = this.sprite.getSpriteByName("head");
+        this.collisionBodies[DogPlayer.CollisionBoxes.HEAD] = this.sprite.getSpriteByName("Dog-10");
         ServiceLocator.physics.addToWorld(this.collisionBodies[DogPlayer.CollisionBoxes.HEAD]);
         
         var self = this;
@@ -98,7 +102,7 @@ class DogPlayer extends GameObject
         ServiceLocator.registerListener(this.cardPiecePicked, this, "CardPieceFoundMessage");
         ServiceLocator.registerListener(this.gearCardCompleted, this, "GearCardCompletedMessage");
         
-        this.ownLight = new spotLight(new Phaser.Point(this.sprite.x + 25, this.sprite.y), 250, 0xFFFF00, 0.5);
+        this.ownLight = new spotLight(new Phaser.Point(this.position.x + 25, this.position.y), 250, 0xFFFF00, 0.5);
         ServiceLocator.lighting.addLight(this.ownLight);
         
         this.attackAudio = this.game.add.audio('playerAttackAudio');
@@ -120,6 +124,8 @@ class DogPlayer extends GameObject
     
     update()
     {
+        this.sprite.x = this.position.x + this.offset.x;
+        this.sprite.y = this.position.y + this.offset.y;
         if (this.updateModeCallback)
         {
             this.updateModeCallback();
@@ -133,7 +139,7 @@ class DogPlayer extends GameObject
             if (this.appliedItems[ind])
             {
                 var transformed = this.appliedItems[ind].transformed;
-                this.appliedItems[ind].sprite.position.set(this.sprite.x + transformed.x, this.sprite.y + transformed.y);
+                this.appliedItems[ind].sprite.position.set(this.position.x + transformed.x, this.position.y + transformed.y);
                 this.appliedItems[ind].sprite.angle = this.sprite.angle + transformed.angle;
             }
         }
@@ -142,33 +148,33 @@ class DogPlayer extends GameObject
     updateWalk()
     {
         var shouldPlay;
-        this.sprite.x += this.curSpeed + this.jumpAcceleration.x;
-        this.ownLight.position = new Phaser.Point(this.sprite.x + 100, this.sprite.y - 25);
+        this.position.x += this.curSpeed + this.jumpAcceleration.x;
+        this.ownLight.position = new Phaser.Point(this.position.x + 100, this.position.y - 25);
 
         if (this.onGround() && this.jumpAcceleration.y === 0)
         {
-            shouldPlay = 'walk';
+            shouldPlay = DogPlayer.Animations.WALK;
             this.jumpAcceleration.x = 0;
         }
         else
         {
-            this.sprite.y -= this.jumpAcceleration.y;
+            this.position.y -= this.jumpAcceleration.y;
             this.jumpAcceleration.y -= this.gravity;
             if (this.jumpAcceleration.y > 0)
             {
-                shouldPlay = 'jump';
+                shouldPlay = DogPlayer.Animations.JUMP;
             }
             else
             {
-                shouldPlay = 'fall';
+                shouldPlay = DogPlayer.Animations.FALL;
             }
             var groundLevel = this.getGroundLevel();
             if (groundLevel)
             {
                 this.landAudio.play();
-                ServiceLocator.publish(new EmitParticle(EmitParticle.Types.GrassLand, new Phaser.Point(this.sprite.x, this.sprite.y + 90)));
+                ServiceLocator.publish(new EmitParticle(EmitParticle.Types.GrassLand, new Phaser.Point(this.position.x, this.position.y + 90)));
                 this.jumpAcceleration.y = 0;
-                this.sprite.y = groundLevel;
+                this.position.y = groundLevel;
             }
         }
         this.play(shouldPlay);
@@ -228,8 +234,8 @@ class DogPlayer extends GameObject
             }
             
             this.trajectoryArrow.visible = true;
-            this.trajectoryArrow.x = curPos.x - relativePlayerPos.x + this.sprite.x + 5;
-            this.trajectoryArrow.y = curPos.y - relativePlayerPos.y + this.sprite.y;
+            this.trajectoryArrow.x = curPos.x - relativePlayerPos.x + this.position.x + 5;
+            this.trajectoryArrow.y = curPos.y - relativePlayerPos.y + this.position.y;
             this.trajectoryArrow.angle = Math.degrees(Phaser.Point.angle(curPos, prevPos));
         }
         else
@@ -262,7 +268,7 @@ class DogPlayer extends GameObject
         ServiceLocator.inputManager.playerDirectionGesture.add(this.jump, this);
         ServiceLocator.registerListener(this.obstacleHit, this, "JumpFailedMessage");
         this.curSpeed = this.walkSpeed;
-        this.play("walk");
+        this.play(DogPlayer.Animations.WALK);
         this.updateModeCallback = this.updateWalk;
     }
     
@@ -272,7 +278,7 @@ class DogPlayer extends GameObject
         ServiceLocator.removeListener(this.obstacleHit, this, "JumpFailedMessage");
         this.trajectoryArrow.visible = false;
         this.curSpeed = 0;
-        this.play("idle");
+        this.play(DogPlayer.Animations.IDLE);
         this.updateModeCallback = undefined;
     }
     
@@ -290,7 +296,7 @@ class DogPlayer extends GameObject
         };
         this.stickNumber--;
         this.updateStickNumber();
-        new AttackStick(this.sprite.position, _enemy.position, cb, this.game);
+        new AttackStick(this.position, _enemy.position, cb, this.game);
     }
     
     updateStickNumber()
@@ -337,7 +343,7 @@ class DogPlayer extends GameObject
         this.subtractHealth(5 * percentage);
         var self = this;
         setTimeout(function(){
-            self.play('idle');
+            self.play(DogPlayer.Animations.IDLE);
         }, 500);
     }
     
@@ -385,13 +391,13 @@ class DogPlayer extends GameObject
     {
         var ret = undefined;
         
-        var groundTiles = ServiceLocator.walkManager.getGroundTiles(this.sprite.x);
+        var groundTiles = ServiceLocator.walkManager.getGroundTiles(this.position.x);
         
         for (var ind in groundTiles)
         {
             var offset = Math.abs(this.jumpAcceleration.y);
             var height = groundTiles[ind].getTopPosition();
-            if (this.sprite.y >= height - offset && this.sprite.y <= height + offset)
+            if (this.position.y >= height - offset && this.position.y <= height + offset)
             {
                 ret = height;
                 ServiceLocator.walkManager.setCurrentWalkLevel(groundTiles[ind].getWalkLevel());
@@ -409,7 +415,7 @@ class DogPlayer extends GameObject
     
     getFeetArea()
     {
-        return [this.sprite.x - 40, this.sprite.x + 112];
+        return [this.position.x - 40, this.position.x + 112];
     }
     
     addItem(_itemClass)
@@ -427,17 +433,17 @@ class DogPlayer extends GameObject
     getHitAreaBottom()
     {
         var bottomHeight = 75;
-        return this.sprite.y - bottomHeight;
+        return this.position.y - bottomHeight;
     }
     
     isUnderground()
     {
-        return this.sprite.y > (GROUND_LEVEL);
+        return this.position.y > (GROUND_LEVEL);
     }
     
     getPosition()
     {
-        return new Phaser.Point(this.sprite.x, this.sprite.y);
+        return new Phaser.Point(this.position.x, this.position.y);
     }
     
     cardPiecePicked()
@@ -464,6 +470,14 @@ class DogPlayer extends GameObject
         this.updateStickNumber();
         this.pickStickAudio.play();
     }
+}
+
+DogPlayer.Animations = {
+    IDLE:"Idle",
+    WALK:"Run",
+    JUMP:"Jump",
+    AIR:"air",
+    FALL:"Fall"
 }
 
 class AttackStick

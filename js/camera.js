@@ -14,9 +14,9 @@ class Camera
     
     update()
     {
-        this.game.camera.x = this.player.sprite.x - this.offset.x;
+        this.game.camera.x = this.player.position.x - this.offset.x;
         //var diffY = this.game.camera.y - this.player.sprite.y + this.yOffset;
-        this.game.camera.y = this.player.sprite.y - this.offset.y;
+        this.game.camera.y = this.player.position.y - this.offset.y;
     }
     
     getPosition()
