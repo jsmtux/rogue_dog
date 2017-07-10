@@ -43,6 +43,8 @@ class DogPlayer extends GameObject
         
         this.position = new Phaser.Point(0,0);
         this.offset = new Phaser.Point(0,90);
+        
+        this.bodyBox;
     }
     
     static preload(_game)
@@ -74,10 +76,12 @@ class DogPlayer extends GameObject
         ServiceLocator.renderer.addToScene(this.sprite);
         this.sprite.onEvent.add(this.playStepSound, this);
         this.sprite.onPointUpdated.add(this.updateItemHandlePoints, this);
+        this.sprite.onBoxUpdated.add(this.updateCollisionBox, this);
         
         this.position.setTo(0, this.playerInitialY);
         
-        this.collisionBodies[DogPlayer.CollisionBoxes.BODY] = this.sprite.getSpriteByName("Dog-13");
+        this.collisionBodies[DogPlayer.CollisionBoxes.BODY] = /*this.sprite.getSpriteByName("Dog-03")*/ this.game.add.sprite(0, 0);
+        ServiceLocator.renderer.addToScene(this.collisionBodies[DogPlayer.CollisionBoxes.BODY]);
         ServiceLocator.physics.addToWorld(this.collisionBodies[DogPlayer.CollisionBoxes.BODY]);
         this.collisionBodies[DogPlayer.CollisionBoxes.HEAD] = this.sprite.getSpriteByName("Dog-10");
         ServiceLocator.physics.addToWorld(this.collisionBodies[DogPlayer.CollisionBoxes.HEAD]);
@@ -126,6 +130,16 @@ class DogPlayer extends GameObject
     {
         this.sprite.x = this.position.x + this.offset.x;
         this.sprite.y = this.position.y + this.offset.y;
+        
+        if (this.bodyBox)
+        {
+            this.collisionBodies[DogPlayer.CollisionBoxes.BODY].x = this.bodyBox.x + this.sprite.x;
+            this.collisionBodies[DogPlayer.CollisionBoxes.BODY].y = this.bodyBox.y + this.sprite.y;
+            
+            this.collisionBodies[DogPlayer.CollisionBoxes.BODY].width = this.bodyBox.width * this.bodyBox.scaleX;
+            this.collisionBodies[DogPlayer.CollisionBoxes.BODY].height = this.bodyBox.height * this.bodyBox.scaleY;
+        }
+        
         if (this.updateModeCallback)
         {
             this.updateModeCallback();
@@ -185,6 +199,13 @@ class DogPlayer extends GameObject
     getCollisionBox(_part)
     {
         return this.collisionBodies[_part];
+    }
+    
+    updateCollisionBox(_spriterGroup, _spriterObject)
+    {
+        this.bodyBox = _spriterObject.transformed;
+        this.bodyBox.height = _spriterObject.objectInfo.height;
+        this.bodyBox.width = _spriterObject.objectInfo.width;
     }
     
     updateTrajectoryImage()
