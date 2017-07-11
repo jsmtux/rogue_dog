@@ -234,6 +234,14 @@ class WalkManager extends GameMode
         this.currentWalkLevel = _level;
         this.currentWalkLevel.setActive(true);
     }
+    
+    endCurrentLevel()
+    {
+        for(var levelInd in this.walkLevels)
+        {
+            this.walkLevels[levelInd].setStagePrototype(undefined);
+        }
+    }
 }
 
 WalkManager.NAME = "WalkManager";

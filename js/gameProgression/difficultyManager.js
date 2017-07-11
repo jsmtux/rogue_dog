@@ -6,14 +6,12 @@ class DifficultyManager
     
     create()
     {
+        this.unlockedEnemies = [];
+        this.enemiesDifficulty = {};
     }
     
     setInitialValues(_combatEnemyNumber, _obstacleNumber, _obstacleLevel)
     {
-        this.enemiesDifficulty = {};
-
-        this.unlockedEnemies = [];
-
         this.combatEnemyNumber = _combatEnemyNumber;
 
         this.obstacleNumber = _obstacleNumber;

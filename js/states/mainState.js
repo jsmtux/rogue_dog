@@ -88,17 +88,17 @@ MainState.prototype.update = function ()
 
     MenuState.gameConfiguration.update(this.currentGameMode, this);
     
-    this.updateSignal.dispatch(); 
-    if (this.statePaused)
+    this.updateSignal.dispatch();
+
+    if (this.overlayGameMode)
     {
-        if (this.overlayGameMode)
-        {
-            this.overlayGameMode.update();
-        }
-        return;
+        this.overlayGameMode.update();
     }
-   
-    this.currentGameMode.update();
+    
+    if (!this.statePaused)
+    {
+        this.currentGameMode.update();
+    }
 }
 
 MainState.prototype.setNextMode = function(_modeName, _args)
@@ -167,7 +167,6 @@ MainState.prototype.setOverlayGameMode = function(_mode, _arguments)
 {
     this.overlayGameMode = this.gameModes[_mode];
     this.overlayGameMode.startMode(_arguments);
-    this.setPaused(true);
 }
 
 MainState.prototype.resetOverlayGameMode = function()
@@ -177,5 +176,4 @@ MainState.prototype.resetOverlayGameMode = function()
         this.overlayGameMode.finishMode();
     }
     this.overlayGameMode = undefined;
-    this.setPaused(false);
 }

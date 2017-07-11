@@ -187,3 +187,19 @@ class HealthPercentageUpdated extends Message
         return this.arguments["percentage"];
     }
 }
+
+class WildcardPicked extends Message
+{
+    constructor(_percentage)
+    {
+        super("WildcardPicked");
+    }
+}
+
+class WildcardShown extends Message
+{
+    constructor(_percentage)
+    {
+        super("WildcardShown");
+    }
+}

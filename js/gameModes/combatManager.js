@@ -172,6 +172,7 @@ class CombatManager extends GameMode
         curCard.show();
         curCard.setPosition(new Phaser.Point(150,150));
         curCard.setYAngle(Math.PI);
+        ServiceLocator.publish(new WildcardShown());
         curCard.setHandler((card) => {card.flip(() => {this.cardFlipped(curCard)})});
     }
     
@@ -181,6 +182,7 @@ class CombatManager extends GameMode
             _card.apply({'player':this.player});
             _card.destroy();
             this.state = CombatManager.State.FINISH_ATTACK;
+            ServiceLocator.publish(new WildcardPicked());
         });
     }
     
