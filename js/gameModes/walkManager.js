@@ -130,9 +130,10 @@ class WalkManager extends GameMode
     create(_game)
     {
         this.background.create(_game, [
-            {'name':'bg0', 'speed':0.2},
-            {'name':'bg1', 'speed':0.5, 'yOffset':360},
-            {'name':'bg2', 'speed':0.7, 'yOffset':550}]);
+            {'name':'layer0', 'speed':0.1},
+            {'name':'layer1', 'speed':0.5, 'yOffset':240},
+            {'name':'layer2', 'speed':0.55, 'yOffset':350},
+            {'name':'bg2', 'speed':0.8, 'yOffset':550}]);
     }
     
     addTile(_grassName, _position, _obstacle, _item, _walkLevel)

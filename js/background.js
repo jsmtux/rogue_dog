@@ -6,8 +6,9 @@ class Background
     
     static preload(_game)
     {
-        _game.load.image('bg0', './img/background/layer-1.png');
-        _game.load.image('bg1', './img/background/layer-2.png');
+        _game.load.image('layer0', './img/background/layer0.png');
+        _game.load.image('layer1', './img/background/layer1.png');
+        _game.load.image('layer2', './img/background/layer2.png');
         _game.load.image('bg2', './img/background/under-layer-1.png');
     }
     
