@@ -31,6 +31,9 @@ class DialogManager extends GameMode
         this.inputDisablingSprite.height = resolution.y;
         this.inputDisablingSprite.inputEnabled = false;
         ServiceLocator.renderer.addToUI(this.inputDisablingSprite);
+
+        this.bmd = game.add.graphics(0, 0);
+        ServiceLocator.renderer.addToUI(this.bmd);
     }
     
     static addTalkingCharacter(_name, _game)
@@ -44,7 +47,10 @@ class DialogManager extends GameMode
     {
         if (this.currentDialogUI)
         {
-            this.currentDialogUI.update();
+            var position = ServiceLocator.viewportHandler.sceneToUIPosition(this.player.position);
+            var sourcePos = this.player.speechBubbleSourcePoint;
+            position = position.add(sourcePos.x, sourcePos.y + 80);
+            this.currentDialogUI.update(position);
         }
     }
     
@@ -57,6 +63,7 @@ class DialogManager extends GameMode
     finishMode()
     {
         this.inputDisablingSprite.inputEnabled = false;
+        this.speechBubble = undefined;
     }
     
     findCharacter(_line)
@@ -116,20 +123,13 @@ class TalkingCharacter
     constructor(_name)
     {
         this.name = _name;
-        this.imageId = this.name + 'Thumbnail';
         this.soundName = this.name + 'Talk';
         this.audioLoadId;
     }
     
     preload(_game)
     {
-        _game.load.image(this.imageId, './img/dialog_thumbnails/' + this.name + '.png');
         this.audioLoadId = _game.load.audio(this.soundName, 'sounds/' + this.name + '_talk.wav');
-    }
-    
-    getImageId()
-    {
-        return this.imageId;
     }
     
     getAudioId()

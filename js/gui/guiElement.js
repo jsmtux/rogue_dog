@@ -56,11 +56,11 @@ class MenuGuiElement extends GuiElement
     {
         var button, panel;
         _slickUI.add(panel = new SlickUI.Element.Panel(600, 50, 250, 150));
-        panel.add(new SlickUI.Element.Text(10,0, "Rogue Dog")).centerHorizontally().text.alpha = 0.5;
+        panel.add(new SlickUI.Element.Text(10,0, "Rogue Dog", 16, "comic")).centerHorizontally().text.alpha = 0.5;
         panel.add(button = new SlickUI.Element.Button(0, 50, 240, 40)).events.onInputUp.add(this.getSignalCall("playButtonClicked"));
-        button.add(new SlickUI.Element.Text(0,0, "Story")).center();
+        button.add(new SlickUI.Element.Text(0,0, "Story", 16, "comic")).center();
         panel.add(button = new SlickUI.Element.Button(0, 100, 240, 40)).events.onInputUp.add(this.getSignalCall("endlessButtonClicked"));
-        button.add(new SlickUI.Element.Text(0,0, "Endless")).center();
+        button.add(new SlickUI.Element.Text(0,0, "Endless", 16, "comic")).center();
         
         super.create(_slickUI, _game, panel);
     }
@@ -148,24 +148,26 @@ class DialogGuiElement extends GuiElement
         this.buttons = [];
         this.talkingCharacter = _talkingCharacter;
         this.talkingAudio;
+        this.containsAnswers = true;
     }
     
-    create(_slickUI, _game)
+    create(_slickUI, _game, _customBmd)
     {
-        if (!this.options || this.options.length == 0)
+        this.slickUI = _slickUI;
+        this.bmd = _customBmd;
+        if (!this.options || this.options.length === 0)
         {
             this.options = [{text:"continue"}];
+            this.containsAnswers = false;
         }
-        var thumbnailPanel;
         var res = ServiceLocator.viewportHandler.resolution;
         var pos = new Phaser.Point((res.x - 700) / 2, (res.y - 150) / 2);
         _slickUI.add(this.panel = new SlickUI.Element.Panel(pos.x, 150, 700, 150));
-        this.panel.add(thumbnailPanel = new SlickUI.Element.Panel(10, 10, 120, 120));
-        this.panel.add(this.text = new SlickUI.Element.Text(150,10, ""));
+        this.panel._sprite.visible = false;
+        this.panel.add(this.text = new SlickUI.Element.Text(10,10, "", 16, "collar"));
         
         if (this.talkingCharacter)
         {
-            thumbnailPanel.add(new SlickUI.Element.DisplayObject(5, 5, _game.make.sprite(0, 0, this.talkingCharacter.getImageId())));
             var audioID = this.talkingCharacter.getAudioId();
             if (audioID)
             {
@@ -181,8 +183,27 @@ class DialogGuiElement extends GuiElement
         ServiceLocator.inputManager.leftButton.onDown.add(this.finishWritingText, this);
     }
     
-    update()
+    update(_source)
     {
+        
+        this.bmd.clear();
+        var textPosition = new Phaser.Point(this.panel.x, this.panel.y);
+        var textSize = new Phaser.Point(this.text.text.width + 40, this.text.text.height + 40);
+        
+        this.bmd.beginFill(0xFEE98C);
+        this.bmd.moveTo(textPosition.x, textPosition.y);
+        this.bmd.lineTo(textPosition.x + textSize.x, textPosition.y);
+        this.bmd.lineTo(textPosition.x + textSize.x, textPosition.y + textSize.y);
+        this.bmd.lineTo(textPosition.x, textPosition.y + textSize.y);
+
+        this.bmd.moveTo(_source.x, _source.y);
+        this.bmd.lineTo(textPosition.x, textPosition.y + textSize.y);
+        var bottomRightPanel = textPosition.x + textSize.x;
+        this.bmd.lineTo(textSize.x < 100 ? bottomRightPanel : textPosition.x + 100, textPosition.y + textSize.y);
+        this.bmd.moveTo(_source.x, _source.y);
+        
+        this.bmd.endFill();
+
         var desiredHeight = 160 + 50 * this.options.length;
         if (this.currentText.length < this.fullText.length)
         {
@@ -191,19 +212,28 @@ class DialogGuiElement extends GuiElement
         else if(this.panel.height < desiredHeight)
         {
             this.panel.height = desiredHeight;
+            this.panel._sprite.visible = false;
         }
         else if (!this.finishedShowing)
         {
+            var textFinishPos = this.text.text.textHeight;
             ServiceLocator.inputManager.leftButton.onDown.remove(this.finishWritingText, this);
             this.finishedShowing = true;
+            var buttonHeight = textSize.y;
             for(var ind in this.options)
             {
                 ind = parseInt(ind);
                 var button;
-                this.panel.add(button = new SlickUI.Element.Button(0, 160 + 50 * ind, 690, 40)).events.onInputUp.add(this.getSignalCall(ind));
-                button.add(new SlickUI.Element.Text(0,0, this.options[ind].text)).center();
+                this.panel.add(button = new SlickUI.Element.Button(100, buttonHeight, 690, 40));
+                if (this.containsAnswers)
+                {
+                    button.events.onInputUp.add(() => {ServiceLocator.publish(new DogAnswerChosen())});
+                }
+                button.events.onInputUp.add(this.getSignalCall(ind));
+                button.add(new SlickUI.Element.Text(0,0, this.options[ind].text, 16, "comic")).center();
                 button.sprite.input.priorityID = 3;
                 this.buttons.push(button);
+                buttonHeight += 50;
             }
         }
         this.text.value = this.currentText;
@@ -221,6 +251,7 @@ class DialogGuiElement extends GuiElement
             this.buttons[parseInt(ind)].events.destroy();
             this.buttons[parseInt(ind)].sprite.destroy();
         }
+        this.bmd.clear();
         super.destroy();
     }
 }

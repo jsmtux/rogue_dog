@@ -106,11 +106,16 @@ class StoryConfiguration
         {
             this.chooseOptionIndex(_option);
         }
-        var nextDialog = this.getNextDialog();
-        if (nextDialog)
+        var nextDialog;
+        while(nextDialog === undefined || nextDialog.fullText.startsWith("dog:"))
         {
-            ServiceLocator.dialogManager.setLine(nextDialog, this.storyCallback, this);
+            nextDialog = this.getNextDialog();
+            if (!nextDialog)
+            {
+                return;
+            }
         }
+        ServiceLocator.dialogManager.setLine(nextDialog, this.storyCallback, this);
     }
     
     update(_curMode, _mainState)
@@ -163,6 +168,8 @@ class DogEnteringStoryStep extends EmptyStoryStep
     start(_storyConfiguration, _mainState)
     {
         _mainState.setNextMode("WalkManager");
+        _storyConfiguration.story.ResetState();
+        _storyConfiguration.choosePathString("Introduction");
     }
 
     update(_storyConfiguration, _curGameMode, _mainState)
@@ -314,7 +321,7 @@ class PlanFirstEncounter extends EmptyStoryStep
     
     finish(_storyConfiguration, _mainState)
     {
-        
+        _mainState.resetOverlayGameMode();
     }
 }
 
@@ -327,7 +334,7 @@ class ContinueFirstEncounter extends EmptyStoryStep
     
     update(_storyConfiguration, _curGameMode, _mainState)
     {
-        if (_curGameMode.isFinished())
+        if (_curGameMode.isFinished() && !this.combatFinished)
         {
             this.followDefaultRules(_curGameMode, _mainState)
         }
@@ -358,8 +365,7 @@ class WaitForLoot extends EmptyStoryStep
         if (_curGameMode.isFinished())
         {
             _storyConfiguration.choosePathString("Introduction.loot_finished");
-            _mainState.setOverlayGameMode("DialogManager");
-            _storyConfiguration.storyCallback();
+            _storyConfiguration.setStoryStep(new DialogStep());
         }
     }
     

@@ -190,7 +190,7 @@ class HealthPercentageUpdated extends Message
 
 class WildcardPicked extends Message
 {
-    constructor(_percentage)
+    constructor()
     {
         super("WildcardPicked");
     }
@@ -198,8 +198,16 @@ class WildcardPicked extends Message
 
 class WildcardShown extends Message
 {
-    constructor(_percentage)
+    constructor()
     {
         super("WildcardShown");
+    }
+}
+
+class DogAnswerChosen extends Message
+{
+    constructor()
+    {
+        super("DogAnswerChosen");
     }
 }

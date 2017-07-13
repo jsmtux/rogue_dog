@@ -22,17 +22,20 @@ class GUIManager
     
     addToRenderer()
     {
+        this.customBmd = this.game.add.graphics(0,0);
+        ServiceLocator.renderer.addToUI(this.customBmd);
         GUIManager.slickUIPlugin.container.displayGroup = this.game.add.group();
     }
     
     update()
     {
+        ServiceLocator.renderer.UIGroup.bringToTop(this.customBmd);
         this.game.world.bringToTop(GUIManager.slickUIPlugin.container.displayGroup);
     }
 
     createUI(_constructor)
     {
-        _constructor.create(GUIManager.slickUIPlugin, this.game);
+        _constructor.create(GUIManager.slickUIPlugin, this.game, this.customBmd);
     }
 }
 

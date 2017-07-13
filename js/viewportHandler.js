@@ -56,4 +56,12 @@ class ViewportHandler
     {
         return new Phaser.Point((this.nativeResolution.x - this.resolution.x) / 2, (this.nativeResolution.y - this.resolution.y) / 2);
     }
+    
+    sceneToUIPosition(_pos)
+    {
+        var camPos = ServiceLocator.camera.getPosition();
+        var sceneOffset = this.getSceneOffset();
+        camPos.add(sceneOffset.x, sceneOffset.y);
+        return _pos.clone().subtract(camPos.x, camPos.y);
+    }
 }

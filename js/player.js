@@ -45,6 +45,8 @@ class DogPlayer extends GameObject
         this.offset = new Phaser.Point(0,90);
         
         this.bodyBox;
+        
+        this.speechBubbleSourcePoint = new Phaser.Point(0,0);
     }
     
     static preload(_game)
@@ -80,7 +82,7 @@ class DogPlayer extends GameObject
         
         this.position.setTo(0, this.playerInitialY);
         
-        this.collisionBodies[DogPlayer.CollisionBoxes.BODY] = /*this.sprite.getSpriteByName("Dog-03")*/ this.game.add.sprite(0, 0);
+        this.collisionBodies[DogPlayer.CollisionBoxes.BODY] = this.game.add.sprite(0, 0);
         ServiceLocator.renderer.addToScene(this.collisionBodies[DogPlayer.CollisionBoxes.BODY]);
         ServiceLocator.physics.addToWorld(this.collisionBodies[DogPlayer.CollisionBoxes.BODY]);
         this.collisionBodies[DogPlayer.CollisionBoxes.HEAD] = this.sprite.getSpriteByName("Dog-10");
@@ -117,6 +119,9 @@ class DogPlayer extends GameObject
         this.stepAudio.volume = 0.25;
         this.pickStickAudio = this.game.add.audio('pickStickAudio');
         this.pickStickAudio.volume = 0.25;
+        //This has been preloaded in DialogManager, should be changed
+        this.barkAudio = this.game.add.audio('dogTalk');
+        
         
         this.trajectoryArrow = _game.add.sprite(0, 0, 'trajectory_arrow');
         this.trajectoryArrow.visible = false;
@@ -124,6 +129,7 @@ class DogPlayer extends GameObject
         ServiceLocator.renderer.addToOverlay(this.trajectoryArrow);
         
         ServiceLocator.registerListener(this.itemPicked, this, "ItemPickedMessage");
+        ServiceLocator.registerListener(this.answerChosen, this, "DogAnswerChosen");
     }
     
     update()
@@ -272,6 +278,9 @@ class DogPlayer extends GameObject
         {
             case "headitem_handle":
                 item = this.appliedItems[Accesory.BodyParts.HEAD];
+                break;
+            case "speechBubbleSource":
+                this.speechBubbleSourcePoint = pointObj.transformed;
                 break;
             default:
                 console.error("Invalid point handler in dog animation.");
@@ -491,6 +500,18 @@ class DogPlayer extends GameObject
         this.updateStickNumber();
         this.pickStickAudio.play();
     }
+    
+    answerChosen()
+    {
+        this.play(DogPlayer.Animations.BARK);
+        this.barkAudio.play();
+        
+        var changeAnimationOnEnd = () => {
+            this.sprite.onLoop.remove(changeAnimationOnEnd);
+            this.play(DogPlayer.Animations.IDLE);
+        }
+        this.sprite.onLoop.add(changeAnimationOnEnd);
+    }
 }
 
 DogPlayer.Animations = {
@@ -498,7 +519,8 @@ DogPlayer.Animations = {
     WALK:"Run",
     JUMP:"Jump",
     AIR:"air",
-    FALL:"Fall"
+    FALL:"Fall",
+    BARK:"Barking"
 }
 
 class AttackStick

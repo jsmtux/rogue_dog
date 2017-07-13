@@ -18,8 +18,8 @@ class Background
     create(_game)
     {
         var layerDefinitions = [
-            {'name':'layer0', 'speed':0.1},
-            {'name':'layer1', 'speed':0.5, 'yOffset':240},
+            {'name':'layer0', 'speed':0.1, 'yOffset':-40},
+            {'name':'layer1', 'speed':0.5, 'yOffset':200},
             {'name':'layer2', 'speed':0.55, 'yOffset':350},
             {'name':'bg2', 'speed':0.8, 'yOffset':550}];
         
@@ -44,10 +44,10 @@ class Background
             }
         }
         
-        var cloud0Object = new BackgroundObject('cloud0', -0.15, 0.15, [0, 200], 15000);
+        var cloud0Object = new BackgroundObject('cloud0', -0.10, 0.15, [0, 200], 15000);
         cloud0Object.create(_game, this.objectsGroup);
         this.objects.push(cloud0Object);
-        var cloud0Object = new BackgroundObject('cloud1', -0.18, 0.18, [0, 200], 15000);
+        var cloud0Object = new BackgroundObject('cloud1', -0.05, 0.18, [0, 200], 15000);
         cloud0Object.create(_game, this.objectsGroup);
         this.objects.push(cloud0Object);
         var cloud0Object = new BackgroundObject('cloud2', -0.22, 0.22, [0, 200], 15000);

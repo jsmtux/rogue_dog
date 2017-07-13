@@ -34,7 +34,7 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('lighting', new Lighting());
     ServiceLocator.initialize('renderer', new Renderer(this));
     ServiceLocator.initialize('cardManager', new CardManager(this));
-    ServiceLocator.initialize('dialogManager', new DialogManager(this));
+    ServiceLocator.initialize('dialogManager', new DialogManager(this, this.player));
     ServiceLocator.initialize('physics', new Physics(this));
 
     this.game.world.setBounds(0, -65, 192000, 900);
