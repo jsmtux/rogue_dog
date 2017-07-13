@@ -13,12 +13,24 @@ class DialogManager extends GameMode
         this.callbackCtx;
         
         this.talkingCharacters = {};
+        
+        this.inputDisablingSprite;
     }
     
     static preload(_game)
     {
         DialogManager.addTalkingCharacter("collar", _game);
         DialogManager.addTalkingCharacter("dog", _game);
+    }
+    
+    create(_game)
+    {
+        this.inputDisablingSprite = _game.add.sprite(0, 0);
+        var resolution = ServiceLocator.viewportHandler.resolution;
+        this.inputDisablingSprite.width = resolution.x;
+        this.inputDisablingSprite.height = resolution.y;
+        this.inputDisablingSprite.inputEnabled = false;
+        ServiceLocator.renderer.addToUI(this.inputDisablingSprite);
     }
     
     static addTalkingCharacter(_name, _game)
@@ -38,6 +50,13 @@ class DialogManager extends GameMode
     
     startMode()
     {
+        this.inputDisablingSprite.inputEnabled = true;
+        this.inputDisablingSprite.input.priorityID = 2;
+    }
+    
+    finishMode()
+    {
+        this.inputDisablingSprite.inputEnabled = false;
     }
     
     findCharacter(_line)

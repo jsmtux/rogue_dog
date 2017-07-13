@@ -202,6 +202,7 @@ class DialogGuiElement extends GuiElement
                 var button;
                 this.panel.add(button = new SlickUI.Element.Button(0, 160 + 50 * ind, 690, 40)).events.onInputUp.add(this.getSignalCall(ind));
                 button.add(new SlickUI.Element.Text(0,0, this.options[ind].text)).center();
+                button.sprite.input.priorityID = 3;
                 this.buttons.push(button);
             }
         }
