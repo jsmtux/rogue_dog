@@ -10,23 +10,50 @@ class Background
         _game.load.image('layer1', './img/background/layer1.png');
         _game.load.image('layer2', './img/background/layer2.png');
         _game.load.image('bg2', './img/background/under-layer-1.png');
+        _game.load.image('cloud0', './img/background/cloud0.png');
+        _game.load.image('cloud1', './img/background/cloud1.png');
+        _game.load.image('cloud2', './img/background/cloud2.png');
     }
     
-    create(_game, _layerDefinitions)
+    create(_game)
     {
+        var layerDefinitions = [
+            {'name':'layer0', 'speed':0.1},
+            {'name':'layer1', 'speed':0.5, 'yOffset':240},
+            {'name':'layer2', 'speed':0.55, 'yOffset':350},
+            {'name':'bg2', 'speed':0.8, 'yOffset':550}];
+        
         this.layers = [];
         this.scale = 1.0;
         
-        for(var ind in _layerDefinitions)
+        this.objects = [];
+        
+        for(var ind in layerDefinitions)
         {
-            var yOffset = _layerDefinitions[ind].yOffset || 0;
-            this.layers.push(new Layer(_layerDefinitions[ind].name, _layerDefinitions[ind].speed, yOffset));
+            var yOffset = layerDefinitions[ind].yOffset || 0;
+            this.layers.push(new Layer(layerDefinitions[ind].name, layerDefinitions[ind].speed, yOffset));
         }
 
         for (var ind in this.layers)
         {
             this.layers[ind].create(_game);
+            if (ind === '0')
+            {
+                this.objectsGroup = _game.add.group();
+                ServiceLocator.renderer.addToScene(this.objectsGroup);
+            }
         }
+        
+        var cloud0Object = new BackgroundObject('cloud0', -0.15, 0.15, [0, 200], 15000);
+        cloud0Object.create(_game, this.objectsGroup);
+        this.objects.push(cloud0Object);
+        var cloud0Object = new BackgroundObject('cloud1', -0.18, 0.18, [0, 200], 15000);
+        cloud0Object.create(_game, this.objectsGroup);
+        this.objects.push(cloud0Object);
+        var cloud0Object = new BackgroundObject('cloud2', -0.22, 0.22, [0, 200], 15000);
+        cloud0Object.create(_game, this.objectsGroup);
+        this.objects.push(cloud0Object);
+        
         _game.updateSignal.add(this.update, this);
         this.prevX = ServiceLocator.camera.getPosition().x;
     }
@@ -40,6 +67,11 @@ class Background
         for(var ind in this.layers)
         {
             this.layers[ind].cameraMoved(distance);
+        }
+        
+        for (var ind in this.objects)
+        {
+            this.objects[ind].update(distance);
         }
     }
 }
@@ -81,5 +113,49 @@ class Layer
         }
         this.imgA.x += _distance * (1-this.speed);
         this.imgB.x += _distance * (1-this.speed);
+    }
+}
+
+class BackgroundObject
+{
+    constructor(_imgName, _speed, _speedRatio, _positionInterval, _meanTime)
+    {
+        this.imgName = _imgName;
+        this.positionInterval = _positionInterval;
+        this.meanTime = _meanTime;
+        this.nextShown = performance.now() + _meanTime * Math.random() * 2;
+        this.speed = _speed;
+        this.speedRatio = _speedRatio;
+    }
+    
+    create(_game, _objectGroup)
+    {
+        this.sprite = _game.add.sprite(0, 0, this.imgName);
+        _objectGroup.add(this.sprite);
+        this.sprite.visible = false;
+    }
+    
+    update(_distance)
+    {
+        if(this.sprite.visible)
+        {
+            var visibleArea = ServiceLocator.camera.getVisibleArea();
+            if (this.sprite.x + this.sprite.width < visibleArea.x)
+            {
+                this.sprite.visible = false;
+                this.nextShown = performance.now() + this.meanTime * Math.random();
+            }
+            this.sprite.x += _distance * (1 - this.speedRatio) + this.speed;
+        }
+        else
+        {
+            if (performance.now() > this.nextShown)
+            {
+                var visibleArea = ServiceLocator.camera.getVisibleArea();
+                this.sprite.x = visibleArea.x + visibleArea.width;
+                this.sprite.y = this.positionInterval[0] + (this.positionInterval[1] - this.positionInterval[0]) * Math.random();
+                this.sprite.visible = true;
+            }
+        }
     }
 }
