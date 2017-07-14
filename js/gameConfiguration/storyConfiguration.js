@@ -92,6 +92,10 @@ class StoryConfiguration
             {
                 this.setStoryStep(new WaitForLoot())
             }
+            else if (command === "GOTO CONTINUE_WAIT")
+            {
+                this.setStoryStep(new ContinueEndlessly())
+            }
             else
             {
                 console.log("Reached unknown command: " + command);
@@ -366,6 +370,26 @@ class WaitForLoot extends EmptyStoryStep
         {
             _storyConfiguration.choosePathString("Introduction.loot_finished");
             _storyConfiguration.setStoryStep(new DialogStep());
+        }
+    }
+    
+    finish(_storyConfiguration, _mainState)
+    {
+        
+    }
+}
+
+class ContinueEndlessly extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+    }
+    
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if (_curGameMode.isFinished())
+        {
+            this.followDefaultRules(_curGameMode, _mainState);
         }
     }
     
