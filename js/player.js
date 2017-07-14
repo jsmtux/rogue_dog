@@ -45,6 +45,7 @@ class DogPlayer extends GameObject
         this.offset = new Phaser.Point(0,90);
         
         this.bodyBox;
+        this.mouthBox;
         
         this.speechBubbleSourcePoint = new Phaser.Point(0,0);
     }
@@ -85,7 +86,8 @@ class DogPlayer extends GameObject
         this.collisionBodies[DogPlayer.CollisionBoxes.BODY] = this.game.add.sprite(0, 0);
         ServiceLocator.renderer.addToScene(this.collisionBodies[DogPlayer.CollisionBoxes.BODY]);
         ServiceLocator.physics.addToWorld(this.collisionBodies[DogPlayer.CollisionBoxes.BODY]);
-        this.collisionBodies[DogPlayer.CollisionBoxes.HEAD] = this.sprite.getSpriteByName("Dog-10");
+        this.collisionBodies[DogPlayer.CollisionBoxes.HEAD] = this.game.add.sprite(0, 0);
+        ServiceLocator.renderer.addToScene(this.collisionBodies[DogPlayer.CollisionBoxes.HEAD]);
         ServiceLocator.physics.addToWorld(this.collisionBodies[DogPlayer.CollisionBoxes.HEAD]);
         
         var self = this;
@@ -144,6 +146,14 @@ class DogPlayer extends GameObject
             
             this.collisionBodies[DogPlayer.CollisionBoxes.BODY].width = this.bodyBox.width * this.bodyBox.scaleX;
             this.collisionBodies[DogPlayer.CollisionBoxes.BODY].height = this.bodyBox.height * this.bodyBox.scaleY;
+        }
+        if (this.mouthBox)
+        {
+            this.collisionBodies[DogPlayer.CollisionBoxes.HEAD].x = this.mouthBox.x + this.sprite.x;
+            this.collisionBodies[DogPlayer.CollisionBoxes.HEAD].y = this.mouthBox.y + this.sprite.y;
+            
+            this.collisionBodies[DogPlayer.CollisionBoxes.HEAD].width = this.mouthBox.width * this.mouthBox.scaleX;
+            this.collisionBodies[DogPlayer.CollisionBoxes.HEAD].height = this.mouthBox.height * this.mouthBox.scaleY;
         }
         
         if (this.updateModeCallback)
@@ -209,9 +219,18 @@ class DogPlayer extends GameObject
     
     updateCollisionBox(_spriterGroup, _spriterObject)
     {
-        this.bodyBox = _spriterObject.transformed;
-        this.bodyBox.height = _spriterObject.objectInfo.height;
-        this.bodyBox.width = _spriterObject.objectInfo.width;
+        if (_spriterObject.name == "body_box")
+        {
+            this.bodyBox = _spriterObject.transformed;
+            this.bodyBox.height = _spriterObject.objectInfo.height;
+            this.bodyBox.width = _spriterObject.objectInfo.width;
+        }
+        else if (_spriterObject.name == "mouth_box")
+        {
+            this.mouthBox = _spriterObject.transformed;
+            this.mouthBox.height = _spriterObject.objectInfo.height;
+            this.mouthBox.width = _spriterObject.objectInfo.width;
+        }
     }
     
     updateTrajectoryImage()

@@ -103,9 +103,13 @@ class DialogManager extends GameMode
     
     dialogHandler(_option)
     {
-        this.currentDialogUI.destroy();
-        this.currentDialogUI = undefined;
-        this.callback.call(this.callbackCtx, _option);
+        //this is caused by not disabling button after choosing dialog answer
+        if (this.currentDialogUI)
+        {
+            this.currentDialogUI.destroy();
+            this.currentDialogUI = undefined;
+            this.callback.call(this.callbackCtx, _option);
+        }
     }
     
     isFinished()
