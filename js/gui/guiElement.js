@@ -227,9 +227,26 @@ class DialogGuiElement extends GuiElement
                 this.panel.add(button = new SlickUI.Element.Button(100, buttonHeight, 690, 40));
                 if (this.containsAnswers)
                 {
-                    button.events.onInputUp.add(() => {ServiceLocator.publish(new DogAnswerChosen())});
+                    ((_ind) =>
+                    {
+                        button.events.onInputUp.add((_button) => {
+                            ServiceLocator.publish(new DogAnswerChosen())
+                            for (var ind in this.buttons)
+                            {
+                                if (_ind === parseInt(ind))
+                                {
+                                    continue;
+                                }
+                                this.buttons[ind].visible = false;
+                            }
+                            setTimeout(this.getSignalCall(_ind), 1000);
+                        });
+                    })(ind);
                 }
-                button.events.onInputUp.add(this.getSignalCall(ind));
+                else
+                {
+                    button.events.onInputUp.add(this.getSignalCall(ind));
+                }
                 button.add(new SlickUI.Element.Text(0,0, this.options[ind].text, 16, "comic")).center();
                 button.sprite.input.priorityID = 3;
                 this.buttons.push(button);
