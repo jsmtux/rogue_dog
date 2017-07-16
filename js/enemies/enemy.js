@@ -102,32 +102,7 @@ class Enemy extends GameObject
     
     getDroppedCards()
     {
-        var totalProbability = 0;
-        var cardPosition = {};
-        for (var cardName in this.cardProbabilities)
-        {
-            if (ServiceLocator.cardManager.lootDeck.stillInDeck(cardName))
-            {
-                var probabilities = this.cardProbabilities[cardName];
-                totalProbability += probabilities;
-                cardPosition[totalProbability] = cardName;
-            }
-        }
-        
-        var roll = randomInt(1, totalProbability);
-        
-        for (var ind in cardPosition)
-        {
-            ind = parseInt(ind);
-            if (ind >= roll)
-            {
-                var cardName = cardPosition[ind];
-                ServiceLocator.cardManager.lootDeck.removeOneCard(cardName);
-                break
-            }
-        }
-        
-        return [ServiceLocator.cardManager.getCardClassFromID(cardName)];
+        return ServiceLocator.cardManager.lootDeck.getRandomCard();
     }
     
     startAttack(_player)
@@ -165,13 +140,6 @@ Enemy.States = {
     WAITING : 0,
     ATTACKING : 1,
     FINISHED: 2
-}
-
-Enemy.cardProbability = {
-    LOW: 1,
-    MED: 3,
-    HIGH: 9,
-    VERY_HIGH: 20
 }
 
 Enemy.AttackOutcome = {

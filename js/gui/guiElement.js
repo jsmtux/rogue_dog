@@ -235,9 +235,12 @@ class DialogGuiElement extends GuiElement
                             {
                                 if (_ind === parseInt(ind))
                                 {
-                                    continue;
+                                    this.buttons[ind].sprite.events.onInputDown.removeAll();
                                 }
-                                this.buttons[ind].visible = false;
+                                else
+                                {
+                                    this.buttons[ind].visible = false;
+                                }
                             }
                             setTimeout(this.getSignalCall(_ind), 1000);
                         });

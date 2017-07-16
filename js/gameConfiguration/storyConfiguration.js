@@ -14,14 +14,16 @@ class StoryConfiguration
     resetGameState(_mainState)
     {
         ServiceLocator.difficultyManager.setInitialValues(1, 0, 0);
-        ServiceLocator.cardManager.lootDeck.addCards({SmMedkitCard:1});
+
+        var lootDeck = ServiceLocator.cardManager.lootDeck;
+        lootDeck.addCard("SmMedkitCard", undefined);
+
+        var wildDeck = ServiceLocator.cardManager.wildDeck;
+        wildDeck.addCard("BeeEnemyCard", 1);
+        wildDeck.addCard("BasicEnemyCard", 1);
+        
         this.mainState = _mainState;
         this.setStoryStep(new DogEnteringStoryStep());
-        
-        ServiceLocator.cardManager.wildDeck.addCards({
-            BeeEnemyCard:1,
-            BasicEnemyCard:1
-        });
     }
     
     setStoryStep(_step)
@@ -92,7 +94,7 @@ class StoryConfiguration
             {
                 this.setStoryStep(new WaitForLoot())
             }
-            else if (command === "GOTO CONTINUE_WAIT")
+            else if (command === "GOTO CONTINUE_WAY")
             {
                 this.setStoryStep(new ContinueEndlessly())
             }
@@ -293,13 +295,15 @@ class PlanFirstEncounter extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(1, 3, 0);
-        ServiceLocator.cardManager.lootDeck.addCards({
-            SmMedkitCard:undefined,
-            MagicianHatCard:1});
-        _mainState.setNextMode("WalkManager");
+        ServiceLocator.difficultyManager.setInitialValues(1, 3, 0);     
+
         ServiceLocator.registerListener(this.enemiesInPlace, this, "EnemiesInPlaceMessage");
         this.enemiesArrived = false;
+        _mainState.setNextMode("WalkManager");
+        
+        var lootDeck = ServiceLocator.cardManager.lootDeck;
+        lootDeck.addCard("SmMedkitCard", undefined);
+        //lootDeck.addCard("MagicianHatCard", 1);   
     }
     
     update(_storyConfiguration, _curGameMode, _mainState)
@@ -383,6 +387,7 @@ class ContinueEndlessly extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
+        _mainState.setNextMode("WalkManager");
     }
     
     update(_storyConfiguration, _curGameMode, _mainState)

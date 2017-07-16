@@ -72,89 +72,110 @@ class CardDeck
 {
     constructor(_cardManager)
     {
-        this.remainingCards = {};
-        this.addedCards = {};
+        this.cards = {};
         this.cardManager = _cardManager;
     }
     
-    addCards(_deckNumbers)
+    addCard(_name, _numberOfCopies, _probability = CardDeck.cardProbability.LOW)
     {
-        for(var ind in _deckNumbers)
+        if (!(_name in this.cards))
         {
-            var cardNumber = _deckNumbers[ind];
-            if (!(ind in this.addedCards))
-            {
-                this.addedCards[ind] = 0;
-            }
-            else
-            {
-                var maxDeckRemaining = this.cardManager.getMaxCardNumberFromID(ind) - this.addedCards[ind];
-                if (maxDeckRemaining < cardNumber)
-                {
-                    cardNumber = maxDeckRemaining;
-                }
-            }
+            this.cards[_name] = {
+                "copiesLeft":0,
+                "probability":_probability,
+                "totalCopiesAdded":0
+            };
+        }
 
-            if (!(ind in this.remainingCards))
-            {
-                this.remainingCards[ind] = 0;
-            }
-            if (_deckNumbers[ind] === undefined)
-            {
-                this.remainingCards[ind] = undefined;
-            }
-            else
-            {
-                this.remainingCards[ind] += _deckNumbers[ind];
-                this.addedCards[ind] += _deckNumbers[ind];
-            }
+        var copiesInGame = this.cardManager.getMaxCardNumberFromID(_name) - this.cards[_name].totalCopiesAdded;
+        if (copiesInGame < _numberOfCopies)
+        {
+            _numberOfCopies = copiesInGame;
+        }
+
+        if (_numberOfCopies === undefined)
+        {
+            this.cards[_name].copiesLeft = undefined;
+            this.cards[_name].totalCopiesAdded = undefined;
+        }
+        else
+        {
+            this.cards[_name].copiesLeft += _numberOfCopies;
+            this.cards[_name].totalCopiesAdded += _numberOfCopies;
         }
     }
     
     stillInDeck(_cardName)
     {
-        return _cardName in this.remainingCards;
+        return this.cards[_cardName] && (this.cards[_cardName].copiesLeft > 0 || this.cards[_cardName].copiesLeft === undefined);
     }
     
     removeOneCard(_cardName)
     {
-        if (_cardName in this.remainingCards)
+        if (_cardName in this.cards)
         {
-            if(this.remainingCards[_cardName] === undefined)
+            if(this.cards[_cardName].copiesLeft === undefined)
             {
                 return;
             }
-            this.remainingCards[_cardName] --;
-            if (this.remainingCards[_cardName] <= 0)
+            if (this.cards[_cardName].copiesLeft > 0)
             {
-                delete this.remainingCards[_cardName];
+                this.cards[_cardName].copiesLeft --;
+                return;
             }
         }
-        else
-        {
-            console.error("Drawn too many cards of type " + _cardName);
-        }
+        
+        console.error("Drawn too many cards of type " + _cardName);
     }
     
     getRandomCard()
-    {
-        var totalCards = Object.keys(this.remainingCards).length;
-        if (totalCards === 0)
+    {        
+        var totalProbability = 0;
+        var cardPosition = {};
+        for (var cardName in this.cards)
         {
-            console.error("Deck is empty, cannot draw random card");
-            return undefined;
+            if (this.stillInDeck(cardName))
+            {
+                var probabilities = this.cards[cardName].probability;
+                totalProbability += probabilities;
+                cardPosition[totalProbability] = cardName;
+            }
         }
-        var ind = randomInt(0, totalCards - 1);
-        var name = Object.keys(this.remainingCards)[ind];
-        this.removeOneCard(name);
-        return this.cardManager.getCardClassFromID(name);
+        
+        var roll = randomInt(1, totalProbability);
+        
+        var cardName;
+        for (var ind in cardPosition)
+        {
+            ind = parseInt(ind);
+            if (ind >= roll)
+            {
+                cardName = cardPosition[ind];
+                this.removeOneCard(cardName);
+                break;
+            }
+        }
+        
+        var ret;
+        if (cardName)
+        {
+            ret = this.cardManager.getCardClassFromID(cardName);
+        }
+        return ret;
     }
     
     restoreCardsToDeck(_cardList)
     {
         for(var ind in _cardList)
         {
-            this.remainingCards[_cardList[ind].ID] ++;
+            this.cards[_cardList[ind].ID].copiesLeft ++;
         }
     }
+}
+
+CardDeck.cardProbability = {
+    LOW: 1,
+    MED: 3,
+    HIGH: 9,
+    VERY_HIGH: 20
 }

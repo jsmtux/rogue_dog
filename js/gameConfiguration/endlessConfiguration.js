@@ -8,14 +8,13 @@ class EndlessConfiguration
     {
         ServiceLocator.difficultyManager.setInitialValues(1, 3, 0);
         
-        ServiceLocator.cardManager.lootDeck.addCards({
-            SmMedkitCard:undefined,
-            MagicianHatCard:1});
+        var lootDeck = ServiceLocator.cardManager.lootDeck;
+        var wildDeck = ServiceLocator.cardManager.wildDeck;
+        lootDeck.addCard("SmMedkitCard", undefined);
+        //lootDeck.addCard("MagicianHatCard", 1);
 
-        ServiceLocator.cardManager.wildDeck.addCards({
-            BeeEnemyCard:1,
-            BasicEnemyCard:1
-        });
+        wildDeck.addCard("BeeEnemyCard", 1);
+        wildDeck.addCard("BasicEnemyCard", 1);
         
         _mainState.setNextMode("WalkManager");
     }

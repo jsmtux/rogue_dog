@@ -193,13 +193,12 @@ class BasicEnemyCard extends Card
     apply(_arguments)
     {
         ServiceLocator.difficultyManager.unlockEnemy(BasicEnemy);
-        ServiceLocator.cardManager.wildDeck.addCards({
-            StrongerBasicEnemyCard:2,
-            NewObstacleCard:3,
-            TwoEnemiesCard:1,
-            MoreObstaclesCard:undefined,
-            OneStickCard:undefined
-        })
+        var wildDeck = ServiceLocator.cardManager.wildDeck;
+        wildDeck.addCard("StrongerBasicEnemyCard", 2);
+        wildDeck.addCard("NewObstacleCard", 3);
+        wildDeck.addCard("TwoEnemiesCard", 1);
+        wildDeck.addCard("MoreObstaclesCard", undefined);
+        wildDeck.addCard("OneStickCard", undefined, CardDeck.cardProbability.VERY_HIGH);
     }
 }
 BasicEnemyCard.ID = "BasicEnemyCard";
@@ -214,12 +213,11 @@ class BeeEnemyCard extends Card
     apply(_arguments)
     {
         ServiceLocator.difficultyManager.unlockEnemy(BeeEnemy);
-        ServiceLocator.cardManager.wildDeck.addCards({
-            OneStickCard:undefined,
-            StrongerBeeEnemyCard:2,
-            NewObstacleCard:3,
-            TwoEnemiesCard:1
-        })
+        var wildDeck = ServiceLocator.cardManager.wildDeck;
+        wildDeck.addCard("OneStickCard", undefined);
+        wildDeck.addCard("StrongerBeeEnemyCard", 2);
+        wildDeck.addCard("NewObstacleCard", 3);
+        wildDeck.addCard("TwoEnemiesCard", 1);
     }
 }
 BeeEnemyCard.ID = "BeeEnemyCard";
