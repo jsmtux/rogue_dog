@@ -5,7 +5,6 @@ class TopBarUI
         this.game = _game;
         
         this.topBarGroup = _game.add.group();
-        //this.healthBar = new HealthBar();
     }
     
     static preload(_game)
@@ -14,8 +13,8 @@ class TopBarUI
         
         GameModeUI.preload(_game);
         
-        //HealthBar.preload(_game);
         HeartsUI.preload(_game);
+        SticksUI.preload(_game);
     }
     
     create()
@@ -30,8 +29,8 @@ class TopBarUI
         this.gameModeUI.create(this.topBarGroup);
         
         
-        this.stickCounterGUI = new StickCounterGuiElement();
-        ServiceLocator.guiManager.createUI(this.stickCounterGUI);
+        this.stickCounterGUI = new SticksUI(5, this.game);
+        this.stickCounterGUI.create(this.topBarGroup);
         
         this.hearts = new HeartsUI(4, this.game);
         this.hearts.create(this.topBarGroup);
@@ -42,6 +41,5 @@ class TopBarUI
     visible(_visible)
     {
         this.topBarGroup.visible = _visible;
-        this.stickCounterGUI.visible(_visible);
     }
 }

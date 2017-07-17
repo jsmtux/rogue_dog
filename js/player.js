@@ -40,6 +40,7 @@ class DogPlayer extends GameObject
         this.updateModeCallback;
         
         this.stickNumber = 0;
+        this.maxStickNumber = 5;
         
         this.position = new Phaser.Point(0,0);
         this.offset = new Phaser.Point(0,90);
@@ -343,13 +344,21 @@ class DogPlayer extends GameObject
             _finishCallback(); 
             _enemy.takeHit(this, _hitType, this.attackPower);
         };
-        this.stickNumber--;
-        this.updateStickNumber();
+        this.updateStickNumber(this.stickNumber - 1);
         new AttackStick(this.position, _enemy.position, cb, this.game);
     }
     
-    updateStickNumber()
+    updateStickNumber(_number)
     {
+        if (_number < 0)
+        {
+            _number = 0;
+        }
+        if (_number > this.maxStickNumber)
+        {
+            _number = this.maxStickNumber
+        }
+        this.stickNumber = _number;
         ServiceLocator.publish(new StickNumberUpdated(this.stickNumber));
     }
 
@@ -382,11 +391,8 @@ class DogPlayer extends GameObject
         {
             this.jumpAcceleration.y = 0;
         }
-        if (this.stickNumber > 0)
-        {
-            this.stickNumber--;
-            this.updateStickNumber();
-        }
+        
+        this.updateStickNumber(this.stickNumber - 1);
     }
     
     monsterHit()
@@ -520,8 +526,7 @@ class DogPlayer extends GameObject
     itemPicked(_msg)
     {
         _msg.getItem().pick();
-        this.stickNumber++;
-        this.updateStickNumber();
+        this.updateStickNumber(this.stickNumber + 1);
         this.pickStickAudio.play();
     }
     

@@ -229,8 +229,7 @@ class OneStickCard extends Card
     apply(_arguments)
     {
         var player = _arguments.player;
-        player.stickNumber++;
-        player.updateStickNumber();
+        player.updateStickNumber(player.stickNumber + 1);
     }
 }
 OneStickCard.ID = "OneStickCard";

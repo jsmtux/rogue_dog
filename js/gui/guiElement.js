@@ -115,33 +115,6 @@ class CardGuiElement extends GuiElement
     }
 }
 
-class StickCounterGuiElement extends GuiElement
-{
-    constructor()
-    {
-        super();
-    }
-    
-    create(_slickUI, _game)
-    {
-        this.stick = _slickUI.add(new SlickUI.Element.DisplayObject(300, 23, game.make.sprite(0, 0, 'stick')));
-        this.text = _slickUI.add(new SlickUI.Element.Text(370,20, "x"));
-        this.setNumber(0);
-        ServiceLocator.registerListener(this.numberUpdated, this, "StickNumberUpdated");
-        super.create(_slickUI, _game, this.stick);
-    }
-    
-    setNumber(_number)
-    {
-        this.text.value = "x" + _number;
-    }
-    
-    numberUpdated(_msg)
-    {
-        this.setNumber(_msg.getNumber());
-    }
-}
-
 class DialogGuiElement extends GuiElement
 {
     constructor(_text, _options, _talkingCharacter)
