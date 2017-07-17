@@ -15,7 +15,7 @@ IntroState.prototype.preload = function()
 
 IntroState.prototype.update = function()
 {
-    if (performance.now() - this.showTime > 2000)
+    if (performance.now() - this.showTime > 1000)
     {
         this.state.start('Load');
     }
@@ -25,7 +25,7 @@ IntroState.prototype.create = function ()
 {
     ServiceLocator.difficultyManager.create(); 
     ServiceLocator.guiManager.create(this);
-    this.bgSprite = this.game.add.sprite(500, 200, 'company_logo');
+    this.bgSprite = this.game.add.sprite(50, 450, 'company_logo');
 
     this.showTime = performance.now();
 }

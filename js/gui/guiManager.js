@@ -9,6 +9,7 @@ class GUIManager
     {
         GUIManager.slickUIPlugin = _game.plugins.add(Phaser.Plugin.SlickUI);
         CardGuiElement.preload(_game);
+        DistanceMeterUI.preload(_game);
     }
     
     create(_game)

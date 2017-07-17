@@ -74,6 +74,10 @@ MainState.prototype.create = function ()
     
     this.gameConfiguration = new StoryConfiguration();
     this.gameConfiguration.resetGameState(this);
+    
+    this.distanceMeter = new DistanceMeterUI();
+    this.distanceMeter.create(this.game);
+    this.distanceMeter.visible(false);
 }
 
 MainState.prototype.addGameMode = function(_mode)
