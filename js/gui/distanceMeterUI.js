@@ -27,7 +27,11 @@ class DistanceMeterUI
     
     setPercentage(_percentage)
     {
-        this.indicator.x = this.bg.width * _percentage;
+        if (_percentage > 1.0)
+        {
+            _percentage = 1.0;
+        }
+        this.indicator.x = ServiceLocator.viewportHandler.resolution.x / 2 - this.bg.width / 2 + (this.bg.width - 50) * _percentage;
     }
     
     visible(_visible)

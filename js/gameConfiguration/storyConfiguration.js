@@ -429,6 +429,9 @@ class ContinueEndlessly extends EmptyStoryStep
     start(_storyConfiguration, _mainState)
     {
         _mainState.setNextMode("WalkManager");
+        _mainState.distanceMeter.visible(true);
+        this.iterationsWalked = 0;
+        this.targetIterations = 1500;
     }
     
     update(_storyConfiguration, _curGameMode, _mainState)
@@ -437,6 +440,14 @@ class ContinueEndlessly extends EmptyStoryStep
         {
             this.followDefaultRules(_curGameMode, _mainState);
         }
+        
+        if (_curGameMode.getModeName() === "WalkManager")
+        {
+            this.iterationsWalked++;
+        }
+        var percentage = this.iterationsWalked / this.targetIterations;
+        
+        _mainState.distanceMeter.setPercentage(percentage);
     }
     
     finish(_storyConfiguration, _mainState)

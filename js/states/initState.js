@@ -21,7 +21,7 @@ InitState.prototype.update = function()
 {
     if (this.loaded)
     {
-        this.state.start('Intro');
+        this.state.start('Load');
     }
 }
 

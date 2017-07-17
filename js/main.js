@@ -11,7 +11,6 @@ game.state.onStateChange.add(function()
 });
 
 game.state.add('Init', InitState);
-game.state.add('Intro', IntroState);
 game.state.add('Load', LoadState);
 game.state.add('Main', MainState);
 game.state.start('Init');
