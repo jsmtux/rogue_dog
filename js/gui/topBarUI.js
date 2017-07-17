@@ -29,12 +29,19 @@ class TopBarUI
         this.gameModeUI = new GameModeUI(this.game);
         this.gameModeUI.create(this.topBarGroup);
         
-        this.stickCounterGUI = new StickCounterGuiElement()
-        var stickCounterUI = ServiceLocator.guiManager.createUI(this.stickCounterGUI);
         
-        //this.healthBar.create(this.topBarGroup);
+        this.stickCounterGUI = new StickCounterGuiElement();
+        ServiceLocator.guiManager.createUI(this.stickCounterGUI);
+        
         this.hearts = new HeartsUI(4, this.game);
         this.hearts.create(this.topBarGroup);
+        
+        this.visible(false);
     }
     
+    visible(_visible)
+    {
+        this.topBarGroup.visible = _visible;
+        this.stickCounterGUI.visible(_visible);
+    }
 }

@@ -23,7 +23,7 @@ class StoryConfiguration
         wildDeck.addCard("BasicEnemyCard", 1);
         
         this.mainState = _mainState;
-        this.setStoryStep(new DogEnteringStoryStep());
+        this.setStoryStep(new IntroStoryStep());
     }
     
     setStoryStep(_step)
@@ -169,13 +169,54 @@ class DialogStep extends EmptyStoryStep
     
 }
 
+class IntroStoryStep extends EmptyStoryStep
+{
+    start(_storyConfiguration, _mainState)
+    {
+        /*this.grayFilter = _mainState.game.add.filter('Sepia');
+        this.grayFilter.uIntensity = 0.0;
+        ServiceLocator.renderer.addFilterToScene(this.grayFilter);*/
+
+        _mainState.topBarUI.visible(false);
+        this.menuGUI = new MenuGuiElement();
+        ServiceLocator.guiManager.createUI(this.menuGUI);
+        this.menuGUI.addListener(this.menuHandler, this);
+        
+        this.start = false;
+        
+        _mainState.setNextMode("WalkManager");
+        _storyConfiguration.story.ResetState();
+        _storyConfiguration.choosePathString("Introduction");
+    }
+
+    update(_storyConfiguration, _curGameMode, _mainState)
+    {
+        if (this.start)
+        {
+            _storyConfiguration.setStoryStep(new DogEnteringStoryStep());
+        }
+    }
+    
+    menuHandler(_name)
+    {
+        if(_name === "startButtonClicked")
+        {
+            this.start = true;
+        }
+    }
+    
+    finish(_storyConfiguration, _mainState)
+    {
+        this.menuGUI.destroy();
+        _mainState.topBarUI.visible(true);
+        //ServiceLocator.renderer.removeFilterFromScene(this.grayFilter);
+    }
+}
+
 class DogEnteringStoryStep extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
     {
-        _mainState.setNextMode("WalkManager");
-        _storyConfiguration.story.ResetState();
-        _storyConfiguration.choosePathString("Introduction");
     }
 
     update(_storyConfiguration, _curGameMode, _mainState)

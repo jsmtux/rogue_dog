@@ -2,6 +2,7 @@ class GUIManager
 {
     constructor()
     {
+        this.inputDisablingSprite;
     }
 
     static preload(_game)
@@ -25,6 +26,13 @@ class GUIManager
         this.customBmd = this.game.add.graphics(0,0);
         ServiceLocator.renderer.addToUI(this.customBmd);
         GUIManager.slickUIPlugin.container.displayGroup = this.game.add.group();
+
+        this.inputDisablingSprite = this.game.add.sprite(0, 0);
+        var resolution = ServiceLocator.viewportHandler.resolution;
+        this.inputDisablingSprite.width = resolution.x;
+        this.inputDisablingSprite.height = resolution.y;
+        this.inputDisablingSprite.inputEnabled = false;
+        ServiceLocator.renderer.addToUI(this.inputDisablingSprite);
     }
     
     update()
@@ -36,6 +44,17 @@ class GUIManager
     createUI(_constructor)
     {
         _constructor.create(GUIManager.slickUIPlugin, this.game, this.customBmd);
+    }
+    
+    disableOtherInputs()
+    {
+        this.inputDisablingSprite.inputEnabled = true;
+        this.inputDisablingSprite.input.priorityID = 2;
+    }
+    
+    enableOtherInputs()
+    {
+        this.inputDisablingSprite.inputEnabled = false;
     }
 }
 

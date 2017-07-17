@@ -48,6 +48,7 @@ MainState.prototype.create = function ()
     ServiceLocator.guiManager.addToRenderer();
     this.topBarUI = new TopBarUI(this.game);
     this.topBarUI.create();
+    this.topBarUI.visible(false);
 
     this.player.create(this);
     
@@ -57,8 +58,6 @@ MainState.prototype.create = function ()
     this.lostUI.hide();
     
     ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
-    
-    this.jumpTutorial = new JumpTutorial(this, this.player);
 
     this.gearCardCompletedMode = new GearCardCompletedMode();
     this.gearCardCompletedMode.create(this);
@@ -67,15 +66,14 @@ MainState.prototype.create = function ()
     this.addGameMode(ServiceLocator.walkManager);
     this.addGameMode(ServiceLocator.combatManager);
     this.addGameMode(ServiceLocator.dialogManager);
-    this.addGameMode(this.jumpTutorial);
-    this.addGameMode(this.gearCardCompletedMode);
     this.addGameMode(new EmptyGameMode());
     this.addGameMode(new CombatLootMode(this, this.player));
     
     this.particleEmitter = new ParticleEmitter(this.game);
     this.particleEmitter.create();
     
-    MenuState.gameConfiguration.resetGameState(this);
+    this.gameConfiguration = new StoryConfiguration();
+    this.gameConfiguration.resetGameState(this);
 }
 
 MainState.prototype.addGameMode = function(_mode)
@@ -87,7 +85,7 @@ MainState.prototype.update = function ()
 {
     ServiceLocator.guiManager.update();
 
-    MenuState.gameConfiguration.update(this.currentGameMode, this);
+    this.gameConfiguration.update(this.currentGameMode, this);
     
     this.updateSignal.dispatch();
 
@@ -126,11 +124,6 @@ MainState.prototype.handleUI = function(_name, _event)
         this.lostUI.hide();
         this.setPaused(false);
         this.restart();
-    }
-    else if (_name === "back")
-    {
-        this.lostUI.hide();
-        this.state.start('Menu');
     }
 }
 

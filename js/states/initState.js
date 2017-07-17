@@ -6,7 +6,7 @@ function InitState(_game)
 InitState.prototype.preload = function()
 {
     GUIManager.preload(this.game);
-    this.game.load.image('menu_bg', './img/ui/menu_dog.png');
+    this.game.load.image('company_logo', './img/logos/guanaco_100.png');
     this.game.load.onLoadComplete.add(this.loadComplete, this);
     
     this.loaded = false;
@@ -21,7 +21,7 @@ InitState.prototype.update = function()
 {
     if (this.loaded)
     {
-        this.state.start('Menu');
+        this.state.start('Intro');
     }
 }
 

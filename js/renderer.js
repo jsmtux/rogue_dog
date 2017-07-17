@@ -8,6 +8,7 @@ class Renderer
     static preload(_game)
     {
         _game.load.script('gray', 'filters/gray.js');
+        _game.load.script('sepia', 'filters/sepia.js');
     }
     
     create(_game)
@@ -34,11 +35,6 @@ class Renderer
         this.UIGroup.fixedToCamera = true;
         
         this.outputSprite.fixedToCamera = true;
-        
-        this.grayFilter = _game.add.filter('Gray'/*, {mask: { type: 'sampler2D', value: this.maskRenderTexture }}*/);
-        this.grayFilter.gray = 0.5;
-        this.grayFilter.mask = this.maskRenderTexture;
-        this.outputSprite.filters = [this.grayFilter];
         
         this.graphics = _game.add.graphics(-offset.x, -offset.y);
         this.addToMask(this.graphics);
@@ -99,5 +95,15 @@ class Renderer
     addToUI(_sprite)
     {
         this.UIGroup.add(_sprite);
+    }
+    
+    addFilterToScene(_filter)
+    {
+        this.outputSprite.filters = [_filter];
+    }
+    
+    removeFilterFromScene(_filter)
+    {
+        this.outputSprite.filters = [];        
     }
 }

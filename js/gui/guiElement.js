@@ -11,14 +11,21 @@ class GuiElement
         this.rootElement = _rootElement;
     }
     
+    //deprecated
     show()
     {
         this.rootElement.visible = true;
     }
     
+    //deprecated
     hide()
     {
         this.rootElement.visible = false;
+    }
+    
+    visible(_visible)
+    {
+        this.rootElement.visible = _visible;
     }
     
     getSpriteGroup()
@@ -55,12 +62,12 @@ class MenuGuiElement extends GuiElement
     create(_slickUI, _game)
     {
         var button, panel;
-        _slickUI.add(panel = new SlickUI.Element.Panel(600, 50, 250, 150));
+        _slickUI.add(panel = new SlickUI.Element.Panel(600, 50, 250, 110));
         panel.add(new SlickUI.Element.Text(10,0, "Rogue Dog", 16, "comic")).centerHorizontally().text.alpha = 0.5;
-        panel.add(button = new SlickUI.Element.Button(0, 50, 240, 40)).events.onInputUp.add(this.getSignalCall("playButtonClicked"));
-        button.add(new SlickUI.Element.Text(0,0, "Story", 16, "comic")).center();
-        panel.add(button = new SlickUI.Element.Button(0, 100, 240, 40)).events.onInputUp.add(this.getSignalCall("endlessButtonClicked"));
-        button.add(new SlickUI.Element.Text(0,0, "Endless", 16, "comic")).center();
+        panel.add(button = new SlickUI.Element.Button(0, 50, 240, 40)).events.onInputUp.add(this.getSignalCall("startButtonClicked"));
+        button.add(new SlickUI.Element.Text(0,0, "Start", 16, "comic")).center();
+        /*panel.add(button = new SlickUI.Element.Button(0, 100, 240, 40)).events.onInputUp.add(this.getSignalCall("optionsButtonClicked"));
+        button.add(new SlickUI.Element.Text(0,0, "Options", 16, "comic")).center();*/
         
         super.create(_slickUI, _game, panel);
     }
@@ -77,8 +84,6 @@ class GameOverGuiElement extends GuiElement
         panel.add(new SlickUI.Element.Text(10,0, "You Lost!")).centerHorizontally().text.alpha = 0.5;
         panel.add(button = new SlickUI.Element.Button(0, 50, 380, 40)).events.onInputUp.add(this.getSignalCall("reload"));
         button.add(new SlickUI.Element.Text(0,0, "Restart")).center();
-        panel.add(button = new SlickUI.Element.Button(0, 100, 380, 40)).events.onInputUp.add(this.getSignalCall("back"));
-        button.add(new SlickUI.Element.Text(0,0, "Back to Menu")).center();
         
         super.create(_slickUI, _game, panel);
     }
@@ -119,10 +124,11 @@ class StickCounterGuiElement extends GuiElement
     
     create(_slickUI, _game)
     {
-        _slickUI.add(new SlickUI.Element.DisplayObject(300, 23, game.make.sprite(0, 0, 'stick')));
+        this.stick = _slickUI.add(new SlickUI.Element.DisplayObject(300, 23, game.make.sprite(0, 0, 'stick')));
         this.text = _slickUI.add(new SlickUI.Element.Text(370,20, "x"));
         this.setNumber(0);
         ServiceLocator.registerListener(this.numberUpdated, this, "StickNumberUpdated");
+        super.create(_slickUI, _game, this.stick);
     }
     
     setNumber(_number)

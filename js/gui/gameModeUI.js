@@ -19,6 +19,7 @@ class GameModeUI
     {
         this.sprite = this.game.add.sprite(0, -30, 'JumpModeLabel');
         _group.add(this.sprite);
+        this.group = _group;
         ServiceLocator.registerListener(this.newGameMode, this, "NewGameModeMessage");
     }
     
@@ -43,10 +44,10 @@ class GameModeUI
                 textureName = 'LootModeLabel';
                 break;
         }
-        this.newSprite = this.game.add.sprite(0,0, textureName);
+        this.newSprite = this.game.add.sprite(0,0, textureName, this.group);
         this.newSprite.x = ServiceLocator.viewportHandler.resolution.x - 50 - this.newSprite.width;
         this.newSprite.y = -30;
-        ServiceLocator.renderer.addToUI(this.newSprite);
+        this.group.add(this.newSprite);
         
         var move = this.game.add.tween(this.newSprite);
 
