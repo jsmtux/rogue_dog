@@ -382,6 +382,11 @@ class DogPlayer extends GameObject
         {
             this.jumpAcceleration.y = 0;
         }
+        if (this.stickNumber > 0)
+        {
+            this.stickNumber--;
+            this.updateStickNumber();
+        }
     }
     
     monsterHit()

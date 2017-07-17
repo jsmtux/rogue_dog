@@ -13,8 +13,6 @@ class CardManager
         CardManager.addNewCard(SmMedkitCard);
         CardManager.addNewCard(StrongerBasicEnemyCard,2);
         CardManager.addNewCard(StrongerBeeEnemyCard,2);
-        CardManager.addNewCard(NewObstacleCard,2);
-        CardManager.addNewCard(MoreObstaclesCard);
         CardManager.addNewCard(TwoEnemiesCard,1);
         CardManager.addNewCard(ThreeEnemiesCard,1);
         CardManager.addNewCard(MagicianHatCard);

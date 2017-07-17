@@ -20,6 +20,7 @@ class Renderer
         var offset = ServiceLocator.viewportHandler.getSceneOffset();
         
         this.outputSprite = this.game.add.sprite(-offset.x, -offset.y, this.diffuseRenderTexture);
+        this.outputSprite.filters = [];
         
         this.sceneGroup = this.game.add.group();
         this.sceneGroup.visible = false;
@@ -57,6 +58,11 @@ class Renderer
         debug.sprite.height = -nativeResolution.y;
         debug.sprite.position.y = nativeResolution.y - offset.y;
         debug.sprite.position.x = -offset.x;
+
+        this.grayFilter = _game.add.filter('Gray');
+        this.grayFilter.gray = 0.5;
+        this.grayFilter.mask = this.maskRenderTexture;
+        this.addFilterToScene(this.grayFilter);
     }
 
     render()

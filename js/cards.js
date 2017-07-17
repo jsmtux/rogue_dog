@@ -195,10 +195,8 @@ class BasicEnemyCard extends Card
         ServiceLocator.difficultyManager.unlockEnemy(BasicEnemy);
         var wildDeck = ServiceLocator.cardManager.wildDeck;
         wildDeck.addCard("StrongerBasicEnemyCard", 2);
-        wildDeck.addCard("NewObstacleCard", 3);
         wildDeck.addCard("TwoEnemiesCard", 1);
-        wildDeck.addCard("MoreObstaclesCard", undefined);
-        wildDeck.addCard("OneStickCard", undefined, CardDeck.cardProbability.VERY_HIGH);
+        wildDeck.addCard("OneStickCard", undefined, CardDeck.cardProbability.HIGH);
     }
 }
 BasicEnemyCard.ID = "BasicEnemyCard";
@@ -214,9 +212,8 @@ class BeeEnemyCard extends Card
     {
         ServiceLocator.difficultyManager.unlockEnemy(BeeEnemy);
         var wildDeck = ServiceLocator.cardManager.wildDeck;
-        wildDeck.addCard("OneStickCard", undefined);
+        wildDeck.addCard("OneStickCard", undefined, CardDeck.cardProbability.HIGH);
         wildDeck.addCard("StrongerBeeEnemyCard", 2);
-        wildDeck.addCard("NewObstacleCard", 3);
         wildDeck.addCard("TwoEnemiesCard", 1);
     }
 }
@@ -237,20 +234,6 @@ class OneStickCard extends Card
     }
 }
 OneStickCard.ID = "OneStickCard";
-
-class MoreObstaclesCard extends Card
-{
-    constructor(_game)
-    {
-        super("Wood Wood Wood", "You'll probably find more obstacles along your way!", "wood_logs_icon", Card.Type.TRAP, _game);
-    }
-    
-    apply(_arguments)
-    {
-        ServiceLocator.difficultyManager.increaseObstacleNumber();
-    }
-}
-MoreObstaclesCard.ID = "MoreObstaclesCard";
 
 class StrongerBasicEnemyCard extends Card
 {
@@ -279,20 +262,6 @@ class StrongerBeeEnemyCard extends Card
     }
 }
 StrongerBeeEnemyCard.ID = "StrongerBeeEnemyCard"
-
-class NewObstacleCard extends Card
-{
-    constructor(_game)
-    {
-        super("Stupid Map", "Harder obstacles may appear!", "new_obstacle_icon", Card.Type.TRAP, _game);
-    }
-    
-    apply(_arguments)
-    {
-        ServiceLocator.difficultyManager.increaseObstacleLevel();
-    }
-}
-NewObstacleCard.ID = "NewObstacleCard"
 
 class TwoEnemiesCard extends Card
 {

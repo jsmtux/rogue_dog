@@ -431,7 +431,10 @@ class ContinueEndlessly extends EmptyStoryStep
         _mainState.setNextMode("WalkManager");
         _mainState.distanceMeter.visible(true);
         this.iterationsWalked = 0;
-        this.targetIterations = 1500;
+        this.targetIterations = 10000;
+        this.stage = 0;
+        ServiceLocator.difficultyManager.increaseObstacleNumber();
+        ServiceLocator.difficultyManager.increaseObstacleNumber();
     }
     
     update(_storyConfiguration, _curGameMode, _mainState)
@@ -446,6 +449,28 @@ class ContinueEndlessly extends EmptyStoryStep
             this.iterationsWalked++;
         }
         var percentage = this.iterationsWalked / this.targetIterations;
+        
+        if (this.stage === 0 && percentage > 0.25)
+        {
+            ServiceLocator.difficultyManager.increaseObstacleNumber();
+            this.stage++;
+        }
+        else if (this.stage === 1 && percentage > 0.4)
+        {
+            ServiceLocator.difficultyManager.increaseObstacleLevel();
+            this.stage++;
+        }
+        else if (this.stage === 2 && percentage > 0.5)
+        {
+            ServiceLocator.difficultyManager.increaseObstacleNumber();
+            this.stage++;
+        }
+        else if (this.stage === 4 && percentage > 0.8)
+        {
+            ServiceLocator.difficultyManager.increaseObstacleNumber();
+        ServiceLocator.difficultyManager.increaseObstacleLevel();
+            this.stage++;
+        }    
         
         _mainState.distanceMeter.setPercentage(percentage);
     }
