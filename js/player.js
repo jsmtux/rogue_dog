@@ -184,8 +184,22 @@ class DogPlayer extends GameObject
 
         if (this.onGround() && this.jumpAcceleration.y === 0)
         {
+            this.sprite.alpha = 1.0;
+            this.curSpeed = this.walkSpeed;
             shouldPlay = DogPlayer.Animations.WALK;
             this.jumpAcceleration.x = 0;
+            if (this.isUnderground())
+            {
+                this.position.y = this.playerInitialY - 100;
+                this.sprite.alpha = 0.5;
+                this.curSpeed = 0;
+                var curX = this.position.x;
+                while (ServiceLocator.walkManager.getGroundTiles(curX).length < 2)
+                {
+                    curX += 10;
+                }
+                this.position.x = curX;
+            }
         }
         else
         {

@@ -17,7 +17,7 @@ class CombatManager extends GameMode
     
     static preload(_game)
     {
-        _game.load.image('card_loot', './img/card_loot.png');
+        _game.load.image('paw_btn', './img/ui/paw.png');
     }
     
     update()
@@ -139,7 +139,7 @@ class CombatManager extends GameMode
         
         if (this.cardButton === undefined)
         {
-            this.cardButton = this.game.add.sprite(100, 100, "card_loot");
+            this.cardButton = this.game.add.sprite(250, 500, "paw_btn");
             ServiceLocator.renderer.addToUI(this.cardButton);
         }
         this.cardButton.visible = true;
