@@ -30,28 +30,28 @@ class HeartsUI
             x += 30;
         }
 
-        ServiceLocator.registerListener(this.updateHealthPercentage, this, "HealthPercentageUpdated");
+        ServiceLocator.registerListener(this.heartNumberUpdated, this, "HeartNumberUpdated");
     }
 
-    updateHealthPercentage(_msg)
+    heartNumberUpdated(_msg)
     {
-        var total = _msg.getPercentage() * this.number;
+        var total = _msg.getNumber();
         for (var i = 0; i < this.number; i++)
         {
             var img;
-            if (total >= 1)
+            if (total >= 4)
             {
                 img = "heart_icon_1";
             }
-            else if (total >= 0.75)
+            else if (total >= 3)
             {
                 img = "heart_icon_0_75";
             }
-            else if (total >= 0.5)
+            else if (total >= 2)
             {
                 img = "heart_icon_0_5";
             }
-            else if (total >= 0.25)
+            else if (total >= 1)
             {
                 img = "heart_icon_0_25";
             }
@@ -60,7 +60,7 @@ class HeartsUI
                 img = "heart_icon_0";
             }
             this.hearts[i].loadTexture(img);
-            total -= 1;
+            total -= 4;
         }
     }
 }

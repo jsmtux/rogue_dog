@@ -5,8 +5,8 @@ class DogPlayer extends GameObject
         super();
         this.game;
         this.character;
-        this.maxHealth = 40;
-        this.health = this.maxHealth;
+        this.maxHeartQuarters = 16;
+        this.heartQuarters = this.maxHeartQuarters;
         this.jumpAcceleration = new Phaser.Point(0, 0);
         this.dizzy = false;
         
@@ -371,9 +371,24 @@ class DogPlayer extends GameObject
         }
     }
     
-    updateHealthPercentage()
+    updateHeartNumber(_number)
     {
-        ServiceLocator.publish(new HealthPercentageUpdated(this.health / this.maxHealth));
+        if (_number < 0)
+        {
+            _number = 0;
+            this.game.die();
+        }
+        if (_number > this.maxHeartQuarters)
+        {
+            _number = this.maxHeartQuarters;
+        }
+        this.heartQuarters = _number;
+        ServiceLocator.publish(new HeartNumberUpdated(this.heartQuarters));
+    }
+    
+    addHeartNumber(_number)
+    {
+        this.updateHeartNumber(this.heartQuarters + _number);
     }
     
     playStepSound()
@@ -386,7 +401,7 @@ class DogPlayer extends GameObject
         this.dizzy = true;
         var self = this;
         setTimeout(function(){self.dizzy = false}, 500);
-        this.subtractHealth(5)
+        this.updateHeartNumber(this.heartQuarters - 1);
         if (this.jumpAcceleration.y > 0)
         {
             this.jumpAcceleration.y = 0;
@@ -397,44 +412,12 @@ class DogPlayer extends GameObject
     
     monsterHit()
     {
-        ServiceLocator.camera.shake(0.02, 200);
         ServiceLocator.camera.flash(0xff0000, 200);
-        var percentage = 1;
-        this.subtractHealth(5 * percentage);
+        this.updateHeartNumber(this.heartQuarters - 2);
         var self = this;
         setTimeout(function(){
             self.play(DogPlayer.Animations.IDLE);
         }, 500);
-    }
-    
-    subtractHealth(_amount)
-    {
-        this.health -= _amount;
-        this.updateHealthPercentage();
-        if (this.health <= 0)
-        {
-            this.game.die();
-        }
-    }
-    
-    addHealth(_points)
-    {
-        this.health += _points;
-        if (this.health > this.maxHealth)
-        {
-            this.health = this.maxHealth;
-        }
-        this.updateHealthPercentage();
-    }
-    
-    subtractHealth(_amount)
-    {
-        this.health -= _amount;
-        this.updateHealthPercentage();
-        if (this.health <= 0)
-        {
-            this.game.die();
-        }
     }
     
     jump(_angle)

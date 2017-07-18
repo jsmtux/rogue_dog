@@ -177,7 +177,7 @@ class SmMedkitCard extends Card
     
     apply(_arguments)
     {
-        _arguments.player.addHealth(5);
+        _arguments.player.addHeartNumber(4);
         ServiceLocator.publish(new EmitParticle(EmitParticle.Types.HealthIncrease));
     }
 }

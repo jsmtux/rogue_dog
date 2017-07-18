@@ -175,16 +175,16 @@ class StickNumberUpdated extends Message
     }
 }
 
-class HealthPercentageUpdated extends Message
+class HeartNumberUpdated extends Message
 {
-    constructor(_percentage)
+    constructor(_number)
     {
-        super("HealthPercentageUpdated", {"percentage": _percentage});
+        super("HeartNumberUpdated", {"number": _number});
     }
     
-    getPercentage()
+    getNumber()
     {
-        return this.arguments["percentage"];
+        return this.arguments["number"];
     }
 }
 
