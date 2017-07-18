@@ -1,6 +1,6 @@
 class Physics
 {
-    constructor(_game, _debugEnabled = false)
+    constructor(_game, _debugEnabled = DebugMode)
     {
         this.game = _game
         this.debugEnabled = _debugEnabled;

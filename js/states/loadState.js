@@ -17,7 +17,7 @@ LoadState.prototype.preload = function()
 
 LoadState.prototype.update = function()
 {
-    if (this.loaded && performance.now() - this.showTime > 3500)
+    if (this.loaded && (DebugMode || performance.now() - this.showTime > 3500))
     {
         this.state.start('Main');
     }

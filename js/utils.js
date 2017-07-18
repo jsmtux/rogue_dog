@@ -31,3 +31,5 @@ SlickUI.Element.TextField.prototype.removeAll     =
 function(destroy, silent, destroyTexture) {
   this.container.displayGroup.removeAll(destroy, silent, destroyTexture);
 };
+
+var DebugMode = false;
