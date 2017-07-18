@@ -199,6 +199,7 @@ class DogPlayer extends GameObject
                     curX += 10;
                 }
                 this.position.x = curX;
+                this.updateHeartNumber(this.heartQuarters - 4);
             }
         }
         else
@@ -522,7 +523,6 @@ class DogPlayer extends GameObject
     
     itemPicked(_msg)
     {
-        _msg.getItem().pick();
         this.updateStickNumber(this.stickNumber + 1);
         this.pickStickAudio.play();
     }

@@ -526,6 +526,7 @@ class Stick extends Item
     create(_game)
     {
         var sprite = _game.add.sprite(this.position.x, this.position.y, 'stick');
+        this.game = _game;
         super.create(sprite);
         ServiceLocator.renderer.addToScene(this.sprite);
         ServiceLocator.physics.addToWorld(this.sprite);
@@ -535,14 +536,20 @@ class Stick extends Item
     {
         if (this.active && this.collides(_player))
         {
-            ServiceLocator.publish(new ItemPickedMessage(this));
+            this.pick();
         }
     }
     
     pick()
     {
         this.active = false;
-        this.sprite.alpha = 0.1;
+        var tween = this.game.add.tween(this.sprite);
+        tween.to({ y: 40, x: this.sprite.x - 50}, 200, Phaser.Easing.Cubic.Out);
+        tween.start();
+        tween.onComplete.add(() =>{
+            ServiceLocator.publish(new ItemPickedMessage(this))
+            this.sprite.alpha = 0;
+        });
     }
 }
 

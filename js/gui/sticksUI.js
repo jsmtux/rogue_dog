@@ -5,7 +5,8 @@ class SticksUI
         this.number = _number;
         this.sticksGroup;
         this.game = _game;
-        this.sticks = []
+        this.sticks = [];
+        this.lastStickNumber = 0;
     }
     
     static preload(_game)
@@ -34,12 +35,28 @@ class SticksUI
     updateStickNumber(_msg)
     {
         var total = _msg.getNumber();
+        var added1 = total === this.lastStickNumber + 1;
         for (var i = 0; i < this.number; i++)
         {
             var img;
             if (total > i)
             {
                 img = "stick_icon";
+                if (added1 && total === i + 1)
+                {
+                    var curStick = this.sticks[i];
+                    var glow = this.game.add.sprite(curStick.x + curStick.width / 2, curStick.y + curStick.height / 1.5, "stick_icon", 0, this.sticksGroup);
+                    this.sticksGroup.add(glow);
+    	            glow.anchor.x = 0.5;
+    	            glow.anchor.y = 0.5;
+                    glow.tint = 0xFF8B00;
+    	            var glowTween = this.game.add.tween(glow);
+                    glowTween.to({ witdth: glow.width * 3, height: glow.width * 3, alpha:0}, 500, Phaser.Easing.Circular.Out);
+                    glowTween.start();
+                    glowTween.onComplete.add(() =>{
+                        glow.destroy();
+                    });
+                }
             }
             else
             {
@@ -47,5 +64,6 @@ class SticksUI
             }
             this.sticks[i].loadTexture(img);
         }
+        this.lastStickNumber = total;
     }
 }
