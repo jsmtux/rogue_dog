@@ -15,6 +15,7 @@ MainState.prototype.preload = function ()
 
     ParticleEmitter.preload(this.game);
     TopBarUI.preload(this.game);
+    DigUI.preload(this.game);
 }
 
 MainState.prototype.create = function ()
@@ -44,6 +45,7 @@ MainState.prototype.create = function ()
     ServiceLocator.camera.create(this, this.player);
     ServiceLocator.walkManager.create(this);
     ServiceLocator.dialogManager.create(this.game);
+    ServiceLocator.combatManager.create(this.game);
     
     ServiceLocator.guiManager.addToRenderer();
     this.topBarUI = new TopBarUI(this.game);
@@ -74,7 +76,7 @@ MainState.prototype.create = function ()
     
     this.gameConfiguration = new StoryConfiguration();
     this.gameConfiguration.resetGameState(this);
-    
+    //this should be in gui manager
     this.distanceMeter = new DistanceMeterUI();
     this.distanceMeter.create(this.game);
     this.distanceMeter.visible(false);

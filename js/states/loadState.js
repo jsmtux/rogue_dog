@@ -73,8 +73,6 @@ LoadState.prototype.create = function ()
 	            {
 	                colorValues.push(value);
 	                ind = colorValues.length - 1;
-	                console.log("added new element for value ");
-	                console.log(bmd.getPixel32(i, j));
 	            }
 	            newSprite.frame = ind;
 	            

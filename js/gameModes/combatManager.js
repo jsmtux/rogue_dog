@@ -20,8 +20,15 @@ class CombatManager extends GameMode
         _game.load.image('paw_btn', './img/ui/paw.png');
     }
     
+    create()
+    {
+        this.digUI = new DigUI(this.game);
+        this.digUI.create();
+    }
+    
     update()
     {
+        this.digUI.update();
         for (var ind in this.enemies)
         {
             this.enemies[ind].update();
@@ -166,6 +173,8 @@ class CombatManager extends GameMode
     wildCardRequested()
     {
         this.removeCombatUI();
+        this.digUI.show(0.3);
+        /*
         var cardClass = ServiceLocator.cardManager.wildDeck.getRandomCard();
         var curCard = new cardClass();
         curCard.create(this.game);
@@ -174,6 +183,7 @@ class CombatManager extends GameMode
         curCard.setYAngle(Math.PI);
         ServiceLocator.publish(new WildcardShown());
         curCard.setHandler((card) => {card.flip(() => {this.cardFlipped(curCard)})});
+        */
     }
     
     cardFlipped(_card)
