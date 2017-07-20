@@ -19,6 +19,7 @@ class CardManager
         CardManager.addNewCard(BasicEnemyCard,1);
         CardManager.addNewCard(BeeEnemyCard,1);
         CardManager.addNewCard(OneStickCard);
+        CardManager.addNewCard(ThreeSticksCard);
         
         for(var ind in CardManager.cardDefinitions)
         {

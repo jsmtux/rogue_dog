@@ -452,23 +452,23 @@ class ContinueEndlessly extends EmptyStoryStep
         
         if (this.stage === 0 && percentage > 0.25)
         {
-            ServiceLocator.difficultyManager.increaseObstacleNumber();
+            ServiceLocator.difficultyManager.increaseObstacleLevel();
             this.stage++;
         }
         else if (this.stage === 1 && percentage > 0.4)
         {
-            ServiceLocator.difficultyManager.increaseObstacleLevel();
+            ServiceLocator.difficultyManager.increaseObstacleNumber();
             this.stage++;
         }
         else if (this.stage === 2 && percentage > 0.5)
         {
             ServiceLocator.difficultyManager.increaseObstacleNumber();
+            ServiceLocator.difficultyManager.increaseObstacleLevel();
             this.stage++;
         }
         else if (this.stage === 4 && percentage > 0.8)
         {
             ServiceLocator.difficultyManager.increaseObstacleNumber();
-        ServiceLocator.difficultyManager.increaseObstacleLevel();
             this.stage++;
         }    
         

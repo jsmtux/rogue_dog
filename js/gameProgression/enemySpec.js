@@ -32,7 +32,7 @@ class BeeEnemySpec
         switch(_level)
         {
             case 0:
-                this.health = 5;
+                this.health = 10;
                 this.bulletSpeed = 3;
                 break;
             case 1:
@@ -40,7 +40,7 @@ class BeeEnemySpec
                 this.bulletSpeed = 5;
                 break;
             case 2:
-                this.health = 15;
+                this.health = 10;
                 this.bulletSpeed = 7;
                 break;
         }

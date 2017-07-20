@@ -195,8 +195,10 @@ class BasicEnemyCard extends Card
         ServiceLocator.difficultyManager.unlockEnemy(BasicEnemy);
         var wildDeck = ServiceLocator.cardManager.wildDeck;
         wildDeck.addCard("StrongerBasicEnemyCard", 2);
-        wildDeck.addCard("TwoEnemiesCard", 1);
-        wildDeck.addCard("OneStickCard", undefined, CardDeck.cardProbability.HIGH);
+        wildDeck.addCard("TwoEnemiesCard", 1, CardDeck.cardProbability.MED);
+        wildDeck.addCard("BeeEnemyCard", 1, CardDeck.cardProbability.MED);
+        wildDeck.addCard("OneStickCard", undefined, CardDeck.cardProbability.MED);
+        wildDeck.addCard("ThreeSticksCard", undefined);
     }
 }
 BasicEnemyCard.ID = "BasicEnemyCard";
@@ -212,9 +214,11 @@ class BeeEnemyCard extends Card
     {
         ServiceLocator.difficultyManager.unlockEnemy(BeeEnemy);
         var wildDeck = ServiceLocator.cardManager.wildDeck;
-        wildDeck.addCard("OneStickCard", undefined, CardDeck.cardProbability.HIGH);
+        wildDeck.addCard("OneStickCard", undefined, CardDeck.cardProbability.MED);
+        wildDeck.addCard("ThreeSticksCard", undefined);
         wildDeck.addCard("StrongerBeeEnemyCard", 2);
-        wildDeck.addCard("TwoEnemiesCard", 1);
+        wildDeck.addCard("TwoEnemiesCard", 1, CardDeck.cardProbability.MED);
+        wildDeck.addCard("BasicEnemyCard", 1, CardDeck.cardProbability.MED);
     }
 }
 BeeEnemyCard.ID = "BeeEnemyCard";
@@ -233,6 +237,21 @@ class OneStickCard extends Card
     }
 }
 OneStickCard.ID = "OneStickCard";
+
+class ThreeSticksCard extends Card
+{
+    constructor(_game)
+    {
+        super("Three sticks!", "You found 3 sticks!", "wood_logs_icon", Card.Type.ITEM, _game);
+    }
+    
+    apply(_arguments)
+    {
+        var player = _arguments.player;
+        player.updateStickNumber(player.stickNumber + 3);
+    }
+}
+ThreeSticksCard.ID = "ThreeSticksCard";
 
 class StrongerBasicEnemyCard extends Card
 {

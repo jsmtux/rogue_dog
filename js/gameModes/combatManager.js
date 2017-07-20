@@ -20,6 +20,7 @@ class CombatManager extends GameMode
     static preload(_game)
     {
         _game.load.image('paw_btn', './img/ui/paw.png');
+        _game.load.image('card_loot', './img/card_loot.png');
     }
     
     create()

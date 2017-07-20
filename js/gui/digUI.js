@@ -9,7 +9,7 @@ class DigUI
         this.cards = [];
         this.listSize = 6;
         this.shown = false;
-        this.speed = 4;
+        this.speed = 3.5;
     }
     
     static preload(_game)
@@ -102,10 +102,11 @@ class DigUI
         this.cardSprites[1].x = 4;
         this.cardSprites[0].x = 4 - width;
         this.cardSprites[2].x = 4 + width;
+        var speed = this.speed;
         this.speed = 0;
         ServiceLocator.inputManager.leftButton.onDown.remove(this.clicked, this);
         setTimeout(() =>{
-            this.speed = 4;
+            this.speed = speed;
             this.hide();
             
             ServiceLocator.cardManager.wildDeck.removeOneCard(this.cardConstructors[1].ID);

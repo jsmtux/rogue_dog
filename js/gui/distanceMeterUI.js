@@ -14,14 +14,14 @@ class DistanceMeterUI
     {
         this.meterGroup = _game.add.group();
         ServiceLocator.renderer.addToUI(this.meterGroup);
+        this.meterGroup.y = 50;
         this.bg = _game.add.sprite(0, 0, 'meterBg', this.meterGroup);
         this.meterGroup.add(this.bg);
         this.bg.x = ServiceLocator.viewportHandler.resolution.x / 2 - this.bg.width / 2;
-        this.bg.y = ServiceLocator.viewportHandler.resolution.y - 90;
         this.indicator = _game.add.sprite(0, 0, 'meterIndicator');
         this.meterGroup.add(this.indicator);
         this.indicator.x = ServiceLocator.viewportHandler.resolution.x / 2 - this.bg.width / 2;
-        this.indicator.y = ServiceLocator.viewportHandler.resolution.y - 70;
+        this.indicator.y = 20;
         this.game = _game;
     }
     
