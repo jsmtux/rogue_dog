@@ -13,6 +13,8 @@ class CombatManager extends GameMode
         this.cardsDisappearing = 0;
         
         this.cardButton;
+        
+        ServiceLocator.registerListener(this.wildcardSelected, this, "WildcardSelected");
     }
     
     static preload(_game)
@@ -172,10 +174,20 @@ class CombatManager extends GameMode
     
     wildCardRequested()
     {
-        this.removeCombatUI();
-        this.digUI.show(0.3);
-        /*
-        var cardClass = ServiceLocator.cardManager.wildDeck.getRandomCard();
+        if (true)
+        {
+            this.removeCombatUI();
+            this.digUI.show(0.3);
+        }
+        else
+        {
+            ServiceLocator.publish(new WildcardSelected(ServiceLocator.cardManager.wildDeck.getRandomCard()));
+        }
+    }
+    
+    wildcardSelected(_msg)
+    {
+        var cardClass = _msg.getCardClass();
         var curCard = new cardClass();
         curCard.create(this.game);
         curCard.show();
@@ -183,7 +195,6 @@ class CombatManager extends GameMode
         curCard.setYAngle(Math.PI);
         ServiceLocator.publish(new WildcardShown());
         curCard.setHandler((card) => {card.flip(() => {this.cardFlipped(curCard)})});
-        */
     }
     
     cardFlipped(_card)

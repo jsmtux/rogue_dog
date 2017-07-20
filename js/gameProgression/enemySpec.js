@@ -5,13 +5,13 @@ class BasicEnemySpec
         switch(_level)
         {
             case 0:
-                this.setValues(1000, 1, 5);
+                this.setValues(1000, 1, 15);
                 break;
             case 1:
-                this.setValues(700, 2, 10);
+                this.setValues(700, 2, 20);
                 break;
             case 2:
-                this.setValues(600, 3, 10);
+                this.setValues(600, 3, 30);
                 break;
         }
         
@@ -36,11 +36,11 @@ class BeeEnemySpec
                 this.bulletSpeed = 3;
                 break;
             case 1:
-                this.health = 5;
+                this.health = 10;
                 this.bulletSpeed = 5;
                 break;
             case 2:
-                this.health = 5;
+                this.health = 15;
                 this.bulletSpeed = 7;
                 break;
         }

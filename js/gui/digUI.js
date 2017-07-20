@@ -4,6 +4,8 @@ class DigUI
     {
         this.group;
         this.game = _game;
+        this.cardSprites = [];
+        this.cardConstructors = [];
         this.cards = [];
         this.listSize = 6;
         this.shown = false;
@@ -40,20 +42,23 @@ class DigUI
             card.mask = mask;
             this.group.add(card);
             cur_x += card.width;
-            this.cards.push(card);
+            this.cardSprites.push(card);
         }
         this.hide();
     }
     
-    show(_ratio)
+    show()
     {
-        this.list = [];
+        this.cards = [];
         for(var i = 0; i < this.listSize; i++)
         {
-            this.list.push(Math.random() < _ratio);
+            var cardClass = ServiceLocator.cardManager.wildDeck.getRandomCard(false);
+            var card = new cardClass();
+            this.cards.push(card);
             if (i >= this.listSize - 3)
             {
-                this.cards[i - 3].loadTexture(this.list[i] ? "dig_card_attack" : "dig_card_enemy");
+                this.cardSprites[i - 3].loadTexture(this.cards[i].getType() === Card.Type.ITEM ? "dig_card_attack" : "dig_card_enemy");
+                this.cardConstructors[i - 3] = this.cards[i].constructor;
             }
         }
         this.group.visible = true;
@@ -63,7 +68,6 @@ class DigUI
     hide()
     {
         this.group.visible = false;
-        ServiceLocator.inputManager.leftButton.onDown.remove(this.clicked, this);
     }
     
     update()
@@ -72,28 +76,40 @@ class DigUI
         {
             return;
         }
-        var width = this.cards[0].width;
-        for(var ind in this.cards)
+        var width = this.cardSprites[0].width;
+        for(var ind in this.cardSprites)
         {
-            this.cards[ind].x -= this.speed;
+            this.cardSprites[ind].x -= this.speed;
         }
-        if (this.cards[0].x < -width)
+        if (this.cardSprites[0].x < -width)
         {
-            var card = this.cards.shift();
-            card.x = this.cards[1].x + width;
-            card.loadTexture(this.list[0] ? "dig_card_attack" : "dig_card_enemy");
-            this.list.push(this.list.shift());
-            this.cards.push(card);
+            var card = this.cardSprites.shift();
+            card.x = this.cardSprites[1].x + width;
+            card.loadTexture(this.cards[0].getType() === Card.Type.ITEM ? "dig_card_attack" : "dig_card_enemy");
+            
+            this.cardConstructors.shift();
+            this.cardConstructors.push(this.cards[0].constructor);
+            
+            this.cards.push(this.cards.shift());
+            this.cardSprites.push(card);
         }
     }
     
     clicked()
     {
-        var width = this.cards[0].width;
-        console.log(this.cards[1].frameName);
-        this.cards[1].x = 4;
-        this.cards[0].x = 4 - width;
-        this.cards[2].x = 4 + width;
+        var width = this.cardSprites[0].width;
+        console.log(this.cardSprites[1].frameName);
+        this.cardSprites[1].x = 4;
+        this.cardSprites[0].x = 4 - width;
+        this.cardSprites[2].x = 4 + width;
         this.speed = 0;
+        ServiceLocator.inputManager.leftButton.onDown.remove(this.clicked, this);
+        setTimeout(() =>{
+            this.speed = 4;
+            this.hide();
+            
+            ServiceLocator.cardManager.wildDeck.removeOneCard(this.cardConstructors[1].ID);
+            ServiceLocator.publish(new WildcardSelected(this.cardConstructors[1]));
+        }, 500);
     }
 }

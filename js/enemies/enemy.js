@@ -206,7 +206,7 @@ class Crosshair extends CircleSelector
     {
         super.updatePosition(_position)
         
-        this.movement += 0.1;
+        this.movement += 0.13;
         this.sprite.angle = Math.sin(this.movement) * 68;
     }
     

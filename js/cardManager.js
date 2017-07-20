@@ -126,7 +126,7 @@ class CardDeck
         console.error("Drawn too many cards of type " + _cardName);
     }
     
-    getRandomCard()
+    getRandomCard(removeFromDeck = true)
     {        
         var totalProbability = 0;
         var cardPosition = {};
@@ -149,7 +149,10 @@ class CardDeck
             if (ind >= roll)
             {
                 cardName = cardPosition[ind];
-                this.removeOneCard(cardName);
+                if (removeFromDeck)
+                {
+                    this.removeOneCard(cardName);
+                }
                 break;
             }
         }

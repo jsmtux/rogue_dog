@@ -196,6 +196,19 @@ class WildcardPicked extends Message
     }
 }
 
+class WildcardSelected extends Message
+{
+    constructor(_cardClass)
+    {
+        super("WildcardSelected", {"cardClass": _cardClass});
+    }
+    
+    getCardClass()
+    {
+        return this.arguments["cardClass"];
+    }
+}
+
 class WildcardShown extends Message
 {
     constructor()
