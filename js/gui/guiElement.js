@@ -36,6 +36,7 @@ class GuiElement
     destroy()
     {
         this.getSpriteGroup().destroy();
+        this.rootElement.destroy();
     }
     
     getSignalCall(_name)
@@ -117,9 +118,28 @@ class CardGuiElement extends GuiElement
 
 class DialogGuiElement extends GuiElement
 {
-    constructor(_text, _options, _talkingCharacter)
+    constructor()
     {
         super();
+    }
+    
+    create(_slickUI, _game, _customBmd)
+    {
+        this.slickUI = _slickUI;
+        this.bmd = _customBmd;
+        this.game = _game;
+        
+        var res = ServiceLocator.viewportHandler.resolution;
+        var pos = new Phaser.Point((res.x - 700) / 2, (res.y - 150) / 2);
+        _slickUI.add(this.panel = new SlickUI.Element.Panel(pos.x, 150, 700, 150));
+        this.panel._sprite.visible = false;
+        this.panel.add(this.text = new SlickUI.Element.Text(10,10, "", 16, "collar"));
+        
+        super.create(_slickUI, _game, this.panel);
+    }
+    
+    show(_text, _options, _talkingCharacter)
+    {
         this.fullText = _text;
         this.options = _options;
         this.currentText = "";
@@ -128,29 +148,20 @@ class DialogGuiElement extends GuiElement
         this.talkingCharacter = _talkingCharacter;
         this.talkingAudio;
         this.containsAnswers = true;
-    }
-    
-    create(_slickUI, _game, _customBmd)
-    {
-        this.slickUI = _slickUI;
-        this.bmd = _customBmd;
+        this.text.value = "";
+
         if (!this.options || this.options.length === 0)
         {
             this.options = [{text:"continue"}];
             this.containsAnswers = false;
         }
-        var res = ServiceLocator.viewportHandler.resolution;
-        var pos = new Phaser.Point((res.x - 700) / 2, (res.y - 150) / 2);
-        _slickUI.add(this.panel = new SlickUI.Element.Panel(pos.x, 150, 700, 150));
-        this.panel._sprite.visible = false;
-        this.panel.add(this.text = new SlickUI.Element.Text(10,10, "", 16, "collar"));
         
         if (this.talkingCharacter)
         {
             var audioID = this.talkingCharacter.getAudioId();
             if (audioID)
             {
-                this.talkingAudio = _game.add.audio(audioID);
+                this.talkingAudio = this.game.add.audio(audioID);
             }
         }
         if (this.talkingAudio)
@@ -158,30 +169,32 @@ class DialogGuiElement extends GuiElement
             this.talkingAudio.play();
         }
         
-        super.create(_slickUI, _game, this.panel);
         ServiceLocator.inputManager.leftButton.onDown.add(this.finishWritingText, this);
+    }
+    
+    drawSpeechBubble(_rectangle, _source)
+    {
+        this.bmd.clear();
+        
+        this.bmd.beginFill(0xFEE98C);
+        this.bmd.moveTo(_rectangle.x, _rectangle.y);
+        this.bmd.lineTo(_rectangle.x + _rectangle.width, _rectangle.y);
+        this.bmd.lineTo(_rectangle.x + _rectangle.width, _rectangle.y + _rectangle.height);
+        this.bmd.lineTo(_rectangle.x, _rectangle.y + _rectangle.height);
+
+        this.bmd.moveTo(_source.x, _source.y);
+        this.bmd.lineTo(_rectangle.x, _rectangle.y + _rectangle.height);
+        var bottomRightPanel = _rectangle.x + _rectangle.width;
+        this.bmd.lineTo(_rectangle.width < 100 ? bottomRightPanel : _rectangle.x + 100, _rectangle.y + _rectangle.height);
+        this.bmd.moveTo(_source.x, _source.y);
+        
+        this.bmd.endFill();
     }
     
     update(_source)
     {
-        
-        this.bmd.clear();
-        var textPosition = new Phaser.Point(this.panel.x, this.panel.y);
-        var textSize = new Phaser.Point(this.text.text.width + 40, this.text.text.height + 40);
-        
-        this.bmd.beginFill(0xFEE98C);
-        this.bmd.moveTo(textPosition.x, textPosition.y);
-        this.bmd.lineTo(textPosition.x + textSize.x, textPosition.y);
-        this.bmd.lineTo(textPosition.x + textSize.x, textPosition.y + textSize.y);
-        this.bmd.lineTo(textPosition.x, textPosition.y + textSize.y);
-
-        this.bmd.moveTo(_source.x, _source.y);
-        this.bmd.lineTo(textPosition.x, textPosition.y + textSize.y);
-        var bottomRightPanel = textPosition.x + textSize.x;
-        this.bmd.lineTo(textSize.x < 100 ? bottomRightPanel : textPosition.x + 100, textPosition.y + textSize.y);
-        this.bmd.moveTo(_source.x, _source.y);
-        
-        this.bmd.endFill();
+        var rect = new Phaser.Rectangle(this.panel.x, this.panel.y, this.text.text.width + 40, this.text.text.height + 40);
+        this.drawSpeechBubble(rect, _source);
 
         var desiredHeight = 160 + 50 * this.options.length;
         if (this.currentText.length < this.fullText.length)
@@ -198,7 +211,7 @@ class DialogGuiElement extends GuiElement
             var textFinishPos = this.text.text.textHeight;
             ServiceLocator.inputManager.leftButton.onDown.remove(this.finishWritingText, this);
             this.finishedShowing = true;
-            var buttonHeight = textSize.y;
+            var buttonHeight = rect.height;
             for(var ind in this.options)
             {
                 ind = parseInt(ind);
@@ -243,14 +256,19 @@ class DialogGuiElement extends GuiElement
         this.currentText = this.fullText;
     }
     
+    hide()
+    {
+        this.bmd.clear();
+        for (var ind in this.buttons)
+        {
+            this.buttons[ind].destroy();
+        }
+        this.buttons = [];
+        this.text.value = "";
+    }
+    
     destroy()
     {
-        for(var ind in this.buttons)
-        {
-            this.buttons[parseInt(ind)].events.destroy();
-            this.buttons[parseInt(ind)].sprite.destroy();
-        }
-        this.bmd.clear();
         super.destroy();
     }
 }

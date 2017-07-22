@@ -44,10 +44,12 @@ MainState.prototype.create = function ()
     ServiceLocator.inputManager.create(this);
     ServiceLocator.camera.create(this, this.player);
     ServiceLocator.walkManager.create(this);
-    ServiceLocator.dialogManager.create(this.game);
-    ServiceLocator.combatManager.create(this.game);
     
     ServiceLocator.guiManager.addToRenderer();
+
+    ServiceLocator.dialogManager.create(this.game);
+    ServiceLocator.combatManager.create(this.game);
+
     this.topBarUI = new TopBarUI(this.game);
     this.topBarUI.create();
     this.topBarUI.visible(false);

@@ -7,7 +7,7 @@ class DialogManager extends GameMode
         this.game = _game;
         this.cardList;
         this.player = _player;
-        this.currentDialogUI;
+        this.dialogUI;
         
         this.callback;
         this.callbackCtx;
@@ -25,6 +25,10 @@ class DialogManager extends GameMode
     {
         this.bmd = game.add.graphics(0, 0);
         ServiceLocator.renderer.addToUI(this.bmd);
+        
+        this.dialogUI = new DialogGuiElement();
+        ServiceLocator.guiManager.createUI(this.dialogUI);
+        this.dialogUI.addListener(this.dialogHandler, this);
     }
     
     static addTalkingCharacter(_name, _game)
@@ -36,12 +40,12 @@ class DialogManager extends GameMode
 
     update()
     {
-        if (this.currentDialogUI)
+        if (this.dialogUI)
         {
             var position = ServiceLocator.viewportHandler.sceneToUIPosition(this.player.position);
             var sourcePos = this.player.speechBubbleSourcePoint;
             position = position.add(sourcePos.x, sourcePos.y + 80);
-            this.currentDialogUI.update(position);
+            this.dialogUI.update(position);
         }
     }
     
@@ -72,6 +76,7 @@ class DialogManager extends GameMode
     setLine(_line, _callback, _callbackCtx)
     {
         var currentCharacter = this.findCharacter(_line);
+        this.dialogUI.show(_line.fullText, _line.options, currentCharacter);
         
         for(var i = 0; i < _line.options.length; i++)
         {
@@ -82,11 +87,7 @@ class DialogManager extends GameMode
                 _line.options[i].text = curLine.substring(separator + 1);
             }
         }
-        
-        this.currentDialogUI = new DialogGuiElement(_line.fullText, _line.options, currentCharacter);
-        ServiceLocator.guiManager.createUI(this.currentDialogUI);
-        this.currentDialogUI.addListener(this.dialogHandler, this);
-        
+                
         this.callback = _callback;
         this.callbackCtx = _callbackCtx;
     }
@@ -94,10 +95,9 @@ class DialogManager extends GameMode
     dialogHandler(_option)
     {
         //this is caused by not disabling button after choosing dialog answer
-        if (this.currentDialogUI)
+        if (this.dialogUI)
         {
-            this.currentDialogUI.destroy();
-            this.currentDialogUI = undefined;
+            this.dialogUI.hide();
             this.callback.call(this.callbackCtx, _option);
         }
     }
