@@ -133,7 +133,7 @@ class DialogGuiElement extends GuiElement
         var pos = new Phaser.Point((res.x - 700) / 2, (res.y - 150) / 2);
         _slickUI.add(this.panel = new SlickUI.Element.Panel(pos.x, 150, 700, 150));
         this.panel._sprite.visible = false;
-        this.panel.add(this.text = new SlickUI.Element.Text(10,10, "", 16, "collar"));
+        this.panel.add(this.text = new SlickUI.Element.Text(10,10, "", 20, "collar"));
         
         super.create(_slickUI, _game, this.panel);
     }

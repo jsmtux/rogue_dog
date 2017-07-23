@@ -33,3 +33,27 @@ function(destroy, silent, destroyTexture) {
 };
 
 var DebugMode = false;
+
+var emojiCodes = {
+    ":smile:": 1,
+    ":afraid:": 2,
+    ":boss:": 3,
+    ":sick:": 4,
+    ":hat:": 5,
+    ":exclamation:": 6,
+    ":question:": 7,
+    ":office:": 8,
+    ":poo:": 9,
+    ":thumbs_up:": 10,
+    ":burguer:": 11,
+    ":monster:": 12,
+    ":see_no_evil:": 13,
+    ":pensive:": 14,
+    ":grin:": 15,
+    ":praise:": 16
+};
+
+function getCodeForEmoji(_name)
+{
+    return String.fromCharCode(emojiCodes[_name]);
+}

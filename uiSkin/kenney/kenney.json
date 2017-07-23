@@ -20,6 +20,7 @@
     "button": "SlickUI.Element.Renderer.ButtonRenderer"
   },
   "fonts": {
+    "noto_emoji": ["fonts/noto_emoji.png", "fonts/noto_emoji.xml"],
     "collar": ["fonts/collar.png", "fonts/collar.fnt"],
     "comic": ["fonts/comic.png", "fonts/comic.fnt"]
   },

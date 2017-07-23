@@ -164,14 +164,19 @@ class AttackDefendedMessage extends Message
 
 class StickNumberUpdated extends Message
 {
-    constructor(_number)
+    constructor(_number, _previous)
     {
-        super("StickNumberUpdated", {"number": _number});
+        super("StickNumberUpdated", {"number": _number, "prevNumber": _previous});
     }
     
     getNumber()
     {
         return this.arguments["number"];
+    }
+    
+    getPreviousNumber()
+    {
+        return this.arguments["prevNumber"];        
     }
 }
 

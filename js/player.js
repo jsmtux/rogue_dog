@@ -373,8 +373,8 @@ class DogPlayer extends GameObject
         {
             _number = this.maxStickNumber
         }
+        ServiceLocator.publish(new StickNumberUpdated(_number, this.stickNumber));
         this.stickNumber = _number;
-        ServiceLocator.publish(new StickNumberUpdated(this.stickNumber));
     }
 
     play(_animationName)

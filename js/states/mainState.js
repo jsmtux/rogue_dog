@@ -16,6 +16,8 @@ MainState.prototype.preload = function ()
     ParticleEmitter.preload(this.game);
     TopBarUI.preload(this.game);
     DigUI.preload(this.game);
+    
+    CollarCharacter.preload(this.game);
 }
 
 MainState.prototype.create = function ()
@@ -82,6 +84,9 @@ MainState.prototype.create = function ()
     this.distanceMeter = new DistanceMeterUI();
     this.distanceMeter.create(this.game);
     this.distanceMeter.visible(false);
+
+    this.collarCharacter = new CollarCharacter();
+    this.collarCharacter.create();
 }
 
 MainState.prototype.addGameMode = function(_mode)
