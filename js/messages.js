@@ -229,3 +229,16 @@ class DogAnswerChosen extends Message
         super("DogAnswerChosen");
     }
 }
+
+class DialogSourceUpdated extends Message
+{
+    constructor(_position)
+    {
+        super("DialogSourceUpdated", {"position": _position});
+    }
+    
+    getPosition()
+    {
+        return this.arguments["position"];
+    }
+}

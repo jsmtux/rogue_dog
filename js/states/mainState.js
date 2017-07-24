@@ -86,7 +86,7 @@ MainState.prototype.create = function ()
     this.distanceMeter.visible(false);
 
     this.collarCharacter = new CollarCharacter();
-    this.collarCharacter.create();
+    this.collarCharacter.create(this);
 }
 
 MainState.prototype.addGameMode = function(_mode)

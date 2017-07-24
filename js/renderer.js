@@ -9,6 +9,7 @@ class Renderer
     {
         _game.load.script('gray', 'filters/gray.js');
         _game.load.script('sepia', 'filters/sepia.js');
+        _game.load.script('screen', 'filters/screen.js');
     }
     
     create(_game)

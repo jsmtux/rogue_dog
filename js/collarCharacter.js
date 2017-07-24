@@ -10,9 +10,9 @@ class CollarCharacter
         
     }
     
-    create()
+    create(_mainState)
     {
-        this.screen = new CollarScreenUI();
+        this.screen = new CollarScreenUI(_mainState);
         ServiceLocator.guiManager.createUI(this.screen);
         
         ServiceLocator.registerListener(this.obstacleHit, this, "JumpFailedMessage");
@@ -21,8 +21,7 @@ class CollarCharacter
     
     obstacleHit(_msg)
     {
-        this.screen.setFace(":grin:");
-        setTimeout(()=>{this.screen.setFace(":smile:");}, 1000);
+        this.stackFaceFor(":grin:", 1000);
     }
     
     stickNumberUpdated(_msg)
@@ -32,16 +31,21 @@ class CollarCharacter
         {
             if (performance.now() - this.lastReceivedStickChange > 1000)
             {
-                this.screen.setFace(":thumbs_up:");
-                setTimeout(()=>{this.screen.setFace(":smile:");}, 1000);
+                this.stackFaceFor(":thumbs_up:", 1000);
             }
             else
             {
-                this.screen.setFace(":praise:");
-                setTimeout(()=>{this.screen.setFace(":smile:");}, 1000);
+                this.stackFaceFor(":praise:", 1000);
             }
             
             this.lastReceivedStickChange = performance.now();
         }
+    }
+    
+    stackFaceFor(_name, _time)
+    {
+        clearTimeout(this.currentTimeout);
+        this.screen.setFace(_name);
+        this.currentTimeout = setTimeout(()=>{this.screen.setFace(":smile:");}, _time);        
     }
 }

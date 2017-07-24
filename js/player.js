@@ -315,7 +315,12 @@ class DogPlayer extends GameObject
                 item = this.appliedItems[Accesory.BodyParts.HEAD];
                 break;
             case "speechBubbleSource":
+                //this should no longer be needed
                 this.speechBubbleSourcePoint = pointObj.transformed;
+                
+                var position = ServiceLocator.viewportHandler.sceneToUIPosition(this.position);
+                position.add(pointObj.transformed.x - 15, pointObj.transformed.y + 85);
+                ServiceLocator.publish(new DialogSourceUpdated(position));
                 break;
             default:
                 console.error("Invalid point handler in dog animation.");

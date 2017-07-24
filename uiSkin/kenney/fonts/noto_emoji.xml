@@ -4,7 +4,7 @@
     <pages>
         <page id="0" file="minecraftia-black.png"/>
     </pages>
-    <chars count="95">
+    <chars count="20">
         <char id="1" x="0" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="q"/>
         <char id="2" x="50" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="w"/>
         <char id="3" x="100" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="e"/>
@@ -13,8 +13,8 @@
         <char id="6" x="250" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="y"/>
         <char id="7" x="300" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
         <char id="8" x="350" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
-        <char id="9" x="400" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
-        <char id="10" x="450" y="0" width="50" height="0" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="9" x="450" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="10" x="400" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
         <char id="11" x="0" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="q"/>
         <char id="12" x="50" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="w"/>
         <char id="13" x="100" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="e"/>
