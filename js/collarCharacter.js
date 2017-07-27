@@ -3,11 +3,15 @@ class CollarCharacter
     constructor()
     {
         this.lastReceivedStickChange = 0;
+        this.faceWidget = new FaceScreenWidget();
+        this.logoImage = new ImageScreenWidget();
+        this.text = new TextScreenWidget("TAP to start, motherfucker!");
+        this.textContainer = new MarginsScreenWidget(this.text, 20, 20);
     }
     
-    static preload()
+    static preload(_game)
     {
-        
+        ImageScreenWidget.preload(_game);
     }
     
     create(_mainState)
@@ -17,6 +21,14 @@ class CollarCharacter
         
         ServiceLocator.registerListener(this.obstacleHit, this, "JumpFailedMessage");
         ServiceLocator.registerListener(this.stickNumberUpdated, this, "StickNumberUpdated");
+        
+        //this.faceWidget.create(_mainState.game);
+        /*this.logoImage.create(_mainState.game);
+        this.textContainer.create(_mainState.game);*/
+
+        var screenGroup = new VGroupScreenWidget([this.faceWidget, this.logoImage, this.textContainer]);
+
+        this.screen.setWidget(screenGroup);
     }
     
     obstacleHit(_msg)
@@ -45,7 +57,7 @@ class CollarCharacter
     stackFaceFor(_name, _time)
     {
         clearTimeout(this.currentTimeout);
-        this.screen.setFace(_name);
-        this.currentTimeout = setTimeout(()=>{this.screen.setFace(":smile:");}, _time);        
+        this.faceWidget.setFace(_name);
+        this.currentTimeout = setTimeout(()=>{this.faceWidget.setFace(":smile:");}, _time);        
     }
 }

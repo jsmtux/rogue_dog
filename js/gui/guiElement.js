@@ -66,7 +66,7 @@ class MenuGuiElement extends GuiElement
         _slickUI.add(panel = new SlickUI.Element.Panel(600, 50, 250, 110));
         panel.add(new SlickUI.Element.Text(10,0, "Rogue Dog", 16, "comic")).centerHorizontally().text.alpha = 0.5;
         panel.add(button = new SlickUI.Element.Button(0, 50, 240, 40)).events.onInputUp.add(this.getSignalCall("startButtonClicked"));
-        button.add(new SlickUI.Element.Text(0,0, "Start", 16, "comic")).center();
+        button.add(new SlickUI.Element.Text(0,0, "Start! " + getCodeForEmoji(":smile:"), 16, "comic")).center();
         /*panel.add(button = new SlickUI.Element.Button(0, 100, 240, 40)).events.onInputUp.add(this.getSignalCall("optionsButtonClicked"));
         button.add(new SlickUI.Element.Text(0,0, "Options", 16, "comic")).center();*/
         
