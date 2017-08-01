@@ -1,13 +1,10 @@
 class DialogManager extends GameMode
 {
-    constructor(_game, _player)
+    constructor(_game)
     {
         super();
         this.finished = false;
         this.game = _game;
-        this.cardList;
-        this.player = _player;
-        this.dialogUI;
         
         this.callback;
         this.callbackCtx;
@@ -23,12 +20,6 @@ class DialogManager extends GameMode
     
     create(_game)
     {
-        this.bmd = game.add.graphics(0, 0);
-        ServiceLocator.renderer.addToUI(this.bmd);
-        
-        this.dialogUI = new DialogGuiElement();
-        ServiceLocator.guiManager.createUI(this.dialogUI);
-        this.dialogUI.addListener(this.dialogHandler, this);
     }
     
     static addTalkingCharacter(_name, _game)
@@ -40,13 +31,6 @@ class DialogManager extends GameMode
 
     update()
     {
-        if (this.dialogUI)
-        {
-            var position = ServiceLocator.viewportHandler.sceneToUIPosition(this.player.position);
-            var sourcePos = this.player.speechBubbleSourcePoint;
-            position = position.add(sourcePos.x, sourcePos.y + 80);
-            this.dialogUI.update(position);
-        }
     }
     
     startMode()
@@ -55,8 +39,7 @@ class DialogManager extends GameMode
     }
     
     finishMode()
-    {
-        this.speechBubble = undefined;
+    {        
         ServiceLocator.guiManager.enableOtherInputs();
     }
     
@@ -76,30 +59,35 @@ class DialogManager extends GameMode
     setLine(_line, _callback, _callbackCtx)
     {
         var currentCharacter = this.findCharacter(_line);
-        this.dialogUI.show(_line.fullText, _line.options, currentCharacter);
-        
+        /*
+        var textContainer = new MarginsScreenWidget(new TextScreenWidget(getCodeForEmoji(":tap:") +" to start!"), 20, 20);
+        var textGroup = new HGroupScreenWidget([new SeparatorScreenWidget(300, 0), textContainer]);
+        var screenGroup = new VGroupScreenWidget([new ImageScreenWidget("logo"), new SeparatorScreenWidget(0, 40), textGroup]);
+        */
+        var collarText = new MarginsScreenWidget(new TextScreenWidget(_line.fullText), 20, 20);
+        var vGroupContents = [collarText];
         for(var i = 0; i < _line.options.length; i++)
         {
             var curLine = _line.options[i].text;
             var separator;
             if ((separator = curLine.indexOf(":")) >= 0)
             {
-                _line.options[i].text = curLine.substring(separator + 1);
+                curLine = curLine.substring(separator + 1);
             }
+            vGroupContents.push(new TextScreenWidget(curLine));
         }
+        var dialogWidget = new VGroupScreenWidget(vGroupContents);
+        ServiceLocator.guiManager.collarScreen.pushWidget(dialogWidget);
                 
         this.callback = _callback;
         this.callbackCtx = _callbackCtx;
+        setTimeout(() => {this.dialogHandler(0)}, 1000);
     }
     
     dialogHandler(_option)
     {
-        //this is caused by not disabling button after choosing dialog answer
-        if (this.dialogUI)
-        {
-            this.dialogUI.hide();
-            this.callback.call(this.callbackCtx, _option);
-        }
+        ServiceLocator.guiManager.collarScreen.popWidget();
+        this.callback.call(this.callbackCtx, _option);
     }
     
     isFinished()

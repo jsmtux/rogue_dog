@@ -15,6 +15,8 @@ class GUIManager
     create(_game)
     {
         this.game = _game;
+        
+        this.collarScreen = new CollarScreenUI();
     }
     
     addToState(_game)
@@ -34,12 +36,16 @@ class GUIManager
         this.inputDisablingSprite.height = resolution.y;
         this.inputDisablingSprite.inputEnabled = false;
         ServiceLocator.renderer.addToUI(this.inputDisablingSprite);
+        
+        this.collarScreen.create(this.game, GUIManager.slickUIPlugin.container.displayGroup);
     }
     
     update()
     {
         ServiceLocator.renderer.UIGroup.bringToTop(this.customBmd);
         this.game.world.bringToTop(GUIManager.slickUIPlugin.container.displayGroup);
+        
+        this.collarScreen.update();
     }
 
     createUI(_constructor)

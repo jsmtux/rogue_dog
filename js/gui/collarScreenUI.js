@@ -1,11 +1,10 @@
 class CollarScreenUI extends GuiElement
 {
-    constructor(_mainState)
+    constructor()
     {
         super();
         this.sourcePoint = new Phaser.Point(0, 0);
         this.targetPoint;
-        this.mainState = _mainState;
         
         this.minSize = new Phaser.Point(60, 20);
         this.rectangle = new Phaser.Rectangle(0, 0, this.minSize.x, this.minSize.y);
@@ -13,6 +12,8 @@ class CollarScreenUI extends GuiElement
         this.arrowHalfWidth = 20;
         
         this.lines = [];
+        
+        this.widgetList = [];
     }
     
     drawBg(_rectangle, _source)
@@ -38,20 +39,16 @@ class CollarScreenUI extends GuiElement
         this.bmd.endFill();
     }
     
-    create(_slickUI, _game, _customBmd)
+    create(_game, _group)
     {
-        this.mainState.updateSignal.add(this.update, this);
-
-        this.group = _game.add.group();
-        ServiceLocator.renderer.addToUI(this.group);
+        this.group = _group;
         
         this.bmd = _game.add.graphics();
         this.group.add(this.bmd);
         
         this.screenFilter = _game.add.filter('Screen');
-        
         this.bmd.filters = [this.screenFilter];
-        
+
         ServiceLocator.registerListener(this.dialogSourceUpdated, this, "DialogSourceUpdated");
         
         this.game = _game;
@@ -59,6 +56,10 @@ class CollarScreenUI extends GuiElement
     
     update()
     {
+        if (!this.targetPoint)
+        {
+            return;
+        }
         var groupTargetPos = this.targetPoint.clone().subtract(50, this.arrowHeight + this.rectangle.height);
         if (!this.group.x === 0 && this.group.y === 0)
         {
@@ -82,13 +83,39 @@ class CollarScreenUI extends GuiElement
         this.drawBg(this.rectangle, this.sourcePoint);
     }
     
-    setWidget(_widget)
+    pushWidget(_widget)
     {
+        var last = this.widgetList[this.widgetList.length - 1]
+        if (last)
+        {
+            last.setVisible(false);
+        }
+
+        this.widgetList.push(_widget);
+
         _widget.create(this.game);
         
         _widget.addToScreenGroup(this.group, CollarScreenUI.padding, CollarScreenUI.padding);
         this.rectangle.width = _widget.width + CollarScreenUI.padding * 2;
         this.rectangle.height = _widget.height + CollarScreenUI.padding * 2;
+    }
+    
+    popWidget()
+    {
+        var widget = this.widgetList.pop();
+        
+        if (widget)
+        {
+            widget.destroy();
+        }
+        
+        var last = this.widgetList[this.widgetList.length - 1]
+        if (last)
+        {
+            last.setVisible(true);
+            this.rectangle.width = last.width + CollarScreenUI.padding * 2;
+            this.rectangle.height = last.height + CollarScreenUI.padding * 2;
+        }
     }
     
     dialogSourceUpdated(_msg)
@@ -116,6 +143,11 @@ class ScreenWidget
     {
         console.err("Destroy not properly implemented on ScreenWidget");
     }
+    
+    setVisible(_visible)
+    {
+        console.err("setVisible not properly implemented on ScreenWidget");
+    }
 }
 
 class FaceScreenWidget extends ScreenWidget
@@ -141,23 +173,29 @@ class FaceScreenWidget extends ScreenWidget
     {
         this.faceText.text = getCodeForEmoji(_charName);
     }
+    
+    destroy()
+    {
+        this.faceText.destroy();
+    }
+    
+    setVisible(_visible)
+    {
+        this.faceText.visible = _visible;
+    }
 }
 
 class ImageScreenWidget extends ScreenWidget
 {
-    constructor()
+    constructor(_imgName)
     {
         super();
-    }
-    
-    static preload(_game)
-    {
-        _game.load.image("logo", "img/logo.png");
+        this.imgName = _imgName;
     }
     
     create(_game)
     {
-        this.logo = _game.add.sprite(0, 0, "logo");
+        this.logo = _game.add.sprite(0, 0, this.imgName);
         this.width = this.logo.width;
         this.height = this.logo.height;
     }
@@ -167,6 +205,16 @@ class ImageScreenWidget extends ScreenWidget
         _group.add(this.logo);
         this.logo.x = _x;
         this.logo.y = _y;
+    }
+    
+    destroy()
+    {
+        this.logo.destroy();
+    }
+    
+    setVisible(_visible)
+    {
+        this.logo.visible = _visible;
     }
 }
 
@@ -180,7 +228,7 @@ class TextScreenWidget extends ScreenWidget
     
     create(_game)
     {
-        this.text = _game.add.bitmapText(0, 0, 'comic', this.textValue, 16);
+        this.text = _game.add.bitmapText(0, 0, 'collar', this.textValue, 20);
         this.width = this.text.width;
         this.height = this.text.height;
     }
@@ -190,6 +238,16 @@ class TextScreenWidget extends ScreenWidget
         _group.add(this.text);
         this.text.x = _x;
         this.text.y = _y;
+    }
+    
+    destroy()
+    {
+        this.text.destroy();
+    }
+    
+    setVisible(_visible)
+    {
+        this.text.visible = _visible;
     }
 }
 
@@ -213,6 +271,16 @@ class MarginsScreenWidget extends ScreenWidget
     addToScreenGroup(_group, _x, _y)
     {
         this.widget.addToScreenGroup(_group, _x + this.xMargin, _y + this.yMargin);
+    }
+    
+    destroy()
+    {
+        this.widget.destroy();
+    }
+    
+    setVisible(_visible)
+    {
+        this.widget.visible = _visible;
     }
 }
 
@@ -250,6 +318,22 @@ class HGroupScreenWidget extends ScreenWidget
             x += CollarScreenUI.padding + this.widgetList[ind].width;
         }
     }
+    
+    destroy()
+    {
+        for(var ind in this.widgetList)
+        {
+            this.widgetList[ind].destroy();
+        }
+    }
+    
+    setVisible(_visible)
+    {
+        for(var ind in this.widgetList)
+        {
+            this.widgetList[ind].setVisible(_visible);
+        }
+    }
 }
 
 class VGroupScreenWidget extends ScreenWidget
@@ -285,5 +369,51 @@ class VGroupScreenWidget extends ScreenWidget
             this.widgetList[ind].addToScreenGroup(_group, _x, y);
             y += CollarScreenUI.padding + this.widgetList[ind].height;
         }
+    }
+    
+    destroy()
+    {
+        for(var ind in this.widgetList)
+        {
+            this.widgetList[ind].destroy();
+        }
+    }
+    
+    setVisible(_visible)
+    {
+        for(var ind in this.widgetList)
+        {
+            this.widgetList[ind].setVisible(_visible);
+        }
+    }
+}
+
+class SeparatorScreenWidget extends ScreenWidget
+{
+    constructor(_hSeparation, _vSeparation)
+    {
+        super();
+        this.hSeparation = _hSeparation;
+        this.vSeparation = _vSeparation;
+    }
+    
+    create()
+    {
+        this.width = this.hSeparation;
+        this.height = this.vSeparation;
+    }
+    
+    addToScreenGroup(_group, _x, _y)
+    {
+        
+    }
+    
+    destroy()
+    {
+        
+    }
+    
+    setVisible(_visible)
+    {
     }
 }

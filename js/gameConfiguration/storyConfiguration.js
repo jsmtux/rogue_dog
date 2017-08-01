@@ -178,15 +178,20 @@ class IntroStoryStep extends EmptyStoryStep
         ServiceLocator.renderer.addFilterToScene(this.grayFilter);*/
 
         _mainState.topBarUI.visible(false);
-        this.menuGUI = new MenuGuiElement();
-        ServiceLocator.guiManager.createUI(this.menuGUI);
-        this.menuGUI.addListener(this.menuHandler, this);
         
         this.start = false;
         
         _mainState.setNextMode("WalkManager");
         _storyConfiguration.story.ResetState();
         _storyConfiguration.choosePathString("Introduction");
+        
+        var textContainer = new MarginsScreenWidget(new TextScreenWidget(getCodeForEmoji(":tap:") +" to start!"), 20, 10);
+        var textGroup = new HGroupScreenWidget([new SeparatorScreenWidget(300, 0), textContainer]);
+        var screenGroup = new VGroupScreenWidget([new SeparatorScreenWidget(0, 10), new ImageScreenWidget("logo"), textGroup]);
+
+        ServiceLocator.guiManager.collarScreen.pushWidget(screenGroup);
+        
+        ServiceLocator.inputManager.leftButton.onDown.add(this.handleTouch, this);
     }
 
     update(_storyConfiguration, _curGameMode, _mainState)
@@ -197,18 +202,16 @@ class IntroStoryStep extends EmptyStoryStep
         }
     }
     
-    menuHandler(_name)
+    handleTouch()
     {
-        if(_name === "startButtonClicked")
-        {
-            this.start = true;
-        }
+        this.start = true;
     }
     
     finish(_storyConfiguration, _mainState)
     {
-        this.menuGUI.destroy();
         _mainState.topBarUI.visible(true);
+        ServiceLocator.inputManager.leftButton.onDown.remove(this.handleTouch, this);
+        ServiceLocator.guiManager.collarScreen.popWidget();
         //ServiceLocator.renderer.removeFilterFromScene(this.grayFilter);
     }
 }

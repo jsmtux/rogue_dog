@@ -50,7 +50,8 @@ var emojiCodes = {
     ":see_no_evil:": 13,
     ":pensive:": 14,
     ":grin:": 15,
-    ":praise:": 16
+    ":praise:": 16,
+    ":tap:":17
 };
 
 function getCodeForEmoji(_name)

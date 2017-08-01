@@ -31,7 +31,7 @@ Phaser.Filter.Screen = function (game) {
             "vec4 pic = texture2D(uSampler,vTextureCoord.xy);",
         
             "float band_pos = fract(time * 0.6) * 3.0 - 1.0;",
-            "c += clamp( (1.0 - abs(band_pos - pos) * 10.0), 0.0, 1.0) * 0.3 * clamp(pic.r, 0.1, 0.6);",
+            "c += clamp( (1.0 - abs(band_pos - pos) * 10.0), 0.0, 1.0) * 0.1 * clamp(pic.r, 0.1, 0.6);",
             
             "c += c * 2. * step(0.8, pic.x);",
             
@@ -39,8 +39,7 @@ Phaser.Filter.Screen = function (game) {
             "c += (noise(gl_FragCoord.xy) - 0.5) * (0.09);",
         
             "float alphaTest = step(0.5, pic.a);",
-            "gl_FragColor = vec4( 0.0, c * alphaTest, c * alphaTest, pic.a );",
-            //"gl_FragColor = vec4( 0.0, pos, pos, 1.0 );",
+            "gl_FragColor = vec4( 0.0, c * alphaTest, c * alphaTest, pic.a * 0.8 );",
         "}"
     ];
 

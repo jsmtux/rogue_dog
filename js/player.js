@@ -318,8 +318,10 @@ class DogPlayer extends GameObject
                 //this should no longer be needed
                 this.speechBubbleSourcePoint = pointObj.transformed;
                 
-                var position = ServiceLocator.viewportHandler.sceneToUIPosition(this.position);
-                position.add(pointObj.transformed.x - 15, pointObj.transformed.y + 85);
+                var position = this.position.clone();
+                position.add(pointObj.transformed.x - 5, pointObj.transformed.y + 80);
+                var sceneOffset = ServiceLocator.viewportHandler.getSceneOffset();
+                position.subtract(sceneOffset.x, sceneOffset.y);
                 ServiceLocator.publish(new DialogSourceUpdated(position));
                 break;
             default:

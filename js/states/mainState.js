@@ -58,11 +58,6 @@ MainState.prototype.create = function ()
 
     this.player.create(this);
     
-    this.lostUI = new GameOverGuiElement();
-    ServiceLocator.guiManager.createUI(this.lostUI);
-    this.lostUI.addListener(this.handleUI, this);
-    this.lostUI.hide();
-    
     ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
 
     this.gearCardCompletedMode = new GearCardCompletedMode();
@@ -78,15 +73,15 @@ MainState.prototype.create = function ()
     this.particleEmitter = new ParticleEmitter(this.game);
     this.particleEmitter.create();
     
+    this.collarCharacter = new CollarCharacter();
+    this.collarCharacter.create(this);
+    
     this.gameConfiguration = new StoryConfiguration();
     this.gameConfiguration.resetGameState(this);
     //this should be in gui manager
     this.distanceMeter = new DistanceMeterUI();
     this.distanceMeter.create(this.game);
     this.distanceMeter.visible(false);
-
-    this.collarCharacter = new CollarCharacter();
-    this.collarCharacter.create(this);
 }
 
 MainState.prototype.addGameMode = function(_mode)
@@ -134,7 +129,6 @@ MainState.prototype.handleUI = function(_name, _event)
     //this is only on 'reload' event
     if (_name === "reload")
     {
-        this.lostUI.hide();
         this.setPaused(false);
         this.restart();
     }
