@@ -253,7 +253,6 @@ class GroundTile extends VisibleObject
     static preload(_game)
     {
         _game.load.image('grassTile', './img/tiles/grass_block.png');
-        _game.load.image('undergroundTile', './img/tiles/underground_block.png');
         _game.load.image('tutorialObstacle', './img/tutorial_obstacle.png');
     }
     

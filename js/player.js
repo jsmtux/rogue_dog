@@ -20,8 +20,6 @@ class DogPlayer extends GameObject
         this.currentAnimation = '';
         this.playerInitialY = GROUND_LEVEL - 90;
         
-        this.cardPieceUI = new CardPieceUI();
-        
         this.attackPower = 4.0;
 
         this.iterationsShowingTrajectory = 0;
@@ -67,7 +65,6 @@ class DogPlayer extends GameObject
 
         DogHatAccesory.preload(_game);
         DogWoolHatAccesory.preload(_game);
-        CardPieceUI.preload(_game);
     }
     
     create(_game)
@@ -103,11 +100,6 @@ class DogPlayer extends GameObject
             'onRemovedFromGroup$dispatch' : function(){
             }
         }
-        
-        
-        this.cardPieceUI.create(this.game);
-        ServiceLocator.registerListener(this.cardPiecePicked, this, "CardPieceFoundMessage");
-        ServiceLocator.registerListener(this.gearCardCompleted, this, "GearCardCompletedMessage");
         
         this.attackAudio = this.game.add.audio('playerAttackAudio');
         this.jumpAudio = this.game.add.audio('playerJumpAudio');
@@ -504,23 +496,6 @@ class DogPlayer extends GameObject
     getPosition()
     {
         return new Phaser.Point(this.position.x, this.position.y);
-    }
-    
-    cardPiecePicked()
-    {
-        this.cardPieceUI.addPiece();
-    }
-    
-    gearCardCompleted()
-    {
-        this.game.setOverlayGameMode("GearCardCompletedMode");
-        var self = this;
-        function cardCollectedCallback()
-        {
-            self.game.resetOverlayGameMode();
-            ServiceLocator.removeListener(cardCollectedCallback, undefined, "GearCardCollectedMessage");
-        };
-        ServiceLocator.registerListener(cardCollectedCallback, undefined, "GearCardCollectedMessage");
     }
     
     itemPicked(_msg)

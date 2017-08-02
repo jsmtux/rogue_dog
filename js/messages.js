@@ -49,22 +49,6 @@ class StoryCommandReceived extends Message
     }
 }
 
-class CardPieceFoundMessage extends Message
-{
-    constructor()
-    {
-        super("CardPieceFoundMessage", {});
-    }
-}
-
-class GearCardCompletedMessage extends Message
-{
-    constructor()
-    {
-        super("GearCardCompletedMessage", {});
-    }
-}
-
 class GearCardCollectedMessage extends Message
 {
     constructor()

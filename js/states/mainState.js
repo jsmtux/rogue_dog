@@ -9,7 +9,6 @@ function MainState(_game)
 MainState.prototype.preload = function ()
 {
     CombatLootMode.preload(this.game);
-    GearCardCompletedMode.preload(this.game);
     DialogManager.preload(this.game);
     CombatManager.preload(this.game);
 
@@ -56,9 +55,6 @@ MainState.prototype.create = function ()
     this.topBarUI.visible(false);
 
     this.player.create(this);
-
-    this.gearCardCompletedMode = new GearCardCompletedMode();
-    this.gearCardCompletedMode.create(this);
 
     this.currentGameMode = undefined;
     this.addGameMode(ServiceLocator.walkManager);
