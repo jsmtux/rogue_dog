@@ -66,36 +66,6 @@ class WalkLevel
     }
 }
 
-class UndergroundWalkLevel extends WalkLevel
-{
-    constructor(_groundTileName, _height, _walkManager)
-    {
-        super(_groundTileName, _height, _walkManager);
-        this.game = _walkManager.game;
-        this.cardPieces = [];
-        this.gap = 10;
-    }
-    
-    update()
-    {
-        super.update();
-        /* NEED TO USE ITEMS TO ADD THIS
-        while(this.lastProcessedX < this.lastX)
-        {
-            this.lastProcessedX += this.gap;
-            if (this.active && Math.random() < ServiceLocator.difficultyManager.getCardSpawnChance())
-            {
-                this.addCardPiece();
-            }
-        }
-        
-        for(var ind in this.cardPieces)
-        {
-            this.cardPieces[ind].update();
-        }*/
-    }
-}
-
 class WalkManager extends GameMode
 {
     constructor(_game, _player)
@@ -110,11 +80,8 @@ class WalkManager extends GameMode
         
         this.walkLevels = [];
         this.walkLevels.push(new WalkLevel('grassTile', GROUND_LEVEL, this));
-        this.walkLevels.push(new UndergroundWalkLevel('undergroundTile', 880, this));
         
         this.currentWalkLevel;
-        
-        this.lastShownJumpHelp = performance.now();
     }
     
     static preload(_game)
@@ -122,7 +89,6 @@ class WalkManager extends GameMode
         Obstacle.preload(_game);
         TallObstacle.preload(_game);
         GroundTile.preload(_game);
-        CardPiece.preload(_game);
         Stick.preload(_game);
         CeilingObstacle.preload(_game);
     }
@@ -182,7 +148,6 @@ class WalkManager extends GameMode
         ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.JUMP));
         this.player.startWalk();
         this.walkLevels[0].setStagePrototype(ServiceLocator.difficultyManager.getStagePrototype());
-        this.walkLevels[1].setStagePrototype(ServiceLocator.difficultyManager.getUndergroundStagePrototype());
     }
     
     finishMode()
@@ -550,80 +515,5 @@ class Stick extends Item
             ServiceLocator.publish(new ItemPickedMessage(this))
             this.sprite.alpha = 0;
         });
-    }
-}
-
-class CardPiece extends Item
-{
-    constructor(_position)
-    {
-        super(_position);
-        this.position.y -=  (230*Math.random() + 50.0);
-        this.glowSprite;
-        this.glowDifference = 0.01;
-    }
-    
-    static preload(_game)
-    {
-        _game.load.image('card_piece', './img/items/piece.png');
-        _game.load.image('card_piece_glow', './img/items/piece_glow.png');
-        _game.load.audio('cardPieceCollectedAudio', 'sounds/card_piece_collected.wav');
-    }
-    
-    create(_game)
-    {
-        var sprite = _game.add.sprite(this.position.x, this.position.y, 'card_piece');
-        ServiceLocator.renderer.addToScene(sprite);
-        super.create(sprite);
-        var sprite = _game.add.sprite(this.position.x, this.position.y, 'card_piece_glow');
-        this.sprite.anchor.x = 0.5;
-        this.sprite.anchor.y = 0.5;
-        ServiceLocator.renderer.addToOverlay(sprite);
-        this.glowSprite = sprite;
-        this.glowSprite.alpha = 0.7;
-        this.glowSprite.inputEnabled = true;
-        this.glowSprite.events.onInputDown.add(this.clicked, this);
-        this.glowSprite.anchor.x = 0.5;
-        this.glowSprite.anchor.y = 0.5;
-        
-        this.collectSound = _game.add.audio('cardPieceCollectedAudio');
-    }
-    
-    destroy()
-    {
-        this.sprite.destroy();
-        this.glowSprite.destroy();
-    }
-    
-    update()
-    {
-        if (this.dying)
-        {
-            if (this.scale === undefined)
-            {
-                this.scale = 1.0;
-                this.glowSprite.alpha = 0.7;
-            }
-            this.glowSprite.scale.setTo(this.scale, this.scale);
-            this.scale += 0.1;
-            this.glowSprite.alpha -= 0.03;
-            this.sprite.alpha -= 0.05;
-        }
-        else
-        {
-            if (this.glowSprite.alpha >= 0.8 || this.glowSprite.alpha <= 0.1)
-            {
-                this.glowDifference *= -1.0;
-            }
-            this.glowSprite.alpha += this.glowDifference;
-        }
-    }
-    
-    clicked()
-    {
-        this.collectSound.play();
-        this.dying = true;
-        this.glowSprite.events.onInputDown.remove(this.clicked, this);
-        ServiceLocator.publish(new CardPieceFoundMessage());
     }
 }

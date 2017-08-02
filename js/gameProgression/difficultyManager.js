@@ -121,17 +121,4 @@ class DifficultyManager
     {
         this.obstacleLevel++;
     }
-    
-    getUndergroundStagePrototype()
-    {
-        var prototypeRules = new PrototypeRules();
-        prototypeRules.setRuleProbability(GrassStagePiece, 0.8);
-        prototypeRules.setRuleProbability(PlatformStagePiece, 0.2);
-        return new StagePrototype(prototypeRules);
-    }
-    
-    getCardSpawnChance()
-    {
-        return 0.02;
-    }
 }

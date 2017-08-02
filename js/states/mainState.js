@@ -34,13 +34,12 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('walkManager', new WalkManager(this, this.player));
     ServiceLocator.initialize('inputManager', new InputManager(this));
     ServiceLocator.initialize('animationManager', new AnimationManager(this));
-    ServiceLocator.initialize('lighting', new Lighting());
     ServiceLocator.initialize('renderer', new Renderer(this));
     ServiceLocator.initialize('cardManager', new CardManager(this));
     ServiceLocator.initialize('dialogManager', new DialogManager(this, this.player));
     ServiceLocator.initialize('physics', new Physics(this));
 
-    this.game.world.setBounds(0, -65, 192000, 900);
+    this.game.world.setBounds(0, -65, 192000, 0);
 
     ServiceLocator.renderer.create(this);
     ServiceLocator.inputManager.create(this);
@@ -57,8 +56,6 @@ MainState.prototype.create = function ()
     this.topBarUI.visible(false);
 
     this.player.create(this);
-    
-    ServiceLocator.lighting.addLight(new OvergroundLight(GROUND_LEVEL - 50));
 
     this.gearCardCompletedMode = new GearCardCompletedMode();
     this.gearCardCompletedMode.create(this);

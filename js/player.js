@@ -20,8 +20,6 @@ class DogPlayer extends GameObject
         this.currentAnimation = '';
         this.playerInitialY = GROUND_LEVEL - 90;
         
-        this.ownLight;
-        
         this.cardPieceUI = new CardPieceUI();
         
         this.attackPower = 4.0;
@@ -111,9 +109,6 @@ class DogPlayer extends GameObject
         ServiceLocator.registerListener(this.cardPiecePicked, this, "CardPieceFoundMessage");
         ServiceLocator.registerListener(this.gearCardCompleted, this, "GearCardCompletedMessage");
         
-        this.ownLight = new spotLight(new Phaser.Point(this.position.x + 25, this.position.y), 250, 0xFFFF00, 0.5);
-        ServiceLocator.lighting.addLight(this.ownLight);
-        
         this.attackAudio = this.game.add.audio('playerAttackAudio');
         this.jumpAudio = this.game.add.audio('playerJumpAudio');
         this.landAudio = this.game.add.audio('playerLandAudio');
@@ -180,7 +175,20 @@ class DogPlayer extends GameObject
     {
         var shouldPlay;
         this.position.x += this.curSpeed + this.jumpAcceleration.x;
-        this.ownLight.position = new Phaser.Point(this.position.x + 100, this.position.y - 25);
+        
+        if (this.isUnderground())
+        {
+            this.position.y = this.playerInitialY - 200;
+            this.sprite.alpha = 0.5;
+            this.curSpeed = 0;
+            var curX = this.position.x;
+            while (ServiceLocator.walkManager.getGroundTiles(curX).length < 1)
+            {
+                curX += 10;
+            }
+            this.position.x = curX;
+            this.updateHeartNumber(this.heartQuarters - 4);
+        }
 
         if (this.onGround() && this.jumpAcceleration.y === 0)
         {
@@ -188,19 +196,6 @@ class DogPlayer extends GameObject
             this.curSpeed = this.walkSpeed;
             shouldPlay = DogPlayer.Animations.WALK;
             this.jumpAcceleration.x = 0;
-            if (this.isUnderground())
-            {
-                this.position.y = this.playerInitialY - 100;
-                this.sprite.alpha = 0.5;
-                this.curSpeed = 0;
-                var curX = this.position.x;
-                while (ServiceLocator.walkManager.getGroundTiles(curX).length < 2)
-                {
-                    curX += 10;
-                }
-                this.position.x = curX;
-                this.updateHeartNumber(this.heartQuarters - 4);
-            }
         }
         else
         {
@@ -503,7 +498,7 @@ class DogPlayer extends GameObject
     
     isUnderground()
     {
-        return this.position.y > (GROUND_LEVEL);
+        return this.position.y > (GROUND_LEVEL + 150);
     }
     
     getPosition()
