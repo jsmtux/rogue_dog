@@ -1,8 +1,7 @@
-class CollarScreenUI extends GuiElement
+class CollarScreenUI
 {
     constructor()
     {
-        super();
         this.sourcePoint = new Phaser.Point(0, 0);
         this.targetPoint;
         
@@ -74,10 +73,10 @@ class CollarScreenUI extends GuiElement
         if (this.rectangle.width > 700)
         {
             xOffset = 200;
-            yOffset = 150;
+            yOffset = 100;
         }
         
-        var groupTargetPos = this.targetPoint.clone().subtract(xOffset, this.arrowHeight + this.rectangle.height);
+        var groupTargetPos = this.targetPoint.clone().subtract(xOffset, yOffset + this.rectangle.height);
         if (!this.group.x === 0 && this.group.y === 0)
         {
             this.group.x = groupTargetPos.x;

@@ -9,6 +9,7 @@ class CardManager
     
     static preload(_game)
     {
+        _game.load.image('cardbg', 'img/card/card_bg.png');
         _game.load.image('cardBack', './img/card/back.png');
         CardManager.addNewCard(SmMedkitCard);
         CardManager.addNewCard(StrongerBasicEnemyCard,2);

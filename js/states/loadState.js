@@ -11,8 +11,6 @@ LoadState.prototype.preload = function()
 {
     ServiceLocator.initialize('guiManager', new GUIManager());
     ServiceLocator.initialize('difficultyManager', new DifficultyManager());
-    
-    ServiceLocator.guiManager.addToState(this.game);
 }
 
 LoadState.prototype.update = function()

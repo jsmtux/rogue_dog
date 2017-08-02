@@ -25,16 +25,22 @@ class Card
     
     buildImage(_game)
     {
-        var cardGUIContainer = new CardGuiElement(this.title, this.text, this.logoName);
+        /*var cardGUIContainer = new CardGuiElement(this.title, this.text, this.logoName);
         ServiceLocator.guiManager.createUI(cardGUIContainer);
 
-        var spriteGroup = cardGUIContainer.rootElement.container.displayGroup;
+        var spriteGroup = cardGUIContainer.rootElement.container.displayGroup;*/
+        var spriteGroup = _game.add.group();
+        _game.add.sprite(0, 0, 'cardbg', undefined, spriteGroup);
+        _game.add.bitmapText(40, 40, 'comic', this.title, undefined, spriteGroup);
+        _game.add.sprite(50, 90, this.logoName, undefined, spriteGroup);
+        var description = _game.add.bitmapText(30, 285, 'comic', this.text, 16, spriteGroup);
+        description.maxWidth = 220;
         
         var renderTexture = _game.add.renderTexture(280, 400, this.logoName + 'cardRT');
         
         renderTexture.renderXY(spriteGroup, 0, 0, true);
         
-        cardGUIContainer.destroy();
+        spriteGroup.destroy();
         
         return renderTexture;
     }

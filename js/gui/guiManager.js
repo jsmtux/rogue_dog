@@ -7,9 +7,11 @@ class GUIManager
 
     static preload(_game)
     {
-        GUIManager.slickUIPlugin = _game.plugins.add(Phaser.Plugin.SlickUI);
-        CardGuiElement.preload(_game);
         DistanceMeterUI.preload(_game);
+
+        _game.load.bitmapFont('noto_emoji', 'fonts/noto_emoji.png', 'fonts/noto_emoji.xml');
+        _game.load.bitmapFont('collar', 'fonts/collar.png', 'fonts/collar.fnt');
+        _game.load.bitmapFont('comic', 'fonts/comic.png', 'fonts/comic.fnt');
     }
     
     create(_game)
@@ -19,16 +21,11 @@ class GUIManager
         this.collarScreen = new CollarScreenUI();
     }
     
-    addToState(_game)
-    {
-        GUIManager.slickUIPlugin.load('uiSkin/kenney/kenney.json');
-    }
-    
     addToRenderer()
     {
         this.customBmd = this.game.add.graphics(0,0);
         ServiceLocator.renderer.addToUI(this.customBmd);
-        GUIManager.slickUIPlugin.container.displayGroup = this.game.add.group();
+        this.group = this.game.add.group();
 
         this.inputDisablingSprite = this.game.add.sprite(0, 0);
         var resolution = ServiceLocator.viewportHandler.resolution;
@@ -37,20 +34,15 @@ class GUIManager
         this.inputDisablingSprite.inputEnabled = false;
         ServiceLocator.renderer.addToUI(this.inputDisablingSprite);
         
-        this.collarScreen.create(this.game, GUIManager.slickUIPlugin.container.displayGroup);
+        this.collarScreen.create(this.game, this.group);
     }
     
     update()
     {
         ServiceLocator.renderer.UIGroup.bringToTop(this.customBmd);
-        this.game.world.bringToTop(GUIManager.slickUIPlugin.container.displayGroup);
+        this.game.world.bringToTop(this.group);
         
         this.collarScreen.update();
-    }
-
-    createUI(_constructor)
-    {
-        _constructor.create(GUIManager.slickUIPlugin, this.game, this.customBmd);
     }
     
     disableOtherInputs()
@@ -64,6 +56,3 @@ class GUIManager
         this.inputDisablingSprite.inputEnabled = false;
     }
 }
-
-GUIManager.loadedUIs = {};
-GUIManager.slickUIPlugin;
