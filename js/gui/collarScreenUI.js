@@ -14,6 +14,8 @@ class CollarScreenUI extends GuiElement
         this.lines = [];
         
         this.widgetList = [];
+        
+        this.rects = [];
     }
     
     drawBg(_rectangle, _source)
@@ -37,6 +39,12 @@ class CollarScreenUI extends GuiElement
         this.bmd.lineTo(_source.x, _source.y);
         
         this.bmd.endFill();
+        
+        for(var ind in this.rects)
+        {
+            var rect = this.rects[ind];
+            this.bmd.drawRoundedRect(rect.x, rect.y, rect.width, rect.height, 5);
+        }
     }
     
     create(_game, _group)
@@ -60,7 +68,16 @@ class CollarScreenUI extends GuiElement
         {
             return;
         }
-        var groupTargetPos = this.targetPoint.clone().subtract(50, this.arrowHeight + this.rectangle.height);
+        
+        var xOffset = 50;
+        var yOffset = this.arrowHeight;
+        if (this.rectangle.width > 700)
+        {
+            xOffset = 200;
+            yOffset = 150;
+        }
+        
+        var groupTargetPos = this.targetPoint.clone().subtract(xOffset, this.arrowHeight + this.rectangle.height);
         if (!this.group.x === 0 && this.group.y === 0)
         {
             this.group.x = groupTargetPos.x;
@@ -95,7 +112,7 @@ class CollarScreenUI extends GuiElement
 
         _widget.create(this.game);
         
-        _widget.addToScreenGroup(this.group, CollarScreenUI.padding, CollarScreenUI.padding);
+        _widget.addToScreenGroup(this, this.group, CollarScreenUI.padding, CollarScreenUI.padding);
         this.rectangle.width = _widget.width + CollarScreenUI.padding * 2;
         this.rectangle.height = _widget.height + CollarScreenUI.padding * 2;
     }
@@ -122,6 +139,23 @@ class CollarScreenUI extends GuiElement
     {
         this.targetPoint = _msg.getPosition();
     }
+    
+    addRect(_rect)
+    {
+        this.rects.push(_rect);
+    }
+    
+    removeRect(_rect)
+    {
+        for (var ind in this.rects)
+        {
+            if(Phaser.Rectangle.equals(_rect, this.rects[ind]))
+            {
+                this.rects.splice(ind, 1);
+                break;
+            }
+        }
+    }
 }
 
 CollarScreenUI.padding = 5;
@@ -134,7 +168,7 @@ class ScreenWidget
         this.height = _height;
     }
     
-    addToScreenGroup(_group, _x, _y)
+    addToScreenGroup(_screen, _group, _x, _y)
     {
         console.err("Destroy not properly implemented on addToScreenGroup");
     }
@@ -162,7 +196,7 @@ class FaceScreenWidget extends ScreenWidget
         this.faceText = _game.add.bitmapText(5, 5, 'noto_emoji', getCodeForEmoji(":smile:"), 50);
     }
     
-    addToScreenGroup(_group, _x, _y)
+    addToScreenGroup(_screen, _group, _x, _y)
     {
         _group.add(this.faceText);
         this.faceText.x = _x;
@@ -200,7 +234,7 @@ class ImageScreenWidget extends ScreenWidget
         this.height = this.logo.height;
     }
     
-    addToScreenGroup(_group, _x, _y)
+    addToScreenGroup(_screen, _group, _x, _y)
     {
         _group.add(this.logo);
         this.logo.x = _x;
@@ -215,6 +249,54 @@ class ImageScreenWidget extends ScreenWidget
     setVisible(_visible)
     {
         this.logo.visible = _visible;
+    }
+}
+
+class ButtonScreenWidget extends ScreenWidget
+{
+    constructor(_widget, _cb)
+    {
+        super();
+        this.widget = _widget;
+        this.cb = _cb;
+        this.sprite;
+    }
+    
+    create(_game)
+    {
+        this.widget.create(_game);
+        this.width = this.widget.width + 10;
+        this.height = this.widget.height + 10;
+        this.sprite = _game.add.sprite(0,0);
+    }
+    
+    addToScreenGroup(_screen, _group, _x, _y)
+    {
+        this.buttonRect = new Phaser.Rectangle(_x, _y, this.width, this.height);
+        this.screen = _screen;
+        _screen.addRect(this.buttonRect);
+        this.widget.addToScreenGroup(_screen, _group, _x + 5, _y + 5);
+        
+        _group.add(this.sprite);
+        this.sprite.x = _x;
+        this.sprite.y = _y;
+        this.sprite.width = this.width;
+        this.sprite.height = this.height;
+        this.sprite.inputEnabled = true;
+        this.sprite.input.priorityID = 3;
+        this.sprite.events.onInputDown.add(this.cb);
+    }
+    
+    destroy()
+    {
+        this.screen.removeRect(this.buttonRect);
+        this.widget.destroy();
+        this.sprite.destroy();
+    }
+    
+    setVisible(_visible)
+    {
+        this.widget.setVisible(_visible);
     }
 }
 
@@ -233,7 +315,7 @@ class TextScreenWidget extends ScreenWidget
         this.height = this.text.height;
     }
     
-    addToScreenGroup(_group, _x, _y)
+    addToScreenGroup(_screen, _group, _x, _y)
     {
         _group.add(this.text);
         this.text.x = _x;
@@ -268,9 +350,9 @@ class MarginsScreenWidget extends ScreenWidget
         this.height = this.widget.height + this.yMargin * 2;
     }
     
-    addToScreenGroup(_group, _x, _y)
+    addToScreenGroup(_screen, _group, _x, _y)
     {
-        this.widget.addToScreenGroup(_group, _x + this.xMargin, _y + this.yMargin);
+        this.widget.addToScreenGroup(_screen, _group, _x + this.xMargin, _y + this.yMargin);
     }
     
     destroy()
@@ -309,12 +391,12 @@ class HGroupScreenWidget extends ScreenWidget
         this.height = size.y;
     }
     
-    addToScreenGroup(_group, _x, _y)
+    addToScreenGroup(_screen, _group, _x, _y)
     {
         var x = _x;
         for(var ind in this.widgetList)
         {
-            this.widgetList[ind].addToScreenGroup(_group, x, _y);
+            this.widgetList[ind].addToScreenGroup(_screen, _group, x, _y);
             x += CollarScreenUI.padding + this.widgetList[ind].width;
         }
     }
@@ -361,12 +443,12 @@ class VGroupScreenWidget extends ScreenWidget
         this.height = size.y;
     }
     
-    addToScreenGroup(_group, _x, _y)
+    addToScreenGroup(_screen, _group, _x, _y)
     {
         var y = _y;
         for(var ind in this.widgetList)
         {
-            this.widgetList[ind].addToScreenGroup(_group, _x, y);
+            this.widgetList[ind].addToScreenGroup(_screen, _group, _x, y);
             y += CollarScreenUI.padding + this.widgetList[ind].height;
         }
     }
@@ -403,7 +485,7 @@ class SeparatorScreenWidget extends ScreenWidget
         this.height = this.vSeparation;
     }
     
-    addToScreenGroup(_group, _x, _y)
+    addToScreenGroup(_screen, _group, _x, _y)
     {
         
     }

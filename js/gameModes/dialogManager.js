@@ -59,11 +59,7 @@ class DialogManager extends GameMode
     setLine(_line, _callback, _callbackCtx)
     {
         var currentCharacter = this.findCharacter(_line);
-        /*
-        var textContainer = new MarginsScreenWidget(new TextScreenWidget(getCodeForEmoji(":tap:") +" to start!"), 20, 20);
-        var textGroup = new HGroupScreenWidget([new SeparatorScreenWidget(300, 0), textContainer]);
-        var screenGroup = new VGroupScreenWidget([new ImageScreenWidget("logo"), new SeparatorScreenWidget(0, 40), textGroup]);
-        */
+
         var collarText = new MarginsScreenWidget(new TextScreenWidget(_line.fullText), 20, 20);
         var vGroupContents = [collarText];
         for(var i = 0; i < _line.options.length; i++)
@@ -74,20 +70,27 @@ class DialogManager extends GameMode
             {
                 curLine = curLine.substring(separator + 1);
             }
-            vGroupContents.push(new TextScreenWidget(curLine));
+            var self = this;
+            var callback = (function(index){return () => {self.dialogHandler(index)}})(i);
+            vGroupContents.push(new ButtonScreenWidget(new TextScreenWidget(curLine), callback));
         }
+        
+        if (_line.options.length == 0)
+        {
+            ServiceLocator.inputManager.leftButton.onDown.addOnce(() => this.dialogHandler(0));
+        }
+        
         var dialogWidget = new VGroupScreenWidget(vGroupContents);
         ServiceLocator.guiManager.collarScreen.pushWidget(dialogWidget);
                 
         this.callback = _callback;
         this.callbackCtx = _callbackCtx;
-        setTimeout(() => {this.dialogHandler(0)}, 1000);
     }
     
     dialogHandler(_option)
     {
         ServiceLocator.guiManager.collarScreen.popWidget();
-        this.callback.call(this.callbackCtx, _option);
+        this.callback.call(this.callbackCtx, parseInt(_option));
     }
     
     isFinished()
