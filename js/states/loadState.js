@@ -37,8 +37,25 @@ LoadState.prototype.create = function ()
     Renderer.preload(this.game);
     CardManager.preload(this.game);
     InputManager.preload(this.game);
+    
+    CombatLootMode.preload(this.game);
+    DialogManager.preload(this.game);
+    CombatManager.preload(this.game);
+
+    ParticleEmitter.preload(this.game);
+    TopBarUI.preload(this.game);
+    DigUI.preload(this.game);
+    
+    CollarCharacter.preload(this.game);
+
     this.game.load.onLoadComplete.add(this.loadComplete, this);
     this.game.load.start();
+    
+    this.showLogo();
+}
+
+LoadState.prototype.showLogo = function()
+{
     
     var bmd = game.make.bitmapData(100, 100);
 	bmd.draw('company_logo', 0, 0);

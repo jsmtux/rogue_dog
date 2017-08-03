@@ -8,15 +8,6 @@ function MainState(_game)
 
 MainState.prototype.preload = function ()
 {
-    CombatLootMode.preload(this.game);
-    DialogManager.preload(this.game);
-    CombatManager.preload(this.game);
-
-    ParticleEmitter.preload(this.game);
-    TopBarUI.preload(this.game);
-    DigUI.preload(this.game);
-    
-    CollarCharacter.preload(this.game);
 }
 
 MainState.prototype.create = function ()
