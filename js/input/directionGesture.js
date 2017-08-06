@@ -142,6 +142,7 @@ class PlayerDirectionGesture extends DirectionGesture
     remove()
     {
         super.remove();
+        this.reset();
     }
 
     mouseDown()

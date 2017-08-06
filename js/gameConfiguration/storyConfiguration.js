@@ -365,38 +365,17 @@ class ContinueFirstEncounter extends EmptyStoryStep
     
     update(_storyConfiguration, _curGameMode, _mainState)
     {
-        if (_curGameMode.isFinished() && !this.combatFinished)
-        {
-            this.followDefaultRules(_curGameMode, _mainState)
-        }
-        if (!this.combatFinished && _curGameMode.getModeName() == "CombatLootMode")
-        {
-            this.combatFinished = true;
-            _storyConfiguration.choosePathString("Introduction.combat_finished");
-            _mainState.setOverlayGameMode("DialogManager");
-            _storyConfiguration.storyCallback();
-        }
-    }
-    
-    finish(_storyConfiguration, _mainState)
-    {
-        
-    }
-}
-
-class WaitForLoot extends EmptyStoryStep
-{
-    start(_storyConfiguration, _mainState)
-    {
-        _mainState.resetOverlayGameMode();
-    }
-    
-    update(_storyConfiguration, _curGameMode, _mainState)
-    {
         if (_curGameMode.isFinished())
         {
-            _storyConfiguration.choosePathString("Introduction.loot_finished");
-            _storyConfiguration.setStoryStep(new DialogStep());
+            if (_curGameMode.getModeName() == "CombatLootMode")
+            {
+                _storyConfiguration.choosePathString("Introduction.loot_finished");
+                _storyConfiguration.setStoryStep(new DialogStep());
+            }
+            else
+            {
+                this.followDefaultRules(_curGameMode, _mainState)
+            }
         }
     }
     
