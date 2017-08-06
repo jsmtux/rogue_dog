@@ -279,38 +279,6 @@ class DoFirstDig extends EmptyStoryStep
     start(_storyConfiguration, _mainState)
     {
         _mainState.setNextMode("CombatManager");
-        ServiceLocator.registerListener(this.cardPickedCb, this, "WildcardShown");
-        this.cardPicked = false;
-    }
-    
-    update(_storyConfiguration, _curGameMode, _mainState)
-    {
-        if (this.cardPicked)
-        {
-            _storyConfiguration.choosePathString("Introduction.found_bad_card");
-            _mainState.setOverlayGameMode("DialogManager");
-            _storyConfiguration.storyCallback();
-            _storyConfiguration.setStoryStep(new EmptyStoryStep());
-        }
-    }
-    
-    cardPickedCb()
-    {
-        this.cardPicked = true;
-    }
-    
-    finish(_storyConfiguration, _mainState)
-    {
-        ServiceLocator.removeListener(this.cardPickedCb, this, "WildcardShown");
-    }
-}
-
-
-class PickBadCard extends EmptyStoryStep
-{
-    start(_storyConfiguration, _mainState)
-    {
-        _mainState.resetOverlayGameMode();
         ServiceLocator.registerListener(this.cardPickedCb, this, "WildcardPicked");
         this.cardPicked = false;
     }

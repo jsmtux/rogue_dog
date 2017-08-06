@@ -39,10 +39,24 @@ var emojiCodes = {
     ":pensive:": 14,
     ":grin:": 15,
     ":praise:": 16,
-    ":tap:":17
+    ":tap:": 17,
+    ":fire:": 18,
+    ":hq:": 19,
+    ":sad:": 20,
+    ":paw:": 21,
+    ":stick:": 22,
+    ":swipe:": 23
 };
 
 function getCodeForEmoji(_name)
 {
-    return String.fromCharCode(emojiCodes[_name]);
+    var id = emojiCodes[_name] + 1100;
+    if (id)
+    {
+	    return String.fromCharCode(id);
+    }
+    else
+    {
+        return undefined;
+    }
 }

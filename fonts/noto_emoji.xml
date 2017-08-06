@@ -5,25 +5,35 @@
         <page id="0" file="minecraftia-black.png"/>
     </pages>
     <chars count="20">
-        <char id="1" x="0" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="q"/>
-        <char id="2" x="50" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="w"/>
-        <char id="3" x="100" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="e"/>
-        <char id="4" x="150" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="r"/>
-        <char id="5" x="200" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="t"/>
-        <char id="6" x="250" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="y"/>
-        <char id="7" x="300" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
-        <char id="8" x="350" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
-        <char id="9" x="450" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
-        <char id="10" x="400" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
-        <char id="11" x="0" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="q"/>
-        <char id="12" x="50" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="w"/>
-        <char id="13" x="100" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="e"/>
-        <char id="14" x="150" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="r"/>
-        <char id="15" x="200" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="t"/>
-        <char id="16" x="250" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="y"/>
-        <char id="17" x="300" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
-        <char id="18" x="350" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
-        <char id="19" x="400" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
-        <char id="20" x="450" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1101" x="0" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="q"/>
+        <char id="1102" x="50" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="w"/>
+        <char id="1103" x="100" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="e"/>
+        <char id="1104" x="150" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="r"/>
+        <char id="1105" x="200" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="t"/>
+        <char id="1106" x="250" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="y"/>
+        <char id="1107" x="300" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1108" x="350" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1109" x="450" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1110" x="400" y="0" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1111" x="0" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="q"/>
+        <char id="1112" x="50" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="w"/>
+        <char id="1113" x="100" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="e"/>
+        <char id="1114" x="150" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="r"/>
+        <char id="1115" x="200" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="t"/>
+        <char id="1116" x="250" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="y"/>
+        <char id="1117" x="300" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1118" x="350" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1119" x="400" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1120" x="450" y="50" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1121" x="0" y="100" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="q"/>
+        <char id="1122" x="50" y="100" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="w"/>
+        <char id="1123" x="100" y="100" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="e"/>
+        <char id="1124" x="150" y="100" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="r"/>
+        <char id="1125" x="200" y="100" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="t"/>
+        <char id="1126" x="250" y="100" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="y"/>
+        <char id="1127" x="300" y="100" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1128" x="350" y="100" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1129" x="450" y="100" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
+        <char id="1130" x="400" y="100" width="50" height="50" xoffset="0" yoffset="0" xadvance="50" page="0" chnl="0" letter="u"/>
     </chars>
 </font>

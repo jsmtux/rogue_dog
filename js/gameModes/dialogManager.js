@@ -60,8 +60,46 @@ class DialogManager extends GameMode
     {
         var currentCharacter = this.findCharacter(_line);
 
-        var collarText = new MarginsScreenWidget(new TextScreenWidget(_line.fullText), 20, 20);
-        var vGroupContents = [collarText];
+        var collarText = _line.fullText;
+        var emojiText = "";
+        var i = 0;
+        while(i < collarText.length)
+        {
+            var curChar = collarText.charAt(i++);
+            if (curChar !== ':')
+            {
+                emojiText += curChar;
+            }
+            else
+            {
+                var emojiCode = "";
+                do
+                {
+                    emojiCode += curChar;
+                    curChar = collarText.charAt(i++);
+                }
+                while (curChar !== ':')
+                emojiCode += curChar;
+                var id = getCodeForEmoji(emojiCode);
+                if (id)
+                {
+                    emojiText += id;
+                }
+                else
+                {
+                    emojiText += "[]";
+                }
+            }
+        }
+        var emojiLines = emojiText.split('\\n');
+
+        var vGroupContents = [];
+
+        for (var ind in emojiLines)
+        {
+            vGroupContents.push(new MarginsScreenWidget(new TextScreenWidget(emojiLines[ind]), 20, 20));
+        }
+        
         for(var i = 0; i < _line.options.length; i++)
         {
             var curLine = _line.options[i].text;

@@ -16,6 +16,7 @@ InitState.prototype.preload = function()
 InitState.prototype.create = function()
 {
     ServiceLocator.viewportHandler.onGameCreation(this.game);
+    this.game.world.setBounds(0, -65, 192000, 0);
 }
 
 InitState.prototype.update = function()

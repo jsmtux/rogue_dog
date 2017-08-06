@@ -6,10 +6,6 @@ function MainState(_game)
     this.currentGameMode;
 };
 
-MainState.prototype.preload = function ()
-{
-}
-
 MainState.prototype.create = function ()
 {
     this.statePaused = false;
@@ -29,7 +25,6 @@ MainState.prototype.create = function ()
     ServiceLocator.initialize('dialogManager', new DialogManager(this, this.player));
     ServiceLocator.initialize('physics', new Physics(this));
 
-    this.game.world.setBounds(0, -65, 192000, 0);
 
     ServiceLocator.renderer.create(this);
     ServiceLocator.inputManager.create(this);
