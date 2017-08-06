@@ -138,6 +138,11 @@ class CombatManager extends GameMode
     {
         this.state = CombatManager.State.ATTACK;
         ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.ATTACK));
+     
+        if (!isEmptyObject(this.enemies))
+        {
+            ServiceLocator.publish(new AttackStartedMessage());
+        }
         if (this.player.canAttack())
         {
             for (var ind in this.enemies)

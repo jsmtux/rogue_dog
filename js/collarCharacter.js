@@ -4,6 +4,7 @@ class CollarCharacter
     {
         this.lastReceivedStickChange = 0;
         this.faceWidget = new FaceScreenWidget();
+        this.stickNumber = 0;
     }
     
     static preload(_game)
@@ -11,14 +12,18 @@ class CollarCharacter
         _game.load.image("logo", "img/logo.png");
     }
     
-    create()
+    create(_mainState)
     {
+        this.mainState = _mainState;
         this.screen = ServiceLocator.guiManager.collarScreen;
         
         this.screen.pushWidget(this.faceWidget);
         
         ServiceLocator.registerListener(this.obstacleHit, this, "JumpFailedMessage");
         ServiceLocator.registerListener(this.stickNumberUpdated, this, "StickNumberUpdated");
+        ServiceLocator.registerListener(this.attackStarted, this, "AttackStartedMessage");
+        
+        this.warnedAboutRunningOutOfSticks = false;
     }
     
     obstacleHit(_msg)
@@ -28,7 +33,7 @@ class CollarCharacter
     
     stickNumberUpdated(_msg)
     {
-        
+        this.stickNumber = _msg.getNumber();
         if (_msg.getNumber() > _msg.getPreviousNumber())
         {
             if (performance.now() - this.lastReceivedStickChange > 1000)
@@ -44,10 +49,20 @@ class CollarCharacter
         }
     }
     
+    attackStarted()
+    {
+        
+        if (!this.warnedAboutRunningOutOfSticks && this.stickNumber === 0)
+        {
+            this.warnedAboutRunningOutOfSticks = true;
+            this.mainState.gameConfiguration.promptStoryPath("Introduction.no_more_sticks");
+        }
+    }
+    
     stackFaceFor(_name, _time)
     {
         clearTimeout(this.currentTimeout);
         this.faceWidget.setFace(_name);
-        this.currentTimeout = setTimeout(()=>{this.faceWidget.setFace(":smile:");}, _time);        
+        this.currentTimeout = setTimeout(()=>{this.faceWidget.setFace(":smile:");}, _time);
     }
 }

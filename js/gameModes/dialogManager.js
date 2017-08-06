@@ -118,6 +118,10 @@ class DialogManager extends GameMode
             ServiceLocator.inputManager.leftButton.onDown.addOnce(() => this.dialogHandler(0));
         }
         
+        var textContainer = new MarginsScreenWidget(new TextScreenWidget(getCodeForEmoji(":tap:") +" to continue"), 20, 10);
+        var textGroup = new HGroupScreenWidget([new SeparatorScreenWidget(300, 0), textContainer]);
+        vGroupContents.push(textGroup);
+        
         var dialogWidget = new VGroupScreenWidget(vGroupContents);
         ServiceLocator.guiManager.collarScreen.pushWidget(dialogWidget);
                 

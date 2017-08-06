@@ -112,6 +112,14 @@ class EnemyTargeted extends Message
     }
 }
 
+class AttackStartedMessage extends Message
+{
+    constructor()
+    {
+        super("AttackStartedMessage");
+    }
+}
+
 class ItemPickedMessage extends Message
 {
     constructor(_item)

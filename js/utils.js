@@ -4,6 +4,11 @@ function randomInt(min, max)
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function isEmptyObject(_object)
+{
+    return Object.keys(_object).length === 0 && _object.constructor === Object;
+}
+
 Math.radians = function(degrees) {
   return degrees * Math.PI / 180;
 };

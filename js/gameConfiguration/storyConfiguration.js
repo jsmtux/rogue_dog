@@ -70,6 +70,10 @@ class StoryConfiguration
         {
             var command = _commands[ind];
             ServiceLocator.publish(new StoryCommandReceived(command));
+            if(command === "COMMEND_FINISHED")
+            {
+                this.mainState.resetOverlayGameMode();
+            }
             if(command === "GOTO WAIT_STICKS")
             {
                 this.setStoryStep(new GatherSticksStoryStep());
@@ -137,6 +141,13 @@ class StoryConfiguration
     setStoryVariable(_name, _value)
     {
         this.story.variablesState[_name] = _value
+    }
+    
+    promptStoryPath(_pathName)
+    {
+        this.choosePathString(_pathName);
+        this.mainState.setOverlayGameMode("DialogManager");
+        this.storyCallback();
     }
 }
 

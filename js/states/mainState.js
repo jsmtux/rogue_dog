@@ -157,3 +157,8 @@ MainState.prototype.resetOverlayGameMode = function()
     }
     this.overlayGameMode = undefined;
 }
+
+MainState.prototype.getCurrentModeName = function()
+{
+    return this.currentGameMode.getModeName();
+}
