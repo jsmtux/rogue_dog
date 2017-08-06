@@ -121,7 +121,7 @@ class GrassStagePiece extends StagePiece {
 class HoleStagePiece extends StagePiece {
     constructor()
     {
-        super([new HoleStageCell(), new HoleStageCell(), new HoleStageCell(), new HoleStageCell()], 4);
+        super([new HoleStageCell(), new HoleStageCell(), new HoleStageCell(), new HoleStageCell(), new HoleStageCell()], 4);
     }
 }
 

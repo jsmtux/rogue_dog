@@ -115,7 +115,7 @@ class DialogManager extends GameMode
         
         if (_line.options.length == 0)
         {
-            ServiceLocator.inputManager.leftButton.onDown.addOnce(() => this.dialogHandler(0));
+            setTimeout(() => ServiceLocator.inputManager.leftButton.onDown.addOnce(() => this.dialogHandler(0), 500));
         }
         
         var textContainer = new MarginsScreenWidget(new TextScreenWidget(getCodeForEmoji(":tap:") +" to continue"), 20, 10);

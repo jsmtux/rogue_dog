@@ -115,9 +115,7 @@ MainState.prototype.handleUI = function(_name, _event)
 
 MainState.prototype.die = function()
 {
-    this.lostUI.show();
-    this.setPaused(true);
-    this.setNextMode("EmptyGameMode");
+    ServiceLocator.camera.fade(2000, () => this.restart());
 }
 
 MainState.prototype.restart = function()

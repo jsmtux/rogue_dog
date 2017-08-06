@@ -66,4 +66,10 @@ class Camera
     {
         this.game.camera.flash(_color, _time);
     }
+    
+    fade(_time, _cb)
+    {
+        this.game.camera.fade(0x000000, _time);
+        this.game.camera.onFadeComplete.add(_cb);
+    }
 }
