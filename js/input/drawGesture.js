@@ -33,7 +33,7 @@ class DrawGesture
     
     update()
     {
-        var timeThreshold = performance.now() - 300;
+        var timeThreshold = performance.now() - 400;
         for (var ind in this.points)
         {
             if(this.points[ind].time < timeThreshold)
