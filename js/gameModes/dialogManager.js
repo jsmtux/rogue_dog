@@ -35,12 +35,12 @@ class DialogManager extends GameMode
     
     startMode()
     {
-        ServiceLocator.guiManager.disableOtherInputs();
+        ServiceLocator.inputManager.disableOtherInputs();
     }
     
     finishMode()
     {        
-        ServiceLocator.guiManager.enableOtherInputs();
+        ServiceLocator.inputManager.enableOtherInputs();
     }
     
     findCharacter(_line)

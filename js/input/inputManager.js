@@ -7,6 +7,7 @@ class InputManager
         this.directionGesture = new DirectionGesture(_game, this);
         this.playerDirectionGesture = new PlayerDirectionGesture(_game, this);
         this.drawGesture = new DrawGesture(_game, this);
+        this.inputDisablingSprite;
     }
     
     static preload(_game)
@@ -37,6 +38,15 @@ class InputManager
         this.leftButton.onDown.add(this.handleTouch, this);
         
         this.bmd = game.add.graphics(-offset.x, -offset.y);
+        
+        this.playerDirectionGesture.create();
+        
+        this.inputDisablingSprite = this.game.add.sprite(0, 0);
+        var resolution = ServiceLocator.viewportHandler.resolution;
+        this.inputDisablingSprite.width = resolution.x;
+        this.inputDisablingSprite.height = resolution.y;
+        this.inputDisablingSprite.inputEnabled = false;
+        ServiceLocator.renderer.addToUI(this.inputDisablingSprite);
     }
     
     handleTouch()
@@ -48,5 +58,17 @@ class InputManager
     {
         ServiceLocator.renderer.addToUI(this.bmd);
         return this.bmd;
+    }
+    
+    disableOtherInputs()
+    {
+        this.playerDirectionGesture.reset();
+        this.inputDisablingSprite.inputEnabled = true;
+        this.inputDisablingSprite.input.priorityID = 2;
+    }
+    
+    enableOtherInputs()
+    {
+        this.inputDisablingSprite.inputEnabled = false;
     }
 }

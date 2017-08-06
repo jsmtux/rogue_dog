@@ -96,8 +96,24 @@ class PlayerDirectionGesture extends DirectionGesture
 {    
     static preload(_game)
     {
-        _game.load.image("jumpArrow", "./img/jumpArrow.png");
+        _game.load.image("jumpBg", "./img/ui/jump/bg.png");
+        _game.load.image("jumpStick", "./img/ui/jump/stick.png");
         this.arrowSprite;
+    }
+    
+    create()
+    {
+        this.bgSprite = this.game.add.sprite(0, 0, "jumpBg");
+        this.bgSprite.alpha = 0.5;
+        this.stickSprite = this.game.add.sprite(0, 0, "jumpStick");
+        this.stickSprite.alpha = 0.75;
+        this.stickSprite.anchor.x = 0.5;
+        this.stickSprite.anchor.y = 0.5;
+        this.bgSprite.anchor = this.stickSprite.anchor.clone();
+        ServiceLocator.renderer.addToUI(this.bgSprite);
+        ServiceLocator.renderer.addToUI(this.stickSprite);
+        this.bgSprite.visible = false;
+        this.stickSprite.visible = false;
     }
     
     mouseUp()
@@ -111,34 +127,32 @@ class PlayerDirectionGesture extends DirectionGesture
                 this.cbFunction.call(this.cbContext, this.curAngle);
             }
 
-            this.initialPos = undefined;
-            this.curAngle = undefined;
         }
-        
-        if (this.arrowSprite)
-        {
-            this.arrowSprite.destroy();
-        }
+        this.reset();
+    }
+    
+    reset()
+    {
+        this.bgSprite.visible = false;
+        this.stickSprite.visible = false;
+        this.initialPos = undefined;
+        this.curAngle = undefined;
     }
     
     remove()
     {
         super.remove();
-        
-        if (this.arrowSprite)
-        {
-            this.arrowSprite.destroy();
-        }
     }
 
     mouseDown()
     {
         super.mouseDown();
         var mousePos = this.getMousePos();
-        this.arrowSprite = this.game.add.sprite(mousePos.x, mousePos.y, "jumpArrow");
-        this.arrowSprite.anchor.x = 0.5;
-        this.arrowSprite.anchor.y = 0.5;
-        ServiceLocator.renderer.addToUI(this.arrowSprite);
+        this.bgSprite.visible = true;
+        this.stickSprite.visible = true;
+        
+        this.bgSprite.x = this.stickSprite.x = mousePos.x;
+        this.bgSprite.y = this.stickSprite.y = mousePos.y;
     }
     
     update()
@@ -147,15 +161,16 @@ class PlayerDirectionGesture extends DirectionGesture
         {
             var curPos = this.getMousePos();
             var distance = this.initialPos.distance(curPos);
-            var vectorDifference = curPos.clone().subtract(this.initialPos.x, this.initialPos.y)
-
-            this.arrowSprite.x = curPos.x - vectorDifference.x / 2;
-            this.arrowSprite.y = curPos.y - vectorDifference.y / 2;
+            var vectorDifference = curPos.clone().subtract(this.initialPos.x, this.initialPos.y).normalize();
+            if (distance > 50)
+            {
+                distance = 50;
+            }
+            vectorDifference.setMagnitude(distance);
+            this.stickSprite.x = this.initialPos.x + vectorDifference.x;
+            this.stickSprite.y = this.initialPos.y + vectorDifference.y;
 
             var angle = Math.degrees(this.initialPos.angle(curPos));
-            
-            this.arrowSprite.angle = angle;
-            this.arrowSprite.scale.setTo(distance / 50, 1.0);
             
             this.curAngle = angle < 0 ? angle + 360: angle;
             
