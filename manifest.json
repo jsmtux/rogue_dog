@@ -5,8 +5,8 @@
   "display": "fullscreen",
   "orientation": "landscape",
   "start_url": "index.html",
-  "xwalk_app_version": "0.2",
-  "xwalk_command_line": "",
+  "xwalk_app_version": "0.22",
+  "xwalk_command_line": "-ignore-gpu-blacklist",
   "xwalk_package_id": "com.jsmtux.rogue",
   "xwalk_target_platforms": [
     "android"
