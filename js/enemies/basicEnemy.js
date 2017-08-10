@@ -12,11 +12,16 @@ class BasicEnemy extends Enemy
         this.spriteOffset = new Phaser.Point(100, 120);
         
         this.dying = false;
+        
+        this.faceAnchor;
+        
+        this.curScale = 0.4;
     }
     
     static preload(_game)
     {
         loadSpriterFiles(_game, "basicEnemy");
+        _game.load.image('basicEnemyHornsOverlay', './img/objects/basicEnemy_horns_overlay.png');
         _game.load.image('up', './img/arrowUp.png');
         _game.load.image('down', './img/arrowDown.png');
         _game.load.image('left', './img/arrowLeft.png');
@@ -32,10 +37,14 @@ class BasicEnemy extends Enemy
     {
         var sprite = loadSpriter(this.game, "basicEnemyJSON", "basicEnemyAtlas", "entity_000");
         this.setSprite(sprite);
-        this.sprite.scale.set(0.4, 0.4);
+        this.sprite.onPointUpdated.add(this.updateItemHandlePoints, this);
+        this.sprite.scale.set(this.curScale, this.curScale);
         this.position.y = 320;
         this.sprite.animations.play('walk');
         this.sprite.onEvent.add(this.playStepSound, this);
+        
+        this.overlaySprite = this.game.add.sprite(0, 0, "basicEnemyHornsOverlay");
+        this.overlaySprite.scale.set(this.curScale, this.curScale);
         
         this.stepAudio = this.game.add.audio('basicEnemyStepAudio');
         this.hitAudio = this.game.add.audio('basicEnemyHitAudio');
@@ -81,7 +90,27 @@ class BasicEnemy extends Enemy
                 this.isIdle = true;
             }
         }
+        //This should be in the render update
+        if (this.faceAnchor)
+        {
+            this.overlaySprite.x = this.faceAnchor.x + this.position.x;
+            this.overlaySprite.y = this.faceAnchor.y + this.position.y;
+        }
         super.update();
+    }
+    
+    updateItemHandlePoints(spriter, pointObj)
+    {
+        switch(pointObj.name)
+        {
+            case "face_anchor":
+                this.faceAnchor = new Phaser.Point(pointObj.transformed.x, pointObj.transformed.y);
+                this.faceAnchor.multiply(this.curScale, this.curScale);
+                this.faceAnchor.add(100, -130);
+                break;
+            default:
+                console.error("Invalid point handler in dog BasicEnemy.");
+        }
     }
     
     startDeath()
