@@ -11,7 +11,6 @@ class GameModeUI
         _game.load.image("AttackModeLabel", "img/mode_labels/attack.png");
         _game.load.image("DefendModeLabel", "img/mode_labels/defend.png");
         _game.load.image("JumpModeLabel", "img/mode_labels/jump.png");
-        _game.load.image("EscapeModeLabel", "img/mode_labels/escape.png");
         _game.load.image("LootModeLabel", "img/mode_labels/loot.png");
     }
     
@@ -36,9 +35,6 @@ class GameModeUI
                 break;
             case GameMode.visibleTypes.JUMP:
                 textureName = 'JumpModeLabel';
-                break;
-            case GameMode.visibleTypes.ESCAPE:
-                textureName = 'EscapeModeLabel';
                 break;
             case GameMode.visibleTypes.LOOT:
                 textureName = 'LootModeLabel';
