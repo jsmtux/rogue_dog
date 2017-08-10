@@ -93,12 +93,25 @@ class DirectionGesture
 }
 
 class PlayerDirectionGesture extends DirectionGesture
-{    
+{
+    constructor(_game, _inputManager)
+    {
+        super(_game, _inputManager);
+        
+        this.iterationsShowingTrajectory = 0;
+        this.trajectoryShowRate = 1.0;
+        this.trajectoryArrow;
+        
+        this.origin = new Phaser.Point(0, 0);
+        
+        this.enabled = false;
+    }
+
     static preload(_game)
     {
         _game.load.image("jumpBg", "./img/ui/jump/bg.png");
         _game.load.image("jumpStick", "./img/ui/jump/stick.png");
-        this.arrowSprite;
+        _game.load.image('trajectory_arrow', './img/trajectory_arrow.png');
     }
     
     create()
@@ -114,6 +127,11 @@ class PlayerDirectionGesture extends DirectionGesture
         ServiceLocator.renderer.addToUI(this.stickSprite);
         this.bgSprite.visible = false;
         this.stickSprite.visible = false;
+        
+        this.trajectoryArrow = this.game.add.sprite(0, 0, 'trajectory_arrow');
+        this.trajectoryArrow.visible = false;
+        this.trajectoryArrow.anchor = new Phaser.Point(0.16, 0.5);
+        ServiceLocator.renderer.addToOverlay(this.trajectoryArrow);
     }
     
     mouseUp()
@@ -188,5 +206,72 @@ class PlayerDirectionGesture extends DirectionGesture
                 this.curAngle = 340;
             }
         }
+        this.updateTrajectoryImage();
+    }
+    
+    updateTrajectoryImage()
+    {
+        var bmd = ServiceLocator.inputManager.getBmd();
+        bmd.clear();
+        this.trajectoryArrow.visible = false;
+        if (this.curAngle !== undefined && this.enabled)
+        {
+            this.iterationsShowingTrajectory++;
+            var cameraPos = ServiceLocator.camera.getPosition();
+            var relativeOrigin = this.origin.clone().subtract(cameraPos.x, cameraPos.y);
+            
+            bmd.moveTo(relativeOrigin.x,relativeOrigin.y);
+            var curPos = relativeOrigin.clone();
+            var iterationAdvance = 1;
+            var jumpAcceleration = new Phaser.Point();
+            jumpAcceleration.y = this.speed.y + this.strength * -Math.sin(Math.radians(this.curAngle));
+            jumpAcceleration.x = this.speed.x + this.strength * Math.cos(Math.radians(this.curAngle));
+            
+            var iteration = 0;
+            while(relativeOrigin.y >= curPos.y && iteration++ < this.iterationsShowingTrajectory * this.trajectoryShowRate)
+            {
+                curPos.x += iterationAdvance * jumpAcceleration.x;
+                curPos.y -= iterationAdvance * jumpAcceleration.y;
+                jumpAcceleration.x += this.acceleration.x;
+                jumpAcceleration.y += this.acceleration.y;
+                bmd.lineStyle(10, 0x000000, 1.0);
+                bmd.lineTo(curPos.x, curPos.y);
+            }
+            
+            jumpAcceleration.y = this.speed.y + this.strength * -Math.sin(Math.radians(this.curAngle));
+            jumpAcceleration.x = this.speed.x + this.strength * Math.cos(Math.radians(this.curAngle));
+            curPos = relativeOrigin.clone();
+            bmd.moveTo(curPos.x, curPos.y);
+            iteration = 0;
+            var prevPos;
+            while(relativeOrigin.y >= curPos.y && iteration++ < this.iterationsShowingTrajectory * this.trajectoryShowRate)
+            {
+                prevPos = curPos.clone();
+                curPos.x += iterationAdvance * jumpAcceleration.x;
+                curPos.y -= iterationAdvance * jumpAcceleration.y;
+                jumpAcceleration.x += this.acceleration.x;
+                jumpAcceleration.y += this.acceleration.y;
+                bmd.lineStyle(6, 0xffffff, 1.0);
+                bmd.lineTo(curPos.x, curPos.y);
+            }
+
+            this.trajectoryArrow.visible = true;
+            this.trajectoryArrow.x = curPos.x - relativeOrigin.x + this.origin.x + 5;
+            this.trajectoryArrow.y = curPos.y - relativeOrigin.y + this.origin.y;
+            this.trajectoryArrow.angle = Math.degrees(Phaser.Point.angle(curPos, prevPos));
+        }
+        else
+        {
+            this.iterationsShowingTrajectory = 0;
+        }
+    }
+    
+    updateSettings(_enabled, _origin, _speed, _acceleration, _strength)
+    {
+        this.enabled = _enabled;
+        this.origin = _origin.clone();
+        this.speed = _speed;
+        this.acceleration = _acceleration;
+        this.strength = _strength;
     }
 }
