@@ -456,62 +456,6 @@ DogPlayer.Animations = {
     BARK:"Barking"
 }
 
-class AttackStick
-{
-    constructor(_initPosition, _endPosition, _callback, _game)
-    {
-        this.endPosition = _endPosition;
-        this.callback = _callback;
-        this.sprite = _game.add.sprite(_initPosition.x, _initPosition.y, 'stick');
-        ServiceLocator.renderer.addToScene(this.sprite);
-        _game.updateSignal.add(this.update, this);
-        this.game = _game;
-        this.x_accel = 10.0;
-        this.y_accel = 20.0;
-
-        var totalIterations = (_endPosition.x - _initPosition.x) / this.x_accel;
-        this.halfIterations = totalIterations / 2;
-        this.curIteration = 0;
-        
-        this.hitStickAudio = this.game.add.audio('hitStickAudio');
-    }
-    
-    static preload(_game)
-    {
-        _game.load.audio('hitStickAudio', 'sounds/hit_stick.wav');
-    }
-    
-    update()
-    {
-        this.sprite.x += 10.0;
-        var distance;
-        if (this.curIteration < this.halfIterations)
-        {
-            var distance = this.halfIterations - this.curIteration;
-        }
-        else
-        {
-            var distance = this.halfIterations - this.curIteration;
-        }
-        distance = distance / this.halfIterations;
-        this.sprite.y -= distance * this.y_accel;
-        if (this.sprite.x >= this.endPosition.x)
-        {
-            this.hitStickAudio.play();
-            this.destroy();
-            this.callback();
-        }
-        this.curIteration ++;
-        this.sprite.angle -= 1 + Math.random();
-    }
-    
-    destroy()
-    {
-        this.sprite.destroy();
-        this.game.updateSignal.remove(this.update, this);
-    }
-}
-
 DogPlayer.CollisionBoxes = {
     HEAD: 0,
     BODY: 1

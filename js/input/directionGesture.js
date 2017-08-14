@@ -205,6 +205,7 @@ class PlayerDirectionGesture extends DirectionGesture
             {
                 this.curAngle = 340;
             }
+            
         }
         this.updateTrajectoryImage();
     }

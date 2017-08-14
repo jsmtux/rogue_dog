@@ -6,7 +6,7 @@ class EndlessConfiguration
     
     resetGameState(_mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(1, 3, 0);
+        ServiceLocator.difficultyManager.setInitialValues(1, 0, 0);
         
         var lootDeck = ServiceLocator.cardManager.lootDeck;
         var wildDeck = ServiceLocator.cardManager.wildDeck;
@@ -17,6 +17,8 @@ class EndlessConfiguration
         wildDeck.addCard("BasicEnemyCard", 1);
         
         _mainState.setNextMode("WalkManager");
+        
+        _mainState.topBarUI.visible(true);
     }
         
     update(_curMode, _mainState)

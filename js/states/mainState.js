@@ -55,7 +55,7 @@ MainState.prototype.create = function ()
     this.collarCharacter = new CollarCharacter();
     this.collarCharacter.create(this);
     
-    this.gameConfiguration = new StoryConfiguration();
+    this.gameConfiguration = new EndlessConfiguration();
     this.gameConfiguration.resetGameState(this);
     //this should be in gui manager
     this.distanceMeter = new DistanceMeterUI();

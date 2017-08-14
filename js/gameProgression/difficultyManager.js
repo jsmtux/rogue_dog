@@ -16,6 +16,8 @@ class DifficultyManager
 
         this.obstacleNumber = _obstacleNumber;
         this.obstacleLevel = _obstacleLevel;
+        
+        this.unlockEnemy(BasicEnemy);
     }
     
     getEnemySpec(_name)

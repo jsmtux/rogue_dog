@@ -19,7 +19,7 @@ class StoryConfiguration
         lootDeck.addCard("SmMedkitCard", undefined);
 
         var wildDeck = ServiceLocator.cardManager.wildDeck;
-        wildDeck.addCard("BeeEnemyCard", 1);
+        //wildDeck.addCard("BeeEnemyCard", 1);
         wildDeck.addCard("BasicEnemyCard", 1);
         
         this.mainState = _mainState;
@@ -187,6 +187,7 @@ class IntroStoryStep extends EmptyStoryStep
         /*this.grayFilter = _mainState.game.add.filter('Sepia');
         this.grayFilter.uIntensity = 0.0;
         ServiceLocator.renderer.addFilterToScene(this.grayFilter);*/
+        ServiceLocator.difficultyManager.setInitialValues(1, 3, 0);  
 
         _mainState.topBarUI.visible(false);
         
@@ -317,8 +318,7 @@ class DoFirstDig extends EmptyStoryStep
 class PlanFirstEncounter extends EmptyStoryStep
 {
     start(_storyConfiguration, _mainState)
-    {
-        ServiceLocator.difficultyManager.setInitialValues(1, 3, 0);     
+    {   
 
         ServiceLocator.registerListener(this.enemiesInPlace, this, "EnemiesInPlaceMessage");
         this.enemiesArrived = false;

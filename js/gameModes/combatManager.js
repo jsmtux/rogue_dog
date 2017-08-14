@@ -9,29 +9,22 @@ class CombatManager extends GameMode
         this.enemies = {};
         this.dyingEnemies = [];
         this.cardsToLoot = [];
+        this.projectiles = [];
         
         this.cardsDisappearing = 0;
-        
-        this.cardButton;
-        
-        ServiceLocator.registerListener(this.wildcardSelected, this, "WildcardSelected");
     }
     
     static preload(_game)
     {
-        _game.load.image('paw_btn', './img/ui/paw.png');
         _game.load.image('card_loot', './img/card_loot.png');
     }
     
     create()
     {
-        this.digUI = new DigUI(this.game);
-        this.digUI.create();
     }
     
     update()
     {
-        this.digUI.update();
         for (var ind in this.enemies)
         {
             this.enemies[ind].update();
@@ -43,6 +36,10 @@ class CombatManager extends GameMode
                 this.dyingEnemies[ind].destroy();
                 this.dyingEnemies.splice(ind,1);
             }
+        }
+        for(var ind in this.projectiles)
+        {
+            this.projectiles[ind].update();
         }
         
         if (this.state === CombatManager.State.WAITING_MONSTERS)
@@ -139,68 +136,19 @@ class CombatManager extends GameMode
         this.state = CombatManager.State.ATTACK;
         ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.ATTACK));
      
-        if (!isEmptyObject(this.enemies))
+        if (/*this.player.canAttack()*/ true)
         {
-            ServiceLocator.publish(new AttackStartedMessage());
-        }
-        if (this.player.canAttack())
-        {
-            for (var ind in this.enemies)
-            {
-                this.enemies[ind].showCrosshair();
-            }
-        }
-        ServiceLocator.registerListener(this.enemyTargeted, this, "EnemyTargeted");
-        
-        if (this.cardButton === undefined)
-        {
-            this.cardButton = this.game.add.sprite(250, 500, "paw_btn");
-            ServiceLocator.renderer.addToUI(this.cardButton);
-        }
-        this.cardButton.visible = true;
-        this.cardButton.inputEnabled = true;
-        this.cardButton.events.onInputDown.add(this.wildCardRequested, this);
-    }
-    
-    escapeSucceeded(_success)
-    {
-        setTimeout(() => {
-            if (_success)
-            {
-                ServiceLocator.cardManager.lootDeck.restoreCardsToDeck(this.cardsToLoot);
-                this.cardsToLoot = [];
-                this.state = CombatManager.State.FLEE_COMBAT;
-            }
-            else
-            {
-                this.state = CombatManager.State.FINISH_ATTACK;
-            }
-        }, 1000);
-    }
-    
-    wildCardRequested()
-    {
-        if (true)
-        {
-            this.removeCombatUI();
-            this.digUI.show(0.3);
-        }
-        else
-        {
-            ServiceLocator.publish(new WildcardSelected(ServiceLocator.cardManager.wildDeck.getRandomCard()));
+            ServiceLocator.inputManager.playerDirectionGesture.add(this.fire, this);
+            ServiceLocator.inputManager.playerDirectionGesture.updateSettings(true, this.player.position, new Phaser.Point(0, 0), new Phaser.Point(0, -0.3), 15);
         }
     }
     
-    wildcardSelected(_msg)
+    fire(_angle)
     {
-        var cardClass = _msg.getCardClass();
-        var curCard = new cardClass();
-        curCard.create(this.game);
-        curCard.show();
-        curCard.setPosition(new Phaser.Point(150,150));
-        curCard.setYAngle(Math.PI);
-        ServiceLocator.publish(new WildcardShown());
-        curCard.setHandler((card) => {card.flip(() => {this.cardFlipped(curCard)})});
+        console.log("Fire on angle " + _angle);
+        var angle = Math.radians(_angle);
+        var projectile = new AttackStick(this.game, this.player.position, undefined, new Phaser.Point(15 * Math.cos(angle), 15 * Math.sin(angle)), new Phaser.Point(0, -0.3));
+        this.projectiles.push(projectile)
     }
     
     cardFlipped(_card)
@@ -211,18 +159,6 @@ class CombatManager extends GameMode
             this.state = CombatManager.State.FINISH_ATTACK;
             ServiceLocator.publish(new WildcardPicked());
         });
-    }
-    
-    removeCombatUI()
-    {
-        this.cardButton.visible = false;
-        this.cardButton.inputEnabled = false;
-        this.cardButton.events.onInputDown.remove(this.wildCardRequested, this);
-        ServiceLocator.removeListener(this.enemyTargeted, this, "EnemyTargeted");
-        for (var ind in this.enemies)
-        {
-            this.enemies[ind].hideCrosshair();
-        }
     }
     
     enemyTargeted(_message)
@@ -321,3 +257,47 @@ CombatManager.State = {
 }
 
 CombatManager.NAME = "CombatManager";
+
+class AttackStick
+{
+    constructor(_game, _initPosition, _callback, _speed, _acceleration)
+    {
+        this.game = _game;
+        this.position = _initPosition.clone();
+        this.callback = _callback;
+        this.speed = _speed;
+        this.acceleration = _acceleration;
+        
+        this.sprite = _game.add.sprite(_initPosition.x, _initPosition.y, 'stick');
+        ServiceLocator.renderer.addToScene(this.sprite);
+        
+        this.hitStickAudio = this.game.add.audio('hitStickAudio');
+    }
+    
+    static preload(_game)
+    {
+        _game.load.audio('hitStickAudio', 'sounds/hit_stick.wav');
+    }
+    
+    update()
+    {
+        var finished = false;
+        if (finished)
+        {
+            this.hitStickAudio.play();
+            this.destroy();
+            this.callback();
+        }
+        this.position.x += this.speed.x;
+        this.position.y += this.speed.y;
+        this.speed.x -= this.acceleration.x;
+        this.speed.y -= this.acceleration.y;
+        this.sprite.position = this.position;
+    }
+    
+    destroy()
+    {
+        this.sprite.destroy();
+        this.game.updateSignal.remove(this.update, this);
+    }
+}
