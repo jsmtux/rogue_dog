@@ -8,6 +8,7 @@ function MainState(_game)
 
 MainState.prototype.create = function ()
 {
+    this.game.sound.mute = true;
     this.statePaused = false;
 
     this.updateSignal = new Phaser.Signal();

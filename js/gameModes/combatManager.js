@@ -37,10 +37,6 @@ class CombatManager extends GameMode
                 this.dyingEnemies.splice(ind,1);
             }
         }
-        for(var ind in this.projectiles)
-        {
-            this.projectiles[ind].update();
-        }
         
         if (this.state === CombatManager.State.WAITING_MONSTERS)
         {
@@ -147,7 +143,7 @@ class CombatManager extends GameMode
     {
         console.log("Fire on angle " + _angle);
         var angle = Math.radians(_angle);
-        var projectile = new AttackStick(this.game, this.player.position, undefined, new Phaser.Point(15 * Math.cos(angle), 15 * Math.sin(angle)), new Phaser.Point(0, -0.3));
+        var projectile = new AttackStick(this.game, this.player.position, undefined, new Phaser.Point(15 * Math.cos(angle), 15 * Math.sin(angle)), new Phaser.Point(0, -0.3), this);
         this.projectiles.push(projectile)
     }
     
@@ -244,6 +240,16 @@ class CombatManager extends GameMode
         ServiceLocator.combatManager.startCombat(_enemies);
         this.cardsToLoot = [];
     }
+    
+    getEnemyBodies()
+    {
+        var ret = [];
+        for (var ind in this.enemies)
+        {
+            ret.push({"enemy": this.enemies[ind], "body":this.enemies[ind].getCollisionBody()});
+        }
+        return ret;
+    }
 }
 
 CombatManager.State = {
@@ -260,7 +266,7 @@ CombatManager.NAME = "CombatManager";
 
 class AttackStick
 {
-    constructor(_game, _initPosition, _callback, _speed, _acceleration)
+    constructor(_game, _initPosition, _callback, _speed, _acceleration, _combatManager)
     {
         this.game = _game;
         this.position = _initPosition.clone();
@@ -270,8 +276,12 @@ class AttackStick
         
         this.sprite = _game.add.sprite(_initPosition.x, _initPosition.y, 'stick');
         ServiceLocator.renderer.addToScene(this.sprite);
+        ServiceLocator.physics.addToWorld(this.sprite);
         
         this.hitStickAudio = this.game.add.audio('hitStickAudio');
+        
+        this.combatManager = _combatManager;
+        this.game.updateSignal.add(this.update, this);
     }
     
     static preload(_game)
@@ -293,6 +303,25 @@ class AttackStick
         this.speed.x -= this.acceleration.x;
         this.speed.y -= this.acceleration.y;
         this.sprite.position = this.position;
+        
+        var collision = this.collides(this.combatManager.getEnemyBodies());
+        if (collision != undefined)
+        {
+            console.log("Collision with " + collision);
+            this.destroy();
+        }
+    }
+    
+    collides(_collisionArray)
+    {
+        for (var ind in _collisionArray)
+        {
+            if (ServiceLocator.physics.isCollidingWith(this.sprite, _collisionArray[ind].body))
+            {
+                return _collisionArray[ind].enemy;
+            }
+        }
+        return undefined;
     }
     
     destroy()

@@ -36,12 +36,25 @@ class BasicEnemy extends Enemy
     create()
     {
         var sprite = loadSpriter(this.game, "basicEnemyJSON", "basicEnemyAtlas", "entity_000");
+        
         this.setSprite(sprite);
         this.sprite.onPointUpdated.add(this.updateItemHandlePoints, this);
         this.sprite.scale.set(this.curScale, this.curScale);
         this.position.y = 320;
         this.sprite.animations.play('walk');
         this.sprite.onEvent.add(this.playStepSound, this);
+        
+        
+        for(var ind in this.sprite.children)
+        {
+            var spriteChild = this.sprite.children[ind];
+            if (spriteChild.name == "head")
+            {
+                spriteChild.scale.set(this.curScale, this.curScale);
+                ServiceLocator.physics.addToWorld(spriteChild);
+                this.collisionbody = spriteChild;
+            }
+        }
         
         this.overlaySprite = this.game.add.sprite(0, 0, "basicEnemyHornsOverlay");
         this.overlaySprite.scale.set(this.curScale, this.curScale);

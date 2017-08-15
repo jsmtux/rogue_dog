@@ -19,6 +19,8 @@ class Enemy extends GameObject
         this.spriteOffset = new Phaser.Point(0, 0);
         
         this.crosshair;
+        
+        this.collisionbody;
     }
     
     static preload(_game)
@@ -133,6 +135,11 @@ class Enemy extends GameObject
         {
             this.crosshair.updatePosition(new Phaser.Point(this.sprite.x, this.sprite.y));
         }
+    }
+    
+    getCollisionBody()
+    {
+        return this.collisionbody;
     }
 }
 
