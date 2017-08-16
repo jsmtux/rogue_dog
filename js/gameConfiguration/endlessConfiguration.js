@@ -6,7 +6,7 @@ class EndlessConfiguration
     
     resetGameState(_mainState)
     {
-        ServiceLocator.difficultyManager.setInitialValues(1, 0, 0);
+        ServiceLocator.difficultyManager.setInitialValues(1, 5, 0);
         
         var lootDeck = ServiceLocator.cardManager.lootDeck;
         var wildDeck = ServiceLocator.cardManager.wildDeck;

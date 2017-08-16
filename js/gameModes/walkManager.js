@@ -474,6 +474,8 @@ class Stick extends Item
         super(_position);
         this.position.y -=  250;
         this.active = true;
+        
+        this.attackPower = 4.0;
     }
     
     destroy()

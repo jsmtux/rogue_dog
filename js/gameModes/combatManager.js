@@ -50,7 +50,7 @@ class CombatManager extends GameMode
         {
             this.startAttack();
         }
-        else if (this.state === CombatManager.State.FINISH_ATTACK)
+        else if (this.state === CombatManager.State.ATTACK)
         {
             if (this.getNumberOfDyingEnemies() === 0 && this.cardsDisappearing === 0)
             {
@@ -58,43 +58,7 @@ class CombatManager extends GameMode
                 {
                     this.finishCombat();
                 }
-                else
-                {
-                    this.state = CombatManager.State.DEFEND;
-                    ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.DEFEND));
-                }
             }
-        }
-        else if (this.state === CombatManager.State.DEFEND)
-        {
-            for (ind in this.enemies)
-            {
-                if (this.enemies[ind].state === Enemy.States.ATTACKING)
-                {
-                    return;
-                }
-                if (this.enemies[ind].state === Enemy.States.WAITING)
-                {
-                    this.enemies[ind].startAttack(this.player);
-                    return;
-                }
-            }
-            for (ind in this.enemies)
-            {
-                this.enemies[ind].state = Enemy.States.WAITING;
-            }
-            if (this.getNumberOfEnemies() > 0)
-            {
-                this.startAttack();
-            }
-            else if (this.getNumberOfDyingEnemies() === 0)
-            {
-                this.finishCombat();
-            }
-        }
-        else if(this.state === CombatManager.State.FLEE_COMBAT)
-        {
-            this.finishCombat();
         }
     }
     
@@ -125,6 +89,7 @@ class CombatManager extends GameMode
     finishCombat()
     {
         this.state = CombatManager.State.FINISHED;
+        ServiceLocator.inputManager.playerDirectionGesture.remove(this.fire, this);
     }
     
     startAttack()
@@ -132,7 +97,7 @@ class CombatManager extends GameMode
         this.state = CombatManager.State.ATTACK;
         ServiceLocator.publish(new NewGameModeMessage(GameMode.visibleTypes.ATTACK));
      
-        if (/*this.player.canAttack()*/ true)
+        if (this.player.canAttack())
         {
             ServiceLocator.inputManager.playerDirectionGesture.add(this.fire, this);
             ServiceLocator.inputManager.playerDirectionGesture.updateSettings(true, this.player.position, new Phaser.Point(0, 0), new Phaser.Point(0, -0.3), 15);
@@ -141,7 +106,7 @@ class CombatManager extends GameMode
     
     fire(_angle)
     {
-        console.log("Fire on angle " + _angle);
+        this.player.updateStickNumber(this.player.stickNumber - 1);
         var angle = Math.radians(_angle);
         var projectile = new AttackStick(this.game, this.player.position, undefined, new Phaser.Point(15 * Math.cos(angle), 15 * Math.sin(angle)), new Phaser.Point(0, -0.3), this);
         this.projectiles.push(projectile)
@@ -250,16 +215,18 @@ class CombatManager extends GameMode
         }
         return ret;
     }
+    
+    projectileHit(_projectile, _enemy, _power)
+    {
+        _enemy.takeHit(this, Enemy.AttackOutcome.HIT, _power);
+    }
 }
 
 CombatManager.State = {
     WAITING_MONSTERS : 1,
     ATTACK_NEXT: 2,
     ATTACK : 3,
-    FINISH_ATTACK: 4,
-    DEFEND : 5,
-    FINISHED: 6,
-    FLEE_COMBAT: 7
+    FINISHED: 4
 }
 
 CombatManager.NAME = "CombatManager";
@@ -305,9 +272,13 @@ class AttackStick
         this.sprite.position = this.position;
         
         var collision = this.collides(this.combatManager.getEnemyBodies());
-        if (collision != undefined)
+        if (collision !== undefined)
         {
-            console.log("Collision with " + collision);
+            this.combatManager.projectileHit(this, collision, 4);
+            this.destroy();
+        }
+        if (collision !== undefined || this.position.y > GROUND_LEVEL)
+        {
             this.destroy();
         }
     }

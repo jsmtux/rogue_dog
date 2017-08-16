@@ -20,8 +20,6 @@ class DogPlayer extends GameObject
         this.currentAnimation = '';
         this.playerInitialY = GROUND_LEVEL - 90;
         
-        this.attackPower = 4.0;
-        
         this.collisionBodies = {};
         
         this.appliedItems = {};
@@ -94,7 +92,6 @@ class DogPlayer extends GameObject
             }
         }
         
-        this.attackAudio = this.game.add.audio('playerAttackAudio');
         this.jumpAudio = this.game.add.audio('playerJumpAudio');
         this.landAudio = this.game.add.audio('playerLandAudio');
         this.landAudio.volume = 0.25;
@@ -276,26 +273,11 @@ class DogPlayer extends GameObject
         return this.stickNumber > 0;
     }
     
-    doAttack(_hitType, _enemy, _finishCallback)
-    {
-        this.attackAudio.play();
-        var cb = () => {
-            _finishCallback(); 
-            _enemy.takeHit(this, _hitType, this.attackPower);
-        };
-        this.updateStickNumber(this.stickNumber - 1);
-        new AttackStick(this.position, _enemy.position, cb, this.game);
-    }
-    
     updateStickNumber(_number)
     {
         if (_number < 0)
         {
             _number = 0;
-        }
-        if (_number > this.maxStickNumber)
-        {
-            _number = this.maxStickNumber
         }
         ServiceLocator.publish(new StickNumberUpdated(_number, this.stickNumber));
         this.stickNumber = _number;

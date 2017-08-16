@@ -129,6 +129,7 @@ class BasicEnemy extends Enemy
     startDeath()
     {
         this.dying = true;
+        this.overlaySprite.destroy();
         this.sprite.animations.play('death');
         var changeAnimationOnEnd = () => {
             this.sprite.onFinish.remove(changeAnimationOnEnd);
