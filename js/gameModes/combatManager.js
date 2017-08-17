@@ -27,7 +27,7 @@ class CombatManager extends GameMode
     {
         for (var ind in this.enemies)
         {
-            this.enemies[ind].update();
+            this.enemies[ind].update(this);
         }
         for (var ind in this.dyingEnemies)
         {
@@ -120,12 +120,6 @@ class CombatManager extends GameMode
             this.state = CombatManager.State.FINISH_ATTACK;
             ServiceLocator.publish(new WildcardPicked());
         });
-    }
-    
-    enemyTargeted(_message)
-    {
-        this.removeCombatUI();
-        this.player.doAttack(_message.getHitType(), _message.getEnemy(), () => {this.state = CombatManager.State.FINISH_ATTACK;});
     }
     
     enemiesInPlace() {

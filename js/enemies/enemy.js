@@ -113,15 +113,51 @@ class Enemy extends GameObject
         return this.constructor.NAME;
     }
     
-    update()
+    update(_combatManager)
     {
         this.sprite.x = this.position.x + this.spriteOffset.x;
         this.sprite.y = this.position.y + this.spriteOffset.y;
         
-        if (this.crosshair)
+        if (this.bullet)
         {
-            this.crosshair.updatePosition(new Phaser.Point(this.sprite.x, this.sprite.y));
+            this.bullet.update();
+            var inside = false;
+            if (this.polygonPoints)
+            {
+                var camPos = ServiceLocator.camera.getPosition();
+                var relativeBulletPosition = new Phaser.Point(this.bullet.sprite.x, this.bullet.sprite.y).subtract(camPos.x, camPos.y);
+                var bulletWidth = this.bullet.sprite.width;
+                var bulletHeight = this.bullet.sprite.height;
+                //Check different hit points
+                inside = this.polygonPoints.contains(relativeBulletPosition.x, relativeBulletPosition.y);
+                inside |= this.polygonPoints.contains(relativeBulletPosition.x + bulletWidth/2, relativeBulletPosition.y + bulletHeight/2);
+                inside |= this.polygonPoints.contains(relativeBulletPosition.x + bulletWidth, relativeBulletPosition.y + bulletHeight);
+                //
+                this.polygonPoints = undefined;
+            }
+            if (inside)
+            {
+                ServiceLocator.publish(new AttackDefendedMessage());
+            }
+            if (inside || this.bullet.isFinished())
+            {
+                this.state = Enemy.States.FINISHED;
+                ServiceLocator.inputManager.drawGesture.remove(this.receivePolygonPoints, this);
+                this.bullet.destroy();
+                this.bullet = undefined;
+            }
         }
+        else if (this.inPlace())
+        {
+            this.shoot(_combatManager.player);
+        }
+    }
+    
+    shoot(_player)
+    {
+        ServiceLocator.inputManager.drawGesture.add(this.receivePolygonPoints, this);
+        this.bullet = new EnemyBullet(this.game, _player, this.spec.bulletSpeed);
+        this.bullet.create(this.position.x, this.position.y);
     }
     
     getCollisionBody()
@@ -140,4 +176,54 @@ Enemy.AttackOutcome = {
     MISS: 0,
     HIT: 1,
     CRITICAL: 2
+}
+
+
+class EnemyBullet
+{
+    constructor(_game, _player, _speed)
+    {
+        this.sprite;
+        this.game = _game;
+        this.player = _player;
+        this.speed = _speed;
+    }
+    
+    static Preload(_game)
+    {
+        _game.load.image('beeBullet', './img/beeBullet.png');
+        _game.load.spritesheet('beeBulletExplosion', './img/bullet_explosion.png', 77, 73);
+    }
+    
+    create(_x, _y)
+    {
+        this.sprite = this.game.add.sprite(_x - 20, _y - 80, 'beeBullet', 5);
+        ServiceLocator.renderer.addToScene(this.sprite);
+    }
+    
+    update()
+    {
+        this.sprite.x -= this.speed;
+    }
+    
+    isFinished()
+    {
+        var finished = this.sprite.x < this.player.getFeetArea()[1];
+        if (finished)
+        {
+            this.player.monsterHit();
+        }
+        return finished;
+    }
+    
+    destroy()
+    {
+        var explosion = this.game.add.sprite(this.sprite.x, this.sprite.y, 'beeBulletExplosion');
+        ServiceLocator.renderer.addToScene(explosion);
+        var explodingAnimation = explosion.animations.add('explode');
+        explosion.play('explode', 10);
+        explodingAnimation.onComplete.add(function () {explosion.destroy();});
+        this.sprite.destroy();
+        
+    }
 }

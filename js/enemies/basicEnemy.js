@@ -89,7 +89,7 @@ class BasicEnemy extends Enemy
         this.crosshair = new EscapeMeter(this.game, this, this.position, new Phaser.Point(-40, -60));
     }
     
-    update()
+    update(_combatManager)
     {
         if (!this.inPlace())
         {
@@ -109,7 +109,7 @@ class BasicEnemy extends Enemy
             this.overlaySprite.x = this.faceAnchor.x + this.position.x;
             this.overlaySprite.y = this.faceAnchor.y + this.position.y;
         }
-        super.update();
+        super.update(_combatManager);
     }
     
     updateItemHandlePoints(spriter, pointObj)
