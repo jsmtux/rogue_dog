@@ -1,6 +1,6 @@
 class DrawGesture
 {
-    constructor(_game, _inputManager)
+    constructor(_game, _inputManager, _initialPoint)
     {
         this.game = _game;
         this.points = [];
@@ -11,6 +11,11 @@ class DrawGesture
         this.contextCb;
         this.removeUpdateSignal = false;
         this.inputManager = _inputManager;
+        
+        if(_initialPoint)
+        {
+            this.addPoint(_initialPoint);
+        }
     }
     
     add(_function, _context)
@@ -21,6 +26,7 @@ class DrawGesture
         this.functionCb = _function;
         this.contextCb = _context;
         this.removeUpdateSignal = false;
+        
     }
     
     remove(_function, _cont)
@@ -92,7 +98,7 @@ class DrawGesture
         }
         
         //remove update signal only when finished and graphics are not shown anymore
-        if (this.polyFillAlpha == 1.0 && this.removeUpdateSignal)
+        if (this.points.length == 0 && this.polyFillAlpha == 1.0 && this.removeUpdateSignal)
         {
             this.game.updateSignal.remove(this.update, this);
             this.removeUpdateSignal = false;
@@ -120,8 +126,13 @@ class DrawGesture
     {
         if (pointer.isDown && !this.game.isPaused())
         {
-            var inputOffset = ServiceLocator.viewportHandler.getSceneOffset();
-            this.points.push({'point':new Phaser.Point(x + inputOffset.x, y + inputOffset.y), 'time':performance.now()});
+            this.addPoint(new Phaser.Point(x,y));
         }
+    }
+    
+    addPoint(_point)
+    {
+        var inputOffset = ServiceLocator.viewportHandler.getSceneOffset();
+        this.points.push({'point':new Phaser.Point(_point.x + inputOffset.x, _point.y + inputOffset.y), 'time':performance.now()});
     }
 }

@@ -3,6 +3,7 @@ class DirectionGesture
     constructor(_game, _inputManager)
     {
         this.game = _game;
+        this.inputManager = _inputManager;
         this.initialPos;
         this.curAngle;
     }
@@ -179,12 +180,10 @@ class PlayerDirectionGesture extends DirectionGesture
         if (this.initialPos)
         {
             var curPos = this.getMousePos();
-            var distance = this.initialPos.distance(curPos);
+            var realDistance = this.initialPos.distance(curPos);
             var vectorDifference = curPos.clone().subtract(this.initialPos.x, this.initialPos.y).normalize();
-            if (distance > 50)
-            {
-                distance = 50;
-            }
+            var distance = realDistance < 50 ? realDistance : 50;
+            
             vectorDifference.setMagnitude(distance);
             this.stickSprite.x = this.initialPos.x + vectorDifference.x;
             this.stickSprite.y = this.initialPos.y + vectorDifference.y;
@@ -193,6 +192,18 @@ class PlayerDirectionGesture extends DirectionGesture
             
             this.curAngle = angle < 0 ? angle + 360: angle;
             
+            
+            if (realDistance > 70)
+            {
+                    if (this.curAngle > 135 && this.curAngle < 205)
+                    {
+                        this.drawGesture = new DrawGesture(this.game, this.inputManager, this.initialPos);
+                        this.drawGesture.add(()=> this.drawGesture.remove());
+                        this.initialPos = undefined;
+                        this.reset();
+                    }
+            }
+
             if (this.curAngle < 45)
             {
                 this.curAngle = 340;
