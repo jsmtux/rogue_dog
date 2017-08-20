@@ -81,16 +81,6 @@ class BasicEnemy extends Enemy
         setTimeout(() => {this.startNewCommand()}, 500);
     }
     
-    showCrosshair()
-    {
-        this.crosshair = new Crosshair(this.game, this, this.position, new Phaser.Point(-40, -60));
-    }
-    
-    showEscapeCheck()
-    {
-        this.crosshair = new EscapeMeter(this.game, this, this.position, new Phaser.Point(-40, -60));
-    }
-    
     update(_combatManager)
     {
         if (!this.inPlace())
@@ -147,70 +137,18 @@ class BasicEnemy extends Enemy
     {
         this.stepAudio.play();
     }
-    
-    startNewCommand()
-    {
-        this.attackOption = BasicEnemy.attackOptions[randomInt(0,3)];
-        this.arrow = this.game.add.sprite(this.position.x, this.position.y - 50, this.attackOption.image);
-        ServiceLocator.renderer.addToScene(this.arrow);
-        ServiceLocator.inputManager.directionGesture.add(this.directionGestureCb, this);
         
-        var self = this;
-        this.endTimeout = setTimeout(function(){
-            self.showResultSprite('bad');
-        }, this.spec.timeout);
-    }
-    
-    directionGestureCb(_direction)
+    shoot(_player)
     {
-        clearTimeout(this.endTimeout);
-        if (this.attackOption.image === _direction)
-        {
-            this.showResultSprite('good');
-            
-            ServiceLocator.publish(new AttackDefendedMessage());
+        var bullet = new EnemyBullet(this.game, _player, this.spec.bulletSpeed);
+        bullet.create(this.position.x, this.position.y + 50);
+        
+        this.sprite.animations.play('attack');
+        var changeAnimationOnEnd = () => {
+            this.sprite.onLoop.remove(changeAnimationOnEnd);
+            this.sprite.animations.play('idle');
         }
-        else
-        {
-            this.showResultSprite('bad');
-        }
-    }
-    
-    showResultSprite(_result)
-    {
-        this.iterationNumber++;
-        clearTimeout(this.endTimeout);
-        ServiceLocator.inputManager.directionGesture.remove();
-        this.arrow.destroy();
-        if (_result == 'good' && this.iterationNumber < this.spec.retries)
-        {
-            setTimeout(() => {this.startNewCommand();}, 100);
-        }
-        else
-        {
-            if (_result == 'bad')
-            {
-                this.sprite.animations.play('attack');
-                this.hitAudio.play();
-                
-                var changeAnimationOnEnd = () => {
-                    this.sprite.onLoop.remove(changeAnimationOnEnd);
-                    this.sprite.animations.play('idle');
-                }
-                this.sprite.onLoop.add(changeAnimationOnEnd);
-                setTimeout(() =>{
-                    this.player.monsterHit();
-                }, 200);
-            }
-            this.iterationNumber = 0;
-            var resultSprite = this.game.add.sprite(this.position.x, this.position.y - 50, _result);
-            ServiceLocator.renderer.addToOverlay(resultSprite);
-            var self = this;
-            setTimeout(function(){
-                resultSprite.destroy();
-                self.state = Enemy.States.FINISHED;
-            }, 500);
-        }
+        this.sprite.onLoop.add(changeAnimationOnEnd);
     }
 };
 

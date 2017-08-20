@@ -25,7 +25,7 @@ function cloneObject(_object)
   return JSON.parse(JSON.stringify(_object));
 }
 
-var DebugMode = true;
+var DebugMode = false;
 
 var emojiCodes = {
     ":smile:": 1,

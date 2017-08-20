@@ -336,6 +336,7 @@ class DogPlayer extends GameObject
         ServiceLocator.camera.flash(0xff0000, 200);
         this.updateHeartNumber(this.heartQuarters - 2);
         var self = this;
+        this.play(DogPlayer.Animations.HIT);
         setTimeout(function(){
             self.play(DogPlayer.Animations.IDLE);
         }, 500);
@@ -435,7 +436,8 @@ DogPlayer.Animations = {
     JUMP:"Jump",
     AIR:"air",
     FALL:"Fall",
-    BARK:"Barking"
+    BARK:"Barking",
+    HIT:"Hurt Soft"
 }
 
 DogPlayer.CollisionBoxes = {

@@ -22,7 +22,7 @@ class BasicEnemySpec
         this.timeout = _timeout;
         this.retries = _retries;
         this.health = _health;
-        this.bulletSpeed = 3;
+        this.bulletSpeed = 4;
     }
 }
 

@@ -68,29 +68,29 @@ class Enemy extends GameObject
                 this.startDeath();
             }
         }
-        
+        var hitSprite;
         switch(_skillCheck)
         {
             case Enemy.AttackOutcome.MISS:
-                this.hit = this.game.add.sprite(this.position.x, this.position.y, 'hit_miss');
+                hitSprite = this.game.add.sprite(this.position.x, this.position.y, 'hit_miss');
                 break;
             case Enemy.AttackOutcome.HIT:
-                this.hit = this.game.add.sprite(this.position.x, this.position.y, 'hit');
+                hitSprite = this.game.add.sprite(this.position.x, this.position.y, 'hit');
                 break;
             case Enemy.AttackOutcome.CRITICAL:
-                this.hit = this.game.add.sprite(this.position.x, this.position.y, 'hit_critical');
+                hitSprite = this.game.add.sprite(this.position.x, this.position.y, 'hit_critical');
                 break;
         }
-        ServiceLocator.renderer.addToOverlay(this.hit);
-        setTimeout(() => {this.hit.destroy();}, 500);
-        this.hit.anchor.x = 0.5;
-        this.hit.anchor.y = 0.5;
+        ServiceLocator.renderer.addToOverlay(hitSprite);
+        setTimeout(() => {hitSprite.destroy();}, 500);
+        hitSprite.anchor.x = 0.5;
+        hitSprite.anchor.y = 0.5;
         
-        this.hit.scale.x = 0.5;
-        this.hit.scale.y = 0.5;
-        this.hit.alpha = 0.0;
-        this.game.add.tween(this.hit).to({ alpha: 1.0 }, 500, Phaser.Easing.Cubic.Out, true);
-        this.game.add.tween(this.hit.scale).to({ x: 1.0, y: 1.0}, 500, Phaser.Easing.Elastic.Out, true);
+        hitSprite.scale.x = 0.5;
+        hitSprite.scale.y = 0.5;
+        hitSprite.alpha = 0.0;
+        this.game.add.tween(hitSprite).to({ alpha: 1.0 }, 500, Phaser.Easing.Cubic.Out, true);
+        this.game.add.tween(hitSprite.scale).to({ x: 1.0, y: 1.0}, 500, Phaser.Easing.Elastic.Out, true);
     }
     
     isDead()
@@ -118,17 +118,16 @@ class Enemy extends GameObject
         this.sprite.x = this.position.x + this.spriteOffset.x;
         this.sprite.y = this.position.y + this.spriteOffset.y;
         
-        if (this.inPlace() && (!this.lastShot || this.lastShot + 1000 < performance.now()))
+        if(!this.lastShot)
+        {
+            this.lastShot = performance.now() - 2000;
+        }
+        
+        if (this.inPlace() && (this.lastShot + 3000 < performance.now()))
         {
             this.shoot(_combatManager.player);
             this.lastShot = performance.now();
         }
-    }
-    
-    shoot(_player)
-    {
-        var bullet = new EnemyBullet(this.game, _player, this.spec.bulletSpeed);
-        bullet.create(this.position.x, this.position.y);
     }
     
     getCollisionBody()
@@ -168,23 +167,21 @@ class EnemyBullet
     
     create(_x, _y)
     {
-        this.sprite = this.game.add.sprite(_x - 20, _y - 80, 'beeBullet', 5);
+        this.sprite = this.game.add.sprite(_x, _y, 'beeBullet', 5);
         ServiceLocator.renderer.addToScene(this.sprite);
         ServiceLocator.registerListener(this.checkPolygonCallback, this, "PolygonIntersectionDrawn");
         ServiceLocator.updateSignal.add(this.update, this);
         this.active = true;
     }
-    
-    destroy()
-    {
-        ServiceLocator.updateSignal.remove(this.update, this);
-        ServiceLocator.removeListener(this.checkPolygonCallback, this, "PolygonIntersectionDrawn");        
-        super.destroy();
-    }
-    
+
     update()
     {
         this.sprite.x -= this.speed;
+        if (this.sprite.x < this.player.position.x)
+        {
+            this.player.monsterHit();
+            this.destroy();
+        }
     }
     
     isFinished()
@@ -205,6 +202,8 @@ class EnemyBullet
         explosion.play('explode', 10);
         explodingAnimation.onComplete.add(function () {explosion.destroy();});
         this.sprite.destroy();
+        ServiceLocator.updateSignal.remove(this.update, this);
+        ServiceLocator.removeListener(this.checkPolygonCallback, this, "PolygonIntersectionDrawn");
     }
     
     checkPolygonCallback(_msg)
@@ -230,6 +229,7 @@ class EnemyBullet
         {
             this.state = Enemy.States.FINISHED;
             this.destroy();
+            ServiceLocator.publish(new AttackDefendedMessage());
             this.active = false;
         }
     }

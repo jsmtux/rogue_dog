@@ -64,6 +64,7 @@ class CombatManager extends GameMode
     
     startCombat(_enemyTypes)
     {
+        ServiceLocator.registerListener(this.missileAvoided, this, "AttackDefendedMessage");
         var renderArea = ServiceLocator.camera.getRenderArea();
         var visibleArea = ServiceLocator.camera.getVisibleArea();
         var padding = 220;
@@ -90,6 +91,7 @@ class CombatManager extends GameMode
     {
         this.state = CombatManager.State.FINISHED;
         ServiceLocator.inputManager.playerDirectionGesture.remove(this.fire, this);
+        ServiceLocator.removeListener(this.missileAvoided, this, "AttackDefendedMessage");
     }
     
     startAttack()
@@ -104,12 +106,20 @@ class CombatManager extends GameMode
         }
     }
     
+    missileAvoided(_msg)
+    {
+        this.player.updateStickNumber(this.player.stickNumber + 1);
+    }
+    
     fire(_angle)
     {
         this.player.updateStickNumber(this.player.stickNumber - 1);
-        var angle = Math.radians(_angle);
-        var projectile = new AttackStick(this.game, this.player.position, undefined, new Phaser.Point(15 * Math.cos(angle), 15 * Math.sin(angle)), new Phaser.Point(0, -0.3), this);
-        this.projectiles.push(projectile)
+        if (this.player.stickNumber > 0)
+        {
+            var angle = Math.radians(_angle);
+            var projectile = new AttackStick(this.game, this.player.position, undefined, new Phaser.Point(15 * Math.cos(angle), 15 * Math.sin(angle)), new Phaser.Point(0, -0.3), this);
+            this.projectiles.push(projectile);
+        }
     }
     
     cardFlipped(_card)
