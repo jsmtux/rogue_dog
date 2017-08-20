@@ -242,7 +242,7 @@ class AttackStick
         this.hitStickAudio = this.game.add.audio('hitStickAudio');
         
         this.combatManager = _combatManager;
-        this.game.updateSignal.add(this.update, this);
+        ServiceLocator.updateSignal.add(this.update, this);
     }
     
     static preload(_game)
@@ -292,6 +292,6 @@ class AttackStick
     destroy()
     {
         this.sprite.destroy();
-        this.game.updateSignal.remove(this.update, this);
+        ServiceLocator.updateSignal.remove(this.update, this);
     }
 }

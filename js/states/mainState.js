@@ -11,9 +11,6 @@ MainState.prototype.create = function ()
     this.game.sound.mute = true;
     this.statePaused = false;
 
-    this.updateSignal = new Phaser.Signal();
-    this.renderSignal = new Phaser.Signal();
-
     this.player = new DogPlayer(this);
     
     ServiceLocator.initialize('camera', new Camera());
@@ -75,7 +72,7 @@ MainState.prototype.update = function ()
 
     this.gameConfiguration.update(this.currentGameMode, this);
     
-    this.updateSignal.dispatch();
+    ServiceLocator.updateSignal.dispatch();
 
     if (this.overlayGameMode)
     {
@@ -100,7 +97,7 @@ MainState.prototype.setNextMode = function(_modeName, _args)
 
 MainState.prototype.render = function ()
 {
-    this.renderSignal.dispatch(); 
+    ServiceLocator.renderSignal.dispatch(); 
     ServiceLocator.renderer.render();
 }
 

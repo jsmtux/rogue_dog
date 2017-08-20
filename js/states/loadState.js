@@ -23,6 +23,7 @@ LoadState.prototype.update = function()
 
 LoadState.prototype.create = function ()
 {
+    ServiceLocator.create(this.game);
     ServiceLocator.difficultyManager.create(); 
     ServiceLocator.guiManager.create(this);
 

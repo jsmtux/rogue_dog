@@ -8,7 +8,7 @@ class Camera
     create(_game, _player)
     {
         this.game = _game;
-        this.game.updateSignal.add(this.update, this);
+        ServiceLocator.updateSignal.add(this.update, this);
         this.player = _player;
     }
     

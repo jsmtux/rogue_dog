@@ -7,7 +7,7 @@ class Physics
         
         this.registeredSprites = [];
         
-        _game.updateSignal.add(this.update, this);
+        ServiceLocator.updateSignal.add(this.update, this);
     }
     
     update()

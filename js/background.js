@@ -54,7 +54,7 @@ class Background
         cloud0Object.create(_game, this.objectsGroup);
         this.objects.push(cloud0Object);
         
-        _game.updateSignal.add(this.update, this);
+        ServiceLocator.updateSignal.add(this.update, this);
         this.prevX = ServiceLocator.camera.getPosition().x;
     }
     

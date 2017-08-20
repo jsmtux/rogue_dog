@@ -22,7 +22,7 @@ class DrawGesture
     {
         this.bmd = this.inputManager.getBmd();
         this.game.input.addMoveCallback(this.updateMouse, this);
-        this.game.updateSignal.add(this.update, this);
+        ServiceLocator.updateSignal.add(this.update, this);
         this.functionCb = _function;
         this.contextCb = _context;
         this.removeUpdateSignal = false;
@@ -100,7 +100,7 @@ class DrawGesture
         //remove update signal only when finished and graphics are not shown anymore
         if (this.points.length == 0 && this.polyFillAlpha == 1.0 && this.removeUpdateSignal)
         {
-            this.game.updateSignal.remove(this.update, this);
+            ServiceLocator.updateSignal.remove(this.update, this);
             this.removeUpdateSignal = false;
             this.bmd.clear();
             this.points = [];
@@ -116,6 +116,7 @@ class DrawGesture
             tmpPoints.push(this.points[x].point);
         }
         this.polygonPoints = new Phaser.Polygon(tmpPoints);
+        ServiceLocator.publish(new PolygonIntersectionDrawn(this.polygonPoints));
         if (this.functionCb)
         {
             this.functionCb.call(this.contextCb, this.polygonPoints);

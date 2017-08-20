@@ -60,7 +60,7 @@ class Card
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputDown.add(this.clickHandler, this);
         
-        this.game.updateSignal.add(this.update, this);
+        ServiceLocator.updateSignal.add(this.update, this);
     }
     
     update()
@@ -124,7 +124,7 @@ class Card
     
     hide()
     {
-        this.game.updateSignal.remove(this.update, this);
+        ServiceLocator.updateSignal.remove(this.update, this);
         this.sprite.visible = false;
         this.sprite.inputEnabled = false;
         this.sprite.events.onInputDown.remove(this.clickHandler, this);

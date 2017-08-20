@@ -118,46 +118,17 @@ class Enemy extends GameObject
         this.sprite.x = this.position.x + this.spriteOffset.x;
         this.sprite.y = this.position.y + this.spriteOffset.y;
         
-        if (this.bullet)
-        {
-            this.bullet.update();
-            var inside = false;
-            if (this.polygonPoints)
-            {
-                var camPos = ServiceLocator.camera.getPosition();
-                var relativeBulletPosition = new Phaser.Point(this.bullet.sprite.x, this.bullet.sprite.y).subtract(camPos.x, camPos.y);
-                var bulletWidth = this.bullet.sprite.width;
-                var bulletHeight = this.bullet.sprite.height;
-                //Check different hit points
-                inside = this.polygonPoints.contains(relativeBulletPosition.x, relativeBulletPosition.y);
-                inside |= this.polygonPoints.contains(relativeBulletPosition.x + bulletWidth/2, relativeBulletPosition.y + bulletHeight/2);
-                inside |= this.polygonPoints.contains(relativeBulletPosition.x + bulletWidth, relativeBulletPosition.y + bulletHeight);
-                //
-                this.polygonPoints = undefined;
-            }
-            if (inside)
-            {
-                ServiceLocator.publish(new AttackDefendedMessage());
-            }
-            if (inside || this.bullet.isFinished())
-            {
-                this.state = Enemy.States.FINISHED;
-                ServiceLocator.inputManager.drawGesture.remove(this.receivePolygonPoints, this);
-                this.bullet.destroy();
-                this.bullet = undefined;
-            }
-        }
-        else if (this.inPlace())
+        if (this.inPlace() && (!this.lastShot || this.lastShot + 1000 < performance.now()))
         {
             this.shoot(_combatManager.player);
+            this.lastShot = performance.now();
         }
     }
     
     shoot(_player)
     {
-        ServiceLocator.inputManager.drawGesture.add(this.receivePolygonPoints, this);
-        this.bullet = new EnemyBullet(this.game, _player, this.spec.bulletSpeed);
-        this.bullet.create(this.position.x, this.position.y);
+        var bullet = new EnemyBullet(this.game, _player, this.spec.bulletSpeed);
+        bullet.create(this.position.x, this.position.y);
     }
     
     getCollisionBody()
@@ -199,6 +170,16 @@ class EnemyBullet
     {
         this.sprite = this.game.add.sprite(_x - 20, _y - 80, 'beeBullet', 5);
         ServiceLocator.renderer.addToScene(this.sprite);
+        ServiceLocator.registerListener(this.checkPolygonCallback, this, "PolygonIntersectionDrawn");
+        ServiceLocator.updateSignal.add(this.update, this);
+        this.active = true;
+    }
+    
+    destroy()
+    {
+        ServiceLocator.updateSignal.remove(this.update, this);
+        ServiceLocator.removeListener(this.checkPolygonCallback, this, "PolygonIntersectionDrawn");        
+        super.destroy();
     }
     
     update()
@@ -224,6 +205,32 @@ class EnemyBullet
         explosion.play('explode', 10);
         explodingAnimation.onComplete.add(function () {explosion.destroy();});
         this.sprite.destroy();
-        
+    }
+    
+    checkPolygonCallback(_msg)
+    {
+        if(!this.active)
+        {
+            return;
+        }
+        var polygonPoints = _msg.getPoints();
+        var inside = false;
+        if (polygonPoints)
+        {
+            var camPos = ServiceLocator.camera.getPosition();
+            var relativeBulletPosition = new Phaser.Point(this.sprite.x, this.sprite.y).subtract(camPos.x, camPos.y);
+            var bulletWidth = this.sprite.width;
+            var bulletHeight = this.sprite.height;
+            //Check different hit points
+            inside = polygonPoints.contains(relativeBulletPosition.x, relativeBulletPosition.y);
+            inside |= polygonPoints.contains(relativeBulletPosition.x + bulletWidth/2, relativeBulletPosition.y + bulletHeight/2);
+            inside |= polygonPoints.contains(relativeBulletPosition.x + bulletWidth, relativeBulletPosition.y + bulletHeight);
+        }
+        if (inside)
+        {
+            this.state = Enemy.States.FINISHED;
+            this.destroy();
+            this.active = false;
+        }
     }
 }

@@ -234,3 +234,16 @@ class DialogSourceUpdated extends Message
         return this.arguments["position"];
     }
 }
+
+class PolygonIntersectionDrawn extends Message
+{
+    constructor(_polygonPoints)
+    {
+        super("PolygonIntersectionDrawn", {"points":_polygonPoints});
+    }
+    
+    getPoints()
+    {
+        return this.arguments["points"];
+    }
+}

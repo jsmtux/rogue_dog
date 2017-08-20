@@ -24,8 +24,8 @@ class DogPlayer extends GameObject
         
         this.appliedItems = {};
         
-        _game.updateSignal.add(this.update, this);
-        _game.renderSignal.add(this.updateRender, this);
+        ServiceLocator.updateSignal.add(this.update, this);
+        ServiceLocator.renderSignal.add(this.updateRender, this);
         this.updateModeCallback;
         
         this.stickNumber = 0;

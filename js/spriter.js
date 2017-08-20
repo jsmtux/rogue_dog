@@ -81,7 +81,7 @@ function loadSpriter(_game, _jsonSpriter, _atlas, _entityName)
         function(){
             var original_destroy = spriterGroup.destroy;
             return function(a, b){
-                _game.updateSignal.remove(spriterGroup.animations.update, spriterGroup.animations);
+                ServiceLocator.updateSignal.remove(spriterGroup.animations.update, spriterGroup.animations);
                 original_destroy.call(spriterGroup, a, b);
             }
         })();

@@ -4,7 +4,7 @@ class AnimationManager
     {
         this.sprites = [];
         this.game = _game;
-        _game.updateSignal.add(this.update, this);
+        ServiceLocator.updateSignal.add(this.update, this);
     }
     
     registerSprite(_sprite)

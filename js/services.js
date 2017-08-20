@@ -16,8 +16,14 @@ class Services
         this.messageListeners = new Phaser.Signal();
         this.namedMessageListeners = {};
         this.viewportHandler = {};
-
+        this.updateSignal = new Phaser.Signal();
+        this.renderSignal = new Phaser.Signal();
+    
         Object.preventExtensions(this);
+    }
+    
+    create()
+    {
     }
     
     initialize(_name, object)

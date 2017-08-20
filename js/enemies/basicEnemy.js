@@ -71,6 +71,8 @@ class BasicEnemy extends Enemy
                     {image: 'down', key: ServiceLocator.inputManager.down}
                 ];
         }
+        
+        ServiceLocator.renderSignal.add(this.updateRender, this);
     }
     
     startAttack(_player)
@@ -103,13 +105,16 @@ class BasicEnemy extends Enemy
                 this.isIdle = true;
             }
         }
-        //This should be in the render update
+        super.update(_combatManager);
+    }
+    
+    updateRender()
+    {
         if (this.faceAnchor)
         {
             this.overlaySprite.x = this.faceAnchor.x + this.position.x;
             this.overlaySprite.y = this.faceAnchor.y + this.position.y;
         }
-        super.update(_combatManager);
     }
     
     updateItemHandlePoints(spriter, pointObj)

@@ -27,7 +27,7 @@ class DirectionGesture
         this.game.input.addMoveCallback(this.updateMouse, this);
         this.cbFunction = _function;
         this.cbContext = _context;
-        this.game.updateSignal.add(this.update, this);
+        ServiceLocator.updateSignal.add(this.update, this);
     }
     
     remove(_function, _cont)
@@ -35,7 +35,7 @@ class DirectionGesture
         this.game.input.onDown.remove(this.mouseDown, this);
         this.game.input.onUp.remove(this.mouseUp, this);
         this.game.input.deleteMoveCallback(this.updateMouse, this);
-        this.game.updateSignal.remove(this.update, this);
+        ServiceLocator.updateSignal.remove(this.update, this);
     };
 
     mouseDown()
