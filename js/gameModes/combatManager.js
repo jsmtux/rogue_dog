@@ -113,9 +113,9 @@ class CombatManager extends GameMode
     
     fire(_angle)
     {
-        this.player.updateStickNumber(this.player.stickNumber - 1);
         if (this.player.stickNumber > 0)
         {
+            this.player.updateStickNumber(this.player.stickNumber - 1);
             var angle = Math.radians(_angle);
             var projectile = new AttackStick(this.game, this.player.position, undefined, new Phaser.Point(15 * Math.cos(angle), 15 * Math.sin(angle)), new Phaser.Point(0, -0.3), this);
             this.projectiles.push(projectile);

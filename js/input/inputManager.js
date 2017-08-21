@@ -47,11 +47,17 @@ class InputManager
         this.inputDisablingSprite.height = resolution.y;
         this.inputDisablingSprite.inputEnabled = false;
         ServiceLocator.renderer.addToUI(this.inputDisablingSprite);
+        ServiceLocator.renderSignal.add(this.renderUpdate, this);
     }
     
     handleTouch()
     {
         this.leftButton.lastTouched = performance.now();
+    }
+    
+    renderUpdate()
+    {
+        this.bmd.clear();
     }
     
     getBmd()

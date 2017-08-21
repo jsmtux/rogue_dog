@@ -7,8 +7,6 @@ class DrawGesture
         this.polygonPoints;
         this.polyFillAlpha = 1.0;
         this.polyFillDecay = 0.05;
-        this.functionCb;
-        this.contextCb;
         this.removeUpdateSignal = false;
         this.inputManager = _inputManager;
         
@@ -18,27 +16,27 @@ class DrawGesture
         }
     }
     
-    add(_function, _context)
+    create()
     {
         this.bmd = this.inputManager.getBmd();
         this.game.input.addMoveCallback(this.updateMouse, this);
         ServiceLocator.updateSignal.add(this.update, this);
-        this.functionCb = _function;
-        this.contextCb = _context;
         this.removeUpdateSignal = false;
         
     }
     
-    remove(_function, _cont)
+    remove()
     {
-        this.game.input.deleteMoveCallback(this.updateMouse, this);
-        this.functionCb = undefined;
-        this.contextCb = undefined;
         this.removeUpdateSignal = true;
+        this.game.input.deleteMoveCallback(this.updateMouse, this);
     };
     
     update()
     {
+        if (this.points.length == 0)
+        {
+            return;
+        }
         var timeThreshold = performance.now() - 400;
         for (var ind in this.points)
         {
@@ -51,7 +49,6 @@ class DrawGesture
                 break;
             }
         }
-        this.bmd.clear();
         
         if (this.polygonPoints)
         {
@@ -102,7 +99,6 @@ class DrawGesture
         {
             ServiceLocator.updateSignal.remove(this.update, this);
             this.removeUpdateSignal = false;
-            this.bmd.clear();
             this.points = [];
             this.polygonPoints = undefined;
         }
@@ -117,10 +113,6 @@ class DrawGesture
         }
         this.polygonPoints = new Phaser.Polygon(tmpPoints);
         ServiceLocator.publish(new PolygonIntersectionDrawn(this.polygonPoints));
-        if (this.functionCb)
-        {
-            this.functionCb.call(this.contextCb, this.polygonPoints);
-        }
     }
     
     updateMouse(pointer, x, y)
@@ -128,6 +120,10 @@ class DrawGesture
         if (pointer.isDown && !this.game.isPaused())
         {
             this.addPoint(new Phaser.Point(x,y));
+        }
+        if (!pointer.isDown)
+        {
+            this.remove();
         }
     }
     

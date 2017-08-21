@@ -197,8 +197,8 @@ class PlayerDirectionGesture extends DirectionGesture
             {
                     if (this.curAngle > 135 && this.curAngle < 205)
                     {
-                        this.drawGesture = new DrawGesture(this.game, this.inputManager, this.initialPos);
-                        this.drawGesture.add(()=> this.drawGesture.remove());
+                        var drawGesture = new DrawGesture(this.game, this.inputManager, this.initialPos);
+                        drawGesture.create();
                         this.initialPos = undefined;
                         this.reset();
                     }
@@ -224,7 +224,6 @@ class PlayerDirectionGesture extends DirectionGesture
     updateTrajectoryImage()
     {
         var bmd = ServiceLocator.inputManager.getBmd();
-        bmd.clear();
         this.trajectoryArrow.visible = false;
         if (this.curAngle !== undefined && this.enabled)
         {
