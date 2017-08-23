@@ -1,11 +1,12 @@
 
 class BeeEnemy extends Enemy
 {
-    constructor(_game, _spec, _index)
+    constructor(_game, _spec, _index, _position)
     {
-        super(_game, _spec, _index);
+        var height = 320;
+        super(_game, _spec, _index, new Phaser.Point(_position.x, height + 150));
 
-        this.height = 320;
+        this.height = height;
         this.moveRadius = 10;
         this.rotationCounter = 0;
         
@@ -25,7 +26,6 @@ class BeeEnemy extends Enemy
     {
         var sprite = loadSpriter(this.game, "beeJSON", "beeAtlas", "Bee");
         this.setSprite(sprite);
-        this.position.y = this.height + 150;
         this.sprite.animations.play('Idle');
         this.sprite.scale.setTo(-0.5, 0.5);
     }
@@ -57,11 +57,6 @@ class BeeEnemy extends Enemy
     
     update(_combatManager)
     {
-        if (!this.inPlace())
-        {
-            this.position.x -= 1.5;
-        }
-    
         //this.position.y = this.height + Math.sin(this.rotationCounter++ / 10.0) * this.moveRadius;
         
         super.update(_combatManager);

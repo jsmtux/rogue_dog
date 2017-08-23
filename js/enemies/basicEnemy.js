@@ -1,8 +1,8 @@
 class BasicEnemy extends Enemy
 {
-    constructor(_game, _spec, _index)
+    constructor(_game, _spec, _index, _position)
     {
-        super(_game, _spec, _index);
+        super(_game, _spec, _index, new Phaser.Point(_position.x, 320));
         
         this.spec = _spec;
         
@@ -40,9 +40,7 @@ class BasicEnemy extends Enemy
         this.setSprite(sprite);
         this.sprite.onPointUpdated.add(this.updateItemHandlePoints, this);
         this.sprite.scale.set(this.curScale, this.curScale);
-        this.position.y = 320;
-        this.sprite.animations.play('walk');
-        this.sprite.onEvent.add(this.playStepSound, this);
+        this.sprite.animations.play('idle');
         
         
         for(var ind in this.sprite.children)
@@ -58,6 +56,7 @@ class BasicEnemy extends Enemy
         
         this.overlaySprite = this.game.add.sprite(0, 0, "basicEnemyHornsOverlay");
         this.overlaySprite.scale.set(this.curScale, this.curScale);
+        ServiceLocator.renderer.addToScene(this.overlaySprite);
         
         this.stepAudio = this.game.add.audio('basicEnemyStepAudio');
         this.hitAudio = this.game.add.audio('basicEnemyHitAudio');
@@ -83,17 +82,10 @@ class BasicEnemy extends Enemy
     
     update(_combatManager)
     {
-        if (!this.inPlace())
+        if (!this.isIdle)
         {
-            this.position.x -= 1.0;
-        }
-        else
-        {
-            if (!this.isIdle)
-            {
-                this.sprite.animations.play('idle');
-                this.isIdle = true;
-            }
+            this.sprite.animations.play('idle');
+            this.isIdle = true;
         }
         super.update(_combatManager);
     }
@@ -107,6 +99,12 @@ class BasicEnemy extends Enemy
         }
     }
     
+    setVisible(_visible)
+    {
+        this.overlaySprite.visible = _visible;
+        super.setVisible(_visible);
+    }
+    
     updateItemHandlePoints(spriter, pointObj)
     {
         switch(pointObj.name)
@@ -114,7 +112,7 @@ class BasicEnemy extends Enemy
             case "face_anchor":
                 this.faceAnchor = new Phaser.Point(pointObj.transformed.x, pointObj.transformed.y);
                 this.faceAnchor.multiply(this.curScale, this.curScale);
-                this.faceAnchor.add(100, -130);
+                this.faceAnchor.add(100, -80);
                 break;
             default:
                 console.error("Invalid point handler in dog BasicEnemy.");

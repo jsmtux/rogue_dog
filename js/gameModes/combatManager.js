@@ -40,7 +40,7 @@ class CombatManager extends GameMode
         
         if (this.state === CombatManager.State.WAITING_MONSTERS)
         {
-            if(this.enemiesInPlace())
+            //if(this.enemiesInPlace())
             {
                 ServiceLocator.publish(new EnemiesInPlaceMessage());
                 this.state = CombatManager.State.ATTACK_NEXT
@@ -62,29 +62,11 @@ class CombatManager extends GameMode
         }
     }
     
-    startCombat(_enemyTypes)
+    startCombat(_enemies)
     {
         ServiceLocator.registerListener(this.missileAvoided, this, "AttackDefendedMessage");
-        var renderArea = ServiceLocator.camera.getRenderArea();
-        var visibleArea = ServiceLocator.camera.getVisibleArea();
-        var padding = 220;
-        var numberOfEnemies = _enemyTypes.length;
         this.state = CombatManager.State.WAITING_MONSTERS;
-        for (var ind in _enemyTypes)
-        {
-            var type = _enemyTypes[ind];
-            var spec = ServiceLocator.difficultyManager.getEnemySpec(type.NAME);
-            var enemy = new type(this.game, spec, ind);
-            enemy.create();
-
-            var initPos = visibleArea.bottomRight.x + 120 + padding * ind;
-            var endPos = renderArea.bottomRight.x + padding * (ind - numberOfEnemies) - 120;
-            
-            
-            enemy.setWalkPath(initPos, endPos);
-
-            this.enemies[ind] = enemy;
-        }
+        this.enemies = _enemies;
     }
     
     finishCombat()
@@ -130,19 +112,6 @@ class CombatManager extends GameMode
             this.state = CombatManager.State.FINISH_ATTACK;
             ServiceLocator.publish(new WildcardPicked());
         });
-    }
-    
-    enemiesInPlace() {
-        var ret = true;
-        for (var ind in this.enemies)
-        {
-            if (!this.enemies[ind].inPlace())
-            {
-                ret = false;
-                break;
-            }
-        }
-        return ret;
     }
     
     getNumberOfEnemies()
@@ -202,10 +171,6 @@ class CombatManager extends GameMode
     
     startMode(_enemies)
     {
-        if (_enemies === undefined)
-        {
-            _enemies = ServiceLocator.difficultyManager.getEnemies();
-        }
         ServiceLocator.combatManager.startCombat(_enemies);
         this.cardsToLoot = [];
     }

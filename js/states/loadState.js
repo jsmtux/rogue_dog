@@ -42,6 +42,7 @@ LoadState.prototype.create = function ()
     CombatLootMode.preload(this.game);
     DialogManager.preload(this.game);
     CombatManager.preload(this.game);
+    WalkToCombatTransition.preload(this.game);
 
     ParticleEmitter.preload(this.game);
     TopBarUI.preload(this.game);

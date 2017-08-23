@@ -24,4 +24,9 @@ class GameObject
         }
         this.sprite.destroy();
     }    
+    
+    setVisible(_visible)
+    {
+        this.sprite.visible = _visible;
+    }
 }

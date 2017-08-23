@@ -46,6 +46,10 @@ class EndlessConfiguration
             }
             if (modeName === "WalkManager")
             {
+                _mainState.setNextMode("WalkToCombatTransition", nextModeArguments);
+            }
+            if (modeName === "WalkToCombatTransition")
+            {
                 _mainState.setNextMode("CombatManager", nextModeArguments);
             }
         }

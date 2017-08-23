@@ -152,8 +152,6 @@ class WalkManager extends GameMode
     
     finishMode()
     {
-        ServiceLocator.inputManager.getBmd().clear();
-        this.player.finishWalk();
     }
 
     getVisibleObstacles()
@@ -202,6 +200,14 @@ class WalkManager extends GameMode
         for(var levelInd in this.walkLevels)
         {
             this.walkLevels[levelInd].setStagePrototype(undefined);
+        }
+    }
+    
+    fillEmpty()
+    {
+        for (var ind in this.walkLevels)
+        {
+            this.walkLevels[ind].fillEmpty();
         }
     }
 }

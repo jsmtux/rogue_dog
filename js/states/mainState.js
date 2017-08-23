@@ -44,6 +44,7 @@ MainState.prototype.create = function ()
     this.addGameMode(ServiceLocator.walkManager);
     this.addGameMode(ServiceLocator.combatManager);
     this.addGameMode(ServiceLocator.dialogManager);
+    this.addGameMode(new WalkToCombatTransition(this.game, this.player));
     this.addGameMode(new EmptyGameMode());
     this.addGameMode(new CombatLootMode(this, this.player));
     

@@ -320,7 +320,7 @@ class PlanFirstEncounter extends EmptyStoryStep
     start(_storyConfiguration, _mainState)
     {   
 
-        ServiceLocator.registerListener(this.enemiesInPlace, this, "EnemiesInPlaceMessage");
+        //ServiceLocator.registerListener(this.enemiesInPlace, this, "EnemiesInPlaceMessage");
         this.enemiesArrived = false;
         _mainState.setNextMode("WalkManager");
         
@@ -342,12 +342,6 @@ class PlanFirstEncounter extends EmptyStoryStep
             _storyConfiguration.storyCallback();
             this.enemiesArrived = false;
         }
-    }
-    
-    enemiesInPlace()
-    {
-        ServiceLocator.removeListener(this.enemiesInPlace, this, "EnemiesInPlaceMessage");
-        this.enemiesArrived = true;
     }
     
     finish(_storyConfiguration, _mainState)

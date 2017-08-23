@@ -1,6 +1,6 @@
 class Enemy extends GameObject
 {
-    constructor(_game, _spec, _index)
+    constructor(_game, _spec, _index, _position)
     {
         super();
         this.game = _game;
@@ -13,9 +13,7 @@ class Enemy extends GameObject
         this.index = _index;
         this.state = Enemy.States.WAITING;
         
-        this.endPos = undefined;
-        
-        this.position = new Phaser.Point(0, 0);
+        this.position = _position;
         this.spriteOffset = new Phaser.Point(0, 0);
         
         this.crosshair;
@@ -32,24 +30,11 @@ class Enemy extends GameObject
     
     setSprite(_sprite)
     {
+        super.create(_sprite, true);
         ServiceLocator.renderer.addToScene(_sprite);
-        GameObject.prototype.create.call(this, _sprite, true);
-    }
-    
-    setWalkPath(_initX, _endX)
-    {
-        this.position.x = _initX;
-        this.endPos = _endX;
-    }
-    
-    inPlace()
-    {
-        var ret = false;
-        if (this.endPos !== undefined)
-        {
-            ret = this.position.x < this.endPos;
-        }
-        return ret;
+        
+        this.sprite.x = this.position.x + this.spriteOffset.x;
+        this.sprite.y = this.position.y + this.spriteOffset.y;
     }
 
     takeHit(_combatManager, _skillCheck, _hitPoints)
@@ -123,7 +108,7 @@ class Enemy extends GameObject
             this.lastShot = performance.now() - 2000;
         }
         
-        if (this.inPlace() && (this.lastShot + 3000 < performance.now()))
+        if (this.lastShot + 3000 < performance.now())
         {
             this.shoot(_combatManager.player);
             this.lastShot = performance.now();
