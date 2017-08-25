@@ -56,11 +56,6 @@ class Camera
         }
         return ret;
     }
-    
-    shake(_str, _time)
-    {
-        this.game.camera.shake(_str, _time);
-    }
 
     flash(_color, _time)
     {

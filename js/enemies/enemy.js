@@ -41,7 +41,7 @@ class Enemy extends GameObject
     {
         if (_skillCheck != Enemy.AttackOutcome.MISS)
         {
-            ServiceLocator.camera.shake(0.02, 200);
+            ServiceLocator.renderer.shake(0.04, 200);
             this.health -= _hitPoints;
             if (_skillCheck == Enemy.AttackOutcome.CRITICAL)
             {

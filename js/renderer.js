@@ -3,6 +3,8 @@ class Renderer
     constructor(_game)
     {
         this.game = _game;
+        this.shakeOffset =  Phaser.Point(0, 0);
+        this.shakeStrength = 0;
     }
     
     static preload(_game)
@@ -50,6 +52,9 @@ class Renderer
         debug.sprite.height = -nativeResolution.y;
         debug.sprite.position.y = nativeResolution.y - offset.y;
         debug.sprite.position.x = -offset.x;
+        
+        ServiceLocator.renderSignal.add(this.render, this);
+        ServiceLocator.updateSignal.add(this.update, this);
     }
 
     render()
@@ -57,11 +62,42 @@ class Renderer
         var cameraPos = ServiceLocator.camera.getPosition();
         
         this.sceneGroup.visible = true;
-        this.diffuseRenderTexture.renderXY(this.sceneGroup, -cameraPos.x, -cameraPos.y, true);
+        this.diffuseRenderTexture.renderXY(this.sceneGroup, -cameraPos.x + this.shakeOffset.x, -cameraPos.y + this.shakeOffset.y, true);
         this.sceneGroup.visible = false;
         
         this.game.world.bringToTop(this.overlay);
         this.game.world.bringToTop(this.UIGroup);
+    }
+    
+    update()
+    {
+        var shakeDistance = 5.0;
+        if (this.shakeStrength > 0.0)
+        {
+            if (!this.shakeTween)
+            {
+                this.shakeTween = this.game.add.tween(this.shakeOffset);
+                this.shakeTween.to({ x: Math.random() * shakeDistance * 2 - shakeDistance,
+                                     y: Math.random() * shakeDistance * 2 - shakeDistance }, 50, Phaser.Easing.Linear.None);
+                this.shakeTween.onComplete.add(() => {this.shakeTween = undefined;});
+                this.shakeTween.start();
+            }
+        }
+        else
+        {
+            if(this.shakeTween)
+            {
+                this.shakeTween.stop();
+                this.shakeTween = undefined;
+            }
+            this.shakeOffset = new Phaser.Point(0, 0);
+        }
+    }
+    
+    shake(_str, _time)
+    {
+        this.shakeStrength = _str;
+        setTimeout(() => this.shakeStrength = 0.0, _time);
     }
     
     addToScene(_element)

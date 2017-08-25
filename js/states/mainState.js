@@ -98,8 +98,7 @@ MainState.prototype.setNextMode = function(_modeName, _args)
 
 MainState.prototype.render = function ()
 {
-    ServiceLocator.renderSignal.dispatch(); 
-    ServiceLocator.renderer.render();
+    ServiceLocator.renderSignal.dispatch();
 }
 
 MainState.prototype.handleUI = function(_name, _event)
